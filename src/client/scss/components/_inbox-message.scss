@@ -1,0 +1,120 @@
+.inbox-message {
+  display: flex;
+
+  padding: 3px 0;
+
+  flex-flow: row;
+  align-items: center;
+  //justify-content: space-between;
+
+  font-family: Arial,sans-serif;
+  font-size: 13px;
+
+  border-bottom: 1px solid rgba(0,0,0,.05);
+
+  &:hover {
+    background: rgba(0,0,0,.03);
+  }
+
+  &__importance {
+    margin-right: 10px;
+
+    color: #bcbcbc;
+
+    &--active {
+      color: #e20000;
+    }
+  }
+
+  &__checked {
+    margin-right: 10px;
+  }
+
+  &__avatar {
+    margin-right: 10px;
+  }
+
+  &__name {
+    width: 190px;
+  }
+
+  &__round {
+    margin-right: 10px;
+  }
+
+  &__subject {
+    display: inline-block;
+
+    //max-width: 50%;
+
+    flex-shrink: 0;
+
+    margin-right: 10px;
+
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__labels {
+    display: flex;
+
+    margin-right: 10px;
+  }
+
+  &__label {
+    margin: 3px;
+  }
+
+  &__message {
+    display:inline-block;
+
+    //max-width : 50%;
+    flex-shrink: 1;
+
+    margin-right: 10px;
+
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__text {
+    display: flex;
+
+    width: 100%;
+
+    justify-content: flex-start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    min-width: 60px;
+  }
+
+  &__data {
+    width: 70px;
+  }
+
+  &--new {
+    .inbox-message__name {
+      font-weight: bold;
+    }
+
+    .inbox-message__subject {
+      font-weight: bold;
+    }
+
+    .inbox-message__message {
+      font-weight: bold;
+    }
+  }
+
+  &--importmant {
+    background: #ffe6e6;
+
+    .inbox-message__importance {
+      color: #e20000;
+    }
+  }
+}

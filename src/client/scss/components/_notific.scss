@@ -1,0 +1,15 @@
+.notific {
+  display: block;
+
+  font: 13px/1.185 sans-serif;
+  color: $silver-notific-color;
+  
+  &__link {
+    color: $notific-link-color;
+  }
+
+  &--auth {
+    font-size: 12px;
+    color: $notific-auth-color;
+  }
+}

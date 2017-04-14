@@ -1,0 +1,25 @@
+.folders-setup {
+  //padding: 0 20px;
+
+  &__row {
+    margin: 4px 0;
+
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+  }
+
+  &__link {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 11px;
+    font-family: Verdana, sans-serif;
+
+    &:hover {
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  &__hr {
+    //margin: 10px;
+  }
+}

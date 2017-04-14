@@ -1,0 +1,24 @@
+.user-signatures {
+
+  padding: 15px;
+
+  &__edit-text{
+    display: inline-block;
+    min-width: 576px;
+    height: 142px;
+
+    border: 1px solid $avatar-border-color;
+  }
+
+  &__view{
+    display: inline-block;
+    min-width: 576px;
+    height: 142px;
+
+    background-color: $signature-pred-publick;
+    box-shadow: $signature-shadow;
+
+  }
+
+}
+

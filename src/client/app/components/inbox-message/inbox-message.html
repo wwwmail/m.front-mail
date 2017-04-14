@@ -1,0 +1,78 @@
+<div class="inbox-message pointer"
+     ng-class="{'inbox-message--importmant': vm.message.isImportmant}"
+     ng-mouseover="vm.message.hover = true" ng-mouseleave="vm.message.hover = false"
+     inbox-message-hover
+     ui-sref="mail.message({id: vm.message.number, mbox: vm.message.mbox})">
+    <div>
+        <div class="inbox-message__importance pointer" ng-click="vm.message.isImportmant = !vm.message.isImportmant; $event.stopPropagation();">
+            <span class="icon-important"></span>
+        </div>
+    </div>
+    <div>
+        <div class="inbox-message__checked">
+            <div class="checkbox-y checkbox-y--size15" ng-click="$event.stopPropagation();">
+                <label class="checkbox-y__label">
+                    <input class="checkbox-y__input" type="checkbox" ng-model="vm.message.isChecked">
+                    <div class="checkbox-y__body">
+                        <span class="checkbox-y__icon icon-mark"></span>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="inbox-message__avatar">
+            <div class="avatar avatar--size30">
+                <img class="avatar__image" src="/images/avatar.png">
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="inbox-message__name">
+            {{ vm.message.from }}
+        </div>
+    </div>
+    <div>
+        <div class="inbox-message__round">
+            <div class="inbox-message__round pointer" ng-click="vm.message.active = !vm.message.active; $event.stopPropagation();">
+                <div class="round" ng-class="{
+                                        'round&#45;&#45;border': vm.message.hover,
+                                        'round&#45;&#45;yellow': vm.message.active
+                                    }"></div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="inbox-message__labels">
+
+            <div class="label-ydx label-ydx--green inbox-message__label">
+                Метка 1
+            </div>
+
+            <div class="label-ydx label-ydx--red inbox-message__label">
+                Метка 2
+            </div>
+
+            <div class="label-ydx label-ydx--blue inbox-message__label">
+                Метка 3
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <span class="icon-incoming"></span>
+    </div>
+    <div class="inbox-message__text">
+        <div class="inbox-message__subject">
+            {{ vm.message.Subject }}
+        </div>
+        <div class="inbox-message__message"
+             ng-bind-html="vm.message.message"></div>
+    </div>
+
+    <div>
+        <div class="inbox-message__data">
+            {{ vm.getDate(vm.message.date.date) }}
+        </div>
+    </div>
+</div>

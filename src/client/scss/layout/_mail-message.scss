@@ -1,0 +1,32 @@
+.mail-message {
+  width: inherit;
+
+  &__head {
+    position: relative;
+    display: block;
+    width: auto;
+    padding-right: 82px;
+
+    box-sizing: border-box;
+  }
+
+  &__title {
+    font-size: 20px;
+    margin: 18px 20px;
+    color: $black;
+  }
+
+  &__reply {
+    position: relative;
+
+    width: 100%;
+    min-width: 450px;
+    padding-right: 82px;
+
+    &__avatar {
+      width: 82px;
+    }
+
+  }
+}
+

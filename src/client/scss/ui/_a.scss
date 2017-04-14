@@ -1,0 +1,60 @@
+.link {
+  transition: all .6s;
+
+  &--next {
+    color: #2f333f;
+    font-family: Arial, sans-serif;
+
+    &:after {
+      content: "";
+      display: inline-flex;
+      position: relative;
+
+      top: 3px;
+
+      margin: 0 3px 0 7px;
+
+      width: 18px;
+      height: 18px;
+
+      background-image: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org….8-1-0.9-1.3S13.3%2C6.5%2C13%2C5.8H13.7z%22/%3E%0A%3C/g%3E%0A%3C/svg%3E%0A);
+      background-repeat: no-repeat;
+    }
+  }
+
+  &--auth {
+    color: $link-color;
+    font-size: 13px;;
+  }
+
+  &--underline {
+    text-decoration: underline;
+    //border-bottom: 1px solid #000;
+    //padding-bottom: 4px;
+  }
+
+  &--disabled {
+    pointer-events: none;
+    cursor: default;
+    color: $silver-notific-color !important;
+  }
+
+  &--gray {
+    color: rgba(0, 0, 0, .5);
+  }
+
+  &--violet {
+    color: #666699;
+  }
+
+  &--hv-red {
+    &:hover {
+      color: red;
+    }
+  }
+
+  &--dotted {
+    text-decoration: underline;
+    text-decoration-style: dotted !important;
+  }
+}

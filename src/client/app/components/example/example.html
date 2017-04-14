@@ -1,0 +1,171 @@
+<div class="card exp-parcel-card">
+
+        <div class="card__header exp-parcel-card__header">
+            <div class="row">
+                <div class="col-md-7 col-sm-7 col-xs-7">
+                    <div class="exp-parcel-card__name pointer">
+                        <span>Новый адрес</span>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-5">
+                    <a class="exp-parcel-card__button"
+                       href
+                       ng-click="vm.close()">
+                        <img class="svg svg--size16"
+                             src="/images/svg/products-warehouse/card/close.svg">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card__body exp-parcel-card__body row">
+            <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                  name="addressForm"
+                  ng-submit="vm.add(addressForm)"
+                  novalidate>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <label class="form__label">Привязать получателя:</label>
+                        <recipient-select
+                                selected="vm.addressForm.recipient"
+                                model=""></recipient-select>
+                    </div>
+
+                    <div class="col-md-6 mobile-group--size10">
+                        <label class="form__label">Страна:</label>
+                        <country-select
+                                selected="vm.addressForm.country"
+                                name="country"
+                                params="{id: 'USA'}"
+                                required="true"
+                                is-no-select="true"
+                                on-selected="vm.clearAfterCountry()"></country-select>
+
+                        <tooltip-validation
+                                ng-if="addressForm.country.$invalid && (addressForm.$submitted || addressForm.country.$touched)"
+                                tooltip-placement="bottom"
+                                tooltip-validation-errors="addressForm.country.$error"
+                                tooltip-validation-messages="vm.address.validations.country"></tooltip-validation>
+                    </div>
+
+                    <div class="col-md-6 form__group--size10">
+                        <label class="form__label">Регион:</label>
+                        <region-select
+                                name="region"
+                                selected="vm.addressForm.region"
+                                country-id="vm.addressForm.country.id"
+                                required="true"
+                                disabled="vm.addressForm.country.id"
+                                on-selected="vm.clearAfterRegion()"></region-select>
+
+                        <tooltip-validation
+                                ng-if="addressForm.region.$invalid && (addressForm.$submitted || addressForm.region.$touched) && addressForm.country.$valid"
+                                tooltip-placement="bottom"
+                                tooltip-validation-errors="addressForm.region.$error"
+                                tooltip-validation-messages="vm.address.validations.region"></tooltip-validation>
+                    </div>
+
+                    <div class="col-md-6 form__group--size10">
+                        <label class="form__label">Город:</label>
+                        <city-select
+                                name="city"
+                                selected="vm.addressForm.city"
+                                region-id="vm.addressForm.region.id"
+                                disabled="vm.addressForm.region.id"
+                                required="true"
+                                on-selected="vm.clearAfterCity()"></city-select>
+                        <tooltip-validation
+                                ng-if="addressForm.city.$invalid && (addressForm.$submitted || addressForm.city.$touched) && addressForm.region.$valid"
+                                tooltip-placement="bottom"
+                                tooltip-validation-errors="addressForm.city.$error"
+                                tooltip-validation-messages="vm.address.validations.city"></tooltip-validation>
+                    </div>
+
+                    <div class="col-md-6 form__group--size10">
+                        <label class="form__label">Индекс:</label>
+                        <input class="form__input" type="text"
+                               name="postalCode"
+                               ng-model="vm.addressForm.postalCode"
+                               required>
+                        <tooltip-validation
+                                ng-if="addressForm.postalCode.$invalid && (addressForm.$submitted || addressForm.postalCode.$touched) && addressForm.city.$valid"
+                                tooltip-placement="bottom"
+                                tooltip-validation-errors="addressForm.postalCode.$error"
+                                tooltip-validation-messages="vm.address.validations.postalCode"></tooltip-validation>
+                    </div>
+
+                    <div class="col-md-6 form__group--size10">
+                        <label class="form__label">Улица:</label>
+                        <input class="form__input" type="text"
+                               name="street"
+                               ng-model="vm.addressForm.street"
+                               required>
+                        <tooltip-validation
+                                ng-if="addressForm.street.$invalid && (addressForm.$submitted || addressForm.street.$touched) && addressForm.postalCode.$valid"
+                                tooltip-placement="bottom"
+                                tooltip-validation-errors="addressForm.street.$error"
+                                tooltip-validation-messages="vm.address.validations.street"></tooltip-validation>
+                    </div>
+
+                    <div class="col-md-12 form__group--size10">
+                        <label class="form__label">Дом, корпус, квартира:</label>
+                        <div class="row-inputs clearfix">
+                            <div class="row-inputs__item w50">
+                                <input class="form__input" type="text"
+                                       name="house"
+                                       ng-model="vm.addressForm.house"
+                                       required>
+
+                                <tooltip-validation
+                                        ng-if="addressForm.house.$invalid && (addressForm.$submitted || addressForm.house.$touched) && addressForm.street.$valid"
+                                        tooltip-placement="bottom"
+                                        tooltip-validation-errors="addressForm.house.$error"
+                                        tooltip-validation-messages="vm.address.validations.house"></tooltip-validation>
+                            </div>
+
+                            <div class="row-inputs__item w25">
+                                <input class="form__input" type="text"
+                                       name="building"
+                                       ng-model="vm.addressForm.building">
+
+                                <tooltip-validation
+                                        ng-if="addressForm.building.$invalid && (addressForm.$submitted || addressForm.building.$touched) && addressForm.house.$valid"
+                                        tooltip-placement="bottom"
+                                        tooltip-validation-errors="addressForm.building.$error"
+                                        tooltip-validation-messages="vm.address.validations.building"></tooltip-validation>
+                            </div>
+
+                            <div class="row-inputs__item w25">
+                                <input class="form__input" type="text"
+                                       name="apartment"
+                                       ng-model="vm.addressForm.apartment">
+
+                                <tooltip-validation
+                                        ng-if="addressForm.apartment.$invalid && (addressForm.$submitted || addressForm.apartment.$touched) && addressForm.building.$valid"
+                                        tooltip-placement="bottom"
+                                        tooltip-validation-errors="addressForm.apartment.$error"
+                                        tooltip-validation-messages="vm.address.validations.apartment"></tooltip-validation>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 form__buttons__group text-center">
+                    <button class="btn-round btn-round--grey"
+                            type="button"
+                            ng-click="vm.close()">Отмена
+                    </button>
+                    <button class="btn-round btn-round--blue"
+                            type="submit">Добавить
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+

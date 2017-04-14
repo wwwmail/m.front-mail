@@ -1,0 +1,56 @@
+.choice-language{
+  position: absolute;
+  bottom: -7px;
+  display: flex;
+  flex-flow: column;
+  padding: 0 5px ;
+  border-radius: 3px;
+  overflow: hidden;
+
+  &__link{
+    display: none;
+    position: relative;
+
+  &:hover{
+
+      background: $yellow-yandex;
+
+      &:before{
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left:-50%;
+        background: $yellow-yandex;
+        z-index: -1;
+        width: 200%;
+      }
+    }
+
+
+  }
+
+  &__country{
+    width: 20px;
+    //padding: 5px;
+    margin: 3px;
+
+  }
+
+  &--active{
+    display: block;
+
+  }
+
+  &:hover{
+    background: rgba($yellow-normal-light, 0.4);
+    box-shadow: $button-shadow;
+
+    .choice-language__link{
+      display: block;
+
+    }
+  }
+
+
+}

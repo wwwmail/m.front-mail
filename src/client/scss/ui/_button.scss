@@ -1,0 +1,194 @@
+.btn {
+  position: relative;
+  margin: 0;
+  padding: 0 15px;
+
+  user-select: none;
+
+  color: $textBlack;
+  text-align: center;
+
+  &:hover {
+    //background-color: $yellow-hard-light;
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: none;
+  }
+
+  &:active {
+    background-color: $yellow-lignt;
+    box-shadow: none;
+  }
+  //
+  //&:disabled {
+  //  background: none;
+  //  &:hover{
+  //    background: none;
+  //
+  //   }
+  // }
+
+  &--act--y-shw:active{
+    background: $yellow-yandex;
+    box-shadow: $button-shadow;
+  }
+
+  &--red {
+    background-color: $red-btn-color;
+    color: #fff;
+    border-color: $red-btn-color;
+
+    &:hover {
+      background-color: $yellow-yandex;
+      border-color: $yellow-yandex;
+      color: #fff;
+    }
+
+    &:active, &:focus {
+      color: #fff !important;
+    }
+  }
+
+  &--yellow {
+
+    background-color: $yellow-normal-light;
+    color: $black;
+    border-color: $yellow-yandex;
+    &:hover {
+      background-color: $yellow-yandex;
+      border-color: $yellow-yandex;
+      color: $black;
+    }
+    &:focus {
+      background-color: $yellow-yandex;
+      border-color: $yellow-yandex;
+      color: $black;
+
+    }
+  }
+
+  &--not-style {
+    border: none;
+    background: none;
+    text-align: center;
+  }
+
+  &--not-events{
+    &:hover{
+      background: none;
+    }
+    &:active{
+      background: none;
+
+    }
+  }
+
+  &--link-style{
+    border: none;
+    background: none;
+    text-align: center;
+
+    border-bottom: 1px dotted $notific-auth-color;
+    border-radius: 0!important;
+
+    padding: 0;
+    height: inherit;
+    border-radius: 0;
+
+    width: auto!important;
+    height: auto!important;
+
+    margin: 16px auto 0px;
+    display: inherit;
+
+    color: $notific-auth-color;
+    &:hover{
+      background: none;
+     }
+  }
+
+  &--normal {
+    border: 1px solid $avatar-border-color;
+    border-radius: 3px;
+    outline: none;
+    box-shadow: none;
+    background: 0 0;
+    -webkit-tap-highlight-color: $black;
+    &:hover {
+      background-color: $yellow-hard-light;
+      border-color: $yellow-hard-light;
+    }
+
+    &:disabled{
+      background: none;
+      &:hover{
+        background: none;
+        border-color: $avatar-border-color;
+      }
+
+    }
+  }
+  &--s-gradient{
+    background: $btn-gradient;
+
+  }
+
+  &--attach{
+    overflow: hidden;
+    padding: 0 5px;
+    z-index: 1;
+
+    &__elm-hide{
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      z-index: 2;
+      cursor: pointer;
+    }
+  }
+
+  &--size_s {
+    height: 26px;
+    font-size: 13px;
+    line-height: 12px;
+  }
+
+  &--size_m {
+    height: 30px;
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  &--size_l {
+    height: 32px;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  &--toggle-arrow{
+
+  }
+
+}
+.ok-validates{
+  position: relative;
+  color: $validtae-ok-green;;
+  font: 13px/1 $mainFont;
+
+  padding: 0 15px 0 35px;
+  &:before{
+    content: '';
+
+    width: 20px;
+    height: 20px;
+
+    position: absolute;
+    left: 10px;
+
+    @extend .icon-valide-ok;
+  }
+}

@@ -1,0 +1,17 @@
+.list-dash {
+  @include no-list;
+
+  &--gray {
+    color: rgba(0,0,0, .4);
+    font-weight: 300;
+    font-size: 12px;
+  }
+
+  &__item {
+    &:before {
+      content: "—";
+      text-indent: -8px;
+      margin-right: 2px;
+    }
+  }
+}

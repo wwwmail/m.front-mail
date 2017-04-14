@@ -1,0 +1,30 @@
+.row {
+  &--size15 {
+    > div {
+      padding-left: 7px;
+      padding-right: 7px;
+
+      &:first-child {
+        padding-left: 15px;
+      }
+
+      &:last-child {
+        padding-right: 15px;
+      }
+    }
+  }
+  &--size0 {
+    > div {
+      padding-left: 0px;
+      padding-right: 0px;
+
+      &:first-child {
+        padding-left: 15px;
+      }
+
+      &:last-child {
+        padding-right: 15px;
+      }
+    }
+  }
+}

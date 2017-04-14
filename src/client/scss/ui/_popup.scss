@@ -1,0 +1,53 @@
+.popup {
+  .modal-content {
+    @include border-radius(0!important);
+
+    padding: 10px 15px 15px;
+  }
+
+  &--tag-create {
+    .modal-dialog {
+      width: 432px;
+    }
+  }
+
+  &--folder-create {
+    .modal-dialog {
+      width: 432px;
+    }
+  }
+
+
+  &__close {
+    @include border-radius(50%);
+
+    position: absolute;
+
+    top: 5px;
+    right: 5px;
+
+    display: block;
+
+    width: 22px;
+    height: 22px;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    //margin: -5px -10px 0 -5px;
+
+    text-align: center;
+    line-height: 22px;
+
+    background: #FFF;
+
+    border: 1px solid #FFF;
+
+    color: #999;
+
+    &:hover {
+      border-color: #CCC;
+    }
+  }
+}

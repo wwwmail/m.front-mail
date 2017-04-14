@@ -1,0 +1,36 @@
+.bread-crumbs {
+  width: 100%;
+  height: auto;
+  padding: 18px 0 18px 12px;
+
+  &__item {
+
+    font: 18px/1;
+    color: $crumb-link-color;
+    text-decoration: underline;
+
+    &::after {
+      content: "";
+
+      display: inline-flex;
+
+      position: relative;
+      top: 3px;
+
+      @extend .icon-crumbs-arrow;
+
+      margin: 0 3px 0 7px;
+
+    }
+  }
+  &--active {
+    color: #000;
+    text-decoration: none;
+
+    &:after {
+      display: none;
+    }
+
+  }
+
+}

@@ -1,0 +1,310 @@
+<inbox-header></inbox-header>
+
+<div class="search-result" ng-if="vm.isNoResult">
+    <strong>Результаты поиска «info»</strong>
+</div>
+
+<div class="search-result search-result--no-result" ng-if="vm.isNoResult">
+    <strong class="font__size18">Не нашлось ни одного письма. Попробуйте сформулировать запрос
+        иначе</strong>
+
+    <p class="color--gray mrg__top20">Рекоммендации:</p>
+
+    <ul class="list-dash list-dash--gray">
+        <li class="list-dash__item">
+            Убедитесь, что в запросе нет ошибок
+        </li>
+        <li class="list-dash__item">
+            Попробуйте уменьшить дилнну запроса
+        </li>
+        <li class="list-dash__item">
+            Если вы помните отправителя, получателя, названия файлов или их тип, попробуйте воспользоваться
+            расширеным поиском или языком запросов
+        </li>
+        <li class="list-dash__item">
+            Попробуйте найти нужное письмо вручную
+        </li>
+    </ul>
+</div>
+
+<div class="inbox-list">
+
+    <inbox-message-list messages="vm.messages"></inbox-message-list>
+
+    <!--
+                <div class="inbox-message pointer">
+                    <div>
+                        <div class="inbox-message__importance">
+                            <span class="icon-important"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__checked">
+                            <label class="checkbox checkbox_theme_islands checkbox_size_m i-bem" data-bem='{"checkbox":{}}'>
+                                <span class="checkbox__box">
+                                    <input class="checkbox__control" type="checkbox"
+                                           autocomplete="off" name="name1" value="val_1"/></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__avatar">
+                            <div class="avatar avatar&#45;&#45;size30">
+                                <img class="avatar__image" src="/images/avatar.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__name">
+                            Alexandr
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__round">
+                            <div class="round round&#45;&#45;yellow"></div>
+                        </div>
+                    </div>
+                    <div class="inbox-message__text">
+                        <div class="inbox-message__subject">
+                            Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit
+                            amet,
+                            consectetur adipiscing elit.
+                        </div>
+                        <div class="inbox-message__message">
+                            Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit amet,
+                            consectetur adipiscing elit. Cras ultricies ligula sed magna dictum porta. Vestibulum ante ipsum
+                            primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit
+                            amet aliquam vel, ullamcorper sit amet ligula. Donec rutrum congue leo eget malesuada. Cras
+                            ultricies ligula sed magna dictum porta. Nulla quis lorem ut libero malesuada feugiat.
+                            Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Vivamus suscipit tortor
+                            eget felis porttitor volutpat. Proin eget tortor risus.
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="inbox-message__data">
+                            30 мар
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inbox-message inbox-message&#45;&#45;new pointer">
+                    <div>
+                        <div class="inbox-message__importance">
+                            <span class="icon-important"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__checked">
+                            <label class="checkbox checkbox_theme_islands checkbox_size_m i-bem" data-bem='{"checkbox":{}}'>
+                                <span class="checkbox__box">
+                                    <input class="checkbox__control" type="checkbox"
+                                           autocomplete="off" name="name1" value="val_1"/></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__avatar">
+                            <div class="avatar avatar&#45;&#45;size30">
+                                <img class="avatar__image" src="/images/avatar.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__name">
+                            Alexandr
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__round">
+                            <div class="round round&#45;&#45;yellow"></div>
+                        </div>
+                    </div>
+                    <div class="inbox-message__text">
+                        <div class="inbox-message__subject">
+                            Curabitur non nulla sit amet nisl tempus.
+                        </div>
+                        <div class="inbox-message__message">
+                            Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit amet,
+                            consectetur adipiscing elit. Cras ultricies ligula sed magna dictum porta. Vestibulum ante ipsum
+                            primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit
+                            amet aliquam vel, ullamcorper sit amet ligula. Donec rutrum congue leo eget malesuada. Cras
+                            ultricies ligula sed magna dictum porta. Nulla quis lorem ut libero malesuada feugiat.
+                            Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Vivamus suscipit tortor
+                            eget felis porttitor volutpat. Proin eget tortor risus.
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="inbox-message__data">
+                            30 мар
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inbox-message inbox-message&#45;&#45;pink pointer">
+                    <div>
+                        <div class="inbox-message__importance">
+                            <span class="icon-important"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__checked">
+                            <label class="checkbox checkbox_theme_islands checkbox_size_m i-bem" data-bem='{"checkbox":{}}'>
+                                <span class="checkbox__box">
+                                    <input class="checkbox__control" type="checkbox"
+                                           autocomplete="off" name="name1" value="val_1"/></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__avatar">
+                            <div class="avatar avatar&#45;&#45;size30">
+                                <img class="avatar__image" src="/images/avatar.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__name">
+                            Alexandr
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__round">
+                            <div class="round round&#45;&#45;yellow"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__subject">
+                            Curabitur non nulla sit amet nisl tempus.
+                        </div>
+                    </div>
+
+                    <div class="inbox-message__message">
+                        Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Cras ultricies ligula sed magna dictum porta. Vestibulum ante ipsum
+                        primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit
+                        amet aliquam vel, ullamcorper sit amet ligula. Donec rutrum congue leo eget malesuada. Cras
+                        ultricies ligula sed magna dictum porta. Nulla quis lorem ut libero malesuada feugiat.
+                        Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Vivamus suscipit tortor
+                        eget felis porttitor volutpat. Proin eget tortor risus.
+                    </div>
+
+                    <div>
+                        <div class="inbox-message__data">
+                            30 мар
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inbox-message pointer"
+                     ng-mouseover="item.hover = true" ng-mouseleave="item.hover = false"
+                     ng-repeat="item in [{hover: false, active: false},{hover: false, active: false},{hover: false, active: false},{hover: false, active: false},{hover: false, active: false},{hover: false, active: false}]"
+                     inbox-message-hover>
+                    <div>
+                        <div class="inbox-message__importance">
+                            <span class="icon-important"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__checked">
+                            <label class="checkbox checkbox_theme_islands checkbox_size_m i-bem" data-bem='{"checkbox":{}}'>
+                                <span class="checkbox__box">
+                                    <input class="checkbox__control" type="checkbox"
+                                           autocomplete="off" name="name1" value="val_1"/></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__avatar">
+                            <div class="avatar avatar&#45;&#45;size30">
+                                <img class="avatar__image" src="/images/avatar.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__name">
+                            Alexandr
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__round">
+                            <div class="inbox-message__round pointer" ng-click="item.active = !item.active">
+                                <div class="round" ng-class="{
+                                            'round&#45;&#45;border': item.hover,
+                                            'round&#45;&#45;yellow': item.active
+                                        }"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inbox-message__labels">
+
+                            <div class="label-ydx label-ydx&#45;&#45;green inbox-message__label">
+                                Метка 1
+                            </div>
+
+                            <div class="label-ydx label-ydx&#45;&#45;red inbox-message__label">
+                                Метка 2
+                            </div>
+
+                            <div class="label-ydx label-ydx&#45;&#45;blue inbox-message__label">
+                                Метка 3
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="inbox-message__text">
+                        <div class="inbox-message__subject">
+                            Curabitur non nulla sit amet nisl tempus convallis.
+                        </div>
+                        <div class="inbox-message__message">
+                            Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit amet,
+                            consectetur adipiscing elit. Cras ultricies ligula sed magna dictum porta. Vestibulum ante ipsum
+                            primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit
+                            amet aliquam vel, ullamcorper sit amet ligula. Donec rutrum congue leo eget malesuada. Cras
+                            ultricies ligula sed magna dictum porta. Nulla quis lorem ut libero malesuada feugiat.
+                            Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Vivamus suscipit tortor
+                            eget felis porttitor volutpat. Proin eget tortor risus.
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="inbox-message__data">
+                            30 мар
+                        </div>
+                    </div>
+                </div>
+    -->
+
+</div>
+
+<div class="inbox-footer mrg__top30">
+    <div class="inbox-footer__row">
+        <div>
+            <div class="font__size13">
+                Вы просмотрели все письма за март 2017 года
+            </div>
+            <div class="mrg__top20">
+                <a class="link link--underline link--next" href="">апрель
+                    <span class="icon-next"></span></a>
+            </div>
+        </div>
+
+        <div class="date-sort">
+            <div class="date-sort__title">
+                Письма по месяцам:
+            </div>
+            <div class="date-sort__row">
+                <a class="date-sort__link" href="">2017:</a>
+                <a class="date-sort__link" href="">март</a>
+                <a class="date-sort__link" href="">апрель</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layout__footer">
+    <footer></footer>
+</div>
+

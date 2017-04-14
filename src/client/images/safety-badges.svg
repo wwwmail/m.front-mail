@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 175 42" style="enable-background:new 0 0 175 42;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#5DA900;}
+	.st1{opacity:0.3;}
+	.st2{fill:#FFFFFF;}
+	.st3{fill:#FFCC00;}
+	.st4{fill:#FF0000;}
+	.st5{opacity:0.1;}
+	.st6{fill:none;stroke:#979797;}
+	.st7{fill:#979797;}
+	.st8{font-family:'ArialMT';}
+	.st9{font-size:24px;}
+</style>
+<g id="green">
+	<polygon class="st0" points="175,0 135,0 139,34 155,42 155,42 155,42 155,42 155,42 171,34 	"/>
+	<polygon id="path-1_1_" class="st1" points="135,0 139,34 155,42 155,0 	"/>
+	<polygon id="check-16-black" class="st2" points="155,26.4 149,20.4 150.4,19 155,23.6 163.6,15 165,16.4 	"/>
+</g>
+<g id="yellow">
+	<polygon class="st3" points="130,0 90,0 94,34 110,42 110,42 110,42 110,42 110,42 126,34 	"/>
+	<polygon id="path-3" class="st1" points="90,0 94,34 110,42 110,0 	"/>
+	<circle id="Oval-63" class="st2" cx="110" cy="28" r="2"/>
+	<polygon id="Rectangle-419" class="st2" points="108,11 112,11 111.3,24 108.7,24 	"/>
+</g>
+<g id="red">
+	<polygon class="st4" points="85,0 45,0 49,34 65,42 65,42 65,42 65,42 65,42 81,34 	"/>
+	<polygon id="path-5_1_" class="st1" points="45,0 49,34 65,42 65,0 	"/>
+	<path id="Oval-63_1_" class="st2" d="M65,30c1.1,0,2-0.9,2-2s-0.9-2-2-2s-2,0.9-2,2S63.9,30,65,30z"/>
+	<polygon id="Rectangle-419_1_" class="st2" points="63,11 67,11 66.3,24 63.7,24 	"/>
+</g>
+<g id="white">
+	<g>
+		<polygon id="path-7_1_" class="st5" points="0,0 4,34 20,42 20,0 		"/>
+		<polygon id="Fill-2_3_" class="st2" points="20,0 20,42 36,34 40,0 		"/>
+	</g>
+	<path id="Combined-Shape" class="st6" d="M20,41.5L4.4,33.7L0.5,0.5H20h19.5l-3.9,33.2L20,41.5z"/>
+	<text transform="matrix(1 0 0 1 13 28)" class="st7 st8 st9">?</text>
+</g>
+</svg>

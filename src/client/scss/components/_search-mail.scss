@@ -1,0 +1,26 @@
+.search-mail {
+  display: flex;
+  flex-direction: row;
+
+  &__close {
+    margin-right: 5px;
+  }
+
+  &__input {
+    width: 188px;
+  }
+
+  &__button {}
+}
+
+@include keyframes(search-input) {
+  from {
+    width: 0;
+  }
+  50% {
+    width: 50%;
+  }
+  to {
+    width: 100%;
+  }
+}

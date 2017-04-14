@@ -1,0 +1,105 @@
+.avatar {
+  @include border-radius(50%);
+
+  display: inline-block;
+  position: relative;
+
+  overflow: hidden;
+
+  &__edit{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    width: inherit;
+    height: 40%;
+
+    background-color: rgba($yellow-yandex, 0.6);
+
+    transform: translateY(100%);
+    transition:  transform 1s;
+    visibility: hidden;
+
+    &:after{
+      position: absolute;
+      top: calc(50% - 12px);
+      left: calc(50% - 12px);
+
+      content: "";
+
+      width: 24px;
+      height: 24px;
+
+      background-position: center center;
+
+    }
+    &--add{
+      &:after{
+      @extend .icon-rounded-add
+      }
+    }
+    &--reload{
+      &:after{
+      @extend .icon-reload
+      }
+    }
+  }
+
+  &--size20 {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--size28 {
+    width: 28px;
+    height: 28px;
+  }
+
+  &--size30 {
+    width: 30px;
+    height: 30px;
+  }
+
+  &--size42 {
+    width: 42px;
+    height: 42px;
+  }
+
+  &--size203 {
+    width: 203px;
+    height: 203px;
+  }
+
+  &--second-style{
+    border: 1px solid $avatar-border-color;
+    background: $silver-avatar-bg-color;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
+
+  &--header {
+    border: 1px solid $avatar-border-color;
+  }
+
+  &--settings{
+    cursor: pointer;
+    &:hover{
+      border: 1px solid $active-left-item-menu-color;
+
+      background-color: $active-left-item-menu-color;
+
+      transition: all 1s;
+
+      .avatar__edit{
+        transform: translateY(0%);
+        transition:  transform 1s;
+        visibility: visible;
+      }
+    }
+    transition: all 1s;
+
+  }
+}

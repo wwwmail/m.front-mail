@@ -1,0 +1,92 @@
+[placeholder] {
+  color: $input-hlaceholder-color;
+}
+
+::-webkit-input-placeholder {
+  color: $input-hlaceholder-color;
+}
+
+.input {
+  position: relative;
+  display: block;
+  width: auto;
+
+  user-select: none;
+
+  box-sizing: border-box;
+  text-overflow: clip;
+
+  color: $textBlack;
+  font-weight: 100;
+
+  border: 1px solid $button-border-color;
+  outline: 1px solid transparent;
+  background: 0 0 transparent;
+
+  padding: 0 10px;
+
+  -webkit-appearance: none;
+
+  &:focus {
+    border: 1px solid $yellow-yandex;
+    outline: 1px solid $yellow-yandex;
+  }
+
+  &--fc-sh-yellow{
+    border: 1px solid $input-border-color-black-yellow;
+    &:focus {
+      outline: none;
+      border: 1px solid $input-border-color-black-yellow;
+      box-shadow: $input-shadow-yellow;
+    }
+  }
+
+  &--up-shadow{
+    box-shadow: $input-insert-shadow;
+  }
+
+  &--size_m {
+    height: 30px;
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  &--size_l {
+    height: 32px;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  &--no-border {
+    border: none;
+  }
+
+}
+
+.input-plash{
+  position: absolute;
+  right: 7px;
+
+  color: $sillver-input-plsah-color;
+  line-height: 1;
+
+  &--top11{top: calc(50% - (11px / 2));}
+  &--top12{top: calc(50% - (12px / 2));}
+  &--top13{top: calc(50% - (13px / 2));}
+  &--top14{top: calc(50% - (14px / 2));}
+  &--top15{top: calc(50% - (15px / 2));}
+  &--top16{top: calc(50% - (16px / 2));}
+  &--top17{top: calc(50% - (17px / 2));}
+  &--top18{top: calc(50% - (18px / 2));}
+}
+
+.input-data-valide-test{
+  font: 12px/1 $mainFont;
+  color: $input-data-valide-test-color;
+
+  &__we-offer{
+    color: $input-data-valide-test-offer-color;
+
+    padding-left: 15px;
+  }
+}

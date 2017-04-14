@@ -1,0 +1,316 @@
+.pointer {
+  cursor: pointer;
+}
+
+.mrg {
+  &__none {
+    margin: 0 !important;
+  }
+  &__auto {
+    margin: auto !important;
+  }
+
+  &__right {
+    margin: auto 0 auto auto !important;
+  }
+  &__left {
+    margin: auto auto auto 0 !important;
+  }
+  &__top {
+    margin: 0 auto auto auto !important;
+  }
+
+  &__left10 {
+    margin-left: 10px !important;
+  }
+
+  &__right10 {
+    margin-right: 10px !important;
+  }
+
+  &__top5 {
+    margin-top: 5px !important;
+  }
+
+  &__top7 {
+    margin-top: 7px !important;
+  }
+
+  &__top10 {
+    margin-top: 10px !important;
+  }
+
+  &__top15 {
+    margin-top: 15px !important;
+  }
+
+  &__top16 {
+    margin-top: 16px !important;
+  }
+
+  &__top20 {
+    margin-top: 20px !important;
+  }
+
+  &__top25 {
+    margin-top: 25px !important;
+  }
+
+  &__top30 {
+    margin-top: 30px !important;
+  }
+
+  &__top40 {
+    margin-top: 40px !important;
+  }
+
+  &__right5 {
+    margin-right: 5px !important;
+  }
+
+  &__right7 {
+    margin-right: 5px !important;
+  }
+
+  &__right16 {
+    margin-right: 18px !important;
+  }
+
+  &__right18 {
+    margin-right: 18px !important;
+  }
+
+  &__right30 {
+    margin-right: 18px !important;
+  }
+
+  &__bottom5 {
+    margin-bottom: 5px !important;
+  }
+
+  &__bottom6 {
+    margin-bottom: 6px !important;
+  }
+
+  &__bottom10 {
+    margin-bottom: 10px !important;
+  }
+
+  &__bottom16 {
+    margin-bottom: 16px !important;
+  }
+
+  &__bottom20 {
+    margin-bottom: 20px !important;
+  }
+
+  &__bottom25 {
+    margin-bottom: 25px !important;
+  }
+
+  &__bottom30 {
+    margin-bottom: 30px !important;
+  }
+
+  &__bottom45 {
+    margin-bottom: 45px !important;
+  }
+
+}
+
+.font {
+  &__size7 {
+    font-size: 7px !important;
+  }
+
+  &__size8 {
+    font-size: 8px !important;
+  }
+
+  &__size9 {
+    font-size: 9px !important;
+  }
+
+  &__size10 {
+    font-size: 10px !important;
+  }
+
+  &__size11 {
+    font-size: 11px !important;
+  }
+
+  &__size12 {
+    font-size: 12px !important;
+  }
+
+  &__size13 {
+    font-size: 13px !important;
+  }
+
+  &__size14 {
+    font-size: 14px !important;
+  }
+
+  &__size15 {
+    font-size: 15px !important;
+  }
+
+  &__size16 {
+    font-size: 16px !important;
+  }
+
+  &__size18 {
+    font-size: 18px !important;
+  }
+
+  &__bold {
+    font-weight: bold;
+  }
+
+  &__center {
+    text-align: center;
+  }
+
+  &__right {
+    text-align: right;
+  }
+
+  &__left {
+    text-align: left;
+  }
+}
+
+.width {
+
+  &--inh {
+    width: inherit !important;
+  }
+
+  &--aut {
+    width: auto !important;
+  }
+
+  &--size20 {
+    width: 20px !important;
+  }
+
+  &--size28 {
+    width: 28px !important;
+  }
+
+  &--size65 {
+    width: 65px !important;
+  }
+
+  &--size65 {
+    width: 90px !important;
+  }
+
+  &--size168 {
+    width: 168px !important;
+  }
+
+  &--size121{
+    width: 121px !important;
+  }
+
+  &--size177 {
+    width: 177px !important;
+  }
+
+  &--size201{
+    width: 201px !important;
+  }
+  &--size328{
+    width: 328px !important;
+  }
+}
+
+.float {
+  &--left {
+    float: left;
+  }
+  &--right {
+    float: right;
+  }
+}
+
+.main-title-text {
+  margin: 0 0 15px;
+  font-size: 28px;
+
+  &__icon {
+    position: relative;
+    align-items: center;
+    display: flex;
+
+    &--size27 {
+      width: 27px;
+      margin: 0 18px 0 0;
+
+    }
+
+  }
+
+}
+
+.hide-elm {
+  visibility: hidden;
+}
+
+.separate {
+  &--top {
+    border-top: 1px solid $silver-btn-color;
+  }
+}
+
+.flex {
+  display: flex;
+
+  &--inline {
+    display: inline-flex;
+  }
+  &--just-s-a {
+    justify-content: space-around;
+  }
+  &--row-wrap {
+    flex-flow: row wrap;
+  }
+
+}
+.align-items{
+  &--cn{
+    align-items: center;
+  }
+}
+
+.position{
+  position: relative!important;
+
+  &--abs{
+    position: absolute!important;
+  }
+
+  &--fix{
+    position: fixed!important;
+  }
+
+  &--stat{
+    position: static!important;
+  }
+
+}
+
+.overflow {
+
+  overflow: auto;
+
+  &--h{
+    overflow: hidden;
+  }
+
+  &--v{
+    overflow: visible;
+
+  }
+}

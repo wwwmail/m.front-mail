@@ -1,0 +1,27 @@
+.date-sort {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-start;
+
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+
+  &__title {
+    margin-right: 5px;
+  }
+
+  &__link {
+    padding: 5px 7px;
+
+    color: #000;
+    text-decoration: underline;
+
+    &:hover {
+      background: #e6e6e6;
+    }
+  }
+
+  &__row {
+
+  }
+}

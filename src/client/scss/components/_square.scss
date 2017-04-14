@@ -1,0 +1,10 @@
+.square {
+  display: inline-block;
+
+  width: 10px;
+  height: 10px;
+
+  &--green {
+    background: #15da00;
+  }
+}

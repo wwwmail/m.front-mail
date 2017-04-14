@@ -1,0 +1,91 @@
+<compose-header></compose-header>
+
+<div class="layout--padding20">
+
+    <div class="compose-from mrg__top20">
+        <div class="compose-from__item font__size13">
+            <button class="btn btn--size_s btn--red width--inh">Отправить</button>
+        </div>
+        <div class="compose-from__item font__size13">от кого:</div>
+        <div class="compose-from__item font__size13">
+            <div class="avatar avatar--size28">
+                <img class="avatar__image" src="/images/avatar.png">
+            </div>
+        </div>
+        <div class="compose-from__item font__size13">
+            John Doe
+        </div>
+        <div class="compose-from__item font--size13">
+            <button class="btn-y">
+                (john.doe@mail.cz)
+                <span class="btn-y__icon btn-y__icon--arrow icon-arrow-down"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="mrg__top10">
+        <div class="input-line input-line--full">
+            <label class="input-line__label">
+                <a class="link link--gray link--hv-red" href="">Кому</a>
+            </label>
+            <div class="input-line__links">
+                <a class="link link--violet link--hv-red" href="#">
+                    Копия
+                </a>
+                <a class="link link--violet link--hv-red" href="#">
+                    Скрытая копия
+                </a>
+            </div>
+            <input class="input-line__input" type="text">
+        </div>
+        <div class="input-line input-line--full mrg__top10">
+            <label class="input-line__label">
+                <a class="link link--gray link--hv-red" href="">Тема</a>
+            </label>
+            <div class="input-line__links">
+                <a class="link link--violet link--hv-red" href="#">
+                    Шаблон
+                </a>
+            </div>
+            <input class="input-line__input" type="text">
+        </div>
+    </div>
+
+    <div class="mrg__top20">
+        <div message-textarea></div>
+    </div>
+
+    <div class="row mrg__top20">
+        <div class="col-xs-6">
+
+            <!--<compose-send></compose-send>-->
+
+            <div class="compose-send">
+                <div class="btn-group compose-send__item">
+                    <button class="btn-group__btn btn btn--size_s btn--red">Отправить</button>
+                    <button class="btn-group__btn btn btn--size_s btn--red"
+                            uib-popover-template="'app/components/time-send/time-send-popover.html'"
+                            popover-class="popover--time-send popover--no-arrow"
+                            popover-placement="top"
+                            popover-animation="true"
+                            popover-trigger="'outsideClick'">
+                        <span class="icon-clock"></span>
+                    </button>
+                </div>
+                <button class="btn-y btn-y--size-m compose-send__item">
+                    <span class="icon-attach"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <p class="font__size13 pull-right">
+                Сохранено как черновик в 16:36
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<div class="layout__footer">
+    <footer></footer>
+</div>

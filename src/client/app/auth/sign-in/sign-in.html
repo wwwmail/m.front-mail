@@ -1,0 +1,149 @@
+<div class="auth-layout">
+
+    <div class="auth-layout__content">
+        <div class="auth-layout__form">
+
+            <div class="card">
+                <div class="auth-form">
+                    <div class="auth-form__logo mrg__bottom16">
+                        <img class="img-responsive mrg__auto" src="/images/logo.png">
+                        <hr class="hr hr--auth mrg__top16">
+                    </div>
+                    <form class="form" name="userForm" ng-submit="vm.login(userForm)" novalidate>
+
+                        <!-- логин -->
+                        <div class="form__field-item mrg__bottom10">
+                            <div class="field-style">
+                                <input class="input input--size_l input--up-shadow width--inh" type="text"
+                                       ng-model="vm.userForm.model.username" required placeholder="Логин">
+                                <validation-errors data="userForm.username"
+                                                   server="vm.userForm.errors"
+                                                   messages="vm.userForm.validations.username">
+                                </validation-errors>
+                            </div>
+                        </div>
+
+                        <!-- пароль -->
+                        <div class="form__field-item mrg__bottom10">
+                            <div class="field-style">
+                                <input class="input input--size_l input--up-shadow width--inh"
+                                       type="password"
+                                       ng-model="vm.userForm.model.password" required placeholder="Пароль">
+                            </div>
+                            <validation-errors data="userForm.password"
+                                               server="vm.userForm.errors"
+                                               messages="vm.userForm.validations.password">
+                            </validation-errors>
+                        </div>
+
+                        <!-- войти -->
+                        <div class="form__field-item mrg__bottom10">
+                            <div class="field-style">
+                                <button class="btn btn--size_l btn--red width--inh" type="submit">Войти</button>
+                            </div>
+                        </div>
+
+                        <div class="validation mrg__bottom10">
+                            <div class="validation__message validation__message--red">
+                                {{ vm.userForm.errors[0] }}
+                            </div>
+                        </div>
+
+                        <!-- запомнить / забыли-->
+                        <div class="form__field-item mrg__bottom10 flex flex--just-s-a">
+                            <div class="field-style widtn--inh">
+                                <!--наш чекбокс -->
+                                <label class="checkbox-y__label checkbox-y" for="isChecked">
+                                    <input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked"
+                                           ng-model="isChecked">
+                                    <div class="checkbox-y__body">
+                                            <span class="checkbox-y__icon icon-mark">
+                                            </span>
+                                    </div>
+                                    <span class="checkbox__text " role="presentation">
+                                        Запомнить меня
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="field-style widtn--inh font__right">
+                                <a class="link link-aith" ui-sref="passwordReset">Забыли пароль?</a>
+                            </div>
+                        </div>
+
+
+                    </form>
+                    <hr class="hr hr--auth ">
+                    <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" ui-sref="signUp">Регистрация</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="auth-layout__bg"></div>
+</div>
+
+<!-- футтер на странице авторизации-->
+<div class="footer footer__auth">
+
+    <!-- Копирайт-->
+    <div class="footer__copyright">
+        <span class="">© 2001—2017 «Mail.cz» Group a.s.</span>
+    </div>
+
+    <!-- Основное меню-->
+    <div class="footer__menu">
+        <div class="navigation">
+            <div class="navigation__row">
+                <div class="navigation__item"><a class="navigation__link navigation__link--footer-a" href="">Поиск</a>
+                </div>
+                <div class="navigation__item"><a class="navigation__link navigation__link--footer-a"
+                                                 href="">Контакты</a></div>
+                <div class="navigation__item"><a class="navigation__link navigation__link--footer-a" href="">Файлы</a>
+                </div>
+                <div class="navigation__item"><a class="navigation__link navigation__link--footer-a" href="">Новости</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Дополнительное меню с выбором языка-->
+    <div class="footer__right-menu  mrg__right">
+
+        <div class="navigation">
+            <div class="navigation__row">
+                <div class="navigation__item position width--size28 ">
+
+                    <div class="choice-language">
+
+                        <a class="choice-language__link choice-language--active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a>
+                        <!---->
+                        <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a>
+
+                    </div>
+                </div>
+                <div class="navigation__item"><a class="navigation__link" href="">Контакты</a></div>
+                <div class="navigation__item"><a class="navigation__link" href="">Реклама</a></div>
+            </div>
+        </div>
+    </div>
+
+</div>

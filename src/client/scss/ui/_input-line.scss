@@ -1,0 +1,86 @@
+//[placeholder] {
+//  color: $input-hlaceholder-color;
+//}
+//
+//::-webkit-input-placeholder {
+//  color: $input-hlaceholder-color;
+//}
+
+.input-line {
+  position: relative;
+
+  display: flex;
+
+  color: $textBlack;
+  font-weight: 100;
+
+  &__input {
+    width: 100%;
+
+    display: block;
+
+    border: none;
+    outline: none;
+
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+
+    padding-left: 40px;
+
+    &:active, &:focus {
+      border-bottom: 1px solid $yellow-yandex;
+      outline: none;
+    }
+  }
+
+  &--full {
+    width: 100%;
+  }
+
+  &__label {
+    position: absolute;
+
+    margin: 0;
+
+    bottom: 3px;
+
+    font-size: 11px;
+    color: rgba(0,0,0,.5);
+  }
+
+  &__links {
+    position: absolute;
+
+    margin: 0;
+
+    bottom: 3px;
+    right: 0;
+
+    font-size: 11px;
+  }
+
+  &:focus {
+    border: 1px solid $yellow-yandex;
+    outline: 1px solid $yellow-yandex;
+  }
+
+  &--up-shadow {
+    box-shadow: $input-insert-shadow;
+  }
+
+  &--size_m {
+    height: 30px;
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  &--size_l {
+    height: 32px;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  &--no-border {
+    border: none;
+  }
+}
+

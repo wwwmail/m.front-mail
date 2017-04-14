@@ -1,0 +1,26 @@
+.hr {
+  margin: 0;
+
+  width: 100%;
+  height: 1px;
+  background-color: $hr-main-color;
+
+  outline: none;
+  border: none;
+
+  //border-top-width: 1px;
+  //border-top-color: rgba(0,0,0,.1);
+  //border-bottom: none;
+  //border-left: none;
+  //border-right: none;
+
+  &--dashed {
+    border: none;
+    border-bottom: 1px dotted $hr-main-color;
+  }
+
+  &--auth{
+    background: $hr-auth-color;
+    margin-bottom: 19px;
+  }
+}

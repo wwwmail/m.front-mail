@@ -1,0 +1,35 @@
+<div class="folder-list">
+    <div class="folder-list__body">
+
+        <!--Пока что скрываем-->
+        <!--<input type="text">-->
+    </div>
+
+    <div>
+        <a class="folder-list__link folder-list__link--disabled" href>
+            <span class="folder-list__name">Входящие</span>
+        </a>
+        <a class="folder-list__link" href>
+            <span class="folder-list__name">Исходящие</span>
+        </a>
+        <a class="folder-list__link" href>
+            <span class="folder-list__name">Удаленные</span>
+        </a>
+        <a class="folder-list__link" href>
+            <span class="folder-list__name">Спам</span>
+        </a>
+        <a class="folder-list__link" href>
+            <span class="folder-list__name">Черновики</span>
+        </a>
+    </div>
+
+    <hr class="hr">
+
+    <div>
+        <a class="folder-list__link folder-list__link--new" href
+           ng-click="vm.openFolderCreatePopup()">
+            <span class="folder-list__name">Новая папка...</span>
+        </a>
+    </div>
+
+</div>

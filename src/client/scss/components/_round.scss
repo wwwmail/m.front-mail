@@ -1,0 +1,19 @@
+.round {
+  display: inline-block;
+
+  @include border-radius(50%);
+
+  border: 1px solid transparent;
+
+  width: 10px;
+  height: 10px;
+
+  &--yellow {
+    background: #f1cb30;
+    border: 1px solid transparent !important;
+  }
+
+  &--border {
+    border: 1px solid rgba(0, 0, 0, .5);
+  }
+}

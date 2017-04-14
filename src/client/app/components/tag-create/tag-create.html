@@ -1,0 +1,29 @@
+<div class="tag-create">
+    <div class="tag-create__title">Создаем тэг</div>
+
+    <div class="mrg__top15">
+        <form novalidate>
+            <div class="tag-create__input mrg__top15">
+                <div class="mrg__right10">
+                    <span class="font__size13">Название</span>
+                </div>
+                <div>
+                    <input class="input input--size_s width--inh input--fc-sh-yellow" type="text" required/>
+                </div>
+            </div>
+
+            <div class="palette-list tag-create__palette mrg__top30">
+                <div class="palette-list__item"
+                     style="background-color: {{ palette.color }}"
+                     ng-repeat="palette in vm.palette.items track by $index">
+                    <span class="palette-list__icon icon-mark" ng-if="palette.active"></span>
+                </div>
+            </div>
+
+            <div class="tag-create__btn mrg__top40">
+                <button class="btn-y btn-y--border" type="submit">Создать тэг</button>
+                <button class="btn-y btn-y--border">Отменить</button>
+            </div>
+        </form>
+    </div>
+</div>

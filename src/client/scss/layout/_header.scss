@@ -1,0 +1,76 @@
+.header {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding: 0 30px;
+
+  height: 60px;
+  min-width: 960px;
+
+  background: $header-color;
+
+  &__name {
+    color: rgba(0, 0, 0, .7);
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+
+    margin-right: 10px;
+  }
+
+  &__spinner {
+    width: 30px;
+
+    margin: 10px;
+  }
+
+  &__navigation {
+
+  }
+
+  &__brand {
+    //min-width: 172px;
+  }
+
+  &__logo {
+    width: 130px;
+  }
+
+  &__settings-link {
+    color: #717376;
+    font-size: 20px;
+
+    &:hover {
+      color: #000;
+    }
+  }
+
+  &__left {
+    width: 100%;
+
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__left-item {
+    margin-right: 10px;
+  }
+
+  &__avatar-link {
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      .header__name {
+        color: rgba(0, 0, 0, 1);
+      }
+
+      .avatar {
+        border-color:rgba(0, 0, 0, .4);
+      }
+    }
+  }
+}

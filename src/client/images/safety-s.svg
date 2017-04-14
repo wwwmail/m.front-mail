@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 43 43" style="enable-background:new 0 0 43 43;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.1;enable-background:new    ;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:none;stroke:#979797;}
+	.st3{fill:#979797;}
+	.st4{font-family:'ArialMT';}
+	.st5{font-size:24px;}
+</style>
+<g>
+	<g>
+		<polygon class="st0" points="1.5,0.5 5.5,34.5 21.5,42.5 21.5,0.5 		"/>
+		<polygon class="st1" points="21.5,0.5 21.5,42.5 37.5,34.5 41.5,0.5 		"/>
+	</g>
+	<path class="st2" d="M21.5,42L5.9,34.2L2,1h19.5H41l-3.9,33.2L21.5,42z"/>
+	<text transform="matrix(1 0 0 1 14.5 28.5)" class="st3 st4 st5">?</text>
+</g>
+</svg>

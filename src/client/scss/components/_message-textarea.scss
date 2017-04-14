@@ -1,0 +1,31 @@
+.message-textarea {
+  .note-editor {
+    border: none;
+  }
+
+  .note-frame {
+    border: none;
+  }
+
+  .note-toolbar {
+    border: none;
+
+    background: none;
+  }
+
+  .note-statusbar {
+    margin-top: 25px;
+
+    height: 2px;
+
+    background-color: #ffdb4d !important;
+  }
+
+  .summernote__resize {
+    margin-top: -20px;
+
+    float: right;
+
+    cursor: se-resize;
+  }
+}

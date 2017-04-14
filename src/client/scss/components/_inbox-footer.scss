@@ -1,0 +1,11 @@
+.inbox-footer {
+  padding: 0 24px;
+
+  font-family: Arial, sans-serif;
+
+  &__row {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+  }
+}

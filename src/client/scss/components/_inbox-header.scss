@@ -1,0 +1,65 @@
+.inbox-header {
+  border-bottom: 1px solid rgba(0,0,0,.05);
+
+  &__row {
+    display: flex;
+  }
+
+  &__item {
+    text-align: center;
+
+    font-family: Arial,sans-serif;
+    font-size: 13px;
+
+    &:hover {
+      background: #f4f4f4;
+    }
+  }
+
+  &__link {
+    display: block;
+
+    padding: 12px 15px;
+
+    &:hover {
+      background: #f4f4f4;
+    }
+  }
+
+  &__icon {
+    display: block;
+
+    font-size: 18px;
+
+    &--green {
+      color: #86ba82;
+    }
+
+    &--blue {
+      color: #859dc6;
+    }
+
+    &--red {
+      color: #e76a50;
+    }
+
+    &--yellow {
+      color: #fcc93a;
+    }
+  }
+
+  &__name {
+    margin-top: 3px;
+
+    display: block;
+
+    color: #000;
+  }
+
+  &__name-icon {
+    margin-top: 3px;
+
+    color: #000;
+    font-size: 10px;
+  }
+}

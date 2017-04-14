@@ -1,0 +1,34 @@
+//.checkbox{
+//  //position: relative;
+//
+//
+//  &__input{
+//    //position: absolute;
+//    //visibility: hidden;
+//
+//  }
+//
+//  &__input:not(checked){
+//
+//  }
+//
+//  &__input:checked{
+//
+//  }
+//
+//  &__label{
+//
+//  }
+//
+//  &:after {
+//    position: absolute;
+//    top: -5px;
+//    left: 2px;
+//    content: '';
+//    background-image: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3…22M13.5.5l-8%2012L1.7%208l-1%201.6L5.6%2015l9.1-13.4z%22%2F%3E%3C%2Fsvg%3E);
+//    background-size: 100%;
+//    visibility: hidden;
+//    opacity: 0;
+//    transition: transform .05s ease-out, opacity .05s ease-out, visibility 0s linear .05s;
+//  }
+//}

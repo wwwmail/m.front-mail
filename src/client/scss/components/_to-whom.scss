@@ -1,0 +1,16 @@
+.to-whom {
+  display: inline-flex;
+  align-items: center;
+
+  &__title {
+    font: 100 11px/1 $mainFont;
+    color: $silver-mail-message-title-color;
+    padding: 6px;
+  }
+
+  &__mail-recipient {
+    font: 100 11px/1 $mainFont;
+    color: $black;
+  }
+
+}

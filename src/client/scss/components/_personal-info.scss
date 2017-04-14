@@ -1,0 +1,19 @@
+
+.personal-info {
+  display: flex;
+  flex-flow: row wrap;
+
+  &__user-avatar {
+    display: block;
+    margin: 0 15px auto;
+  }
+
+  &__user-info {
+    margin: auto 15px;
+    width: 550px;
+  }
+
+  @media only screen and(max-width: 980px) {
+
+  }
+}

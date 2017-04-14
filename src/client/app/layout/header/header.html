@@ -1,0 +1,83 @@
+<div class="header">
+    <div class="header__brand pointer" ui-sref="mail.inbox">
+        <img class="header__logo" src="/images/logo.png" alt="Mail logo">
+    </div>
+
+    <div>
+        <div class="header__spinner">
+            <spinner></spinner>
+        </div>
+    </div>
+
+    <div class="header__navigation">
+
+        <!--Тут компонент меню-->
+        <div class="navigation">
+            <div class="navigation__row">
+                <div class="navigation__item">
+                    <a class="navigation__link navigation__link--active" href="">Поиск</a>
+                </div>
+                <div class="navigation__item">
+                    <a class="navigation__link" href="">Контакты</a>
+                </div>
+                <div class="navigation__item">
+                    <a class="navigation__link" href="">Файлы</a>
+                </div>
+                <div class="navigation__item">
+                    <a class="navigation__link" href="">Новости</a>
+                </div>
+                <div class="navigation__item">
+                    <a class="navigation__link" href="">Еще</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="header__left">
+        <div class="header__search header__left-item">
+
+            <search-mail></search-mail>
+
+        </div>
+
+        <div class="header__settings header__left-item">
+            <!--<a class="header__settings-link">-->
+            <button class="btn-y btn-y--settings pointer"
+                    uib-popover-template="'app/components/settings-menu/settings-menu.html'"
+                    popover-class="popover--settings"
+                    popover-placement="bottom"
+                    popover-animation="true"
+                    popover-trigger="'outsideClick'">
+                <span class="icon-settings"></span>
+            </button>
+        </div>
+
+
+        <div class="header__avatar header__left-item">
+
+            <a class="header__avatar-link" href
+               uib-popover-template="'app/components/user-menu/user-menu-popover.html'"
+               popover-class="popover--user popover--no-arrow"
+               popover-placement="bottom-right"
+               popover-animation="true"
+               popover-trigger="'outsideClick'">
+
+                <div class="header__name">
+
+                    john.doe@mail.cz
+
+                </div>
+
+                <!--Тут компонент аватара-->
+
+                <div class="avatar avatar--header avatar--size42">
+                    <img class="avatar__image" src="/images/avatar.png">
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+</div>

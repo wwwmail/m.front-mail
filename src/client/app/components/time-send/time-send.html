@@ -1,0 +1,43 @@
+<div class="time-send" ng-class="{'time-send--info-open': vm.isInfoOpen}">
+    <div class="time-send__close pointer" ng-click="vm.close()">
+        <img class="img-responsive" src="/images/cancel.svg">
+    </div>
+    <div class="time-send__content">
+        <div class="time-send__info font__size13" ng-if="vm.isInfoOpen">
+            Вы можете указать дату и время, когда письмо должно быть отправлено. Отправку письма можно отложить не более
+            чем на один год с текущей даты.
+        </div>
+        <div class="time-send__planing mrg__top10">
+            <div class="time-send__planing-item">
+                <div class="checkbox-y checkbox-y--size15">
+                    <label class="checkbox-y__label" for="isChecked">
+                        <input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked"
+                               ng-model="isChecked">
+                        <div class="checkbox-y__body">
+                            <span class="checkbox-y__icon icon-mark"></span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="time-send__planing-item font__size15">
+                <div uib-datepicker-popup="'dd-MMMM-yyyy'"
+                     ng-model="vm.dateModel" is-open="vm.isDateOpen"
+                     datepicker-options="vm.dateOptions"></div>
+                отправить <a href ng-click="vm.isDateOpen = !vm.isDateOpen">сегодня</a> в
+            </div>
+            <div class="time-send__planing-item">
+                <button class="btn-y btn-y--border">
+                    15:00
+                    <span class="btn-y__icon btn-y__icon--arrow icon-arrow-down"></span>
+                </button>
+            </div>
+            <div class="time-send__planing-item">
+                <a class="link link--gray font__size18"
+                   href
+                   ng-click="vm.isInfoOpen = !vm.isInfoOpen">
+                    <span class="icon-info"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

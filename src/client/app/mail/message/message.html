@@ -1,0 +1,147 @@
+<inbox-header></inbox-header>
+
+<div class="mail-message">
+
+    <!-- Хедер сообщения -->
+    <div class="mail-message__head">
+
+        <div class="mail-message__title mrg-top18">
+            Регистрация на сервисе @mail.cz
+        </div>
+
+        <div class="info-sender flex--inline">
+
+            <div class="info-sender__avatar flex">
+                <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                </div>
+            </div>
+
+            <div class="info-sender__title">
+                <div class="info-sender__from-whom">
+                    Команда @Mail.cz
+                    <span class="info-sender__from-whom__mail-name">support@mail.cz</span>
+                </div>
+
+                <div class="info-sender__to-whom flex--inline">
+                    <span class="mrg__right18">Вам</span>
+
+                    <div class="avatar avatar--settings avatar--size20 avatar--second-style mrg__right5">
+                        <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                    </div>
+
+                    <span class="">john.doe@mail.cz</span>
+
+                    <button class="btn btn--not-style btn--not-events bth--toggle-arrow icon-arrow-up font__size7"
+                            id="" type="button">
+
+                    </button>
+                </div>
+            </div>
+            <div class="info-sender__date mrg__right"> 1 мар в 16:20</div>
+
+        </div>
+
+    </div>
+
+    <!-- Тело сообщения -->
+    <div class="mail-message__body">
+        <div class="body-message">
+
+            <!--Само сообщение-->
+            <div class="body-message__content"
+                 ng-bind-html="vm.message.model.body"></div>
+
+        </div>
+    </div>
+
+    <!-- Быстрый ответ-->
+    <div class="mail-message__reply flex--inline">
+
+        <div class="mail-message__reply__avatar flex">
+            <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__top">
+                <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+            </div>
+        </div>
+
+        <!-- поле для ввода сообщения с двумя сотояниями-->
+        <!--
+           **! Этот класс является переключателем состояни для поля ввода
+               >>> quick-reply--used-input-message
+        -->
+        <div class="quick-reply" ng-click="vm.isSendTextOpen = true"
+             ng-class="{'quick-reply--used-input-message': vm.isSendTextOpen}">
+
+            <!-- до нажатия-->
+            <div class="quick-reply__not-form-message">
+
+                <div class="quick-reply__not-form-message__title">
+                    Нажмите здесь, чтобы
+                    <span class="quick-reply__not-form-message__title__method">Ответить</span> или
+                    <span class="quick-reply__not-form-message__title__method">Переслать</span>
+                </div>
+            </div>
+
+            <!-- после нажатия-->
+            <div class="quick-reply__form-message">
+
+                <button class="quick-reply__form-message__btn-close btn btn--not-style btn-y--close font__size16"
+                        type="button"
+                        ng-click="vm.isSendTextOpen = false; $event.stopPropagation();">
+                    <img class="btn-y__icon " src="/images/cancel.svg">
+                </button>
+
+                <!-- информациия о адрессате-->
+                <div class=" quick-reply__form-message__header to-whom">
+                    <span class="to-whom__title">Кому:</span>
+                    <span class="to-whom__mail-recipient">Команда Яндекс.Почты</span>
+                </div>
+
+                <!-- Поле ввода сообщения-->
+                <div class="quick-reply__form-message__content message-input"
+                     placeholder="Введите ваше сообщение">
+                    Введите ваше сообщение
+                </div>
+
+                <!-- Основная навигация по дествиям-->
+                <div class="quick-reply__form-message__footer control-send-message">
+
+                    <button class="btn btn--yellow btn--act--y-shw btn--size_s width--size90">Отправить</button>
+
+                    <button class="btn btn--not-style btn--attach btn--size_s btn--not-events width--size28 icon-attach font__size16">
+                        <input class="btn--attach__elm-hide" type="file"/>
+                    </button>
+
+                    <span class="quick-reply__form-message__footer__allform">Перейти в полную форму ответа</span>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Пагинация писем как в яндексе,
+     в макетах не не было предусмотрено, по этому я только набросал семантику,
+     не стилизовал вдруг будет использоватся
+-->
+
+<!--
+
+<div class="messages-prev">
+    <a class="messages-prev__next hide-elm" href="">
+        <span>Команда Яндекс.Почты</span>
+        <span>Как читать почту с мобильного</span>
+    </a>
+    <a class="messages-prev__next messages-prev__next--next" href="">
+
+    </a>
+</div>
+
+-->
+
+<div class="layout__footer">
+    <footer></footer>
+</div>

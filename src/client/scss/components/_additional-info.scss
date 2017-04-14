@@ -1,0 +1,39 @@
+.additional-info {
+  width: 550px;
+  min-width: 550px;
+  margin: auto;
+
+  &__block {
+    margin: 0 0 25px 0;
+
+    &__title {
+      font: normal 18px/1.6 sans-serif;
+      color: #000000;
+    }
+
+    &__option {
+      display: grid;
+
+      padding: 0 0 0 43px;
+    }
+    &__link {
+      font: 100 15px/1.533 sans-serif;
+      color: $additional-link-color;
+
+      &:hover {
+        font-weight: 500;
+        color: $additional-link-color;
+
+      }
+    }
+
+    &__snap-profile {
+      display: inline-flex;
+      justify-content: center;
+      padding: 0 0 0 50px;
+    }
+  }
+  &__allow {
+    padding: 10px 0px 0 7px;
+  }
+}

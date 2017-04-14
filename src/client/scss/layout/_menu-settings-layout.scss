@@ -1,0 +1,16 @@
+.menu-settings-layout {
+  &__padding {
+    padding: 0 20px;
+
+    &--size10 {
+      padding: 0 10px;
+    }
+  }
+
+  &__pass-info {
+    color: #78797a;
+
+    font-size: 11px;
+    font-family: Verdana, sans-serif;
+  }
+}

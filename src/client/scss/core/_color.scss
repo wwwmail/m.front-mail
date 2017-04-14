@@ -1,0 +1,28 @@
+.color {
+  &__white {
+    color: #fff;
+  }
+
+  &__gray {
+    color: #717376;
+  }
+
+  &--gray {
+    color: #717376;
+  }
+
+  &--green {
+    color: #5c9042;
+  }
+
+  &--yellow {
+    color: #f3b763;
+  }
+
+  &--red {
+    color: #cc0000;
+  }
+  &--silver{
+    color: $checkbox-auth-color;
+  }
+}

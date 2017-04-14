@@ -1,0 +1,98 @@
+@import "compass/css3/animation";
+@import "compass/css3/border-radius";
+@import "compass/css3/transform";
+@import "compass/css3/box-shadow";
+@import "compass/css3";
+@import 'core/mixins';
+@import 'core/vars';
+@import 'core/color';
+@import 'core/helper';
+@import 'layout/layout';
+@import 'layout/menu-main';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/navigation';
+@import 'layout/layout-settings.scss';
+@import 'layout/menu-main-layout';
+@import 'layout/container';
+@import 'layout/menu-settings-layout';
+@import 'layout/menu-settings';
+@import 'layout/auth-layout';
+@import 'layout/mail-message';
+@import "layout/password-reset-layout";
+@import 'ui/checked';
+@import 'ui/hr';
+@import 'ui/btn-y';
+@import "ui/form";
+@import "ui/a";
+@import "ui/button";
+@import "ui/input";
+@import "ui/popover";
+@import "ui/popup";
+@import "ui/row";
+@import "ui/card";
+@import "ui/checkbox";
+@import "ui/btn-group";
+@import "ui/input-line";
+@import "ui/checkbox-y/style.scss";
+@import "components/validation";
+@import 'components/avatar';
+@import 'components/round';
+@import 'components/folders-setup';
+@import 'components/square';
+@import 'components/inbox-header';
+@import 'components/inbox-message';
+@import 'components/inbox-footer';
+@import 'components/date-sort';
+@import "components/notific";
+@import "components/bread-crumbs";
+@import "components/personal-info";
+@import "components/additional-info";
+@import "components/user-signatures";
+@import "components/social-icons";
+@import "components/search-mail";
+@import "components/settings-menu";
+@import "components/user-menu";
+@import "components/search-result";
+@import "components/list-dash";
+@import "components/label-ydx";
+@import "components/auth-form";
+@import "components/message-textarea";
+@import "components/compose-from";
+@import "components/quick-reply";
+@import "components/to-whom";
+@import "components/info-sender";
+@import "components/compose-send";
+@import "components/body-message";
+@import "components/time-send";
+@import "components/choice-language";
+@import "components/spinner";
+@import "components/folder-list";
+@import "components/folder-create";
+@import "components/tag-list";
+@import "components/tag-create";
+@import "components/palette-list";
+@import 'font-icons/icomoon';
+
+body {
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  &:hover, &:focus {
+    color: #000;
+    text-decoration: none;
+  }
+}
+
+label {
+  font-weight: normal;
+}

@@ -1,0 +1,12 @@
+.folder-create {
+  width: 432px;
+
+  &__title {
+    font-size: 17px;
+  }
+
+  &__input {
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,70 @@
+.menu-settings {
+  @include no-list;
+
+  display: block;
+
+  &__icon {
+    margin-right: 8px;
+  }
+
+  &__item {
+
+  }
+
+  &__link {
+    display: block;
+
+    padding: 0 20px;
+
+    color: #000;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+
+    line-height: 26px;
+
+    &:hover {
+      background: rgba(0, 0, 0, .1);
+    }
+
+    &--gray {
+      color: rgba(0, 0, 0, .5);
+    }
+
+    &--active {
+      color: #fff;
+
+      background: #8ea4d3 !important;
+    }
+
+    &--open {
+      &:before {
+        content: "";
+
+      }
+    }
+  }
+
+  &__sub {
+    .menu-main__link {
+      padding-left: 70px;
+    }
+  }
+
+  &__counter {
+    float: right;
+  }
+
+  &--tag {
+    display: block;
+
+    .menu-main__item {
+      float: left;
+
+      width: 50%;
+    }
+
+    &:after {
+      @include clear;
+    }
+  }
+}

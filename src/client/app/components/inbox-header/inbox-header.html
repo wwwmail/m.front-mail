@@ -1,0 +1,86 @@
+<div class="inbox-header">
+    <div class="inbox-header__row">
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" ui-sref="mail.compose">
+                <span class="icon-write inbox-header__icon inbox-header__icon--blue"></span>
+                <span class="inbox-header__name">Написать</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-redo inbox-header__icon inbox-header__icon--green"></span>
+                <span class="inbox-header__name">Обновить</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-forward inbox-header__icon inbox-header__icon--blue"></span>
+                <span class="inbox-header__name">Переслать</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-bin inbox-header__icon inbox-header__icon--red"></span>
+                <span class="inbox-header__name">Удалить</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-spam inbox-header__icon inbox-header__icon--yellow"></span>
+                <span class="inbox-header__name">Спам</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-unread inbox-header__icon inbox-header__icon--blue"></span>
+                <span class="inbox-header__name">Не прочитано</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href
+               uib-popover-template="'app/components/tag-list/tag-list-popover.html'"
+               popover-class="popover--tag-list"
+               popover-placement="bottom"
+               popover-animation="true"
+               popover-trigger="'outsideClick'">
+                <span class="icon-tag inbox-header__icon inbox-header__icon--blue"></span>
+                <div class="inbox-header__name">
+                    Тэг
+                    <span class="icon-arrow-down inbox-header__name-icon"></span>
+                </div>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href
+               uib-popover-template="'app/components/folder-list/folder-list-popover.html'"
+               popover-class="popover--folder-list"
+               popover-placement="bottom"
+               popover-animation="true"
+               popover-trigger="'outsideClick'">
+                <span class="icon-folder inbox-header__icon inbox-header__icon--blue"></span>
+                <div class="inbox-header__name">
+                    В папку
+                    <span class="icon-arrow-down inbox-header__name-icon"></span>
+                </div>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-archive inbox-header__icon inbox-header__icon--blue"></span>
+                <span class="inbox-header__name">Архивировать</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-pin inbox-header__icon inbox-header__icon--blue"></span>
+                <span class="inbox-header__name">Закрепить</span>
+            </a>
+        </div>
+        <div class="inbox-header__item">
+            <a class="inbox-header__link" href>
+                <span class="icon-more inbox-header__icon inbox-header__icon--blue"></span>
+                <span class="inbox-header__name">Еще</span>
+            </a>
+        </div>
+    </div>
+</div>

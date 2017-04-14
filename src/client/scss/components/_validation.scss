@@ -1,0 +1,15 @@
+.validation {
+
+  &__message {
+    font: normal 12px/1.16 sans-serif;
+    color: $notific-auth-color;
+    margin-top: 5px;
+    padding-left: 3px;
+
+    &--red {
+      color: #cc0000;
+    }
+
+  }
+
+}

@@ -1,0 +1,16 @@
+.layout-settings {
+  margin: 25px;
+  display: inline-flex;
+  flex-flow: row wrap;
+  width: 100%;
+  justify-content: space-around;
+
+  &__col {
+    //width: 50%;
+    min-width: 450px;
+  }
+  &__row {
+    width: 100%;
+    flex-flow: row wrap;
+  }
+}

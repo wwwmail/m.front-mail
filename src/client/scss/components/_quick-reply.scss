@@ -1,0 +1,109 @@
+/* Блок с формой быстрого ответа */
+
+.quick-reply {
+  position: relative;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  min-width: 50%;
+  min-height: 130px;
+
+  display: inline-flex;
+  align-items: center;
+  flex-flow: row wrap;
+
+  cursor: text;
+
+  padding: 0 0 18px 15px;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+
+    content: "";
+
+    min-height: 90px;
+
+    border: 1px solid $quick-reply-border-color;
+  }
+
+  &--used-input-message{
+    width: inherit;
+
+    .quick-reply__not-form-message{
+      display: none;
+    }
+
+    .quick-reply__form-message{
+      display: block;
+    }
+    &:focus{
+      &:before{
+        border: 1px solid $yellow-yandex;
+        outline: 1px solid $yellow-yandex;;
+        box-shadow: $button-shadow;
+      }
+    }
+
+  }
+
+  &__not-form-message {
+    display: block;
+
+    &__title {
+      color: $silver-mail-message-title-color;
+      font: 100 13px/1 $mainFont;
+      position: relative;
+      top: -31px;
+
+      &__method {
+        color: $notific-link-color;
+        cursor: pointer;
+
+        &:hover {
+          color: $red-remove-color;
+        }
+      }
+    }
+  }
+
+  &__form-message {
+    display: none;
+
+    &__btn-close {
+      position: absolute;
+      top: 15px;
+      right: 10px;
+
+      padding: 2px;
+    }
+
+    &__header {
+      position: absolute;
+      top: 8px;
+      left: 10px
+    }
+
+    &__content {
+    }
+
+    &__footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+
+      &__allform {
+        font: 100 13px/1 $mainFont;
+        color: $silver-mail-message-title-color;
+
+        cursor: pointer;
+        &:hover {
+          color: $link-color;
+        }
+      }
+    }
+
+  }
+}

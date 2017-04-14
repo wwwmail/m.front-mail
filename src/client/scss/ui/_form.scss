@@ -1,0 +1,50 @@
+.form {
+  &__fields {
+  }
+
+  &__field-item {
+    margin-bottom: 16px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+
+    &--flex-start {
+      align-items: flex-start;
+    }
+  }
+
+}
+
+
+.field-style {
+  width: 100%;
+  vertical-align: bottom;
+  display: inline-block;
+
+  &__title {
+    display: block;
+
+    margin: 0 0 5px 0;
+
+    font: 15px/1.2 sans-serif;
+
+  }
+
+  &__group{
+    width: inherit;
+  }
+
+  &__container {
+    display: inline-flex;
+  }
+
+  &--max-wd260{
+    max-width: 260px;
+  }
+
+  &--flex{
+    display: flex;
+  }
+}
+
+
