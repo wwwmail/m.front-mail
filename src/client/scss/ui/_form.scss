@@ -11,7 +11,21 @@
     &--flex-start {
       align-items: flex-start;
     }
+
+    &--mob-modif{
+
+    }
   }
+
+  @media only screen and (max-width: 640px) {
+
+    &__field-item--mob-modif{
+      display:block!important;
+    }
+
+
+  }
+
 
 }
 
@@ -45,6 +59,21 @@
   &--flex{
     display: flex;
   }
+
+
+
+  @media only screen and (max-width: 768px) {
+
+  }
+
+  @media only screen and (max-width: 562px) {
+
+  }
+  @media only screen and (max-width: 320px) {
+
+  }
+
+
 }
 
 

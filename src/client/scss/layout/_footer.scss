@@ -13,10 +13,10 @@
   background: #fff;
 
   &__auth{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    position: relative;
+    width: calc(100% + 30px);
+    left: -15px;
+
     height: 42px;
 
     background-color: rgba($auth-footer-color, .8);
@@ -27,14 +27,12 @@
 
     font: 100 13px/1 Arial,sans-serif;
 
-
-
     padding: 0 25px;
 
     display: inline-flex;
     justify-content: flex-start;
     align-items: center;
-
+    flex: 0 0 auto;
   }
 
   &__copyright{

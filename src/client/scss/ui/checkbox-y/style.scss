@@ -102,4 +102,15 @@
       font-size: 18px;
     }
   }
+
+  &--chek-top{
+    .checkbox-y__body{
+
+      margin-top: 0!important;
+      margin-bottom: auto!important;
+
+      top: 3px!important;
+
+    }
+  }
 }

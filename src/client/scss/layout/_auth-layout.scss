@@ -1,35 +1,48 @@
-.auth-layout {
+.auth-layout, .password-reset-layout {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
 
-
-
+  padding: 0 15px;
   &__content{
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
+    position: relative;
+
 
     display: flex;
     justify-content: center;
     flex-flow: column;
+    flex: 1 0 auto;
 
-    min-width: 850px;
-    min-height: 600px;
+    width: 100%;
+    min-height: 100%;
   }
 
-
   &__form {
-    width: 340px;
+    width: inherit;
+    max-width: 340px;
 
     position: relative;
     z-index: 2;
 
     margin: auto;
 
+
     &--wd388{
      width: 388px;
-    }
 
+      @media only screen and (max-width: 562px) {
+        width: 100%;
+        max-width: 100%;
+      }
+      @media only screen and (min-width: 562px) {
+        width: 388px;
+        max-width: 100%;
+      }
+    }
   }
 
   &__bg {
@@ -51,6 +64,23 @@
     -moz-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
     -o-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
     transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
+  }
+
+  @media only screen and (max-width: 768px) {
+
+  }
+  @media only screen and (max-width: 640px) {
+
+
+  }
+  @media only screen and (max-width: 562px) {
+
+
+  }
+  @media only screen and (max-width: 360px) {
+  }
+
+  @media only screen and (max-width: 320px) {
 
   }
 }
@@ -66,5 +96,24 @@
     background: $auth-sms-bg-color;
     z-index: -1;
 
+  }
+
+
+}
+.auth-layout, .password-reset-layout{
+  .field-style{
+    .ok-validates{
+      max-width: 118px;
+      padding-right: 0;
+    }
+  }
+  @media only screen and (max-width: 360px) {
+    .field-style{
+      .ok-validates{
+        color: rgba($validtae-ok-green, 0);
+        max-width: 20px;
+        width: 20px;
+      }
+    }
   }
 }

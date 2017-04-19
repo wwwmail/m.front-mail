@@ -7,8 +7,12 @@
 
   width: 100%;
 
-  min-width: 980px;
+  max-width: 768px;
   min-height: 100%;
+  margin: auto 0;
+  padding: 0 15px;
+
+
 
   &__inner {
     position: relative;
@@ -63,4 +67,5 @@
   &--padding20 {
     padding: 0 20px;
   }
+
 }

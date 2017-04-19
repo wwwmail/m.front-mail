@@ -92,6 +92,10 @@
     margin-bottom: 6px !important;
   }
 
+  &__bottom8 {
+    margin-bottom: 8px !important;
+  }
+
   &__bottom10 {
     margin-bottom: 10px !important;
   }
@@ -182,6 +186,10 @@
 
 .width {
 
+  &--all {
+    width: 100% !important;
+  }
+
   &--inh {
     width: inherit !important;
   }
@@ -206,24 +214,43 @@
     width: 90px !important;
   }
 
-  &--size168 {
-    width: 168px !important;
+  &--size129 {
+    width: 129px !important;
   }
 
-  &--size121{
-    width: 121px !important;
+  &--size150 {
+    width: 150px !important;
+  }
+
+  &--size168 {
+    width: 168px !important;
   }
 
   &--size177 {
     width: 177px !important;
   }
 
-  &--size201{
+  &--size201 {
     width: 201px !important;
   }
-  &--size328{
+  &--size328 {
     width: 328px !important;
   }
+
+  // max-width
+
+  &--max126 {
+    max-width: 126px;
+  }
+
+  // min-width
+
+  &--min126 {
+    min-width: 126px;
+  }
+
+
+
 }
 
 .float {
@@ -265,16 +292,16 @@
 }
 
 .flex {
-  display: flex;
+  display: flex !important;
 
   &--inline {
-    display: inline-flex;
+    display: inline-flex !important;
   }
   &--just-s-a {
-    justify-content: space-around;
+    justify-content: space-around !important;
   }
   &--row-wrap {
-    flex-flow: row wrap;
+    flex-flow: row wrap !important;
   }
 
 }
@@ -313,4 +340,22 @@
     overflow: visible;
 
   }
+}
+.line-h{
+  &--h-1{
+    line-height: 1;
+  }
+  &--h-1-2{
+    line-height: 1.2
+  }
+  &--h-1-5{
+    line-height: 1.5;
+  }
+  &--h-1-7{
+    line-height: 1.7;
+  }
+  &--h-1-9{
+    line-height: 1.8;
+  }
+
 }
