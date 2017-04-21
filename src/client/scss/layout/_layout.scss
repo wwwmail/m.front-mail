@@ -12,8 +12,6 @@
   margin: auto 0;
   padding: 0 15px;
 
-
-
   &__inner {
     position: relative;
 
@@ -28,15 +26,40 @@
   }
 
   &__left {
-    position: relative;
+    position: fixed;
+    &:before{
+      content: "";
 
-    background: $menu-main-color;
+      position: absolute;
 
-    z-index: 2;
+      width: 100vw;
+      height: 100vh;
+
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+
+      z-index: 99;
+      background-color: rgba($black, .54);
+    }
+
   }
 
   &__menu {
-    width: 260px;
+    position: fixed;
+    top:0 ;
+    left: 0;
+    bottom: 0;
+
+    background: $menu-main-color;
+
+    z-index: 100;
+
+    width: 100%;
+    max-width: 478px;
+
+
   }
 
   &__content {

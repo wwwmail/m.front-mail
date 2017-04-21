@@ -108,7 +108,11 @@
       background: none;
      }
   }
+  &--circle{
+    border-radius: 50%;
 
+
+  }
   &--normal {
     border: 1px solid $avatar-border-color;
     border-radius: 3px;
@@ -130,6 +134,7 @@
 
     }
   }
+
   &--s-gradient{
     background: $btn-gradient;
 
@@ -167,6 +172,11 @@
     height: 32px;
     font-size: 15px;
     line-height: 18px;
+  }
+  &--size_53{
+    width: 53px;
+    height: 53px;
+    font-size: 20px;
   }
 
   &--toggle-arrow{

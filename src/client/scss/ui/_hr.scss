@@ -23,4 +23,10 @@
     background: $hr-auth-color;
     margin-bottom: 19px;
   }
+
+  &--main-menu{
+    background-color: $hr-main-menu-color;
+    margin: 8px 13px;
+    width: inherit;
+  }
 }

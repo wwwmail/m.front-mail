@@ -1,201 +1,180 @@
 <div class="menu-main-layout">
+
+    <!-- хедер меню-->
+    <div class="menu-main-layout__header">
+        <img class=" menu-main-layout__header__logo img-responsive" src="/images/logo.png">
+    </div>
+
+    <div class="menu-main-layout__user-info">
+            <div class="menu-main-layout__avatar">
+                <div class="avatar avatar--size68 avatar--second-style">
+                    <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                </div>
+
+                <button class="menu-main-layout__add-user  icon-cancel btn--circle btn--size_53 rotate--am90" ></button>
+
+            </div>
+
+
+
+        <span class="menu-main-layout__user-name mrg__top10">John Doe</span>
+        <span class="menu-main-layout__user-mail">john.doe@mail.cz</span>
+    </div>
+
+    <!--основное меню -->
     <div class="menu-main-layout__item">
-        <!--menu-main__link&#45;&#45;open-->
         <ul class="menu-main">
-            <li class="menu-main__item" ng-repeat="folder in vm.folders.items">
-                <a class="menu-main__link" ui-sref="mail.inbox({mbox: folder.name, filter: undefined})"
-                   ui-sref-active="menu-main__link--active"
-                   ng-class="{'menu-main__link--gray': !folder.messagesCount}">
-                    <span class="{{ folder.icon }} menu-main__icon"></span>
-                    {{ folder.caption }}
-                    <div class="menu-main__counter">
-                        <span class="round round--yellow"></span>
-                        <span class="color--white">0/{{ folder.messagesCount }}</span>
-                    </div>
-                </a>
-
-                <!--                <ul class="menu-main__sub menu-main">
-                                    <li class="menu-main__item">
-                                        <a class="menu-main__link" href="">
-                                            Папка
-                                        </a>
-                                    </li>
-                                </ul>-->
-
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link">
+                        <span class="icon-inbox menu-main__icon"></span>
+                        <span class="menu-mein__title">Входящие</span></a>
+                    <div class="menu-mein__additional-option"></div>
+                </div>
             </li>
-            <!--            <li class="menu-main__item">
-                            <a class="menu-main__link" href="">
-                                <span class="icon-sent menu-main__icon"></span>
-                                Отправленные
-                            </a>
-                        </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link">
+                        <span class="icon-d-folder menu-main__icon"></span>
+                        <span class="menu-mein__title">Папка</span></a>
+                    <div class="menu-main__additional-option">
+                        <span class="icon-arrow-up menu-main__icon"></span>
+                    </div>
+                </div>
+                <div class="menu-main__item__content ">
+                    <ul class="menu-main menu-main--additional">
                         <li class="menu-main__item">
-                            <a class="menu-main__link menu-main__link&#45;&#45;gray" href="">
-                                <span class="icon-bin menu-main__icon"></span>
-                                Удаленные
-                            </a>
+                            <a class="menu-main__link menu-main__link--active">
+                                <span class="icon-folder menu-main__icon"></span>
+                                <span class="menu-mein__title">Новая Папка</span></a>
+                            <div class="menu-mein__additional-option"></div>
                         </li>
-                        <li class="menu-main__item">
-                            <a class="menu-main__link menu-main__link&#45;&#45;gray" href="">
-                                <span class="icon-spam menu-main__icon"></span>
-                                Спам
-                            </a>
-                        </li>
-                        <li class="menu-main__item">
-                            <a class="menu-main__link" href="">
-                                <span class="icon-draft menu-main__icon"></span>
-                                Черновики
-                            </a>
-                        </li>-->
+                    </ul>
+                </div>
+            </li>
+
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link">
+                        <span class="icon-sent menu-main__icon"></span>
+                        <span class="menu-mein__title">Отправленные</span></a>
+                    <div class="menu-main__additional-option"></div>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link">
+                        <span class="icon-delete menu-main__icon"></span>
+                        <span class="menu-mein__title">Удалённые</span></a>
+                    <div class="menu-main__additional-option">
+                        <span class="icon-brush menu-main__icon"></span>
+                    </div>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link">
+                        <span class="icon-spam menu-main__icon"></span>
+                        <span class="menu-mein__title">Спам</span></a>
+                    <div class="menu-main__additional-option"></div>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link">
+                        <span class="icon-draft menu-main__icon"></span>
+                        <span class="menu-mein__title">Черновики</span></a>
+                    <div class="menu-main__additional-option"></div>
+                </div>
+            </li>
+
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link" href="">
+                        <span class="icon-outbox menu-main__icon"></span>
+                        <span class="menu-mein__title">Исходящие</span></a>
+                    </a>
+                </div>
+            </li>
+
         </ul>
 
-        <div class="menu-main-layout__padding">
+        <!---->
+        <hr class="hr hr--main-menu">
 
-            <div class="folders-setup">
-                <div class="folders-setup__row">
-                    <a class="folders-setup__link" href>
-                        создать папку
-                    </a>
-                    <a class="folders-setup__link" href>
-                        настроить...
-                    </a>
-                </div>
-                <hr class="hr folders-setup__hr">
-            </div>
-        </div>
-
-    </div>
-
-    <div class="menu-main-layout__item mrg__top20">
-
-        <div class="menu-main-layout__padding menu-main-layout__padding--size10">
-
-            <ul class="menu-main">
-                <li class="menu-main__item menu-main__item">
-                    <button class="btn-y btn-y--active pointer" type="button"
-                            ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})"
-                            ui-sref-active="btn-y--active">
+        <!-- -->
+        <ul class="menu-main">
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link" href="">
                         <span class="icon-important menu-main__icon"></span>
-                        Важные
-                    </button>
-                </li>
-                <li class="menu-main__item">
-                    <button class="btn-y pointer" type="button"
-                            ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})"
-                            ui-sref-active="btn-y--active">
-                        <span class="icon-unread-solid menu-main__icon"></span>
-                        Непрочитанные
-                    </button>
-                </li>
-                <li class="menu-main__item">
-                    <button class="btn-y pointer" type="button"
-                            ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})"
-                            ui-sref-active="btn-y--active">
-                        <span class="icon-attach menu-main__icon"></span>
-                        С Вложением
-                    </button>
-                </li>
-            </ul>
-
-        </div>
-
-        <div class="menu-main-layout__padding">
-
-            <div class="folders-setup">
-                <div class="folders-setup__row">
-                    <a class="folders-setup__link" href>
-                        создать папку
-                    </a>
-                    <a class="folders-setup__link" href>
-                        настроить...
+                        <span class="menu-mein__title">Важные</span></a>
                     </a>
                 </div>
-                <hr class="hr folders-setup__hr">
-            </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link" href="">
+                        <span class="icon-clip menu-main__icon"></span>
+                        <span class="menu-mein__title">С вложениями</span></a>
+                    </a>
+                </div>
+            </li>
 
-        </div>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link" href="">
+                        <span class="icon-unread menu-main__icon"></span>
+                        <span class="menu-mein__title">Непрочитанные</span></a>
+                    </a>
+                </div>
+            </li>
+        </ul>
+
+        <!-- -->
+        <hr class="hr hr--main-menu">
+
+        <!-- -->
+        <ul class="menu-main">
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link" href="">
+                        <span class="icon-tag-solid menu-main__icon menu-main__icon--select"></span>
+                        <span class="menu-mein__title">Позже</span></a>
+                    </a>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link" href="">
+                        <span class="icon-filter menu-main__icon"></span>
+                        <span class="menu-mein__title">Фильтры</span></a>
+                    </a>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item__content">
+                    <a class="menu-main__link" href="">
+                        <span class="icon-settings menu-main__icon"></span>
+                        <span class="menu-mein__title">Настройки</span></a>
+                    </a>
+                </div>
+            </li>
+        </ul>
 
     </div>
 
-    <div class="menu-main-layout__item mrg__top20">
-
-        <div class="menu-main-layout__padding menu-main-layout__padding--size10">
-
-            <ul class="menu-main menu-main--tag">
-                <li class="menu-main__item">
-
-                    <button class="btn-y pointer" type="button">
-                        <div class="square square--green btn-y__icon"></div>
-                        Тег
-                    </button>
-
-                </li>
-                <li class="menu-main__item">
-
-                    <button class="btn-y pointer" type="button">
-                        <div class="square square--green btn-y__icon"></div>
-                        Тег 2
-                    </button>
-
-                </li>
-                <li class="menu-main__item">
-
-                    <button class="btn-y pointer" type="button">
-                        <div class="square square--green btn-y__icon"></div>
-                        Тег 3
-                    </button>
-
-                </li>
-                <li class="menu-main__item">
-
-                    <button class="btn-y pointer" type="button">
-                        <div class="square square--green btn-y__icon"></div>
-                        Тег 4
-                    </button>
-
-                </li>
-                <li class="menu-main__item">
-
-                    <button class="btn-y pointer" type="button">
-                        <div class="square square--green btn-y__icon"></div>
-                        Новая
-                    </button>
-
-                </li>
-            </ul>
+    <!--футер-->
+    <div class="menu-main-layout__footer-menu">
+        <!-- -->
+        <hr class="hr hr--main-menu">
+        <div class="mrg__left10 mrg__top10 mrg__bottom5">
+            <span class="">Полная |</span>
+            <span class="font__normal">Мобильная v 1.0</span>
 
         </div>
 
-        <div class="menu-main-layout__padding">
-            <div class="folders-setup">
-                <div class="folders-setup__row">
-                    <a class="folders-setup__link" href>
-                        создать папку
-                    </a>
-                    <a class="folders-setup__link" href>
-                        настроить...
-                    </a>
-                </div>
-                <hr class="hr folders-setup__hr">
-            </div>
-        </div>
 
-        <div class="menu-main-layout__padding mrg__top16">
-            <button class="btn-y btn-y--size26 btn-y--border btn-y--image-icon btn-y--white pointer" type="button">
-                <span class="btn-y__name">
-                    Добавить другой ящик
-                </span>
-                <img class="btn-y__icon" src="/images/gmail.png" alt="">
-                <img class="btn-y__icon" src="/images/yahoo-mail.png" alt="">
-            </button>
-        </div>
-
-    </div>
-
-    <div class="menu-main-layout__padding mrg__top20">
-        <a class="menu-main-layout__button-tarif" href="">
-            <img class="img-responsive" src="/images/tarif-button.png">
-        </a>
     </div>
 
 </div>
