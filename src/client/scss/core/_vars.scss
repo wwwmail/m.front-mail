@@ -3,10 +3,32 @@
 $black: #000;
 $textBlack: #000;
 
+$white-color: #ffffff;
+$textWhile: #ffffff;
+
+
 $main-border-color: #cccccc;
 
+
+
+$yellow-select-main-menu-color: #e7cb42;
+
+
+$hr-main-menu-color: #656c7b;
+$user-mail-main-menu-color: #a3a7b0;
+$user-name-main-menu-color: $white-color;
+$bth-add-use-color: #666d7b;
+
+
+$select-icon-main-menu-color: #5a8eff;
+
+$header-mein-menu-text-color: #a1a6af;
+
+
+
+
 $header-color: #e1e5eb;
-$menu-main-color: #edeff3;
+$menu-main-color: #555d6d;
 $crumb-link-color: #1a3dc1;
 
 $silver-notific-color: #999999;
@@ -72,11 +94,11 @@ $input-shadow-yellow: 0px 0px 10px 0px rgba(249,227,139,1);
 $btn-gradient: linear-gradient(to bottom, #fefefe 0%,#efefef 100%);
 
 /* Font variable ********************************************************************/
-$mainFont: Arial, sans-serif;
+$mainFont: 'HelveticaNeueCyr' , sans-serif;
 
 $mainSecondFont: Verdana, sans-serif;
 
-//$mainThreeFont:
+$mainThreeFont: Arial, sans-serif;
 
 $button-border-color: #c3c4c9;
 $button-active-color: #f6f5f3;
