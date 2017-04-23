@@ -15,6 +15,9 @@
         // the following shows the default values. values passed to this method
         // will extend the defaults using angular.extend
 
+        // console.log('http', $http);
+        // $http({url: '/auth/logout', method: 'GET'});
+
         $authProvider.configure({
             apiUrl: CONFIG.APIHost,
             tokenValidationPath: '/auth/validate-token',
@@ -62,19 +65,19 @@
                 // console.log('handleLoginResponse', response);
                 // the persistData method will store the token for subsequent requests.
                 // this will be stored using cookies or localStorage depending on your config.
-                console.log(' response.token',  response.access_token);
+                console.log(' response.token',  response.data.access_token);
                 $auth.persistData('auth_headers', {
-                    'Authorization': response.access_token
+                    'Authorization': response.data.access_token
                 });
 
-                return response;
+                return response.data;
             },
             handleAccountUpdateResponse: function (response) {
-                return response;
+                return response.data;
             },
             handleTokenValidationResponse: function (response) {
                 // console.log('handleTokenValidationResponse', response);
-                return response;
+                return response.data;
             }
         });
     })

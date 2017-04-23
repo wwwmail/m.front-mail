@@ -5,15 +5,22 @@
         .module('auth.signIn')
         .controller('SignInController', SignInController);
 
-    SignInController.$inject = ['$state', '$auth'];
+    SignInController.$inject = ['$scope', '$state', '$auth'];
     /* @ngInject */
-    function SignInController($state, $auth) {
+    function SignInController($scope, $state, $auth) {
         var vm = this;
 
         vm.userForm = {
             isLoading: false,
+            isChange: false,
             model: {}
         };
+
+        $scope.$watch('vm.userForm.model', function (data, oldData) {
+            if (!_.isEqual(data, oldData)) {
+                vm.userForm.errors = '';
+            }
+        }, true);
 
         vm.login = login;
 
@@ -26,8 +33,7 @@
                     $state.go('mail.inbox');
                 })
                 .catch(function (response) {
-                    // handle error response
-                    vm.userForm.errors = response.errors;
+                    vm.userForm.errors = "Не правильный логин или пароль";
                     console.log('error', vm.userForm.errors);
                 });
         }
