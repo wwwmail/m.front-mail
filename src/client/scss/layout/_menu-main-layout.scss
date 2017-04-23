@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  box-sizing: border-box;
+
+  background: $menu-main-color;
+  z-index: 51;
 
   &__header {
 

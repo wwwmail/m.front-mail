@@ -31,6 +31,11 @@
     border: 1px solid $yellow-yandex;
     outline: 1px solid $yellow-yandex;
   }
+  &--no-focus{
+    border: none!important;
+    outline: none!important;
+  }
+
 
   &--fc-sh-yellow{
     border: 1px solid $input-border-color-black-yellow;

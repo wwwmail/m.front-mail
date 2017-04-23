@@ -35,14 +35,39 @@
     }
     &--add{
       &:after{
-      @extend .icon-rounded-add
+        @extend .icon-rounded-add
       }
     }
     &--reload{
       &:after{
-      @extend .icon-reload
+        @extend .icon-reload
       }
     }
+  }
+
+  &__symbol-image{
+    position: absolute;
+    top:0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    background:  $avatar-bg-symbol-color;
+
+    color: $avatar-symbol-color;
+    font: 500 18px/1 $mainThreeFont;
+  }
+
+  &__first-name, &__last-name{
+    //margin: auto;
+
+  }
+  &__last-name{
+    //margin: auto auto auto ;
   }
 
   &--size20 {

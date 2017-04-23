@@ -19,10 +19,49 @@ $user-mail-main-menu-color: #a3a7b0;
 $user-name-main-menu-color: $white-color;
 $bth-add-use-color: #666d7b;
 
+$btn-more-color: #717170;
+
+$inbox-head-text-color: #373737;
+$inbox-message-color: #777777;
+$inbox-date-message-color: #777777;
+
+$inbox-important-message-color: #ffe6e6;
+$inbox-message-round-color: #bcbcbc;
+$inbox-message-checked: #f6f5f3;
+$inbox-message-avatar-checked: #e4e4e3;
+
+
+
+
+/* Color pallete for mails tags  */
+
+$cp-red: #f44336;
+$cp-purpure: #e91e63;
+$cp-orange: #ffc107;
+$cp-yellow: #ffeb3b;
+$cp-green: #4caf50;
+$cp-blue: #2196f3;
+$cp-blueblack: #3f51b5;
+$cp-fiolet: #9c27b0;
+$cp-space-gray: #607d8e;
+$cp-silver: #9e9e9e;
+
+$important-tags-color: #727272;
+$important-tags-active-color: #d23100;
+
+
 
 $select-icon-main-menu-color: #5a8eff;
 
 $header-mein-menu-text-color: #a1a6af;
+
+$header-border-color: #e4e2da;
+$header-icon-color: #808080;
+
+$search-border-color: #e6e6e6;
+
+$avatar-bg-symbol-color: #d9d9d9;
+$avatar-symbol-color: #ffffff;
 
 
 
@@ -85,6 +124,8 @@ $input-insert-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.15);
 $form-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.35);
 $button-shadow: 0px 0px 2px 0px rgba(255, 219, 77, 0.6);
 $input-shadow-yellow: 0px 0px 10px 0px rgba(249,227,139,1);
+
+$menu-shadow: 1px 0px 35px 2px rgba(0,0,0,0.16);
 
 
 

@@ -7,6 +7,7 @@
 
   color: $textBlack;
   text-align: center;
+  cursor: pointer;
 
   &:hover {
     //background-color: $yellow-hard-light;
@@ -73,6 +74,9 @@
     border: none;
     background: none;
     text-align: center;
+    &:active, &:hover, &:focus{
+      background: none;
+    }
   }
 
   &--not-events{
@@ -108,11 +112,15 @@
       background: none;
      }
   }
+
   &--circle{
     border-radius: 50%;
-
-
   }
+
+  &--radius_3{
+    border-radius: 6px;
+  }
+
   &--normal {
     border: 1px solid $avatar-border-color;
     border-radius: 3px;
@@ -173,10 +181,26 @@
     font-size: 15px;
     line-height: 18px;
   }
+
   &--size_53{
     width: 53px;
     height: 53px;
     font-size: 20px;
+  }
+
+  &--size_28{
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+
+  }
+
+  &--size_62{
+
+    width: 62px;
+    height: 62px;
+    font-size: 26px;
+
   }
 
   &--toggle-arrow{

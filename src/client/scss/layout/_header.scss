@@ -1,76 +1,66 @@
 .header {
-  display: flex;
-  flex-flow: row;
-  justify-content: flex-start;
-  align-items: center;
+  position: fixed;
+  top:0;
+  left: 0;
 
-  padding: 0 30px;
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  height: 48px;
 
-  height: 60px;
-  min-width: 960px;
+  background-color: $white-color;
+  z-index: 100;
 
-  background: $header-color;
+  &__container{
+    position: relative;
 
-  &__name {
-    color: rgba(0, 0, 0, .7);
-    font-size: 13px;
-    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    margin-right: 10px;
-  }
-
-  &__spinner {
-    width: 30px;
-
-    margin: 10px;
-  }
-
-  &__navigation {
-
-  }
-
-  &__brand {
-    //min-width: 172px;
-  }
-
-  &__logo {
-    width: 130px;
-  }
-
-  &__settings-link {
-    color: #717376;
-    font-size: 20px;
-
-    &:hover {
-      color: #000;
-    }
-  }
-
-  &__left {
     width: 100%;
 
-    display: flex;
-    flex-flow: row;
-    justify-content: flex-end;
-    align-items: center;
+    max-width: 768px;
+    min-height: 100%;
+    margin: auto;
+
+    //padding: 0 15px;
   }
 
-  &__left-item {
-    margin-right: 10px;
+  &__left{
+    width: auto;
+
+
   }
 
-  &__avatar-link {
-    display: flex;
-    align-items: center;
+  &__center{
+    color: $black;
+    font: 300 15px/1 $mainFont;
 
-    &:hover {
-      .header__name {
-        color: rgba(0, 0, 0, 1);
-      }
+    width: auto;
 
-      .avatar {
-        border-color:rgba(0, 0, 0, .4);
-      }
+    &__count-letters{
+
+
     }
+
   }
+
+  &__right{
+    width: auto;
+
+
+  }
+
+  &__icon{
+
+    //width: 20px;
+    //height: 20px;
+
+    color: $header-icon-color;
+    font: 300 20px/1 $mainFont;
+
+  }
+
 }
+

@@ -1,0 +1,110 @@
+.letter-tags {
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 3px 0 0 3px ;
+
+  cursor: pointer;
+  color: #fff;
+  font: 400 11px/1 $mainThreeFont;
+
+  max-height: 19px;
+  height: 19px;
+  z-index: 1;
+
+  &__name{
+    margin: auto;
+    padding: 2px 0 2px 6px;
+
+  }
+
+  &__icon{
+    position: absolute;
+    top: 0px;
+    bottom: 0;
+    right: -17px;
+
+    height: 19px;
+    width: 24px;
+
+    z-index: -1;
+
+    margin-top: 0;
+  }
+
+  &--red{
+    background: $cp-red;
+    .letter-tags__icon{
+      fill: $cp-red;
+    }
+  }
+
+  &--purpure{
+    background: $cp-purpure;
+    .letter-tags__icon{
+      fill: $cp-purpure;
+    }
+  }
+
+  &--orange{
+    background: $cp-orange;
+    color: $black;
+    .letter-tags__icon{
+      fill: $cp-orange;
+    }
+  }
+
+  &--yellow{
+    background: $cp-yellow;
+    color: $black;
+    .letter-tags__icon{
+      fill: $cp-yellow;
+    }
+  }
+
+  &--green{
+    background: $cp-green;
+    .letter-tags__icon{
+      fill: $cp-green;
+    }
+  }
+
+  &--blue{
+    background: $cp-blue;
+    .letter-tags__icon{
+      fill: $cp-blue;
+    }
+  }
+
+  &--blueblack{
+    background: $cp-blueblack;
+    .letter-tags__icon{
+      fill: $cp-blueblack;
+    }
+  }
+
+  &--fiolet{
+    background: $cp-fiolet;
+    .letter-tags__icon{
+      fill: $cp-fiolet;
+    }
+  }
+
+  &--space-gray{
+    background: $cp-space-gray;
+    .letter-tags__icon{
+      fill: $cp-space-gray;
+    }
+  }
+
+  &--silver{
+    background: $cp-silver;
+    .letter-tags__icon{
+      fill: $cp-silver;
+    }
+  }
+
+}

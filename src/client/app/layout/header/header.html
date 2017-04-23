@@ -1,83 +1,27 @@
 <div class="header">
-    <div class="header__brand pointer" ui-sref="mail.inbox">
-        <img class="header__logo" src="/images/logo.png" alt="Mail logo">
-    </div>
-
-    <div>
-        <div class="header__spinner">
-            <spinner></spinner>
-        </div>
-    </div>
-
-    <div class="header__navigation">
-
-        <!--Тут компонент меню-->
-        <div class="navigation">
-            <div class="navigation__row">
-                <div class="navigation__item">
-                    <a class="navigation__link navigation__link--active" href="">Поиск</a>
-                </div>
-                <div class="navigation__item">
-                    <a class="navigation__link" href="">Контакты</a>
-                </div>
-                <div class="navigation__item">
-                    <a class="navigation__link" href="">Файлы</a>
-                </div>
-                <div class="navigation__item">
-                    <a class="navigation__link" href="">Новости</a>
-                </div>
-                <div class="navigation__item">
-                    <a class="navigation__link" href="">Еще</a>
-                </div>
-            </div>
+    <div class="header__container">
+        <div class="header__left">
+            <button class="icon-menu btn btn--not-style header__icon"></button>
         </div>
 
-    </div>
-
-
-    <div class="header__left">
-        <div class="header__search header__left-item">
-
-            <search-mail></search-mail>
+        <div class="header__center">
+            <span class="">Входящие</span>
+            <span class="header__center__count-letters">28</span>
 
         </div>
 
-        <div class="header__settings header__left-item">
-            <!--<a class="header__settings-link">-->
-            <button class="btn-y btn-y--settings pointer"
-                    uib-popover-template="'app/components/settings-menu/settings-menu.html'"
-                    popover-class="popover--settings"
-                    popover-placement="bottom"
-                    popover-animation="true"
-                    popover-trigger="'outsideClick'">
-                <span class="icon-settings"></span>
-            </button>
-        </div>
+        <div class="header__right">
 
+            <form class="search-block widtn-inh search-block--no-active" action="">
+                <input class="input input--no-border input--no-focus input--size_l width--all" type="text" placeholder="Поиск писем">
+                <button class="search-block__icon-close icon-cancel btn btn--not-style btn--size_s mrg__right"></button>
+                <button class="search-block__icon icon-lens btn btn--not-style header__icon mrg__right"></button>
+            </form>
 
-        <div class="header__avatar header__left-item">
-
-            <a class="header__avatar-link" href
-               uib-popover-template="'app/components/user-menu/user-menu-popover.html'"
-               popover-class="popover--user popover--no-arrow"
-               popover-placement="bottom-right"
-               popover-animation="true"
-               popover-trigger="'outsideClick'">
-
-                <div class="header__name">
-
-                    john.doe@mail.cz
-
-                </div>
-
-                <!--Тут компонент аватара-->
-
-                <div class="avatar avatar--header avatar--size42">
-                    <img class="avatar__image" src="/images/avatar.png">
-                </div>
-            </a>
 
         </div>
+        <hr class="hr hr--header">
+        
 
     </div>
 </div>
