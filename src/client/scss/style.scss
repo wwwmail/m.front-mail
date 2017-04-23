@@ -36,6 +36,7 @@
 @import "ui/btn-group";
 @import "ui/input-line";
 @import "ui/checkbox-y/style.scss";
+@import "components/search-block";
 @import "components/validation";
 @import 'components/avatar';
 @import 'components/round';
@@ -56,7 +57,7 @@
 @import "components/user-menu";
 @import "components/search-result";
 @import "components/list-dash";
-@import "components/label-ydx";
+@import "components/letter-tags";
 @import "components/auth-form";
 @import "components/message-textarea";
 @import "components/compose-from";
@@ -73,6 +74,7 @@
 @import "components/tag-list";
 @import "components/tag-create";
 @import "components/palette-list";
+@import "components/important-tags";
 @import 'font-icons/icomoon';
 
 body {

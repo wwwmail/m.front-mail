@@ -9,11 +9,14 @@
 
   max-width: 768px;
   min-height: 100%;
-  margin: auto 0;
-  padding: 0 15px;
+  margin: auto;
+
+  //padding: 0 15px;
+
 
   &__inner {
     position: relative;
+    margin-top: 48px;
 
     display: flex;
     flex-direction: row;
@@ -22,42 +25,51 @@
     max-width: 98%;
     max-width: -webkit-calc(100% + 0vw);
     max-width: calc(100% + 0vw);
-    z-index: 1;
+    z-index: 3;
   }
 
   &__left {
-    position: fixed;
-    &:before{
-      content: "";
+    position: absolute;
 
-      position: absolute;
+    top: -48px ;
+    right: 0;
+    bottom: 0;
+    left: 0;
 
-      width: 100vw;
-      height: 100vh;
 
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-
-      z-index: 99;
-      background-color: rgba($black, .54);
-    }
-
+    //display: none;
   }
 
   &__menu {
-    position: fixed;
+    position: absolute;
     top:0 ;
     left: 0;
     bottom: 0;
 
-    background: $menu-main-color;
-
-    z-index: 100;
+    z-index: 50;
+    box-shadow: $menu-shadow;
 
     width: 100%;
     max-width: 478px;
+
+    &:before{
+      content: "";
+
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+
+      width: 1200vw;
+      min-height: 100%;
+
+
+      left: -50vw;
+
+      z-index: -1;
+      background-color: rgba($black, .54);
+    }
+
 
 
   }
@@ -83,6 +95,9 @@
     }
   }
 
+  &__header{
+    z-index: 2;
+  }
   &__footer {
     margin-top: 50px;
   }

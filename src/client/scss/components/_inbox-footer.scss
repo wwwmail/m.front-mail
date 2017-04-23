@@ -1,11 +1,30 @@
 .inbox-footer {
-  padding: 0 24px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
 
-  font-family: Arial, sans-serif;
+  display: block;
+  width: 100%;
+  min-height: 0;
 
-  &__row {
+  background-color: transparent;
+  z-index: 100;
+
+  &__content {
+    position: relative;
+
     display: flex;
-    flex-flow: row;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: flex-end;
+
+    width: 100%;
+
+    max-width: 768px;
+    min-height: 100%;
+    margin: auto;
+
+    padding: 13px;
   }
+
 }

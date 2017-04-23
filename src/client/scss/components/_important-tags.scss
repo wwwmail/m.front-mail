@@ -1,0 +1,22 @@
+.important-tags{
+
+  position: relative;
+
+  color: $important-tags-color;
+
+  &:before {
+    content: "\e915";
+    font-family: 'icomoon' !important;
+  }
+
+
+  &--active{
+    color:$important-tags-active-color;
+
+    &:before {
+      content: "\e916";
+      font-family: 'icomoon' !important;
+    }
+
+  }
+}
