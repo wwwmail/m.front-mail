@@ -9,7 +9,7 @@
   height: 48px;
 
   background-color: $white-color;
-  z-index: 100;
+  z-index: 2;
 
   &__container{
     position: relative;
@@ -29,8 +29,6 @@
 
   &__left{
     width: auto;
-
-
   }
 
   &__center{
@@ -53,12 +51,9 @@
   }
 
   &__icon{
-
-    //width: 20px;
-    //height: 20px;
-
     color: $header-icon-color;
     font: 300 20px/1 $mainFont;
+
 
   }
 

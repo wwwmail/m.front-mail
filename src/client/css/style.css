@@ -317,6 +317,19 @@
   line-height: 1.8;
 }
 
+/*Hiddeens scroll*/
+.scrollables::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}
+
+.scrollables {
+  height: 100%;
+  overflow: -moz-scrollbars-none;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+}
+
 /* Helvetica font*/
 @font-face {
   font-family: 'HelveticaNeueCyr';
@@ -427,16 +440,26 @@
   max-width: 98%;
   max-width: -webkit-calc(100% + 0vw);
   max-width: calc(100% + 0vw);
-  z-index: 3;
 }
-.layout__left {
-  position: absolute;
-  top: -48px;
+.layout__menu {
+  position: fixed;
+  display: none;
+  top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.54);
+  overflow-y: hidden;
 }
-.layout__menu {
+.layout__menu--is-active-menu {
+  display: block;
+}
+.layout__menu--is-active-menu .layout__menu-content {
+  transform: translate3d(0px, 0px, 0px);
+  transition: transform 500ms ease-in-out;
+}
+.layout__menu-content {
   position: absolute;
   top: 0;
   left: 0;
@@ -445,9 +468,11 @@
   box-shadow: 1px 0px 35px 2px rgba(0, 0, 0, 0.16);
   width: 100%;
   max-width: 478px;
+  overflow: hidden;
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 500ms ease-in-out;
 }
-.layout__menu:before {
-  content: "";
+.layout__menu-content:before {
   position: absolute;
   top: 0;
   right: 0;
@@ -476,7 +501,8 @@
   padding: 0 20px;
 }
 .layout__header {
-  z-index: 2;
+  position: relative;
+  z-index: 3;
 }
 .layout__footer {
   margin-top: 50px;
@@ -532,14 +558,23 @@
 .menu-main__link--open:before {
   content: "";
 }
+.menu-main__count {
+  text-align: center;
+  color: #fc0;
+  font-size: 14px;
+}
 .menu-main__additional-option {
   cursor: pointer;
   padding: 10px 7px 10px 14px;
   font-size: 24px;
+  min-width: 48px;
 }
 .menu-main__additional-option:hover, .menu-main__additional-option:active {
   background-color: rgba(255, 204, 0, 0.9);
   color: #555d6d;
+}
+.menu-main__additional-option:hover .menu-main__count, .menu-main__additional-option:active .menu-main__count {
+  color: #555d6d !important;
 }
 .menu-main__sub .menu-main__link {
   padding-left: 70px;
@@ -573,7 +608,7 @@
   min-height: 48px;
   height: 48px;
   background-color: #ffffff;
-  z-index: 100;
+  z-index: 2;
 }
 .header__container {
   position: relative;
@@ -1305,7 +1340,6 @@
   position: relative;
   display: block;
   width: auto;
-  user-select: none;
   box-sizing: border-box;
   text-overflow: clip;
   color: #000;
@@ -2052,7 +2086,7 @@
   width: 100%;
   min-height: 0;
   background-color: transparent;
-  z-index: 100;
+  z-index: 2;
 }
 .inbox-footer__content {
   position: relative;

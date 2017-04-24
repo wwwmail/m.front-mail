@@ -64,15 +64,25 @@
     }
   }
 
+  &__count{
+    text-align: center;
+    color: $yellow-yandex;
+    font-size: 14px;
+  }
+
   &__additional-option{
-    cursor: pointer
-  ;
+    cursor: pointer;
     padding: 10px 7px 10px 14px;
     font-size: 24px;
+    min-width: 48px;
 
     &:hover, &:active {
       background-color: rgba($yellow-yandex, .9);
       color: $menu-main-color;
+
+      .menu-main__count{
+        color: $menu-main-color!important;
+      }
     }
   }
 

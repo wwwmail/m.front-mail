@@ -387,5 +387,26 @@
   &--h-1-9{
     line-height: 1.8;
   }
+}
+
+
+/*Hiddeens scroll*/
+.scrollables::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}
+
+.scrollables{
+  height: 100%;
+
+  overflow: -moz-scrollbars-none;
+  overflow-y: auto;
+  -ms-overflow-style: none;
 
 }
+
+//@-moz-document url-prefix() {
+//  .scrollables {
+//    margin-right: -15px;
+//  }
+//}
