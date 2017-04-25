@@ -40,7 +40,7 @@
                     $state.go('mail.inbox');
                 })
                 .catch(function (response) {
-                    vm.userForm.errors = response.data;
+                    vm.userForm.errors = response.data.data;
                     console.log('error', response);
                 });
         }
