@@ -51,7 +51,7 @@
             authService.sendCode({}, {phone: phone})
                 .then(function (response) {
                     console.log('response', response);
-                    vm.codeResult = response;
+                    vm.codeResult = response.data;
                 })
                 .catch(function (response) {
                     vm.userForm.errors = response.data;

@@ -16,7 +16,7 @@
             {
                 state: 'passwordUpdate',
                 config: {
-                    url: '/password-update',
+                    url: '/password-update?username&code',
                     templateUrl: 'app/auth/password-update/password-update.html',
                     controller: 'PasswordUpdateController',
                     controllerAs: 'vm',

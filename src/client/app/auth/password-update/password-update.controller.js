@@ -12,24 +12,43 @@
 
         vm.userForm = {
             isLoading: false,
-            model: {}
+            model: {},
+            validations: {
+                code: {
+                    'required': 'Введите код'
+                },
+                newpassword: {
+                    'required': 'Введите новый пароль'
+                },
+                passwordConf: {
+                    'required': 'Повторите новый пароль'
+                }
+            }
         };
 
-        vm.send = send;
+        vm.resetPassword = resetPassword;
 
-        function send() {
-            // console.log(vm.userForm);
-            // vm.userForm.isLoading = true;
-            // $auth.submitLogin(vm.userForm.model)
-            //     .then(function (response) {
-            //         vm.userForm.isLoading = false;
-            //         $state.go('mail.inbox');
-            //     })
-            //     .catch(function (response) {
-            //         // handle error response
-            //         vm.userForm.errors = response.errors;
-            //         console.log('error', vm.userForm.errors);
-            //     });
+        activate();
+
+        function activate() {
+            // alert($state.params.username);
+        }
+
+        function resetPassword() {
+            if (userForm.$invalid) return;
+            vm.userForm.model.username = $state.params.username;
+            console.log(vm.userForm);
+            vm.userForm.isLoading = true;
+            $auth.updatePassword(vm.userForm.model)
+                .then(function (response) {
+                    vm.userForm.isLoading = false;
+                    $state.go('signIn');
+                })
+                .catch(function (response) {
+                    // handle error response
+                    vm.userForm.errors = response.data.data;
+                    console.log('error', vm.userForm.errors);
+                });
         }
 
     }
