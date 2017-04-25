@@ -5,18 +5,24 @@
         .module('mail.inbox')
         .controller('InboxController', InboxController);
 
-    InboxController.$inject = ['mail', 'mailBox', '$state'];
+    InboxController.$inject = ['$rootScope', '$state', 'mail', 'mailBox'];
     /* @ngInject */
-    function InboxController(mail, mailBox, $state) {
+    function InboxController($rootScope, $state, mail, mailBox) {
         var vm = this;
 
         vm.messages = {
             params: {
-                'per-page': 5
-            }
+                'per-page': 20,
+                'len': 100
+            },
+            checked: []
         };
 
         vm.folders = {};
+
+        $rootScope.$on('mail:sync', function () {
+            get();
+        });
 
         activate();
 
@@ -36,29 +42,16 @@
 
         function get() {
             mail.get(vm.messages.params).then(function (response) {
-                vm.messages = _.assign(vm.messages, response);
-                console.log(vm.messages);
+                vm.messages = _.assign(vm.messages, response.data);
                 _.forEach(vm.messages.items, function (message) {
-                    getMessage(message);
+                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
                 });
-            });
-        }
-
-        function getMessage(message) {
-            console.log('get', message);
-            mail.getById({
-                id: message.number,
-                mbox: message.mbox,
-                part: 'text'
-            }).then(function (response) {
-                message.message = response;
-                console.log('message', message);
             });
         }
 
         function getMailBox() {
             mailBox.get().then(function (response) {
-                vm.folders = _.assign(vm.folders, response);
+                vm.folders = _.assign(vm.folders, response.data);
             });
         }
     }

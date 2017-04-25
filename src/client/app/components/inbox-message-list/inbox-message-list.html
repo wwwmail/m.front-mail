@@ -1,3 +1,808 @@
 <div class="inbox-message-list">
     <inbox-message message="message" ng-repeat="message in vm.messages.items"></inbox-message>
+
+<!--    <div class="inbox-message inbox-message&#45;&#45;new">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;border"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;new">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;yellow"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;importmant">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;yellow"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;checked">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;border"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;checked">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;border"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;new">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;border"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;importmant">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;yellow"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;importmant">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;yellow"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>
+
+
+    <div class="inbox-message inbox-message&#45;&#45;importmant">
+
+        &lt;!&ndash; Блок селекта и аватарки &ndash;&gt;
+        <div class="inbox-message__left">
+
+            <div class="inbox-message__avatar">
+                <div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg__auto">
+                    <img class="avatar__image" src="/images/avatar-personal.svg">
+                    <div class="inbox-message__check-message"></div>
+                </div>
+
+            </div>
+
+            <div class="inbox-message__round">
+                <div class="round round&#45;&#45;yellow"></div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Основйной блок &ndash;&gt;
+        <div class="inbox-message__center">
+
+            <div class="inbox-message__head">
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__importance">
+                    <span class="important-tags important-tags&#45;&#45;active"></span>
+                </div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__name">John Doe</div>
+                &lt;!&ndash;&ndash;&gt;
+                <div class="inbox-message__data">
+                    30 мар
+                </div>
+            </div>
+
+            <div class="inbox-message__text">
+                <div class="inbox-message__subject">Subject</div>
+                <div class="inbox-message__message">
+                    Lorem ipsum dolor sit amet, timeam appellantur nec te, et agam quot conclusionemque pri, mea eu propriae oportere interpretaris. In nec quidam eleifend partiendo.
+                </div>
+            </div>
+
+            <div class="inbox-message__labels">
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;red">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;orange">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;green">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <div class="inbox-message__label letter-tags letter-tags&#45;&#45;purpure">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <svg class="letter-tags__icon">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+            </div>
+
+        </div>
+
+        &lt;!&ndash; блок меню &ndash;&gt;
+        <div class="inbox-message__right">
+            <button class="inbox-message__right__btn btn  btn&#45;&#45;size_m btn&#45;&#45;not-style btn&#45;&#45;size_28 icon-more"></button>
+        </div>
+
+    </div>-->
 </div>

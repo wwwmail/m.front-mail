@@ -15,9 +15,6 @@
         // the following shows the default values. values passed to this method
         // will extend the defaults using angular.extend
 
-        // console.log('http', $http);
-        // $http({url: '/auth/logout', method: 'GET'});
-
         $authProvider.configure({
             apiUrl: CONFIG.APIHost,
             tokenValidationPath: '/auth/validate-token',

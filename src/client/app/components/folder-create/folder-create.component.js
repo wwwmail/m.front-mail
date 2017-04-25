@@ -4,7 +4,9 @@
     angular
         .module('app.components')
         .component('folderCreate', {
-            bindings: {},
+            bindings: {
+                onClose: '&'
+            },
             templateUrl: 'app/components/folder-create/folder-create.html',
             controller: 'FolderCreateController',
             controllerAs: 'vm'
