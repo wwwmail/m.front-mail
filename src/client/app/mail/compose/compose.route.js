@@ -16,7 +16,17 @@
             {
                 state: 'mail.compose',
                 config: {
-                    url: '/compose',
+                    url: '/compose?id&mbox',
+                    templateUrl: 'app/mail/compose/compose.html',
+                    controller: 'ComposeController',
+                    controllerAs: 'vm',
+                    title: 'Compose'
+                }
+            },
+            {
+                state: 'mail.composeDraft',
+                config: {
+                    url: '/compose?id&mbox',
                     templateUrl: 'app/mail/compose/compose.html',
                     controller: 'ComposeController',
                     controllerAs: 'vm',

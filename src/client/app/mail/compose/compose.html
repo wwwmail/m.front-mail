@@ -24,20 +24,48 @@
     </div>
 
     <div class="mrg__top10">
+
         <div class="input-line input-line--full">
             <label class="input-line__label">
                 <a class="link link--gray link--hv-red" href="">Кому</a>
             </label>
             <div class="input-line__links">
-                <a class="link link--violet link--hv-red" href="#">
+                <a class="link link--violet link--hv-red" ng-click="vm.isCopy = true">
                     Копия
                 </a>
-                <a class="link link--violet link--hv-red" href="#">
+                <a class="link link--violet link--hv-red" ng-click="vm.isCopyHidden = true">
                     Скрытая копия
                 </a>
             </div>
-            <input class="input-line__input" type="text">
+            <input class="input-line__input"
+                   type="text"
+                   name="to"
+                   ng-model="vm.sendForm.model.to"
+                   required>
         </div>
+
+        <!--<div class="input-line__error" ng-if="sendForm.to.$invalid && sendForm.$submitted">-->
+            <!--Поле не заполнено. Необходимо ввести адрес.-->
+        <!--</div>-->
+
+        <div class="input-line input-line--full mrg__top10" ng-if="vm.isCopy">
+            <label class="input-line__label">
+                <a class="link link--gray link--hv-red" href="">Копия</a>
+            </label>
+            <input class="input-line__input" type="text"
+                   name="toCopy"
+                   ng-model="vm.sendForm.model.toCopy">
+        </div>
+
+        <div class="input-line input-line--full mrg__top10" ng-if="vm.isCopyHidden">
+            <label class="input-line__label">
+                <a class="link link--gray link--hv-red" href="">Скрытая</a>
+            </label>
+            <input class="input-line__input" type="text"
+                   name="isCopyHidden"
+                   ng-model="vm.sendForm.model.isCopyHidden">
+        </div>
+
         <div class="input-line input-line--full mrg__top10">
             <label class="input-line__label">
                 <a class="link link--gray link--hv-red" href="">Тема</a>
@@ -47,12 +75,13 @@
                     Шаблон
                 </a>
             </div>
-            <input class="input-line__input" type="text">
+            <input class="input-line__input" type="text"
+                   ng-model="vm.sendForm.model.subject">
         </div>
     </div>
 
     <div class="mrg__top20">
-        <div message-textarea></div>
+        <div message-textarea ng-model="vm.sendForm.model.body"></div>
     </div>
 
     <div class="row mrg__top20">
