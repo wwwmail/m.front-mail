@@ -1,27 +1,91 @@
-<div class="header ">
-    <div class="header__container">
-        <div class="header__left">
-            <button class="icon-menu btn btn--not-style header__icon" ng-click="vm.openMenu()"></button>
+<div class="header">
+
+    <!--
+        у нас используется разный хедер для страниц
+        для активации нужнохо хедера просто  нужно добавлять класс is-active
+        при условии открития нужной страници
+    -->
+
+    <!-- Хедер для главной страници -->
+    <div class="header__main is-active">
+        <div class="header__container">
+            <div class="header__left">
+                <button class="icon-menu btn btn--not-style btn--main-mobile-color header__icon padding--left" ng-click="vm.openMenu()"></button>
+            </div>
+
+            <div class="header__center">
+                <span class="header__title-text">Входящие</span>
+                <span class="header__count-letters">28</span>
+
+            </div>
+
+            <div class="header__right">
+                <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"></button>
+            </div>
+
+            <hr class="hr hr--header">
+
         </div>
-
-        <div class="header__center">
-            <span class="">Входящие</span>
-            <span class="header__center__count-letters">28</span>
-
-        </div>
-
-        <div class="header__right">
-
-            <form class="search-block widtn-inh search-block--no-active" action="">
-                <input class="input input--no-border input--no-focus input--size_l width--all" type="text" placeholder="Поиск писем">
-                <button class="search-block__icon-close icon-cancel btn btn--not-style btn--size_s mrg__right"></button>
-                <button class="search-block__icon icon-lens btn btn--not-style header__icon mrg__right"></button>
-            </form>
-
-
-        </div>
-        <hr class="hr hr--header">
-        
-
     </div>
+
+    <!-- Хедер для страници поиска-->
+    <div class="header__search  ">
+        <div class="header__container">
+            <div class="header__left">
+                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"></button>
+            </div>
+
+
+            <div class="header__right width--inh">
+
+                <form class="search-block widtn-inh search-block" action="">
+                    <input class="input input--no-border input--no-focus input--size_l width--all" type="text" placeholder="Поиск писем">
+                    <button class="search-block__icon-close icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s mrg__right"></button>
+                    <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right"></button>
+                </form>
+
+
+            </div>
+            <hr class="hr hr--header hr--yellow">
+
+
+        </div>
+    </div>
+
+    <!-- Хедер для страници просмотра письма-->
+    <div class="header__massege-replay">
+        <div class="header__container">
+            <div class="header__left">
+                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left">
+                    <span class="font__arial font__size13 mrg__left5 ">Назад</span>
+                </button>
+            </div>
+
+            <div class="header__right">
+                <button class="icon-arrow-up btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right_2"></button>
+                <button class="icon-arrow-down btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
+    <!-- Хедер для страници создания письма-->
+    <div class="header__massege-replay">
+        <div class="header__container">
+            <div class="header__left">
+                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left">
+                </button>
+            </div>
+
+            <div class="header__center mrg__left50">
+                <span class="header__title-text">Новое письмо</span>
+            </div>
+
+            <div class="header__right">
+                <button class="btn btn--not-style btn--main-mobile-color header__icon mrg__right font__arial font__size15 padding--rignt">Отправить</button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
 </div>

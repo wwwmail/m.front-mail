@@ -3,14 +3,35 @@
   align-items: center;
 
   &__title {
-    font: 100 11px/1 $mainFont;
+    font: 300 14px/1 $mainFont;
     color: $silver-mail-message-title-color;
-    padding: 6px;
+
+    margin-right: 10px;
   }
 
   &__mail-recipient {
-    font: 100 11px/1 $mainFont;
+    font: 300 14px/1 $mainFont;
     color: $black;
+    margin-left: 6px;
+  }
+
+  &__folders {
+    display: flex;
+    flex-wrap: wrap;
+
+    font: 300 14px/1.4 $mainFont;
+    color: $black;
+  }
+  &__folder{
+    padding-right: 10px;
+  }
+
+  @media only screen and (max-width: 380px) {
+    &__mail-recipient{
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
 }

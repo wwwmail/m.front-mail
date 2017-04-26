@@ -16,12 +16,17 @@
   }
 
   &--yellow {
-    color: #f3b763;
+    color: $yellow-yandex!important;
   }
 
   &--red {
-    color: #cc0000;
+    color: #cc0000!important;
   }
+
+  &--light-red {
+    color: $light-red!important;
+  }
+
   &--silver{
     color: $checkbox-auth-color;
   }

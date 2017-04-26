@@ -5,6 +5,7 @@ $textBlack: #000;
 
 $white-color: #ffffff;
 $textWhile: #ffffff;
+$light-red: #e76a50;
 
 
 $main-border-color: #cccccc;
@@ -48,6 +49,15 @@ $cp-silver: #9e9e9e;
 
 $important-tags-color: #727272;
 $important-tags-active-color: #d23100;
+
+$mail-message-title-color: #282828;
+$mail-message-title-bg-color: #f6f5f3;
+$mail-message-title--border-color: #ecebea;
+
+$main-btn-color: #808080;
+
+
+
 
 
 
@@ -111,8 +121,9 @@ $auth-sms-bg-color: #ebebeb;
 
 $silver-mail-message-title-color: #7f7f7f;
 
-$message-date-color: #7f7f8f;
-$massage-content-bg-color: #f4f4f4;
+$message-date-color: #7d7d7d;
+$messafe-from-whom-color: #333333;
+$massage-content-bg-color: #fff;
 
 //border
 $avatar-border-color: $main-border-color;

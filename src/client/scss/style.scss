@@ -21,6 +21,7 @@
 @import 'layout/auth-layout';
 @import 'layout/mail-message';
 @import "layout/password-reset-layout";
+@import "layout/mobile-popup";
 @import 'ui/checked';
 @import 'ui/hr';
 @import 'ui/btn-y';
@@ -42,6 +43,7 @@
 @import 'components/round';
 @import 'components/folders-setup';
 @import 'components/square';
+@import "components/inbox-list";
 @import 'components/inbox-header';
 @import 'components/inbox-message';
 @import 'components/inbox-footer';

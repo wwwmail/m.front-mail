@@ -11,6 +11,32 @@
   background-color: $white-color;
   z-index: 2;
 
+  &__main{
+    display: none;
+    visibility: hidden;
+  }
+  &__search{
+    display: none;
+    visibility: hidden;
+  }
+  &__massege-replay{
+    display: none;
+    visibility: hidden;
+  }
+  &__massege-new{
+    display: none;
+    visibility: hidden;
+  }
+  &__main.is-active,
+  &__search.is-active,
+  &__massege-replay.is-active,
+  &__massege-new.is-active{
+    height: inherit;
+
+    display: block;
+    visibility: visible;
+  }
+
   &__container{
     position: relative;
 
@@ -24,6 +50,8 @@
     min-height: 100%;
     margin: auto;
 
+    padding: 0 22px;
+
     //padding: 0 15px;
   }
 
@@ -33,28 +61,35 @@
 
   &__center{
     color: $black;
-    font: 300 15px/1 $mainFont;
-
     width: auto;
+  }
 
-    &__count-letters{
+  &__title-text{
+    font: 300 15px/1 $mainFont;
+  }
 
-
-    }
-
+  &__count-letters{
+    font: 300 13px/1 $mainFont;
+    color: $yellow-yandex;
   }
 
   &__right{
     width: auto;
-
-
   }
 
   &__icon{
     color: $header-icon-color;
-    font: 300 20px/1 $mainFont;
+    font: 300 13px/1 $mainFont;
+    &:before{
+      font-size: 20px;
 
+    }
+  }
 
+  @media only screen and (max-width: 562px) {
+    &__content{
+      padding: 0 10px;
+    }
   }
 
 }

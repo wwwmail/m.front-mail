@@ -39,4 +39,16 @@
     margin: 0;
     width: 200vw;
   }
+  &--inbox-footer{
+    position: absolute;
+    top: 0;
+    left: -50vw;
+    right: 50vw;
+    background-color: $header-border-color;
+    margin: 0;
+    width: 200vw;
+  }
+    &--yellow{
+    background-color: $yellow-yandex;
+  }
 }
