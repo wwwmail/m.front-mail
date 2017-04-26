@@ -22,6 +22,9 @@
   &--red {
     color: #cc0000!important;
   }
+  &--red{
+    color: $red!important;
+  }
 
   &--light-red {
     color: $light-red!important;

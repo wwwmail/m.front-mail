@@ -51,4 +51,17 @@
     &--yellow{
     background-color: $yellow-yandex;
   }
+
+  &--popup{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+
+    background-color: $hr-popup-color;
+    margin: 0;
+
+  }
 }

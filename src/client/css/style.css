@@ -23,6 +23,9 @@
 .color--red {
   color: #cc0000 !important;
 }
+.color--red {
+  color: #d23100 !important;
+}
 .color--light-red {
   color: #e76a50 !important;
 }
@@ -1087,11 +1090,67 @@
 }
 
 .mobile-popup {
+  position: relative;
   display: flex;
   flex-flow: column;
+  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  background: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  min-width: 272px;
+  width: 272px;
+  max-height: 90%;
+}
+.mobile-popup__head {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 52px;
+  width: 100%;
+  color: #000;
+  font: 100 16px/1 Arial, sans-serif;
+}
+.mobile-popup__head__title {
+  margin: auto;
+  padding-left: 28px;
+}
+.mobile-popup__content {
+  width: 100%;
+  padding: 0 25px;
+  overflow: auto;
+}
+.mobile-popup__item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 52px;
+  color: #000;
+  font: 300 20px/1 "HelveticaNeueCyr", sans-serif;
+}
+.mobile-popup__icon {
+  font-size: 21px;
+  padding-right: 12px;
+}
+.mobile-popup__icon-close {
   position: absolute;
-  padding: 15px;
-  overflow: hidden;
+  right: 0;
+  top: 15px;
+  font-size: 15px;
+}
+
+.popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
 }
 
 .checkbox {
@@ -1139,6 +1198,15 @@
 }
 .hr--yellow {
   background-color: #fc0;
+}
+.hr--popup {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #eeeeee;
+  margin: 0;
 }
 
 .btn-y {
