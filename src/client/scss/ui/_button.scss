@@ -22,14 +22,6 @@
     background-color: $yellow-lignt;
     box-shadow: none;
   }
-  //
-  //&:disabled {
-  //  background: none;
-  //  &:hover{
-  //    background: none;
-  //
-  //   }
-  // }
 
   &--act--y-shw:active{
     background: $yellow-yandex;
@@ -85,7 +77,6 @@
     }
     &:active{
       background: none;
-
     }
   }
 
@@ -117,6 +108,10 @@
     border-radius: 50%;
   }
 
+  &--no-radius{
+    border-radius: 0!important;
+  }
+
   &--radius_3{
     border-radius: 6px;
   }
@@ -141,6 +136,11 @@
       }
 
     }
+  }
+
+  &--main-mobile-color{
+    color: $main-btn-color;
+    fill: $main-btn-color;
   }
 
   &--s-gradient{
@@ -188,11 +188,19 @@
     font-size: 20px;
   }
 
+  &--size_20{
+    font-size: 20px;
+  }
+
+  &--size_20x20{
+    width: 20px;
+    height: 20px;
+  }
+
   &--size_28{
     width: 28px;
     height: 28px;
     font-size: 18px;
-
   }
 
   &--size_62{
@@ -200,11 +208,10 @@
     width: 62px;
     height: 62px;
     font-size: 26px;
-
   }
 
-  &--toggle-arrow{
-
+  &--rotate{
+    transform: rotate(180deg);
   }
 
 }
@@ -215,8 +222,8 @@
 
   padding: 0 15px 0 35px;
   &:before{
-    content: '';
 
+    content: '';
     width: 20px;
     height: 20px;
 

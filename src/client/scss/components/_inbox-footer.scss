@@ -13,18 +13,76 @@
 
   &__content {
     position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
     width: 100%;
 
     max-width: 768px;
     min-height: 100%;
     margin: auto;
 
+    padding: 0 0px;
+
+  }
+  &__new-message{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
     padding: 13px;
   }
 
+  &__group-option{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    background: $white-color;
+    z-index: 2;
+
+    padding: 10px 0;
+
+    &:before{
+      content: "";
+
+      position: absolute;
+      top:0;
+      bottom: 0;
+      left: -30vw;
+
+      background: $white-color;
+
+      height: 100%;
+      width: 1000vw;
+    }
+
+    .icon-folder, .icon-tag, .icon-archive {
+      display: none!important;
+    }
+
+    &.is-more-switch{
+
+      .icon-delete, .icon-spam, .icon-unread{
+        display: none!important;
+      }
+
+      .icon-folder, .icon-tag,.icon-archive {
+        display: flex!important;
+      }
+
+      .btn--icon{
+        transform: rotate(180deg);
+      }
+    }
+  }
+  //@media only screen and (max-width: 360px) {
+  //  &__group-option{
+  //    max-width: 160px;
+  //    overflow: hidden;
+  //    text-overflow: ellipsis;
+  //  }
+  //}
 }

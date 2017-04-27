@@ -1,0 +1,100 @@
+.folder-layout{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: $white-color;
+
+  z-index: 5;
+
+  background: $menu-main-color;
+
+
+  &__container{
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    max-width: 768px;
+    min-height: 100%;
+    margin: auto;
+
+    padding: 0 22px;
+
+
+  }
+
+  &__header{
+    position: relative;
+
+    min-height: 40px;
+
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+
+    font: 400 16px/1 $mainFont;
+    color: $yellow-yandex;
+  }
+
+  &__footer{
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+
+
+    height: 42px;
+    font-size: 16px;
+
+    //margin: auto auto 0 auto;
+
+  }
+
+  &__content{
+    flex: 1 0 auto;
+    height: 0;
+  }
+
+  &__separate{
+    position: relative;
+    opacity: .6;
+    margin-top: 10px;
+
+  }
+  &__item{
+    display: flex;
+    align-items: center;
+
+    padding: 6px 20px;
+
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  &__icon{
+
+    margin-right: 10px;
+
+  }
+
+  &__tittle{
+
+  }
+  @media only screen and (max-width: 562px) {
+    &__container{
+      padding: 0 10px;
+    }
+  }
+}
