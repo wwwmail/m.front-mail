@@ -14,23 +14,45 @@
   //border-left: none;
   //border-right: none;
 
+  &--top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+    margin: 0;
+  }
+
+  &--bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    margin: 0;
+  }
+
+
+
   &--dashed {
     border: none;
     border-bottom: 1px dotted $hr-main-color;
   }
 
-  &--auth{
+  &--auth {
     background: $hr-auth-color;
     margin-bottom: 19px;
   }
 
-  &--main-menu{
+  &--main-menu {
     background-color: $hr-main-menu-color;
     margin: 8px 13px;
     width: inherit;
   }
 
-  &--header{
+  &--header {
     position: absolute;
     bottom: 0;
     left: -50vw;
@@ -39,7 +61,7 @@
     margin: 0;
     width: 200vw;
   }
-  &--inbox-footer{
+  &--inbox-footer {
     position: absolute;
     top: 0;
     left: -50vw;
@@ -48,11 +70,11 @@
     margin: 0;
     width: 200vw;
   }
-    &--yellow{
+  &--yellow {
     background-color: $yellow-yandex;
   }
 
-  &--popup{
+  &--popup {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -64,4 +86,10 @@
     margin: 0;
 
   }
+
+  &--folders {
+    background-color: rgba($white-color, .1);
+  }
+
+
 }
