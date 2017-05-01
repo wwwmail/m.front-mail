@@ -10,6 +10,7 @@
   max-width: 768px;
   min-height: 100%;
   margin: auto;
+  overflow-x: hidden;
 
 
   //padding: 0 15px;
@@ -25,7 +26,7 @@
     max-width: 98%;
     max-width: -webkit-calc(100% + 0vw);
     max-width: calc(100% + 0vw);
-
+    z-index: 2;
   }
 
   &__menu {
@@ -108,8 +109,7 @@
 
   &__header{
     position: relative;
-
-    z-index: 3;
+    z-index: 5;
   }
   &__footer {
     margin-top: 50px;

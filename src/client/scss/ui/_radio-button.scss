@@ -1,0 +1,100 @@
+.radio-button{
+  position: relative;
+
+  width: 51px;
+
+  //-webkit-user-select:none;
+  //-moz-user-select:none;
+  //-ms-user-select: none;
+
+  &__checkbox {
+    display: none;
+  }
+
+  &__label {
+    display: block;
+
+    overflow: hidden;
+
+    cursor: pointer;
+    border-radius: 16px;
+    margin: 0;
+    padding: 0;
+
+  }
+  &__inner {
+    display: block;
+
+    width: 200%;
+    margin-left: -100%;
+
+    transition: margin 0.3s ease-in 0s;
+
+    &:after {
+      content: "";
+      padding-right: 10px;
+      background-color: #eeeeee;
+      color: #FFFFFF;
+      text-align: right;
+    }
+
+    &:before {
+      content: "";
+
+      padding-left: 10px;
+
+      background-color: #FFCC00;
+      color: #FFFFFF;
+    }
+
+  }
+  &__inner:before,
+  &__inner:after {
+    display: block;
+    float: left;
+
+    width: 50%;
+    height: 31px;
+
+    padding: 0;
+
+    line-height: 30px;
+    font-size: 14px;
+    color: white;
+    font-family: Trebuchet, Arial, sans-serif;
+    font-weight: bold;
+
+    box-sizing: border-box;
+  }
+
+  &__switch {
+    display: block;
+    width: 27px;
+    height: 27px;
+
+    margin: 2px;
+    background: #FFFFFF;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 20px;
+
+    border-radius: 100%;
+    box-shadow: $radiobutton-switch;
+
+    transition: all 0.3s ease-in 0s;
+  }
+
+  &__checkbox:checked + &__label &__inner {
+    margin-left: 0;
+  }
+  &__checkbox:checked + &__label &__switch {
+    right: 0px;
+  }
+
+}
+
+
+
+

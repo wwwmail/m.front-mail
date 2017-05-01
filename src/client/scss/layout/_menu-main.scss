@@ -24,9 +24,9 @@
       font: 300 18px/1 $mainFont;
       color: $white-color;
 
-      &:hover {
-        background: rgba($yellow-select-main-menu-color, .1);
-      }
+      //&:hover {
+      //  background: rgba($yellow-select-main-menu-color, .1);
+      //}
     }
   }
 
@@ -44,10 +44,10 @@
     &:hover {
       color: $yellow-select-main-menu-color;
     }
-
-    &:active, &:focus {
-      color: #fff;
-    }
+    //
+    //&:active, &:focus {
+    //  color: #fff;
+    //}
 
     &--gray {
       color: rgba(0, 0, 0, .5);
@@ -76,14 +76,14 @@
     font-size: 24px;
     min-width: 48px;
 
-    &:hover, &:active {
-      background-color: rgba($yellow-yandex, .9);
-      color: $menu-main-color;
-
-      .menu-main__count{
-        color: $menu-main-color!important;
-      }
-    }
+    //&:hover, &:active {
+    //  background-color: rgba($yellow-yandex, .9);
+    //  color: $menu-main-color;
+    //
+    //  .menu-main__count{
+    //    color: $menu-main-color!important;
+    //  }
+    //}
   }
 
   &__sub {

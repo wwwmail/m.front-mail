@@ -1,0 +1,72 @@
+.textarea {
+  position: relative;
+
+  width: 100%;
+  max-width: 100%;
+
+  min-width: 300px;
+  min-height: 40px;
+
+  border: none;
+  background: none;
+
+  padding: 0;
+
+  text-indent: 0;
+
+  font: 100 14px/1.4 $mainFont;
+  resize: both;
+
+  color: $black;
+  z-index: 2;
+  overflow: auto;
+
+  &:focus {
+    outline: none;
+  }
+
+  &--normal{
+    padding: 10px 10px;
+    border: 1px solid $button-border-color;
+    outline: 1px solid transparent;
+
+    &:focus{
+      border: 1px solid $yellow-yandex!important;
+      outline: 1px solid $yellow-yandex!important;
+    }
+  }
+
+  &--not-resize{
+    resize: none!important;
+  }
+
+  &--up-shadow{
+    box-shadow: $input-insert-shadow;
+  }
+
+  &--size_xs{
+    font-size: 12px;
+    line-height: 10px;
+  }
+
+  &--size_s {
+    font-size: 13px;
+    line-height: 12px;
+  }
+
+  &--size_sm {
+    font-size: 13px;
+    line-height: 12px;
+  }
+
+  &--size_m {
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  &--size_l {
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+}
