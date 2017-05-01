@@ -6,7 +6,7 @@
     <div class="mail-message__head">
 
         <div class="mail-message__title">
-            Регистрация на сервисе @mail.cz
+            {{ vm.message.model.Subject }}
         </div>
 
         <div class="info-sender ">
@@ -20,13 +20,13 @@
 
                 <div class="info-sender__title">
                     <div class="info-sender__from-whom">
-                        John Doe
+                        {{ vm.message.model.from }}
                         <!--<span class="info-sender__from-whom__mail-name">support@mail.cz</span>-->
                         <button class="btn btn--not-style btn--not-events btn--main-mobile-color font__size12 padding--right_2 padding--left_2 mrg__left5 icon-arrow-down" type="button"></button>
                     </div>
 
                     <div class="info-sender__date">
-                        22 марта в 18:09
+                        {{ vm.getDate(vm.message.model.date.date) }}
                     </div>
 
                 </div>
@@ -52,7 +52,9 @@
                     <div class="avatar avatar--settings avatar--size28 avatar--second-style">
                         <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
                     </div>
-                    <span class="to-whom__mail-recipient">john.doe@mail.cz</span>
+                    <span class="to-whom__mail-recipient">
+                        {{ vm.message.model.fromAddress }}
+                    </span>
                 </div>
 
                 <div class="info-sender__message-info__item to-whom">
