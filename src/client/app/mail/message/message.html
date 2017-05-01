@@ -1,51 +1,116 @@
-<inbox-header></inbox-header>
+<!--<inbox-header></inbox-header>-->
 
 <div class="mail-message">
 
     <!-- Хедер сообщения -->
     <div class="mail-message__head">
 
-        <div class="mail-message__title mrg-top18">
+        <div class="mail-message__title">
             {{ vm.message.model.Subject }}
         </div>
 
-        <div class="info-sender flex--inline">
+        <div class="info-sender ">
+            <div class="info-sender__head flex--inline">
 
-            <div class="info-sender__avatar flex">
-                <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__auto">
-                    <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                <div class="info-sender__avatar flex">
+                    <div class="avatar avatar--settings avatar--size42 avatar--second-style">
+                        <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                    </div>
                 </div>
+
+                <div class="info-sender__title">
+                    <div class="info-sender__from-whom">
+                        {{ vm.message.model.from }}
+                        <!--<span class="info-sender__from-whom__mail-name">support@mail.cz</span>-->
+                        <button class="btn btn--not-style btn--not-events btn--main-mobile-color font__size12 padding--right_2 padding--left_2 mrg__left5 icon-arrow-down" type="button"></button>
+                    </div>
+
+                    <div class="info-sender__date">
+                        {{ vm.getDate(vm.message.model.date.date) }}
+                    </div>
+
+                </div>
+                <div class="info-sender__right-menu mrg__right">
+                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"></div>
+                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red"></div>
+                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply"></div>
+                </div>
+
             </div>
 
-            <div class="info-sender__title">
-                <div class="info-sender__from-whom">
-                    {{ vm.message.model.from }}
-                    <span class="info-sender__from-whom__mail-name">
+            <!--
+                для того чтобы отобразить боле подробную информацию по писью,
+                при нажатии на кнопу возле имени нужно к
+                info-sender__message-info добавить is-active
+                а info-sender__from-whom > button нужно заменить icon-arrow-down на icon-arrow-up
+                ну или добавить btn--rotate
+            -->
+
+            <div class="info-sender__message-info is-active">
+                <div class="info-sender__message-info__item to-whom">
+                    <span class="to-whom__title width--min60">Кому</span>
+                    <div class="avatar avatar--settings avatar--size28 avatar--second-style">
+                        <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                    </div>
+                    <span class="to-whom__mail-recipient">
                         {{ vm.message.model.fromAddress }}
                     </span>
                 </div>
 
-                <div class="info-sender__to-whom flex--inline">
-                    <span class="mrg__right18" ng-if="vm.$state.params.mbox !== 'Sent'">Вам:</span>
-                    <span class="mrg__right18" ng-if="vm.$state.params.mbox === 'Sent'">Получатель:</span>
+                <div class="info-sender__message-info__item to-whom">
+                    <span class="to-whom__title width--min60">От Кого</span>
 
-                    <div class="avatar avatar--settings avatar--size20 avatar--second-style mrg__right5">
+                    <div class="avatar avatar--settings avatar--size28 avatar--second-style">
                         <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
                     </div>
 
-                    <!--<span class="">john.doe@mail.cz</span>-->
-
-                    <span class="mrg__left5"
-                          ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">john.doe@mail.cz</span>
-                    <span class="mrg__left5" ng-if="vm.isFromOpen && vm.$state.params.mbox === 'Sent'">{{ vm.message.model.to[0].address }}</span>
-
-                    <button class="btn btn--not-style btn--not-events bth--toggle-arrow icon-arrow-up font__size7"
-                            ng-class="{'icon-arrow-up': vm.isFromOpen, 'icon-arrow-down': !vm.isFromOpen}"
-                            ng-click="vm.isFromOpen = !vm.isFromOpen"
-                            type="button"></button>
+                    <span class="to-whom__mail-recipient">john.doe@mail.cz</span>
                 </div>
+
+                <div class="info-sender__message-info__item to-whom">
+                    <span class="to-whom__title width--min60">Папки</span>
+                    <div class="to-whom__folders">
+                        <div class="to-whom__folder">Входящие</div>
+                        <div class="to-whom__folder">Новые</div>
+                        <div class="to-whom__folder">Избранное</div>
+
+                    </div>
+                </div>
+
+                <div class="info-sender__message-info__item to-whom">
+                    <span class="to-whom__title width--min60"> Метки</span>
+                    <div class="inbox-message__labels">
+
+                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--orange">
+                            <span class="letter-tags__name">Метка 1</span>
+                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+                        </div>
+
+                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--red">
+                            <span class="letter-tags__name">Метка 1</span>
+                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+                        </div>
+
+                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--orange">
+                            <span class="letter-tags__name">Метка 1</span>
+                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+                        </div>
+
+                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--space-gray">
+                            <span class="letter-tags__name">Метка 1</span>
+                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+                        </div>
+
+                        <div class="letter-tags letter-tags--poss-remove letter-tags--space-gray">
+                            <span class="letter-tags__name">Метка 1</span>
+                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+                        </div>
+
+                    </div>
+                </div>
+
+
             </div>
-            <div class="info-sender__date mrg__right">{{ vm.getDate(vm.message.model.date.date) }}</div>
         </div>
 
     </div>
@@ -57,125 +122,37 @@
             <!--Само сообщение-->
             <div class="body-message__content"
                  ng-bind-html="vm.message.model.body"></div>
-
         </div>
+    </div>
+
+    <div class="mail-message__footer">
+        <div class="btn btn--not-events btn--not-style btn--main-mobile-color btn--size_20 icon-more mrg__right"></div>
     </div>
 
     <!-- Быстрый ответ-->
-    <div class="mail-message__reply flex--inline">
+    <div class="mail-message__reply">
 
-        <div class="mail-message__reply__avatar flex">
-            <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__top">
-                <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
-            </div>
-        </div>
+        <div class="mail-message__reply-container">
 
-        <!-- поле для ввода сообщения с двумя сотояниями-->
-        <!--
-           **! Этот класс является переключателем состояни для поля ввода
-               >>> quick-reply--used-input-message
-        -->
-        <div class="quick-reply" ng-click="vm.isSendTextOpen = true"
-             ng-class="{'quick-reply--used-input-message': vm.isSendTextOpen}">
-
-            <!-- до нажатия-->
-            <div class="quick-reply__not-form-message">
-
-                <div class="quick-reply__not-form-message__title">
-                    Нажмите здесь, чтобы
-                    <span class="quick-reply__not-form-message__title__method">Ответить</span> или
-                    <span class="quick-reply__not-form-message__title__method">Переслать</span>
-                </div>
-            </div>
-
-
-            <!-- после нажатия-->
-            <div class="quick-reply__form-message">
-
-                <div class="letter-tags letter-tags--poss-remove letter-tags--space-gray">
-                    <span class="letter-tags__name">Метка 1</span>
-                    <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+            <div class="quick-reply">
+                <button class="quick-reply__write btn btn--not-style icon-write"></button>
+                <div class="quick-reply__message">
+                    <div class="quick-reply__message-input" contenteditable="true"></div>
                 </div>
 
-
-                <button class="quick-reply__form-message__btn-close btn btn--not-style btn-y--close font__size16"
-                        type="button"
-                        ng-click="vm.isSendTextOpen = false; $event.stopPropagation();">
-                    <img class="btn-y__icon " src="/images/cancel.svg">
-                </button>
-
-                <!-- информациия о адрессате-->
-                <div class=" quick-reply__form-message__header to-whom">
-                    <span class="to-whom__title">Кому:</span>
-                    <span class="to-whom__mail-recipient">Команда Яндекс.Почты</span>
-                </div>
-
-                <!-- Поле ввода сообщения-->
-                <div class="quick-reply__form-message__content message-input"
-                     placeholder="Введите ваше сообщение">
-                    Введите ваше сообщение
-                </div>
-
-                <!-- Основная навигация по дествиям-->
-                <div class="quick-reply__form-message__footer control-send-message">
-
-                    <button class="btn btn--yellow btn--act--y-shw btn--size_s width--size90">Отправить</button>
-
-                    <button class="btn btn--not-style btn--attach btn--size_s btn--not-events width--size28 icon-attach font__size16">
-                        <input class="btn--attach__elm-hide" type="file"/>
-                    </button>
-
-                    <span class="quick-reply__form-message__footer__allform">Перейти в полную форму ответа</span>
-
-                </div>
+                <button class="quick-reply__send btn btn--not-style ">Отпр.</button>
             </div>
 
         </div>
+
+
+        <!-- поле для ввода сообщения -->
+
 
     </div>
 
 </div>
 
-<!-- Пагинация писем как в яндексе,
-     в макетах не не было предусмотрено, по этому я только набросал семантику,
-     не стилизовал вдруг будет использоватся
--->
-
-<!--
-
-<<<<<<< HEAD
-<div class="messages-prev">
-    <a class="messages-prev__next hide-elm" href="">
-        <span>Команда Яндекс.Почты</span>
-        <span>Как читать почту с мобильного</span>
-    </a>
-    <a class="messages-prev__next messages-prev__next--next" href="">
-
-    </a>
-=======
-    <!-- Быстрый ответ-->
-<div class="mail-message__reply">
-
-    <div class="mail-message__reply-container">
-
-        <div class="quick-reply">
-            <button class="quick-reply__write btn btn--not-style icon-write"></button>
-            <div class="quick-reply__message">
-                <div class="quick-reply__message-input" contenteditable="true"></div>
-            </div>
-
-            <button class="quick-reply__send btn btn--not-style ">Отпр.</button>
-        </div>
-
-    </div>
-
-
-    <!-- поле для ввода сообщения -->
-
-
-</div>
-
-
-<div class="layout__footer">
-    <footer></footer>
-</div>
+<!--<div class="layout__footer">-->
+    <!--<footer></footer>-->
+<!--</div>-->
