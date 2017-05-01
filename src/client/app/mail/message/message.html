@@ -35,7 +35,8 @@
 
                     <!--<span class="">john.doe@mail.cz</span>-->
 
-                    <span class="mrg__left5" ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">john.doe@mail.cz</span>
+                    <span class="mrg__left5"
+                          ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">john.doe@mail.cz</span>
                     <span class="mrg__left5" ng-if="vm.isFromOpen && vm.$state.params.mbox === 'Sent'">{{ vm.message.model.to[0].address }}</span>
 
                     <button class="btn btn--not-style btn--not-events bth--toggle-arrow icon-arrow-up font__size7"
@@ -87,8 +88,15 @@
                 </div>
             </div>
 
+
             <!-- после нажатия-->
             <div class="quick-reply__form-message">
+
+                <div class="letter-tags letter-tags--poss-remove letter-tags--space-gray">
+                    <span class="letter-tags__name">Метка 1</span>
+                    <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+                </div>
+
 
                 <button class="quick-reply__form-message__btn-close btn btn--not-style btn-y--close font__size16"
                         type="button"
@@ -135,6 +143,7 @@
 
 <!--
 
+<<<<<<< HEAD
 <div class="messages-prev">
     <a class="messages-prev__next hide-elm" href="">
         <span>Команда Яндекс.Почты</span>
@@ -143,9 +152,29 @@
     <a class="messages-prev__next messages-prev__next--next" href="">
 
     </a>
+=======
+    <!-- Быстрый ответ-->
+<div class="mail-message__reply">
+
+    <div class="mail-message__reply-container">
+
+        <div class="quick-reply">
+            <button class="quick-reply__write btn btn--not-style icon-write"></button>
+            <div class="quick-reply__message">
+                <div class="quick-reply__message-input" contenteditable="true"></div>
+            </div>
+
+            <button class="quick-reply__send btn btn--not-style ">Отпр.</button>
+        </div>
+
+    </div>
+
+
+    <!-- поле для ввода сообщения -->
+
+
 </div>
 
--->
 
 <div class="layout__footer">
     <footer></footer>

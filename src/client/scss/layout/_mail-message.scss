@@ -53,22 +53,58 @@
   }
 
   &__reply {
-    position: relative;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
 
-    width: 100%;
-    min-width: 450px;
-    padding-right: 82px;
+    height: auto;
 
-    &__avatar {
-      width: 82px;
-    }
+    min-height: 50px;
+    max-height: 120px;
+
+    display: flex;
+    align-items: flex-end;
+
+    box-sizing: content-box;
+    z-index: 5;
+    border-top: 1px solid $header-border-color;
 
   }
+  &__reply-container{
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+    background: $white-color;
+
+    width: 100%;
+
+    max-width: 768px;
+    min-height: 100%;
+    padding: 2px 22px;
+
+    margin: auto auto 0;
+
+    //padding: 0 15px;
+  }
+
   &__footer{
     display: flex;
     align-items: center;
 
     padding: 16px;
   }
+
+
+
+  @media only screen and (max-width: 562px) {
+    &__reply-container{
+      padding: 0 10px;
+    }
+  }
+
 }
 

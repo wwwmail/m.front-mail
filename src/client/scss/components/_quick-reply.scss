@@ -1,109 +1,75 @@
 /* Блок с формой быстрого ответа */
 
 .quick-reply {
-  position: relative;
-  right: 0;
-  bottom: 0;
-  width: auto;
-  min-width: 50%;
-  min-height: 130px;
 
-  display: inline-flex;
-  align-items: center;
-  flex-flow: row wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 
-  cursor: text;
+  width: inherit;
+  height: inherit;
+  padding-bottom: 15px;
 
-  padding: 0 0 18px 15px;
 
-  &:before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
+  &__message{
+    position: relative;
+    bottom: -3px;
 
-    content: "";
+    overflow: scroll;
+    display: inline-block;
 
-    min-height: 90px;
+    width: 100%;
+    height: auto;
 
-    border: 1px solid $quick-reply-border-color;
+    min-height: 20px;
+    max-height: 120px;
+
+    padding-top: 4px;
+
+    vertical-align: bottom;
+    line-height: 22px;
+
+    outline: none;
   }
 
-  &--used-input-message{
-    width: inherit;
+  &__message-input{
+    font: normal 16px/1.33 $mainFont;
+    color: $black;
 
-    .quick-reply__not-form-message{
-      display: none;
-    }
+    min-height: 20px;
+    max-height: 100px;
+    height: auto;
+    margin-left: 5px;
 
-    .quick-reply__form-message{
-      display: block;
-    }
-    &:focus{
-      &:before{
-        border: 1px solid $yellow-yandex;
-        outline: 1px solid $yellow-yandex;;
-        box-shadow: $button-shadow;
-      }
-    }
-
-  }
-
-  &__not-form-message {
-    display: block;
-
-    &__title {
-      color: $silver-mail-message-title-color;
-      font: 100 13px/1 $mainFont;
-      position: relative;
-      top: -31px;
-
-      &__method {
-        color: $notific-link-color;
-        cursor: pointer;
-
-        &:hover {
-          color: $red-remove-color;
-        }
-      }
+    &:focus, &:active{
+      outline: none;
+      border: none;
     }
   }
 
-  &__form-message {
-    display: none;
-
-    &__btn-close {
-      position: absolute;
-      top: 15px;
-      right: 10px;
-
-      padding: 2px;
-    }
-
-    &__header {
-      position: absolute;
-      top: 8px;
-      left: 10px
-    }
-
-    &__content {
-    }
-
-    &__footer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-
-      &__allform {
-        font: 100 13px/1 $mainFont;
-        color: $silver-mail-message-title-color;
-
-        cursor: pointer;
-        &:hover {
-          color: $link-color;
-        }
-      }
-    }
-
+  &__send{
+    color: $message-replay-btn;
+    font: normal 16px/1 $mainFont;
   }
+  &__write{
+    color: $main-btn-color;
+    font-size: 16px;
+  }
+
+  @media only screen and (max-width: 562px) {
+    &__send, &__write{
+      padding:  0 10px;
+    }
+  }
+
+  @media only screen and (max-width: 360px) {
+    &__send, &__write{
+      padding:  0 5px;
+    }
+    &__message-input{
+      font-size: 14px;
+    }
+  }
+
+
 }
