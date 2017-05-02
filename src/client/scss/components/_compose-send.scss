@@ -2,4 +2,45 @@
   &__item {
     margin-right: 5px;
   }
+  .note-toolbar.panel-heading{
+    display: none!important;
+  }
+}
+
+.compose{
+
+
+  &__header{
+
+  }
+  &__content{
+
+  }
+  &__message{
+
+    padding: 10px;
+
+    font: normal 14px/1.3 $mainThreeFont;
+
+    color: #282828;
+
+  }
+
+
+}
+
+$inpus-compose-text: #b3b3b8;
+
+.btn-arrow{
+  position: absolute;
+  right: 1px;
+
+  font-size: 14px;
+  color: #888888;
+
+  &--active{
+
+  }
+
+
 }
