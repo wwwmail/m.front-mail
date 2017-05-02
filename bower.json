@@ -31,7 +31,12 @@
     "angular-messages": "1.5.3",
     "summernote": "^0.8.3",
     "lodash": "^4.17.4",
-    "moment": "^2.18.1"
+    "moment": "^2.18.1",
+    "ng-file-upload": "^12.2.13",
+    "ng-img-crop": "^0.3.2",
+    "angular-ui-select": "^0.19.8",
+    "select2": "3.4.5",
+    "angular-img-fallback": "^0.2.0"
   },
   "overrides": {
     "jquery": {
@@ -62,6 +67,12 @@
     },
     "angular-ui-select": {
       "main": "dist/select.min.js"
+    },
+    "ng-img-crop": {
+      "main": "compile/minified/ng-img-crop.js"
+    },
+    "select2": {
+      "main": []
     }
   }
 }

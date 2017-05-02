@@ -9,7 +9,7 @@
     <!-- Блок селекта и аватарки -->
     <div class="inbox-message__left">
 
-        <label>
+        <label ng-click="$event.stopPropagation();">
             <div class="inbox-message__avatar">
                 <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__auto">
                     <img class="avatar__image" src="/images/avatar-personal.svg">
@@ -23,7 +23,8 @@
         </label>
 
         <div class="inbox-message__round">
-            <div class="round round--border"></div>
+            <div class="round round--border"
+                 ng-class="{'round--yellow': !vm.message.seen}"></div>
         </div>
     </div>
 
@@ -32,7 +33,7 @@
 
         <div class="inbox-message__head">
             <!---->
-            <div class="inbox-message__importance">
+            <div class="inbox-message__importance" ng-if="vm.message.important">
                 <span class="important-tags important-tags--active"></span>
             </div>
             <!---->
@@ -54,38 +55,11 @@
 
         <div class="inbox-message__labels">
 
-            <div class="inbox-message__label letter-tags letter-tags--red">
-                <span class="letter-tags__name">Метка 1</span>
+            <div class="inbox-message__label letter-tags" ng-repeat="tag in vm.message.tags track by $index"
+                 style="background: {{ tag.bgcolor }};">
+                <span class="letter-tags__name">{{ tag.tag_name }}</span>
                 <svg class="letter-tags__icon">
-                    <use xlink:href="#ico_label-message"></use>
-                </svg>
-            </div>
-
-            <div class="inbox-message__label letter-tags letter-tags--orange">
-                <span class="letter-tags__name">Метка 1</span>
-                <svg class="letter-tags__icon">
-                    <use xlink:href="#ico_label-message"></use>
-                </svg>
-            </div>
-
-            <div class="inbox-message__label letter-tags letter-tags--space-gray">
-                <span class="letter-tags__name">Метка 1</span>
-                <svg class="letter-tags__icon">
-                    <use xlink:href="#ico_label-message"></use>
-                </svg>
-            </div>
-
-            <div class="inbox-message__label letter-tags letter-tags--green">
-                <span class="letter-tags__name">Метка 1</span>
-                <svg class="letter-tags__icon">
-                    <use xlink:href="#ico_label-message"></use>
-                </svg>
-            </div>
-
-            <div class="inbox-message__label letter-tags letter-tags--purpure">
-                <span class="letter-tags__name">Метка 1</span>
-                <svg class="letter-tags__icon">
-                    <use xlink:href="#ico_label-message"></use>
+                    <use xlink:href="#ico_label-message" style="fill: {{ tag.bgcolor }}"></use>
                 </svg>
             </div>
 

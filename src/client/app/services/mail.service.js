@@ -97,6 +97,158 @@
             // return resource.destroy(params, data).$promise;
         }
 
+        function setSeen(data) {
+            var messages = angular.copy(data);
+
+            if (messages.isLoading || !messages.checked.length) return;
+
+            var ids = [];
+
+            _.forEach(messages.checked, function (checked) {
+                ids.push(checked.number);
+                _.forEach(messages.items, function (item) {
+                    if (checked.number == item.number) {
+                        item.seen = true;
+                    }
+                });
+            });
+
+            messages.checked = [];
+
+            _.forEach(messages.items, function (item) {
+                _.forEach(ids, function (id) {
+                    if (item.number === id) {
+                        messages.checked.push(item);
+                    }
+                });
+            });
+
+            messages.isLoading = true;
+
+            flag({}, {
+                ids: ids,
+                flag: 'Seen'
+            }).then(function (response) {
+                messages.isLoading = false;
+            });
+
+            return messages;
+        }
+
+        function setUnSeen(data) {
+            var messages = angular.copy(data);
+
+            if (messages.isLoading || !messages.checked.length) return;
+
+            var ids = [];
+
+            _.forEach(messages.checked, function (checked) {
+                ids.push(checked.number);
+                _.forEach(messages.items, function (item) {
+                    if (checked.number == item.number) {
+                        item.seen = false;
+                    }
+                });
+            });
+
+            messages.checked = [];
+
+            _.forEach(messages.items, function (item) {
+                _.forEach(ids, function (id) {
+                    if (item.number === id) {
+                        messages.checked.push(item);
+                    }
+                });
+            });
+
+            messages.isLoading = true;
+
+            deflag({}, {
+                ids: ids,
+                flag: 'Seen'
+            }).then(function (response) {
+                messages.isLoading = false;
+            });
+
+            return messages;
+        }
+
+        function setImportant(data) {
+            var messages = angular.copy(data);
+
+            if (messages.isLoading || !messages.checked.length) return;
+
+            var ids = [];
+
+            _.forEach(messages.checked, function (checked) {
+                ids.push(checked.number);
+                _.forEach(messages.items, function (item) {
+                    if (checked.number == item.number) {
+                        item.important = true;
+                    }
+                });
+            });
+
+            messages.checked = [];
+
+            _.forEach(messages.items, function (item) {
+                _.forEach(ids, function (id) {
+                    if (item.number === id) {
+                        messages.checked.push(item);
+                    }
+                });
+            });
+
+            messages.isLoading = true;
+
+            flag({}, {
+                ids: ids,
+                flag: 'Flagged'
+            }).then(function (response) {
+                messages.isLoading = false;
+            });
+
+            return messages;
+        }
+
+        function setUnImportant(data) {
+            var messages = angular.copy(data);
+
+            if (messages.isLoading || !messages.checked.length) return;
+
+            var ids = [];
+
+            _.forEach(messages.checked, function (checked) {
+                ids.push(checked.number);
+                _.forEach(messages.items, function (item) {
+                    if (checked.number == item.number) {
+                        item.important = false;
+                    }
+                });
+            });
+
+            messages.checked = [];
+
+            _.forEach(messages.items, function (item) {
+                _.forEach(ids, function (id) {
+                    if (item.number === id) {
+                        messages.checked.push(item);
+                    }
+                });
+            });
+
+            messages.isLoading = true;
+
+            deflag({}, {
+                ids: ids,
+                flag: 'Flagged'
+            }).then(function (response) {
+                messages.isLoading = false;
+            });
+
+            return messages;
+        }
+
         return {
             get: get,
             post: post,
@@ -105,7 +257,11 @@
             move: move,
             destroy: destroy,
             flag: flag,
-            deflag: deflag
+            deflag: deflag,
+            setSeen: setSeen,
+            setUnSeen: setUnSeen,
+            setImportant: setImportant,
+            setUnImportant: setUnImportant
         }
     }
 

@@ -6,7 +6,8 @@
         .constant('CONFIG',
             {
                 DebugMode: true,
-                APIHost: 'http://apimail.devogic.com'
+                APIHost: 'http://apimail.devogic.com',
+                MediaUrl: 'http://apimail.devogic.com/'
             }
         );
 })();

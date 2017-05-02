@@ -5,9 +5,9 @@
         .module('app.components')
         .controller('InboxMessageController', InboxMessageController);
 
-    InboxMessageController.$inject = ['$state', 'mail'];
+    InboxMessageController.$inject = ['$state', '$scope', 'mail', 'tag'];
     /* @ngInject */
-    function InboxMessageController($state, mail) {
+    function InboxMessageController($state, $scope, mail, tag) {
         var vm = this;
 
         vm.getDate = getDate;
@@ -20,6 +20,7 @@
         function activate() {
             vm.$state = $state;
             console.log('activate', vm.message);
+            getTags();
         }
 
         function getDate(date) {
@@ -51,32 +52,61 @@
         }
 
         function setSeen() {
-            if (vm.message.seen) {
+            if (vm.message.seen && !vm.message.isLoading) {
+                vm.message.isLoading = true;
                 mail.deflag({}, {
                     ids: [vm.message.number],
+                    mbox: vm.message.mbox,
                     flag: 'Seen'
+                }).then(function () {
+                    vm.message.isLoading = false;
                 });
+                vm.message.seen = !vm.message.seen;
                 return;
             }
 
+            vm.message.isLoading = true;
             mail.flag({}, {
                 ids: [vm.message.number],
+                mbox: vm.message.mbox,
                 flag: 'Seen'
-            })
+            }).then(function () {
+                vm.message.isLoading = false;
+            });
+            vm.message.seen = !vm.message.seen
         }
 
         function setImportant() {
-            if (vm.message.important) {
+            if (vm.message.important && !vm.message.isLoading) {
+                vm.message.isLoading = true;
                 mail.deflag({}, {
                     ids: [vm.message.number],
+                    mbox: vm.message.mbox,
                     flag: 'Flagged'
+                }).then(function () {
+                    vm.message.isLoading = false;
                 });
+                vm.message.important = !vm.message.important;
                 return;
             }
 
+            vm.message.isLoading = true;
             mail.flag({}, {
                 ids: [vm.message.number],
+                mbox: vm.message.mbox,
                 flag: 'Flagged'
+            }).then(function () {
+                vm.message.isLoading = false;
+            });
+            vm.message.important = !vm.message.important;
+        }
+
+        function getTags() {
+            tag.getTagsByMessage({}, {
+                mbox: vm.message.mbox,
+                id: vm.message.number
+            }).then(function (response) {
+                vm.message.tags = response.data;
             })
         }
     }
