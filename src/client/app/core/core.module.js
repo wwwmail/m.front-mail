@@ -12,6 +12,10 @@
             'checklist-model',
             'blocks.logger',
             'blocks.router',
-            'ng-token-auth'
+            'ng-token-auth',
+            'ngFileUpload',
+            'ngImgCrop',
+            'ui.select',
+            'dcbImgFallback'
         ]);
 })();

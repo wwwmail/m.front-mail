@@ -18,11 +18,22 @@
                 config: {
                     url: '/mail',
                     templateUrl: 'app/mail/mail.html',
+                    controller: 'MailController',
+                    controllerAs: 'vm',
                     resolve: {
                         auth: function ($auth, $state) {
                             return $auth.validateUser().catch(function () {
                                 $state.go('signIn');
                             });
+                        },
+                        user: function (profile) {
+                            return profile.get();
+                        },
+                        folder: function (mailBox) {
+                            return mailBox.get();
+                        },
+                        tagResolve: function (tag) {
+                            return tag.get();
                         }
                     }
                 }

@@ -1,5 +1,4 @@
-.important-tags{
-
+.important-tags {
   position: relative;
 
   color: $important-tags-color;
@@ -9,14 +8,12 @@
     font-family: 'icomoon' !important;
   }
 
-
-  &--active{
+  &--active {
     color:$important-tags-active-color;
 
     &:before {
       content: "\e916";
       font-family: 'icomoon' !important;
     }
-
   }
 }

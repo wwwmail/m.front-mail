@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', 'mailBox'];
+    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mailBox'];
 
     /* @ngInject */
-    function MenuMainController($scope, $rootScope, $uibModal, mailBox) {
+    function MenuMainController($scope, $rootScope, $uibModal, $auth, mailBox) {
         var vm = this;
 
         vm.standartFolders = [
@@ -62,6 +62,8 @@
 
         function activate() {
             getMailBox();
+
+            vm.user = $auth.user;
         }
 
         function getMailBox() {

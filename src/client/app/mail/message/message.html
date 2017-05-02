@@ -81,30 +81,37 @@
                     <span class="to-whom__title width--min60"> Метки</span>
                     <div class="inbox-message__labels">
 
-                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--orange">
-                            <span class="letter-tags__name">Метка 1</span>
-                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
+                        <div class="inbox-message__label letter-tags letter-tags--poss-remove"
+                             style="background: {{ tag.bgcolor }}; color: {{ tag.color }}"
+                             ng-repeat="tag in vm.message.model.tags">
+                            <span class="letter-tags__name">{{ tag.tag_name }}</span>
+                            <button class="btn btn--not-style btn--circle letter-tags__icon"
+                                    ng-click="vm.setUnTag(tag)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-bold-removed"></use>
+                                </svg>
+                            </button>
                         </div>
 
-                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--red">
-                            <span class="letter-tags__name">Метка 1</span>
-                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
-                        </div>
+                        <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;red">-->
+                            <!--<span class="letter-tags__name">Метка 1</span>-->
+                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--</div>-->
 
-                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--orange">
-                            <span class="letter-tags__name">Метка 1</span>
-                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
-                        </div>
+                        <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;orange">-->
+                            <!--<span class="letter-tags__name">Метка 1</span>-->
+                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--</div>-->
 
-                        <div class="inbox-message__label letter-tags letter-tags--poss-remove letter-tags--space-gray">
-                            <span class="letter-tags__name">Метка 1</span>
-                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
-                        </div>
+                        <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;space-gray">-->
+                            <!--<span class="letter-tags__name">Метка 1</span>-->
+                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--</div>-->
 
-                        <div class="letter-tags letter-tags--poss-remove letter-tags--space-gray">
-                            <span class="letter-tags__name">Метка 1</span>
-                            <button class="btn btn--not-style btn--circle letter-tags__icon icon-cancel"></button>
-                        </div>
+                        <!--<div class="letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;space-gray">-->
+                            <!--<span class="letter-tags__name">Метка 1</span>-->
+                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--</div>-->
 
                     </div>
                 </div>

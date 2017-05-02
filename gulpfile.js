@@ -50,7 +50,10 @@ var config = [
 
 var pathBowerCss = [
     pathBower + 'bootstrap/dist/css/bootstrap.min.css',
-    pathBower + 'summernote/dist/summernote.css'
+    pathBower + 'summernote/dist/summernote.css',
+    pathBower + 'ng-img-crop/compile/minified/ng-img-crop.css',
+    pathBower + 'select2/select2.css',
+    pathBower + 'angular-ui-select/dist/select.css'
 ];
 
 var pathFonts = [
@@ -155,7 +158,7 @@ gulp.task('serverDev', function () {
     connect.server({
         root: ['build-dev'],
         livereload: false,
-        port: 10000,
+        port: 7003,
         middleware: function (connect, opt) {
             return [middleware];
         }
@@ -332,7 +335,7 @@ gulp.task('build', [
     connect.server({
         root: ['build'],
         livereload: false,
-        port: 10001,
+        port: 1001,
         middleware: function (connect, opt) {
             return [middleware];
         }

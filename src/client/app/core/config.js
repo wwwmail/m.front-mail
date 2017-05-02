@@ -62,6 +62,7 @@
                 // console.log('handleLoginResponse', response);
                 // the persistData method will store the token for subsequent requests.
                 // this will be stored using cookies or localStorage depending on your config.
+
                 console.log(' response.token',  response.data.access_token);
                 $auth.persistData('auth_headers', {
                     'Authorization': response.data.access_token
@@ -73,7 +74,8 @@
                 return response.data;
             },
             handleTokenValidationResponse: function (response) {
-                // console.log('handleTokenValidationResponse', response);
+                // alert();
+                // console.log('handleTokenValidationResponse', profile.get());
                 return response.data;
             }
         });

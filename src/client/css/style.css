@@ -2536,9 +2536,6 @@
 .inbox-message__round {
   margin-top: 7px;
 }
-.inbox-message__importance .important-tags {
-  display: none;
-}
 .inbox-message__checked {
   margin-right: 10px;
 }
