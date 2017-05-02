@@ -20,7 +20,12 @@
                     templateUrl: 'app/mail/message/message.html',
                     controller: 'MessageController',
                     controllerAs: 'vm',
-                    title: 'Message'
+                    title: 'Message',
+                    resolve: {
+                        message: function (mail, $stateParams) {
+                            return mail.getById({id: $stateParams.id, mbox: $stateParams.mbox, part: 'headnhtml'});
+                        }
+                    }
                 }
             }
         ];

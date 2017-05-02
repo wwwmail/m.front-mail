@@ -9,7 +9,7 @@
             {{ vm.message.model.Subject }}
         </div>
 
-        <div class="info-sender ">
+        <div class="info-sender">
             <div class="info-sender__head flex--inline">
 
                 <div class="info-sender__avatar flex">
@@ -22,14 +22,17 @@
                     <div class="info-sender__from-whom">
                         {{ vm.message.model.from }}
                         <!--<span class="info-sender__from-whom__mail-name">support@mail.cz</span>-->
-                        <button class="btn btn--not-style btn--not-events btn--main-mobile-color font__size12 padding--right_2 padding--left_2 mrg__left5 icon-arrow-down" type="button"></button>
+                        <button class="btn btn--not-style btn--not-events btn--main-mobile-color font__size12 padding--right_2 padding--left_2 mrg__left5"
+                                ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
+                                type="button"
+                                ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo"></button>
                     </div>
 
                     <div class="info-sender__date">
                         {{ vm.getDate(vm.message.model.date.date) }}
                     </div>
-
                 </div>
+
                 <div class="info-sender__right-menu mrg__right">
                     <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"></div>
                     <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red"></div>
@@ -46,7 +49,7 @@
                 ну или добавить btn--rotate
             -->
 
-            <div class="info-sender__message-info is-active">
+            <div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo">
                 <div class="info-sender__message-info__item to-whom">
                     <span class="to-whom__title width--min60">Кому</span>
                     <div class="avatar avatar--settings avatar--size28 avatar--second-style">
@@ -73,7 +76,6 @@
                         <div class="to-whom__folder">Входящие</div>
                         <div class="to-whom__folder">Новые</div>
                         <div class="to-whom__folder">Избранное</div>
-
                     </div>
                 </div>
 
@@ -88,29 +90,30 @@
                             <button class="btn btn--not-style btn--circle letter-tags__icon"
                                     ng-click="vm.setUnTag(tag)">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-bold-removed"></use>
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                         xlink:href="#icon-bold-removed"></use>
                                 </svg>
                             </button>
                         </div>
 
                         <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;red">-->
-                            <!--<span class="letter-tags__name">Метка 1</span>-->
-                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--<span class="letter-tags__name">Метка 1</span>-->
+                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
                         <!--</div>-->
 
                         <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;orange">-->
-                            <!--<span class="letter-tags__name">Метка 1</span>-->
-                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--<span class="letter-tags__name">Метка 1</span>-->
+                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
                         <!--</div>-->
 
                         <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;space-gray">-->
-                            <!--<span class="letter-tags__name">Метка 1</span>-->
-                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--<span class="letter-tags__name">Метка 1</span>-->
+                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
                         <!--</div>-->
 
                         <!--<div class="letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;space-gray">-->
-                            <!--<span class="letter-tags__name">Метка 1</span>-->
-                            <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
+                        <!--<span class="letter-tags__name">Метка 1</span>-->
+                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
                         <!--</div>-->
 
                     </div>
@@ -128,7 +131,7 @@
 
             <!--Само сообщение-->
             <div class="body-message__content"
-                 ng-bind-html="vm.message.model.body"></div>
+                 ng-bind-html="vm.getTrustHtml(vm.message.model.body)"></div>
         </div>
     </div>
 
@@ -161,5 +164,5 @@
 </div>
 
 <!--<div class="layout__footer">-->
-    <!--<footer></footer>-->
+<!--<footer></footer>-->
 <!--</div>-->
