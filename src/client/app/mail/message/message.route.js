@@ -16,14 +16,19 @@
             {
                 state: 'mail.message',
                 config: {
-                    url: '/message/:mbox/:id',
+                    url: '/message/:mbox/:id?connection_id',
                     templateUrl: 'app/mail/message/message.html',
                     controller: 'MessageController',
                     controllerAs: 'vm',
                     title: 'Message',
                     resolve: {
                         message: function (mail, $stateParams) {
-                            return mail.getById({id: $stateParams.id, mbox: $stateParams.mbox, part: 'headnhtml'});
+                            return mail.getById({
+                                id: $stateParams.id,
+                                mbox: $stateParams.mbox,
+                                connection_id: $stateParams.connection_id,
+                                part: 'headnhtml'
+                            });
                         }
                     }
                 }

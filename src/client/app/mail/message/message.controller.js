@@ -5,9 +5,9 @@
         .module('mail.message')
         .controller('MessageController', MessageController);
 
-    MessageController.$inject = ['mail', '$state', '$sce', 'message', 'tag'];
+    MessageController.$inject = ['mail', '$scope', '$state', '$sce', 'message', 'tag', '$rootScope'];
     /* @ngInject */
-    function MessageController(mail, $state, $sce, message, tag) {
+    function MessageController(mail, $scope, $state, $sce, message, tag, $rootScope) {
         var vm = this;
 
         vm.message = {};
@@ -27,6 +27,19 @@
         vm.getTrustHtml = getTrustHtml;
         vm.setUnTag = setUnTag;
         vm.send = send;
+        vm.setImportant = setImportant;
+
+        $scope.$on('tag:message:add:success', function (e, data) {
+            // console.log('data', data);
+            // vm.message.model.tags.push(data.tag);
+            getTags();
+        });
+
+        $scope.$on('tag:message:delete:success', function (e, data) {
+            // console.log('data', data);
+            // vm.message.model.tags.push(data.tag);
+            getTags();
+        });
 
         activate();
 
@@ -34,21 +47,23 @@
             vm.$state = $state;
             // getMessage();
 
-            message.$promise
-                .then(function (response) {
-                    vm.message.model = response.data;
-                    vm.messages.checked.push(vm.message.model);
+            message.$promise.then(function (response) {
+                vm.message.model = response.data;
+                vm.messages.checked.push(vm.message.model);
 
-                    // vm.message.model.from
+                $rootScope.$broadcast('mailBox:sync');
 
-                    getTags();
-                });
+                getTags();
+
+                mail.setAnswerData(vm.message.model);
+            });
         }
 
         function getTags() {
             tag.getTagsByMessage({}, {
                 mbox: vm.message.model.mbox,
-                id: vm.message.model.number
+                id: vm.message.model.number,
+                connection_id: vm.message.model.connection_id
             }).then(function (response) {
                 vm.message.model.tags = response.data;
             })
@@ -64,8 +79,8 @@
             ids.push(vm.message.model.number);
 
             tag.deleteTagFromMessages({}, {
-                ids: ids,
-                mbox: vm.message.model.mbox,
+                // ids: ids,
+                messages: [vm.message.model],
                 tag_id: item.id
             }).then(function (response) {
                 // vm.messages.checked = [];
@@ -88,8 +103,6 @@
                 to: vm.message.model.fromAddress,
                 body: vm.sendForm.model.body
             };
-
-            // console.log('data', data);
 
             data.cmd = 'send';
             mail.post({}, data).then(function (response) {
@@ -125,5 +138,29 @@
 
             return data;
         }
+
+        function setImportant() {
+            if (vm.message.model.important && !vm.message.model.isLoading) {
+                vm.message.isLoading = true;
+                mail.deflag({}, {
+                    messages: [vm.message.model],
+                    flag: 'Flagged'
+                }).then(function () {
+                    vm.message.isLoading = false;
+                });
+                vm.message.model.important = !vm.message.model.important;
+                return;
+            }
+
+            vm.message.isLoading = true;
+            mail.flag({}, {
+                messages: [vm.message.model],
+                flag: 'Flagged'
+            }).then(function () {
+                vm.message.isLoading = false;
+            });
+            vm.message.model.important = !vm.message.model.important;
+        }
+
     }
 })();

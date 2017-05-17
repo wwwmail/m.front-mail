@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="info-sender__date">
-                        {{ vm.getDate(vm.message.model.date.date) }}
+                        <to-date date="vm.message.model.date.date"></to-date>
                     </div>
                 </div>
 
@@ -53,29 +53,28 @@
                 <div class="info-sender__message-info__item to-whom">
                     <span class="to-whom__title width--min60">Кому</span>
                     <div class="avatar avatar--settings avatar--size28 avatar--second-style">
-                        <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                        <avatar-name name="vm.message.model.to[0].name"
+                                     email="vm.message.model.to[0].address"></avatar-name>
                     </div>
                     <span class="to-whom__mail-recipient">
-                        {{ vm.message.model.fromAddress }}
+                        {{ vm.message.model.to[0].name ? vm.message.model.to[0].name : vm.message.model.to[0].address }}
                     </span>
                 </div>
 
                 <div class="info-sender__message-info__item to-whom">
                     <span class="to-whom__title width--min60">От Кого</span>
-
-                    <div class="avatar avatar--settings avatar--size28 avatar--second-style">
-                        <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                    <div class="avatar avatar--settings avatar--size28 avatar--second-style"
+                         ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">
+                        <avatar-name name="vm.message.model.from"
+                                     email="vm.message.model.fromAddress"></avatar-name>
                     </div>
-
                     <span class="to-whom__mail-recipient">john.doe@mail.cz</span>
                 </div>
 
                 <div class="info-sender__message-info__item to-whom">
-                    <span class="to-whom__title width--min60">Папки</span>
+                    <span class="to-whom__title width--min60">Папка</span>
                     <div class="to-whom__folders">
-                        <div class="to-whom__folder">Входящие</div>
-                        <div class="to-whom__folder">Новые</div>
-                        <div class="to-whom__folder">Избранное</div>
+                        <div class="to-whom__folder">{{ vm.message.model.mboxi18n }}</div>
                     </div>
                 </div>
 

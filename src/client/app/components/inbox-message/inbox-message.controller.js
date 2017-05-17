@@ -3,104 +3,119 @@
 
     angular
         .module('app.components')
-        .controller('InboxHeaderController', InboxHeaderController);
+        .controller('InboxMessageController', InboxMessageController);
 
-    InboxHeaderController.$inject = ['$state', '$scope', 'mail'];
+    InboxMessageController.$inject = ['$state', '$scope', 'mail', 'tag', '$rootScope'];
     /* @ngInject */
-    function InboxHeaderController($state, $scope, mail) {
+    function InboxMessageController($state, $scope, mail, tag, $rootScope) {
         var vm = this;
 
-        vm.title = "InboxHeaderController";
-
-        vm.isSeen = true;
-
-        vm.checkedAllMessages = checkedAllMessages;
-        vm.syncMail = syncMail;
-        vm.move = move;
-        vm.destroy = destroy;
-        vm.triggerSeen = triggerSeen;
-        vm.goToAnswer = goToAnswer;
-        vm.goToFwd = goToFwd;
-
-        $scope.$watch('vm.messages.checked', function (data) {
-            if (data && !data.length) {
-                vm.isAllChecked = false;
-            }
-        }, true);
+        vm.getDate = getDate;
+        vm.goToUrl = goToUrl;
+        vm.setSeen = setSeen;
+        vm.setImportant = setImportant;
 
         activate();
 
         function activate() {
             vm.$state = $state;
-            console.log('vm.state', vm.$state.current.name);
         }
 
-        function checkedAllMessages() {
-            if (vm.isAllChecked && vm.messages.items) {
-                vm.messages.checked = angular.copy(vm.messages.items);
+        function getDate(date) {
+            var newDate = new Date(date);
+
+            return moment(newDate).calendar(null, {
+                sameDay: 'hh:mm',
+                nextDay: '[Tomorrow]',
+                nextWeek: 'dddd',
+                lastDay: 'D MMM',
+                lastWeek: 'D MMM YY',
+                sameElse: 'D MMM YY'
+            });
+        }
+
+        function goToUrl() {
+            if ($state.params.mbox === 'Drafts') {
+                $state.go('mail.compose', {
+                    id: vm.message.number,
+                    mbox: vm.message.mbox,
+                    connection_id: vm.message.connection_id
+                });
                 return;
             }
-            vm.messages.checked = [];
-        }
 
-        function syncMail() {
-            if ($state.current.name === 'mail.inbox') {
-                $scope.$emit('mail:sync');
+            if ($state.params.mbox === 'Templates') {
+                $state.go('mail.compose', {
+                    id: vm.message.number,
+                    mbox: vm.message.mbox,
+                    connection_id: vm.message.connection_id,
+                    template: true
+                });
                 return;
             }
-            $scope.$emit('folders:sync');
-            $state.go('mail.inbox', {mbox: 'INBOX'});
-        }
 
-        function move(folder) {
-            vm.messages = mail.moveToFolder(folder, vm.messages);
-        }
-
-        function destroy() {
-            vm.messages = mail.destroy(vm.messages);
-            vm.messages = [];
-        }
-
-        function triggerSeen() {
-            vm.isSeen ? setUnSeen() : setSeen();
-            vm.isSeen = !vm.isSeen;
+            $state.go('mail.message', {
+                id: vm.message.number,
+                mbox: vm.message.mbox,
+                connection_id: vm.message.connection_id
+            });
         }
 
         function setSeen() {
-            vm.messages = mail.setSeen(vm.messages);
+            if (vm.message.seen && !vm.message.isLoading) {
+                vm.message.isLoading = true;
+                mail.deflag({}, {
+                    messages: [vm.message],
+                    flag: 'Seen'
+                }).then(function () {
+                    vm.message.isLoading = false;
+                    $rootScope.$broadcast('mailBox:sync');
+                });
+                vm.message.seen = !vm.message.seen;
+                return;
+            }
+
+            vm.message.isLoading = true;
+            mail.flag({}, {
+                messages: [vm.message],
+                flag: 'Seen'
+            }).then(function () {
+                vm.message.isLoading = false;
+                $rootScope.$broadcast('mailBox:sync');
+            });
+            vm.message.seen = !vm.message.seen
         }
 
-        function setUnSeen() {
-            vm.messages = mail.setUnSeen(vm.messages);
+        function setImportant() {
+            if (vm.message.important && !vm.message.isLoading) {
+                vm.message.isLoading = true;
+                mail.deflag({}, {
+                    messages: [vm.message],
+                    flag: 'Flagged'
+                }).then(function () {
+                    vm.message.isLoading = false;
+                });
+                vm.message.important = !vm.message.important;
+                return;
+            }
+
+            vm.message.isLoading = true;
+            mail.flag({}, {
+                messages: [vm.message],
+                flag: 'Flagged'
+            }).then(function () {
+                vm.message.isLoading = false;
+            });
+            vm.message.important = !vm.message.important;
         }
 
-        function goToAnswer() {
-            var data = mail.getAnswerData();
-            $state.go('mail.compose', {
-                // to: data.fromAddress,
-                connection_id: data.connection_id,
-                mbox: data.mbox,
-                id: data.number,
-                re: true
-            });
-        }
-
-        function goToFwd() {
-            console.log('vm.messages.checked', vm.messages.checked);
-            var ids = [];
-
-            _.forEach(vm.messages.checked, function (item) {
-                ids.push(item.number);
-            });
-
-            console.log('ids', ids);
-
-            mail.setFwdData(vm.messages.checked);
-
-            $state.go('mail.compose', {
-                ids: ids,
-                fwd: true
-            });
+        function getTags() {
+            tag.getTagsByMessage({}, {
+                mbox: vm.message.mbox,
+                id: vm.message.number
+            }).then(function (response) {
+                vm.message.tags = response.data;
+            })
         }
     }
 })();

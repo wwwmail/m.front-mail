@@ -5,7 +5,8 @@
         .module('app.components')
         .component('inboxMessage', {
             bindings: {
-                message: '='
+                message: '=',
+                messages: '='
             },
             templateUrl: 'app/components/inbox-message/inbox-message.html',
             controller: 'InboxMessageController',
