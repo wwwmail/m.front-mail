@@ -6,15 +6,16 @@
      ng-click="vm.goToUrl()"
      inbox-message-hover>
 
-
+    <!--ng-model="vm.messages.isChecked"-->
     <div class="inbox-message__left">
         <label ng-click="$event.stopPropagation();">
             <div class="inbox-message__avatar">
                 <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__auto">
                     <img class="avatar__image" src="/images/avatar-personal.svg">
                     <div class="inbox-message__check-message"></div>
-                    <input type="checkbox" style="display: none;"
+                    <input type="checkbox"
                            ng-model="vm.messages.isChecked"
+                           style="display: none;"
                            data-checklist-model="vm.messages.checked"
                            data-checklist-value="vm.message">
                 </div>
