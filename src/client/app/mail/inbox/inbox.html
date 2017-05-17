@@ -48,41 +48,41 @@
         <!-- Нижнее меню опций для выделеных писем -->
         <div class="inbox-footer__group-option is-more-switch" ng-if="vm.messages.checked.length">
             <hr class="hr hr--inbox-footer">
-            <div class="inbox-footer__group-option-content">
-                <!-- первичные кнопки-->
-                <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font__size20 flex flex--column align-items--cn color--light-red padding">
-                    <span class="font__arial font__size14 mrg__top5">Удалить</span>
-                </button>
+            <div class="inbox-footer__group-option-wrapper">
+                <div class="inbox-footer__group-option-content">
+                    <!-- первичные кнопки-->
+                    <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font__size20 flex flex--column align-items--cn color--light-red padding">
+                        <span class="font__arial font__size14 mrg__top5">Удалить</span>
+                    </button>
 
-                <button class="inbox-footer__group-option-item btn btn--not-style  icon-spam font__size20 flex flex--column align-items--cn color--yellow padding">
-                    <span class="font__arial font__size14 mrg__top5">Это спам</span>
-                </button>
+                    <button class="inbox-footer__group-option-item btn btn--not-style  icon-spam font__size20 flex flex--column align-items--cn color--yellow padding">
+                        <span class="font__arial font__size14 mrg__top5">Это спам</span>
+                    </button>
 
-                <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-unread font__size20 flex flex--column align-items--cn padding">
-                    <span class="font__arial font__size14 mrg__top5">Не прочитано</span>
-                </button>
+                    <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-unread font__size20 flex flex--column align-items--cn padding">
+                        <span class="font__arial font__size14 mrg__top5">Не прочитано</span>
+                    </button>
 
-                <!-- переключатель-->
-                <button class="inbox-footer__group-option-item inbox-footer__group-option-item-switch btn btn--not-style icon-double-arrow-right font__size20 flex flex--column align-items--cn padding">
-                    <span class="font__arial font__size14 mrg__top5">Еще</span>
-                </button>
+                    <!-- переключатель-->
+                    <button class="inbox-footer__group-option-item inbox-footer__group-option-item-switch btn btn--not-style icon-double-arrow-right font__size20 flex flex--column align-items--cn padding">
+                        <span class="font__arial font__size14 mrg__top5">Еще</span>
+                    </button>
 
-                <!-- вторичные кнопки-->
-                <button class="inbox-footer__group-option-item btn btn--not-style icon-folder font__size20 flex flex--column align-items--cn color--light-red padding">
-                    <span class="font__arial font__size14 mrg__top5">В папку</span>
-                </button>
+                    <!-- вторичные кнопки-->
+                    <button class="inbox-footer__group-option-item btn btn--not-style icon-folder font__size20 flex flex--column align-items--cn color--light-red padding">
+                        <span class="font__arial font__size14 mrg__top5">В папку</span>
+                    </button>
 
-                <button class="inbox-footer__group-option-item btn btn--not-style icon-tag font__size20 flex flex--column align-items--cn color--yellow padding">
-                    <span class=" font__arial font__size14 mrg__top5">Метки</span>
-                </button>
+                    <button class="inbox-footer__group-option-item btn btn--not-style icon-tag font__size20 flex flex--column align-items--cn color--yellow padding">
+                        <span class=" font__arial font__size14 mrg__top5">Метки</span>
+                    </button>
 
-                <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-archive font__size20 flex flex--column align-items--cn padding">
-                    <span class="font__arial font__size14 mrg__top5">Архив</span>
-                </button>
+                    <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-archive font__size20 flex flex--column align-items--cn padding">
+                        <span class="font__arial font__size14 mrg__top5">Архив</span>
+                    </button>
+                </div>
             </div>
-
         </div>
-
     </div>
 </div>
 

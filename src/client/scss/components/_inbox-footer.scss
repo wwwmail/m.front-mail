@@ -51,12 +51,8 @@
       width: 1000vw;
     }
 
-    .is-more-switch{
+    &.is-more-switch{
       transition: all .666s;
-
-      .inbox-message-list{
-        padding-bottom: 55px!important;
-      }
 
       .inbox-footer__group-option-content{
         transform: translateX(-75%)!important;
@@ -70,6 +66,13 @@
     }
 
   }
+
+  &__group-option-wrapper{
+    overflow: hidden;
+    position: relative;
+    min-height: 55px;
+  }
+
   &__group-option-content{
     position: absolute;
     top: 1px;
@@ -86,7 +89,6 @@
 
     background: $white-color;
     transition: .6s;
-    overflow: hidden;
   }
   &__group-option-item{
     min-width: 25%;
