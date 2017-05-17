@@ -28,6 +28,8 @@
         vm.setUnTag = setUnTag;
         vm.send = send;
         vm.setImportant = setImportant;
+        vm.move = move;
+        vm.destroy = destroy;
 
         $scope.$on('tag:message:add:success', function (e, data) {
             // console.log('data', data);
@@ -160,6 +162,15 @@
                 vm.message.isLoading = false;
             });
             vm.message.model.important = !vm.message.model.important;
+        }
+
+        function move(folder) {
+            vm.messages = mail.moveToFolder(folder, vm.messages);
+        }
+
+        function destroy() {
+            vm.messages = mail.destroy(vm.messages);
+            vm.messages = [];
         }
 
     }

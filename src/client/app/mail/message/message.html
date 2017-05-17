@@ -14,7 +14,8 @@
 
                 <div class="info-sender__avatar flex">
                     <div class="avatar avatar--settings avatar--size42 avatar--second-style">
-                        <img class="avatar__image" src="/images/avatar-personal.svg" alt="">
+                        <avatar-name name="vm.message.model.from"
+                                     email="vm.message.model.to[0].fromAddress"></avatar-name>
                     </div>
                 </div>
 
@@ -35,7 +36,12 @@
 
                 <div class="info-sender__right-menu mrg__right">
                     <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"></div>
-                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red"></div>
+                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red"
+                         ng-if="vm.$state.params.mbox !== 'Trash'"
+                         ng-click="vm.move({name: 'Trash'})"></div>
+                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red"
+                         ng-if="vm.$state.params.mbox === 'Trash'"
+                         ng-click="vm.destroy({name: 'Trash'})"></div>
                     <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply"></div>
                 </div>
 
@@ -68,7 +74,9 @@
                         <avatar-name name="vm.message.model.from"
                                      email="vm.message.model.fromAddress"></avatar-name>
                     </div>
-                    <span class="to-whom__mail-recipient">john.doe@mail.cz</span>
+                    <span class="to-whom__mail-recipient">
+                        {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
+                    </span>
                 </div>
 
                 <div class="info-sender__message-info__item to-whom">
