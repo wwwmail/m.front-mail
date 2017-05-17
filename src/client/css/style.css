@@ -2604,15 +2604,9 @@
   padding: 13px;
 }
 .inbox-footer__group-option {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
+  min-height: 55px;
   z-index: 2;
-  padding: 10px 0;
+  width: 100%;
 }
 .inbox-footer__group-option:before {
   content: "";
@@ -2624,20 +2618,35 @@
   height: 100%;
   width: 1000vw;
 }
-.inbox-footer__group-option .icon-folder, .inbox-footer__group-option .icon-tag, .inbox-footer__group-option .icon-archive {
-  display: none !important;
+.inbox-footer__group-option .is-more-switch {
+  transition: all .666s;
 }
-.inbox-footer__group-option.is-more-switch .icon-delete, .inbox-footer__group-option.is-more-switch .icon-spam, .inbox-footer__group-option.is-more-switch .icon-unread {
-  display: none !important;
+.inbox-footer__group-option .is-more-switch .inbox-message-list {
+  padding-bottom: 55px !important;
 }
-.inbox-footer__group-option.is-more-switch .icon-folder, .inbox-footer__group-option.is-more-switch .icon-tag, .inbox-footer__group-option.is-more-switch .icon-archive {
-  display: flex !important;
+.inbox-footer__group-option .is-more-switch .inbox-footer__group-option-content {
+  transform: translateX(-75%) !important;
 }
-.inbox-footer__group-option.is-more-switch .btn--icon {
+.inbox-footer__group-option .is-more-switch .inbox-footer__group-option-item-switch:before {
   transform: rotate(180deg);
 }
-.inbox-footer__new-btn {
-  margin: 0 0 15px;
+.inbox-footer__group-option-content {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 10px 0;
+  background: #ffffff;
+  transition: .6s;
+  overflow: hidden;
+}
+.inbox-footer__group-option-item {
+  min-width: 25%;
+  color: #808080;
 }
 
 .date-sort {
@@ -3593,6 +3602,10 @@
   font-family: 'icomoon' !important;
 }
 
+.inbox-message-list--indentation {
+  padding-bottom: 55px !important;
+}
+
 @font-face {
   font-family: 'icomoon';
   src: url("../../fonts/icomoon.eot?rhuj2v");
@@ -3663,110 +3676,164 @@
 
 .icon-cb-unchecked:before {
   content: "\e90b";
+  color: #d4d4d4;
 }
 
-.icon-clip:before {
+.icon-check-box-mark:before {
   content: "\e90c";
 }
 
-.icon-delete:before {
+.icon-checked:before {
   content: "\e90d";
+  color: #727272;
 }
 
-.icon-d-folder:before {
+.icon-clip:before {
   content: "\e90e";
 }
 
-.icon-draft:before {
+.icon-comment-contact:before {
   content: "\e90f";
 }
 
-.icon-equalize:before {
+.icon-conacts-sends:before {
   content: "\e910";
 }
 
-.icon-filter:before {
+.icon-crumbs-arrow:before {
   content: "\e911";
 }
 
-.icon-folder:before {
+.icon-delete:before {
   content: "\e912";
 }
 
-.icon-forward:before {
+.icon-d-folder:before {
   content: "\e913";
 }
 
-.icon-full-screen:before {
+.icon-double-arrow-left:before {
   content: "\e914";
 }
 
-.icon-important:before {
+.icon-double-arrow-right:before {
   content: "\e915";
 }
 
-.icon-important-solid:before {
+.icon-draft:before {
   content: "\e916";
 }
 
-.icon-inbox:before {
+.icon-equalize:before {
   content: "\e917";
 }
 
-.icon-lens:before {
+.icon-eye:before {
   content: "\e918";
 }
 
-.icon-menu:before {
+.icon-filter:before {
   content: "\e919";
 }
 
-.icon-more:before {
+.icon-folder:before {
   content: "\e91a";
 }
 
-.icon-outbox:before {
+.icon-forward:before {
   content: "\e91b";
 }
 
-.icon-pin:before {
+.icon-full-screen:before {
   content: "\e91c";
 }
 
-.icon-reply:before {
+.icon-grid-square:before {
   content: "\e91d";
 }
 
-.icon-reply-all:before {
+.icon-important:before {
   content: "\e91e";
 }
 
-.icon-sent:before {
+.icon-important-solid:before {
   content: "\e91f";
 }
 
-.icon-settings:before {
+.icon-inbox:before {
   content: "\e920";
 }
 
-.icon-spam:before {
+.icon-label-message:before {
   content: "\e921";
 }
 
-.icon-tag:before {
+.icon-lens:before {
   content: "\e922";
 }
 
-.icon-tag-solid:before {
+.icon-menu:before {
   content: "\e923";
 }
 
-.icon-unread:before {
+.icon-more:before {
   content: "\e924";
 }
 
-.icon-write:before {
+.icon-outbox:before {
   content: "\e925";
+}
+
+.icon-pin:before {
+  content: "\e926";
+}
+
+.icon-remove-thick:before {
+  content: "\e927";
+}
+
+.icon-reply:before {
+  content: "\e928";
+}
+
+.icon-reply-all:before {
+  content: "\e929";
+}
+
+.icon-select-arrow:before {
+  content: "\e92a";
+}
+
+.icon-send:before {
+  content: "\e92b";
+}
+
+.icon-sent:before {
+  content: "\e92c";
+}
+
+.icon-settings:before {
+  content: "\e92d";
+}
+
+.icon-spam:before {
+  content: "\e92e";
+}
+
+.icon-tag:before {
+  content: "\e92f";
+}
+
+.icon-tag-solid:before {
+  content: "\e930";
+}
+
+.icon-unread:before {
+  content: "\e931";
+}
+
+.icon-write:before {
+  content: "\e932";
 }
 
 /* icons.data.svg.css ==================================*/
