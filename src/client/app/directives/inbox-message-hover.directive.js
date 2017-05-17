@@ -17,7 +17,6 @@
         return directive;
 
         function link(scope, element, attrs) {
-
             element.bind('mouseover', function() {
                 element.find('.round').addClass('round--border');
             });

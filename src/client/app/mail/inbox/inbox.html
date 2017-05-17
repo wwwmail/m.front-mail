@@ -27,21 +27,350 @@
     </ul>
 </div>
 
-<!---->
 <div class="inbox-list">
-    <!--<inbox-message-list messages="vm.messages"></inbox-message-list>-->
-
     <inbox-message-list messages="vm.messages"></inbox-message-list>
 </div>
 
-<div class="inbox-footer">
+<div class="inbox-footer ">
     <div class="inbox-footer__content">
         <button class="inbox-footer__new-btn btn btn--red btn--size_62 btn--radius_3 icon-write" ui-sref="mail.compose"></button>
+
+        <!--
+            При выделении писем у нас должна скрываться кнопка создания письма
+            для этого просто к inbox-footer__new-message добавляем класс hide-elm и убираем его соответственно
+            inbox-footer__group-option
+        -->
+
+        <!-- Кнопка перехода на страницу создания письма-->
+        <div class="inbox-footer__new-message">
+            <button class="btn btn--red btn--size_62 btn--radius_3 icon-write " ui-sref="mail.compose"></button>
+        </div>
+
+        <!--
+            Так тут смотри, для того чтобы отобразить еще парамев выделения
+            я использовал класс is-more-switch сотри скрин http://prntscr.com/f0wxii
+        -->
+
+        <!-- Нижнее меню опций для выделеных писем -->
+        <div class="inbox-footer__group-option is-more-switch ">
+
+            <hr class="hr hr--inbox-footer">
+
+            <!-- первичные кнопки-->
+            <button class="btn btn--not-style btn--main-mobile-color icon-delete font__size20 flex flex--column align-items--cn color--light-red padding">
+                <span class="btn--main-mobile-color font__arial font__size14 mrg__top5">Удалить</span>
+            </button>
+
+            <button class="btn btn--not-style btn--main-mobile-color icon-spam font__size20 flex flex--column align-items--cn color--yellow padding">
+                <span class="btn--main-mobile-color font__arial font__size14 mrg__top5">Это спам</span>
+            </button>
+
+            <button class="btn btn--not-style btn--main-mobile-color btn--not-events icon-unread font__size20 flex flex--column align-items--cn padding">
+                <span class="btn--main-mobile-color font__arial font__size14 mrg__top5">Не прочитано</span>
+            </button>
+
+            <!-- переключатель-->
+            <button class="btn btn--not-style btn--main-mobile-color  font__size20 flex flex--column align-items--cn padding">
+                <svg class="btn--icon btn--size_20x20">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ico_more-selection-actions"></use>
+                </svg>
+                <span class="btn--main-mobile-color font__arial font__size14 mrg__top5">Еще</span>
+
+            </button>
+
+            <!-- вторичные кнопки-->
+
+            <button class="btn btn--not-style btn--main-mobile-color icon-folder font__size20 flex flex--column align-items--cn color--light-red padding">
+                <span class="btn--main-mobile-color font__arial font__size14 mrg__top5">В папку</span>
+            </button>
+
+            <button class="btn btn--not-style btn--main-mobile-color icon-tag font__size20 flex flex--column align-items--cn color--yellow padding">
+                <span class="btn--main-mobile-color font__arial font__size14 mrg__top5">Метки</span>
+            </button>
+
+            <button class="btn btn--not-style btn--main-mobile-color btn--not-events icon-archive font__size20 flex flex--column align-items--cn padding">
+                <span class="btn--main-mobile-color font__arial font__size14 mrg__top5">Архив</span>
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Первый попап с выбором действий управления письмом-->
+<div class="popup hide-elm">
+
+    <div class="popup__container">
+
+        <div class="popup__head">
+            <span class="popup__head__title">Действия с письмом</span>
+            <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s"></button>
+            <hr class="hr hr--popup">
+        </div>
+
+        <div class="popup__content scrollables">
+
+            <div class="popup__item">
+                <span class="icon-reply popup__icon"></span>
+                <span class="popup__item__title">Ответить</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-reply-all popup__icon"></span>
+                <span class="popup__item__title">Ответить всем</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-forward popup__icon"></span>
+                <span class="popup__item__title">Переслать</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-delete popup__icon color--light-red"></span>
+                <span class="popup__item__title">Удалить</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-unread popup__icon"></span>
+                <span class="popup__item__title">Не прочитано</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-folder popup__icon"></span>
+                <span class="popup__item__title">В папку</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-tag popup__icon"></span>
+                <span class="popup__item__title">Теги</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-archive popup__icon"></span>
+                <span class="popup__item__title">В архив</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-spam popup__icon color--yellow"></span>
+                <span class="popup__item__title">Спам</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-pin popup__icon"></span>
+                <span class="popup__item__title">Закрепить</span></a>
+            </div>
+
+            <div class="popup__item">
+                <span class="icon-important-solid popup__icon color--semi-dark-red"></span>
+                <span class="popup__item__title">Важное</span></a>
+            </div>
+
+        </div>
     </div>
 
 </div>
 
-<div class="layout__footer">
-    <!--<footer></footer>-->
+<!-- Первый попап с выбором действий добавления метки-->
+<div class="popup hide-elm">
+
+    <div class="popup__container">
+
+        <div class="popup__head">
+            <span class="popup__head__title">Метки</span>
+            <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s"></button>
+            <hr class="hr hr--popup">
+        </div>
+
+        <div class="popup__content scrollables">
+
+            <div class="popup__item">
+
+                <div class="letter-tags">
+                    <span class="icon-important popup__icon popup__icon--not-size color--semi-dark-red"></span>
+                </div>
+                <span class="popup__item__title popup__item__title--mrg-left">Важное</span>
+
+                <span class="popup__item__tick is-selected"></span>
+
+            </div>
+
+            <div class="popup__item">
+
+                <div class="letter-tags letter-tags--red">
+                    <svg class="letter-tags__icon ">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <span class="popup__item__title popup__item__title--mrg-left">Метка 1</span>
+
+                <span class="popup__item__tick"></span>
+
+            </div>
+
+            <div class="popup__item">
+
+                <div class="letter-tags letter-tags--orange">
+                    <svg class="letter-tags__icon ">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <span class="popup__item__title popup__item__title--mrg-left">Метка 1</span>
+
+                <span class="popup__item__tick is-selected"></span>
+
+            </div>
+
+            <div class="popup__item">
+
+                <div class="letter-tags letter-tags--orange">
+                    <svg class="letter-tags__icon ">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <span class="popup__item__title popup__item__title--mrg-left">Метка 1</span>
+
+                <span class="popup__item__tick is-selected"></span>
+
+            </div>
+
+            <div class="popup__item">
+
+                <div class="letter-tags letter-tags--purpure">
+                    <svg class="letter-tags__icon ">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <span class="popup__item__title popup__item__title--mrg-left">Метка 1</span>
+
+                <span class="popup__item__tick"></span>
+
+            </div>
+
+            <div class="popup__item">
+
+                <div class="letter-tags letter-tags--space-gray">
+                    <svg class="letter-tags__icon ">
+                        <use xlink:href="#ico_label-message"></use>
+                    </svg>
+                </div>
+
+                <span class="popup__item__title popup__item__title--mrg-left">Метка 1</span>
+
+                <span class="popup__item__tick is-selected"></span>
+
+            </div>
+
+        </div>
+
+        <div class="popup__footer">
+            <button class="btn btn--yellow btn--no-radius width--all height--min-inh font__size20" >Готово</button>
+        </div>
+    </div>
 </div>
 
+<!-- Окно папок при добавлении -->
+
+<div class="folder-layout hide-elm">
+    <div class="folder-layout__container">
+
+        <div class="folder-layout__header">
+            <div class="">
+                <span class="icon-d-folder folder-layout__icon"></span>
+                <span>Папки</span>
+            </div>
+            <span class="font__size12">Закрыть</span>
+
+            <!--<hr class="hr hr&#45;&#45;folders hr&#45;&#45;bottom">-->
+
+        </div>
+
+        <div class="folder-layout__content scrollables">
+
+            <hr class="hr hr--folders hr--top">
+
+            <!-- Свои папки-->
+            <!-- Отделитель-->
+            <div class="folder-layout__separate mrg__bottom10">
+                <span class="font__size12">Мои папки</span>
+                <hr class="hr hr--folders hr--bottom">
+            </div>
+
+            <!-- Сами итемы-->
+
+
+            <div class="folder-layout__item">
+                <span class="icon-folder folder-layout__icon"></span>
+                <span class="folder-layout__title">Моя папка 3</span>
+            </div>
+
+            <div class="folder-layout__item">
+                <span class="icon-folder folder-layout__icon"></span>
+                <span class="folder-layout__title">Моя папка 1</span>
+            </div>
+
+            <div class="folder-layout__item">
+                <span class="icon-folder folder-layout__icon"></span>
+                <span class="folder-layout__title">Моя папка 2</span>
+            </div>
+
+            <div class="folder-layout__item">
+                <span class="icon-folder folder-layout__icon"></span>
+                <span class="folder-layout__title">Моя папка 3</span>
+            </div>
+
+
+            <!-- стандартные папки-->
+            <!-- Отделитель-->
+            <div class="folder-layout__separate mrg__bottom10">
+                <span class="font__size12">Остновыные папки</span>
+                <hr class="hr hr--folders hr--bottom">
+            </div>
+            <!-- Сами итемы-->
+
+            <div class="folder-layout__item">
+                <span class="icon-sent folder-layout__icon"></span>
+                <span class="folder-layout__title">Отправленные</span>
+            </div>
+
+            <div class="folder-layout__item">
+                <span class="icon-delete folder-layout__icon"></span>
+                <span class="folder-layout__title">Удалённые</span>
+            </div>
+
+            <div class="folder-layout__item">
+                <span class="icon-spam folder-layout__icon"></span>
+                <span class="folder-layout__title">Спам</span>
+            </div>
+
+            <div class="folder-layout__item">
+                <span class="icon-draft folder-layout__icon"></span>
+                <span class="folder-layout__title">Черновики</span>
+            </div>
+
+            <div class="folder-layout__item">
+                <span class="icon-archive folder-layout__icon"></span>
+                <span class="folder-layout__title">Архив</span>
+            </div>
+
+
+
+        </div>
+
+        <div class="folder-layout__footer">
+
+            <hr class="hr hr--folders hr--top">
+
+            <span class="icon-settings folder-layout__icon"></span>
+            <span class="folder-layout__title">Управление папками</span>
+
+        </div>
+
+
+    </div>
+
+</div>

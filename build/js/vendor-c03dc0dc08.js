@@ -35208,6 +35208,2592 @@ return hooks;
 
 })));
 
+/**!
+ * AngularJS file upload directives and services. Supoorts: file upload/drop/paste, resume, cancel/abort,
+ * progress, resize, thumbnail, preview, validation and CORS
+ * @author  Danial  <danial.farid@gmail.com>
+ * @version 12.2.13
+ */
+
+if (window.XMLHttpRequest && !(window.FileAPI && FileAPI.shouldLoad)) {
+  window.XMLHttpRequest.prototype.setRequestHeader = (function (orig) {
+    return function (header, value) {
+      if (header === '__setXHR_') {
+        var val = value(this);
+        // fix for angular < 1.2.0
+        if (val instanceof Function) {
+          val(this);
+        }
+      } else {
+        orig.apply(this, arguments);
+      }
+    };
+  })(window.XMLHttpRequest.prototype.setRequestHeader);
+}
+
+var ngFileUpload = angular.module('ngFileUpload', []);
+
+ngFileUpload.version = '12.2.13';
+
+ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
+  var upload = this;
+  upload.promisesCount = 0;
+
+  this.isResumeSupported = function () {
+    return window.Blob && window.Blob.prototype.slice;
+  };
+
+  var resumeSupported = this.isResumeSupported();
+
+  function sendHttp(config) {
+    config.method = config.method || 'POST';
+    config.headers = config.headers || {};
+
+    var deferred = config._deferred = config._deferred || $q.defer();
+    var promise = deferred.promise;
+
+    function notifyProgress(e) {
+      if (deferred.notify) {
+        deferred.notify(e);
+      }
+      if (promise.progressFunc) {
+        $timeout(function () {
+          promise.progressFunc(e);
+        });
+      }
+    }
+
+    function getNotifyEvent(n) {
+      if (config._start != null && resumeSupported) {
+        return {
+          loaded: n.loaded + config._start,
+          total: (config._file && config._file.size) || n.total,
+          type: n.type, config: config,
+          lengthComputable: true, target: n.target
+        };
+      } else {
+        return n;
+      }
+    }
+
+    if (!config.disableProgress) {
+      config.headers.__setXHR_ = function () {
+        return function (xhr) {
+          if (!xhr || !xhr.upload || !xhr.upload.addEventListener) return;
+          config.__XHR = xhr;
+          if (config.xhrFn) config.xhrFn(xhr);
+          xhr.upload.addEventListener('progress', function (e) {
+            e.config = config;
+            notifyProgress(getNotifyEvent(e));
+          }, false);
+          //fix for firefox not firing upload progress end, also IE8-9
+          xhr.upload.addEventListener('load', function (e) {
+            if (e.lengthComputable) {
+              e.config = config;
+              notifyProgress(getNotifyEvent(e));
+            }
+          }, false);
+        };
+      };
+    }
+
+    function uploadWithAngular() {
+      $http(config).then(function (r) {
+          if (resumeSupported && config._chunkSize && !config._finished && config._file) {
+            var fileSize = config._file && config._file.size || 0;
+            notifyProgress({
+                loaded: Math.min(config._end, fileSize),
+                total: fileSize,
+                config: config,
+                type: 'progress'
+              }
+            );
+            upload.upload(config, true);
+          } else {
+            if (config._finished) delete config._finished;
+            deferred.resolve(r);
+          }
+        }, function (e) {
+          deferred.reject(e);
+        }, function (n) {
+          deferred.notify(n);
+        }
+      );
+    }
+
+    if (!resumeSupported) {
+      uploadWithAngular();
+    } else if (config._chunkSize && config._end && !config._finished) {
+      config._start = config._end;
+      config._end += config._chunkSize;
+      uploadWithAngular();
+    } else if (config.resumeSizeUrl) {
+      $http.get(config.resumeSizeUrl).then(function (resp) {
+        if (config.resumeSizeResponseReader) {
+          config._start = config.resumeSizeResponseReader(resp.data);
+        } else {
+          config._start = parseInt((resp.data.size == null ? resp.data : resp.data.size).toString());
+        }
+        if (config._chunkSize) {
+          config._end = config._start + config._chunkSize;
+        }
+        uploadWithAngular();
+      }, function (e) {
+        throw e;
+      });
+    } else if (config.resumeSize) {
+      config.resumeSize().then(function (size) {
+        config._start = size;
+        if (config._chunkSize) {
+          config._end = config._start + config._chunkSize;
+        }
+        uploadWithAngular();
+      }, function (e) {
+        throw e;
+      });
+    } else {
+      if (config._chunkSize) {
+        config._start = 0;
+        config._end = config._start + config._chunkSize;
+      }
+      uploadWithAngular();
+    }
+
+
+    promise.success = function (fn) {
+      promise.then(function (response) {
+        fn(response.data, response.status, response.headers, config);
+      });
+      return promise;
+    };
+
+    promise.error = function (fn) {
+      promise.then(null, function (response) {
+        fn(response.data, response.status, response.headers, config);
+      });
+      return promise;
+    };
+
+    promise.progress = function (fn) {
+      promise.progressFunc = fn;
+      promise.then(null, null, function (n) {
+        fn(n);
+      });
+      return promise;
+    };
+    promise.abort = promise.pause = function () {
+      if (config.__XHR) {
+        $timeout(function () {
+          config.__XHR.abort();
+        });
+      }
+      return promise;
+    };
+    promise.xhr = function (fn) {
+      config.xhrFn = (function (origXhrFn) {
+        return function () {
+          if (origXhrFn) origXhrFn.apply(promise, arguments);
+          fn.apply(promise, arguments);
+        };
+      })(config.xhrFn);
+      return promise;
+    };
+
+    upload.promisesCount++;
+    if (promise['finally'] && promise['finally'] instanceof Function) {
+      promise['finally'](function () {
+        upload.promisesCount--;
+      });
+    }
+    return promise;
+  }
+
+  this.isUploadInProgress = function () {
+    return upload.promisesCount > 0;
+  };
+
+  this.rename = function (file, name) {
+    file.ngfName = name;
+    return file;
+  };
+
+  this.jsonBlob = function (val) {
+    if (val != null && !angular.isString(val)) {
+      val = JSON.stringify(val);
+    }
+    var blob = new window.Blob([val], {type: 'application/json'});
+    blob._ngfBlob = true;
+    return blob;
+  };
+
+  this.json = function (val) {
+    return angular.toJson(val);
+  };
+
+  function copy(obj) {
+    var clone = {};
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        clone[key] = obj[key];
+      }
+    }
+    return clone;
+  }
+
+  this.isFile = function (file) {
+    return file != null && (file instanceof window.Blob || (file.flashId && file.name && file.size));
+  };
+
+  this.upload = function (config, internal) {
+    function toResumeFile(file, formData) {
+      if (file._ngfBlob) return file;
+      config._file = config._file || file;
+      if (config._start != null && resumeSupported) {
+        if (config._end && config._end >= file.size) {
+          config._finished = true;
+          config._end = file.size;
+        }
+        var slice = file.slice(config._start, config._end || file.size);
+        slice.name = file.name;
+        slice.ngfName = file.ngfName;
+        if (config._chunkSize) {
+          formData.append('_chunkSize', config._chunkSize);
+          formData.append('_currentChunkSize', config._end - config._start);
+          formData.append('_chunkNumber', Math.floor(config._start / config._chunkSize));
+          formData.append('_totalSize', config._file.size);
+        }
+        return slice;
+      }
+      return file;
+    }
+
+    function addFieldToFormData(formData, val, key) {
+      if (val !== undefined) {
+        if (angular.isDate(val)) {
+          val = val.toISOString();
+        }
+        if (angular.isString(val)) {
+          formData.append(key, val);
+        } else if (upload.isFile(val)) {
+          var file = toResumeFile(val, formData);
+          var split = key.split(',');
+          if (split[1]) {
+            file.ngfName = split[1].replace(/^\s+|\s+$/g, '');
+            key = split[0];
+          }
+          config._fileKey = config._fileKey || key;
+          formData.append(key, file, file.ngfName || file.name);
+        } else {
+          if (angular.isObject(val)) {
+            if (val.$$ngfCircularDetection) throw 'ngFileUpload: Circular reference in config.data. Make sure specified data for Upload.upload() has no circular reference: ' + key;
+
+            val.$$ngfCircularDetection = true;
+            try {
+              for (var k in val) {
+                if (val.hasOwnProperty(k) && k !== '$$ngfCircularDetection') {
+                  var objectKey = config.objectKey == null ? '[i]' : config.objectKey;
+                  if (val.length && parseInt(k) > -1) {
+                    objectKey = config.arrayKey == null ? objectKey : config.arrayKey;
+                  }
+                  addFieldToFormData(formData, val[k], key + objectKey.replace(/[ik]/g, k));
+                }
+              }
+            } finally {
+              delete val.$$ngfCircularDetection;
+            }
+          } else {
+            formData.append(key, val);
+          }
+        }
+      }
+    }
+
+    function digestConfig() {
+      config._chunkSize = upload.translateScalars(config.resumeChunkSize);
+      config._chunkSize = config._chunkSize ? parseInt(config._chunkSize.toString()) : null;
+
+      config.headers = config.headers || {};
+      config.headers['Content-Type'] = undefined;
+      config.transformRequest = config.transformRequest ?
+        (angular.isArray(config.transformRequest) ?
+          config.transformRequest : [config.transformRequest]) : [];
+      config.transformRequest.push(function (data) {
+        var formData = new window.FormData(), key;
+        data = data || config.fields || {};
+        if (config.file) {
+          data.file = config.file;
+        }
+        for (key in data) {
+          if (data.hasOwnProperty(key)) {
+            var val = data[key];
+            if (config.formDataAppender) {
+              config.formDataAppender(formData, key, val);
+            } else {
+              addFieldToFormData(formData, val, key);
+            }
+          }
+        }
+
+        return formData;
+      });
+    }
+
+    if (!internal) config = copy(config);
+    if (!config._isDigested) {
+      config._isDigested = true;
+      digestConfig();
+    }
+
+    return sendHttp(config);
+  };
+
+  this.http = function (config) {
+    config = copy(config);
+    config.transformRequest = config.transformRequest || function (data) {
+        if ((window.ArrayBuffer && data instanceof window.ArrayBuffer) || data instanceof window.Blob) {
+          return data;
+        }
+        return $http.defaults.transformRequest[0].apply(this, arguments);
+      };
+    config._chunkSize = upload.translateScalars(config.resumeChunkSize);
+    config._chunkSize = config._chunkSize ? parseInt(config._chunkSize.toString()) : null;
+
+    return sendHttp(config);
+  };
+
+  this.translateScalars = function (str) {
+    if (angular.isString(str)) {
+      if (str.search(/kb/i) === str.length - 2) {
+        return parseFloat(str.substring(0, str.length - 2) * 1024);
+      } else if (str.search(/mb/i) === str.length - 2) {
+        return parseFloat(str.substring(0, str.length - 2) * 1048576);
+      } else if (str.search(/gb/i) === str.length - 2) {
+        return parseFloat(str.substring(0, str.length - 2) * 1073741824);
+      } else if (str.search(/b/i) === str.length - 1) {
+        return parseFloat(str.substring(0, str.length - 1));
+      } else if (str.search(/s/i) === str.length - 1) {
+        return parseFloat(str.substring(0, str.length - 1));
+      } else if (str.search(/m/i) === str.length - 1) {
+        return parseFloat(str.substring(0, str.length - 1) * 60);
+      } else if (str.search(/h/i) === str.length - 1) {
+        return parseFloat(str.substring(0, str.length - 1) * 3600);
+      }
+    }
+    return str;
+  };
+
+  this.urlToBlob = function(url) {
+    var defer = $q.defer();
+    $http({url: url, method: 'get', responseType: 'arraybuffer'}).then(function (resp) {
+      var arrayBufferView = new Uint8Array(resp.data);
+      var type = resp.headers('content-type') || 'image/WebP';
+      var blob = new window.Blob([arrayBufferView], {type: type});
+      var matches = url.match(/.*\/(.+?)(\?.*)?$/);
+      if (matches.length > 1) {
+        blob.name = matches[1];
+      }
+      defer.resolve(blob);
+    }, function (e) {
+      defer.reject(e);
+    });
+    return defer.promise;
+  };
+
+  this.setDefaults = function (defaults) {
+    this.defaults = defaults || {};
+  };
+
+  this.defaults = {};
+  this.version = ngFileUpload.version;
+}
+
+]);
+
+ngFileUpload.service('Upload', ['$parse', '$timeout', '$compile', '$q', 'UploadExif', function ($parse, $timeout, $compile, $q, UploadExif) {
+  var upload = UploadExif;
+  upload.getAttrWithDefaults = function (attr, name) {
+    if (attr[name] != null) return attr[name];
+    var def = upload.defaults[name];
+    return (def == null ? def : (angular.isString(def) ? def : JSON.stringify(def)));
+  };
+
+  upload.attrGetter = function (name, attr, scope, params) {
+    var attrVal = this.getAttrWithDefaults(attr, name);
+    if (scope) {
+      try {
+        if (params) {
+          return $parse(attrVal)(scope, params);
+        } else {
+          return $parse(attrVal)(scope);
+        }
+      } catch (e) {
+        // hangle string value without single qoute
+        if (name.search(/min|max|pattern/i)) {
+          return attrVal;
+        } else {
+          throw e;
+        }
+      }
+    } else {
+      return attrVal;
+    }
+  };
+
+  upload.shouldUpdateOn = function (type, attr, scope) {
+    var modelOptions = upload.attrGetter('ngfModelOptions', attr, scope);
+    if (modelOptions && modelOptions.updateOn) {
+      return modelOptions.updateOn.split(' ').indexOf(type) > -1;
+    }
+    return true;
+  };
+
+  upload.emptyPromise = function () {
+    var d = $q.defer();
+    var args = arguments;
+    $timeout(function () {
+      d.resolve.apply(d, args);
+    });
+    return d.promise;
+  };
+
+  upload.rejectPromise = function () {
+    var d = $q.defer();
+    var args = arguments;
+    $timeout(function () {
+      d.reject.apply(d, args);
+    });
+    return d.promise;
+  };
+
+  upload.happyPromise = function (promise, data) {
+    var d = $q.defer();
+    promise.then(function (result) {
+      d.resolve(result);
+    }, function (error) {
+      $timeout(function () {
+        throw error;
+      });
+      d.resolve(data);
+    });
+    return d.promise;
+  };
+
+  function applyExifRotations(files, attr, scope) {
+    var promises = [upload.emptyPromise()];
+    angular.forEach(files, function (f, i) {
+      if (f.type.indexOf('image/jpeg') === 0 && upload.attrGetter('ngfFixOrientation', attr, scope, {$file: f})) {
+        promises.push(upload.happyPromise(upload.applyExifRotation(f), f).then(function (fixedFile) {
+          files.splice(i, 1, fixedFile);
+        }));
+      }
+    });
+    return $q.all(promises);
+  }
+
+  function resizeFile(files, attr, scope, ngModel) {
+    var resizeVal = upload.attrGetter('ngfResize', attr, scope);
+    if (!resizeVal || !upload.isResizeSupported() || !files.length) return upload.emptyPromise();
+    if (resizeVal instanceof Function) {
+      var defer = $q.defer();
+      return resizeVal(files).then(function (p) {
+        resizeWithParams(p, files, attr, scope, ngModel).then(function (r) {
+          defer.resolve(r);
+        }, function (e) {
+          defer.reject(e);
+        });
+      }, function (e) {
+        defer.reject(e);
+      });
+    } else {
+      return resizeWithParams(resizeVal, files, attr, scope, ngModel);
+    }
+  }
+
+  function resizeWithParams(params, files, attr, scope, ngModel) {
+    var promises = [upload.emptyPromise()];
+
+    function handleFile(f, i) {
+      if (f.type.indexOf('image') === 0) {
+        if (params.pattern && !upload.validatePattern(f, params.pattern)) return;
+        params.resizeIf = function (width, height) {
+          return upload.attrGetter('ngfResizeIf', attr, scope,
+            {$width: width, $height: height, $file: f});
+        };
+        var promise = upload.resize(f, params);
+        promises.push(promise);
+        promise.then(function (resizedFile) {
+          files.splice(i, 1, resizedFile);
+        }, function (e) {
+          f.$error = 'resize';
+          (f.$errorMessages = (f.$errorMessages || {})).resize = true;
+          f.$errorParam = (e ? (e.message ? e.message : e) + ': ' : '') + (f && f.name);
+          ngModel.$ngfValidations.push({name: 'resize', valid: false});
+          upload.applyModelValidation(ngModel, files);
+        });
+      }
+    }
+
+    for (var i = 0; i < files.length; i++) {
+      handleFile(files[i], i);
+    }
+    return $q.all(promises);
+  }
+
+  upload.updateModel = function (ngModel, attr, scope, fileChange, files, evt, noDelay) {
+    function update(files, invalidFiles, newFiles, dupFiles, isSingleModel) {
+      attr.$$ngfPrevValidFiles = files;
+      attr.$$ngfPrevInvalidFiles = invalidFiles;
+      var file = files && files.length ? files[0] : null;
+      var invalidFile = invalidFiles && invalidFiles.length ? invalidFiles[0] : null;
+
+      if (ngModel) {
+        upload.applyModelValidation(ngModel, files);
+        ngModel.$setViewValue(isSingleModel ? file : files);
+      }
+
+      if (fileChange) {
+        $parse(fileChange)(scope, {
+          $files: files,
+          $file: file,
+          $newFiles: newFiles,
+          $duplicateFiles: dupFiles,
+          $invalidFiles: invalidFiles,
+          $invalidFile: invalidFile,
+          $event: evt
+        });
+      }
+
+      var invalidModel = upload.attrGetter('ngfModelInvalid', attr);
+      if (invalidModel) {
+        $timeout(function () {
+          $parse(invalidModel).assign(scope, isSingleModel ? invalidFile : invalidFiles);
+        });
+      }
+      $timeout(function () {
+        // scope apply changes
+      });
+    }
+
+    var allNewFiles, dupFiles = [], prevValidFiles, prevInvalidFiles,
+      invalids = [], valids = [];
+
+    function removeDuplicates() {
+      function equals(f1, f2) {
+        return f1.name === f2.name && (f1.$ngfOrigSize || f1.size) === (f2.$ngfOrigSize || f2.size) &&
+          f1.type === f2.type;
+      }
+
+      function isInPrevFiles(f) {
+        var j;
+        for (j = 0; j < prevValidFiles.length; j++) {
+          if (equals(f, prevValidFiles[j])) {
+            return true;
+          }
+        }
+        for (j = 0; j < prevInvalidFiles.length; j++) {
+          if (equals(f, prevInvalidFiles[j])) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      if (files) {
+        allNewFiles = [];
+        dupFiles = [];
+        for (var i = 0; i < files.length; i++) {
+          if (isInPrevFiles(files[i])) {
+            dupFiles.push(files[i]);
+          } else {
+            allNewFiles.push(files[i]);
+          }
+        }
+      }
+    }
+
+    function toArray(v) {
+      return angular.isArray(v) ? v : [v];
+    }
+
+    function resizeAndUpdate() {
+      function updateModel() {
+        $timeout(function () {
+          update(keep ? prevValidFiles.concat(valids) : valids,
+            keep ? prevInvalidFiles.concat(invalids) : invalids,
+            files, dupFiles, isSingleModel);
+        }, options && options.debounce ? options.debounce.change || options.debounce : 0);
+      }
+
+      var resizingFiles = validateAfterResize ? allNewFiles : valids;
+      resizeFile(resizingFiles, attr, scope, ngModel).then(function () {
+        if (validateAfterResize) {
+          upload.validate(allNewFiles, keep ? prevValidFiles.length : 0, ngModel, attr, scope)
+            .then(function (validationResult) {
+              valids = validationResult.validsFiles;
+              invalids = validationResult.invalidsFiles;
+              updateModel();
+            });
+        } else {
+          updateModel();
+        }
+      }, function () {
+        for (var i = 0; i < resizingFiles.length; i++) {
+          var f = resizingFiles[i];
+          if (f.$error === 'resize') {
+            var index = valids.indexOf(f);
+            if (index > -1) {
+              valids.splice(index, 1);
+              invalids.push(f);
+            }
+            updateModel();
+          }
+        }
+      });
+    }
+
+    prevValidFiles = attr.$$ngfPrevValidFiles || [];
+    prevInvalidFiles = attr.$$ngfPrevInvalidFiles || [];
+    if (ngModel && ngModel.$modelValue) {
+      prevValidFiles = toArray(ngModel.$modelValue);
+    }
+
+    var keep = upload.attrGetter('ngfKeep', attr, scope);
+    allNewFiles = (files || []).slice(0);
+    if (keep === 'distinct' || upload.attrGetter('ngfKeepDistinct', attr, scope) === true) {
+      removeDuplicates(attr, scope);
+    }
+
+    var isSingleModel = !keep && !upload.attrGetter('ngfMultiple', attr, scope) && !upload.attrGetter('multiple', attr);
+
+    if (keep && !allNewFiles.length) return;
+
+    upload.attrGetter('ngfBeforeModelChange', attr, scope, {
+      $files: files,
+      $file: files && files.length ? files[0] : null,
+      $newFiles: allNewFiles,
+      $duplicateFiles: dupFiles,
+      $event: evt
+    });
+
+    var validateAfterResize = upload.attrGetter('ngfValidateAfterResize', attr, scope);
+
+    var options = upload.attrGetter('ngfModelOptions', attr, scope);
+    upload.validate(allNewFiles, keep ? prevValidFiles.length : 0, ngModel, attr, scope)
+      .then(function (validationResult) {
+      if (noDelay) {
+        update(allNewFiles, [], files, dupFiles, isSingleModel);
+      } else {
+        if ((!options || !options.allowInvalid) && !validateAfterResize) {
+          valids = validationResult.validFiles;
+          invalids = validationResult.invalidFiles;
+        } else {
+          valids = allNewFiles;
+        }
+        if (upload.attrGetter('ngfFixOrientation', attr, scope) && upload.isExifSupported()) {
+          applyExifRotations(valids, attr, scope).then(function () {
+            resizeAndUpdate();
+          });
+        } else {
+          resizeAndUpdate();
+        }
+      }
+    });
+  };
+
+  return upload;
+}]);
+
+ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload', function ($parse, $timeout, $compile, Upload) {
+  var generatedElems = [];
+
+  function isDelayedClickSupported(ua) {
+    // fix for android native browser < 4.4 and safari windows
+    var m = ua.match(/Android[^\d]*(\d+)\.(\d+)/);
+    if (m && m.length > 2) {
+      var v = Upload.defaults.androidFixMinorVersion || 4;
+      return parseInt(m[1]) < 4 || (parseInt(m[1]) === v && parseInt(m[2]) < v);
+    }
+
+    // safari on windows
+    return ua.indexOf('Chrome') === -1 && /.*Windows.*Safari.*/.test(ua);
+  }
+
+  function linkFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile, upload) {
+    /** @namespace attr.ngfSelect */
+    /** @namespace attr.ngfChange */
+    /** @namespace attr.ngModel */
+    /** @namespace attr.ngfModelOptions */
+    /** @namespace attr.ngfMultiple */
+    /** @namespace attr.ngfCapture */
+    /** @namespace attr.ngfValidate */
+    /** @namespace attr.ngfKeep */
+    var attrGetter = function (name, scope) {
+      return upload.attrGetter(name, attr, scope);
+    };
+
+    function isInputTypeFile() {
+      return elem[0].tagName.toLowerCase() === 'input' && attr.type && attr.type.toLowerCase() === 'file';
+    }
+
+    function fileChangeAttr() {
+      return attrGetter('ngfChange') || attrGetter('ngfSelect');
+    }
+
+    function changeFn(evt) {
+      if (upload.shouldUpdateOn('change', attr, scope)) {
+        var fileList = evt.__files_ || (evt.target && evt.target.files), files = [];
+        /* Handle duplicate call in  IE11 */
+        if (!fileList) return;
+        for (var i = 0; i < fileList.length; i++) {
+          files.push(fileList[i]);
+        }
+        upload.updateModel(ngModel, attr, scope, fileChangeAttr(),
+          files.length ? files : null, evt);
+      }
+    }
+
+    upload.registerModelChangeValidator(ngModel, attr, scope);
+
+    var unwatches = [];
+    if (attrGetter('ngfMultiple')) {
+      unwatches.push(scope.$watch(attrGetter('ngfMultiple'), function () {
+        fileElem.attr('multiple', attrGetter('ngfMultiple', scope));
+      }));
+    }
+    if (attrGetter('ngfCapture')) {
+      unwatches.push(scope.$watch(attrGetter('ngfCapture'), function () {
+        fileElem.attr('capture', attrGetter('ngfCapture', scope));
+      }));
+    }
+    if (attrGetter('ngfAccept')) {
+      unwatches.push(scope.$watch(attrGetter('ngfAccept'), function () {
+        fileElem.attr('accept', attrGetter('ngfAccept', scope));
+      }));
+    }
+    unwatches.push(attr.$observe('accept', function () {
+      fileElem.attr('accept', attrGetter('accept'));
+    }));
+    function bindAttrToFileInput(fileElem, label) {
+      function updateId(val) {
+        fileElem.attr('id', 'ngf-' + val);
+        label.attr('id', 'ngf-label-' + val);
+      }
+
+      for (var i = 0; i < elem[0].attributes.length; i++) {
+        var attribute = elem[0].attributes[i];
+        if (attribute.name !== 'type' && attribute.name !== 'class' && attribute.name !== 'style') {
+          if (attribute.name === 'id') {
+            updateId(attribute.value);
+            unwatches.push(attr.$observe('id', updateId));
+          } else {
+            fileElem.attr(attribute.name, (!attribute.value && (attribute.name === 'required' ||
+            attribute.name === 'multiple')) ? attribute.name : attribute.value);
+          }
+        }
+      }
+    }
+
+    function createFileInput() {
+      if (isInputTypeFile()) {
+        return elem;
+      }
+
+      var fileElem = angular.element('<input type="file">');
+
+      var label = angular.element('<label>upload</label>');
+      label.css('visibility', 'hidden').css('position', 'absolute').css('overflow', 'hidden')
+        .css('width', '0px').css('height', '0px').css('border', 'none')
+        .css('margin', '0px').css('padding', '0px').attr('tabindex', '-1');
+      bindAttrToFileInput(fileElem, label);
+
+      generatedElems.push({el: elem, ref: label});
+
+      document.body.appendChild(label.append(fileElem)[0]);
+
+      return fileElem;
+    }
+
+    function clickHandler(evt) {
+      if (elem.attr('disabled')) return false;
+      if (attrGetter('ngfSelectDisabled', scope)) return;
+
+      var r = detectSwipe(evt);
+      // prevent the click if it is a swipe
+      if (r != null) return r;
+
+      resetModel(evt);
+
+      // fix for md when the element is removed from the DOM and added back #460
+      try {
+        if (!isInputTypeFile() && !document.body.contains(fileElem[0])) {
+          generatedElems.push({el: elem, ref: fileElem.parent()});
+          document.body.appendChild(fileElem.parent()[0]);
+          fileElem.bind('change', changeFn);
+        }
+      } catch (e) {/*ignore*/
+      }
+
+      if (isDelayedClickSupported(navigator.userAgent)) {
+        setTimeout(function () {
+          fileElem[0].click();
+        }, 0);
+      } else {
+        fileElem[0].click();
+      }
+
+      return false;
+    }
+
+
+    var initialTouchStartY = 0;
+    var initialTouchStartX = 0;
+
+    function detectSwipe(evt) {
+      var touches = evt.changedTouches || (evt.originalEvent && evt.originalEvent.changedTouches);
+      if (touches) {
+        if (evt.type === 'touchstart') {
+          initialTouchStartX = touches[0].clientX;
+          initialTouchStartY = touches[0].clientY;
+          return true; // don't block event default
+        } else {
+          // prevent scroll from triggering event
+          if (evt.type === 'touchend') {
+            var currentX = touches[0].clientX;
+            var currentY = touches[0].clientY;
+            if ((Math.abs(currentX - initialTouchStartX) > 20) ||
+              (Math.abs(currentY - initialTouchStartY) > 20)) {
+              evt.stopPropagation();
+              evt.preventDefault();
+              return false;
+            }
+          }
+          return true;
+        }
+      }
+    }
+
+    var fileElem = elem;
+
+    function resetModel(evt) {
+      if (upload.shouldUpdateOn('click', attr, scope) && fileElem.val()) {
+        fileElem.val(null);
+        upload.updateModel(ngModel, attr, scope, fileChangeAttr(), null, evt, true);
+      }
+    }
+
+    if (!isInputTypeFile()) {
+      fileElem = createFileInput();
+    }
+    fileElem.bind('change', changeFn);
+
+    if (!isInputTypeFile()) {
+      elem.bind('click touchstart touchend', clickHandler);
+    } else {
+      elem.bind('click', resetModel);
+    }
+
+    function ie10SameFileSelectFix(evt) {
+      if (fileElem && !fileElem.attr('__ngf_ie10_Fix_')) {
+        if (!fileElem[0].parentNode) {
+          fileElem = null;
+          return;
+        }
+        evt.preventDefault();
+        evt.stopPropagation();
+        fileElem.unbind('click');
+        var clone = fileElem.clone();
+        fileElem.replaceWith(clone);
+        fileElem = clone;
+        fileElem.attr('__ngf_ie10_Fix_', 'true');
+        fileElem.bind('change', changeFn);
+        fileElem.bind('click', ie10SameFileSelectFix);
+        fileElem[0].click();
+        return false;
+      } else {
+        fileElem.removeAttr('__ngf_ie10_Fix_');
+      }
+    }
+
+    if (navigator.appVersion.indexOf('MSIE 10') !== -1) {
+      fileElem.bind('click', ie10SameFileSelectFix);
+    }
+
+    if (ngModel) ngModel.$formatters.push(function (val) {
+      if (val == null || val.length === 0) {
+        if (fileElem.val()) {
+          fileElem.val(null);
+        }
+      }
+      return val;
+    });
+
+    scope.$on('$destroy', function () {
+      if (!isInputTypeFile()) fileElem.parent().remove();
+      angular.forEach(unwatches, function (unwatch) {
+        unwatch();
+      });
+    });
+
+    $timeout(function () {
+      for (var i = 0; i < generatedElems.length; i++) {
+        var g = generatedElems[i];
+        if (!document.body.contains(g.el[0])) {
+          generatedElems.splice(i, 1);
+          g.ref.remove();
+        }
+      }
+    });
+
+    if (window.FileAPI && window.FileAPI.ngfFixIE) {
+      window.FileAPI.ngfFixIE(elem, fileElem, changeFn);
+    }
+  }
+
+  return {
+    restrict: 'AEC',
+    require: '?ngModel',
+    link: function (scope, elem, attr, ngModel) {
+      linkFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile, Upload);
+    }
+  };
+}]);
+
+(function () {
+
+  ngFileUpload.service('UploadDataUrl', ['UploadBase', '$timeout', '$q', function (UploadBase, $timeout, $q) {
+    var upload = UploadBase;
+    upload.base64DataUrl = function (file) {
+      if (angular.isArray(file)) {
+        var d = $q.defer(), count = 0;
+        angular.forEach(file, function (f) {
+          upload.dataUrl(f, true)['finally'](function () {
+            count++;
+            if (count === file.length) {
+              var urls = [];
+              angular.forEach(file, function (ff) {
+                urls.push(ff.$ngfDataUrl);
+              });
+              d.resolve(urls, file);
+            }
+          });
+        });
+        return d.promise;
+      } else {
+        return upload.dataUrl(file, true);
+      }
+    };
+    upload.dataUrl = function (file, disallowObjectUrl) {
+      if (!file) return upload.emptyPromise(file, file);
+      if ((disallowObjectUrl && file.$ngfDataUrl != null) || (!disallowObjectUrl && file.$ngfBlobUrl != null)) {
+        return upload.emptyPromise(disallowObjectUrl ? file.$ngfDataUrl : file.$ngfBlobUrl, file);
+      }
+      var p = disallowObjectUrl ? file.$$ngfDataUrlPromise : file.$$ngfBlobUrlPromise;
+      if (p) return p;
+
+      var deferred = $q.defer();
+      $timeout(function () {
+        if (window.FileReader && file &&
+          (!window.FileAPI || navigator.userAgent.indexOf('MSIE 8') === -1 || file.size < 20000) &&
+          (!window.FileAPI || navigator.userAgent.indexOf('MSIE 9') === -1 || file.size < 4000000)) {
+          //prefer URL.createObjectURL for handling refrences to files of all sizes
+          //since it doesn´t build a large string in memory
+          var URL = window.URL || window.webkitURL;
+          if (URL && URL.createObjectURL && !disallowObjectUrl) {
+            var url;
+            try {
+              url = URL.createObjectURL(file);
+            } catch (e) {
+              $timeout(function () {
+                file.$ngfBlobUrl = '';
+                deferred.reject();
+              });
+              return;
+            }
+            $timeout(function () {
+              file.$ngfBlobUrl = url;
+              if (url) {
+                deferred.resolve(url, file);
+                upload.blobUrls = upload.blobUrls || [];
+                upload.blobUrlsTotalSize = upload.blobUrlsTotalSize || 0;
+                upload.blobUrls.push({url: url, size: file.size});
+                upload.blobUrlsTotalSize += file.size || 0;
+                var maxMemory = upload.defaults.blobUrlsMaxMemory || 268435456;
+                var maxLength = upload.defaults.blobUrlsMaxQueueSize || 200;
+                while ((upload.blobUrlsTotalSize > maxMemory || upload.blobUrls.length > maxLength) && upload.blobUrls.length > 1) {
+                  var obj = upload.blobUrls.splice(0, 1)[0];
+                  URL.revokeObjectURL(obj.url);
+                  upload.blobUrlsTotalSize -= obj.size;
+                }
+              }
+            });
+          } else {
+            var fileReader = new FileReader();
+            fileReader.onload = function (e) {
+              $timeout(function () {
+                file.$ngfDataUrl = e.target.result;
+                deferred.resolve(e.target.result, file);
+                $timeout(function () {
+                  delete file.$ngfDataUrl;
+                }, 1000);
+              });
+            };
+            fileReader.onerror = function () {
+              $timeout(function () {
+                file.$ngfDataUrl = '';
+                deferred.reject();
+              });
+            };
+            fileReader.readAsDataURL(file);
+          }
+        } else {
+          $timeout(function () {
+            file[disallowObjectUrl ? '$ngfDataUrl' : '$ngfBlobUrl'] = '';
+            deferred.reject();
+          });
+        }
+      });
+
+      if (disallowObjectUrl) {
+        p = file.$$ngfDataUrlPromise = deferred.promise;
+      } else {
+        p = file.$$ngfBlobUrlPromise = deferred.promise;
+      }
+      p['finally'](function () {
+        delete file[disallowObjectUrl ? '$$ngfDataUrlPromise' : '$$ngfBlobUrlPromise'];
+      });
+      return p;
+    };
+    return upload;
+  }]);
+
+  function getTagType(el) {
+    if (el.tagName.toLowerCase() === 'img') return 'image';
+    if (el.tagName.toLowerCase() === 'audio') return 'audio';
+    if (el.tagName.toLowerCase() === 'video') return 'video';
+    return /./;
+  }
+
+  function linkFileDirective(Upload, $timeout, scope, elem, attr, directiveName, resizeParams, isBackground) {
+    function constructDataUrl(file) {
+      var disallowObjectUrl = Upload.attrGetter('ngfNoObjectUrl', attr, scope);
+      Upload.dataUrl(file, disallowObjectUrl)['finally'](function () {
+        $timeout(function () {
+          var src = (disallowObjectUrl ? file.$ngfDataUrl : file.$ngfBlobUrl) || file.$ngfDataUrl;
+          if (isBackground) {
+            elem.css('background-image', 'url(\'' + (src || '') + '\')');
+          } else {
+            elem.attr('src', src);
+          }
+          if (src) {
+            elem.removeClass('ng-hide');
+          } else {
+            elem.addClass('ng-hide');
+          }
+        });
+      });
+    }
+
+    $timeout(function () {
+      var unwatch = scope.$watch(attr[directiveName], function (file) {
+        var size = resizeParams;
+        if (directiveName === 'ngfThumbnail') {
+          if (!size) {
+            size = {
+              width: elem[0].naturalWidth || elem[0].clientWidth,
+              height: elem[0].naturalHeight || elem[0].clientHeight
+            };
+          }
+          if (size.width === 0 && window.getComputedStyle) {
+            var style = getComputedStyle(elem[0]);
+            if (style.width && style.width.indexOf('px') > -1 && style.height && style.height.indexOf('px') > -1) {
+              size = {
+                width: parseInt(style.width.slice(0, -2)),
+                height: parseInt(style.height.slice(0, -2))
+              };
+            }
+          }
+        }
+
+        if (angular.isString(file)) {
+          elem.removeClass('ng-hide');
+          if (isBackground) {
+            return elem.css('background-image', 'url(\'' + file + '\')');
+          } else {
+            return elem.attr('src', file);
+          }
+        }
+        if (file && file.type && file.type.search(getTagType(elem[0])) === 0 &&
+          (!isBackground || file.type.indexOf('image') === 0)) {
+          if (size && Upload.isResizeSupported()) {
+            size.resizeIf = function (width, height) {
+              return Upload.attrGetter('ngfResizeIf', attr, scope,
+                {$width: width, $height: height, $file: file});
+            };
+            Upload.resize(file, size).then(
+              function (f) {
+                constructDataUrl(f);
+              }, function (e) {
+                throw e;
+              }
+            );
+          } else {
+            constructDataUrl(file);
+          }
+        } else {
+          elem.addClass('ng-hide');
+        }
+      });
+
+      scope.$on('$destroy', function () {
+        unwatch();
+      });
+    });
+  }
+
+
+  /** @namespace attr.ngfSrc */
+  /** @namespace attr.ngfNoObjectUrl */
+  ngFileUpload.directive('ngfSrc', ['Upload', '$timeout', function (Upload, $timeout) {
+    return {
+      restrict: 'AE',
+      link: function (scope, elem, attr) {
+        linkFileDirective(Upload, $timeout, scope, elem, attr, 'ngfSrc',
+          Upload.attrGetter('ngfResize', attr, scope), false);
+      }
+    };
+  }]);
+
+  /** @namespace attr.ngfBackground */
+  /** @namespace attr.ngfNoObjectUrl */
+  ngFileUpload.directive('ngfBackground', ['Upload', '$timeout', function (Upload, $timeout) {
+    return {
+      restrict: 'AE',
+      link: function (scope, elem, attr) {
+        linkFileDirective(Upload, $timeout, scope, elem, attr, 'ngfBackground',
+          Upload.attrGetter('ngfResize', attr, scope), true);
+      }
+    };
+  }]);
+
+  /** @namespace attr.ngfThumbnail */
+  /** @namespace attr.ngfAsBackground */
+  /** @namespace attr.ngfSize */
+  /** @namespace attr.ngfNoObjectUrl */
+  ngFileUpload.directive('ngfThumbnail', ['Upload', '$timeout', function (Upload, $timeout) {
+    return {
+      restrict: 'AE',
+      link: function (scope, elem, attr) {
+        var size = Upload.attrGetter('ngfSize', attr, scope);
+        linkFileDirective(Upload, $timeout, scope, elem, attr, 'ngfThumbnail', size,
+          Upload.attrGetter('ngfAsBackground', attr, scope));
+      }
+    };
+  }]);
+
+  ngFileUpload.config(['$compileProvider', function ($compileProvider) {
+    if ($compileProvider.imgSrcSanitizationWhitelist) $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|webcal|local|file|data|blob):/);
+    if ($compileProvider.aHrefSanitizationWhitelist) $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|webcal|local|file|data|blob):/);
+  }]);
+
+  ngFileUpload.filter('ngfDataUrl', ['UploadDataUrl', '$sce', function (UploadDataUrl, $sce) {
+    return function (file, disallowObjectUrl, trustedUrl) {
+      if (angular.isString(file)) {
+        return $sce.trustAsResourceUrl(file);
+      }
+      var src = file && ((disallowObjectUrl ? file.$ngfDataUrl : file.$ngfBlobUrl) || file.$ngfDataUrl);
+      if (file && !src) {
+        if (!file.$ngfDataUrlFilterInProgress && angular.isObject(file)) {
+          file.$ngfDataUrlFilterInProgress = true;
+          UploadDataUrl.dataUrl(file, disallowObjectUrl);
+        }
+        return '';
+      }
+      if (file) delete file.$ngfDataUrlFilterInProgress;
+      return (file && src ? (trustedUrl ? $sce.trustAsResourceUrl(src) : src) : file) || '';
+    };
+  }]);
+
+})();
+
+ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', function (UploadDataUrl, $q, $timeout) {
+  var upload = UploadDataUrl;
+
+  function globStringToRegex(str) {
+    var regexp = '', excludes = [];
+    if (str.length > 2 && str[0] === '/' && str[str.length - 1] === '/') {
+      regexp = str.substring(1, str.length - 1);
+    } else {
+      var split = str.split(',');
+      if (split.length > 1) {
+        for (var i = 0; i < split.length; i++) {
+          var r = globStringToRegex(split[i]);
+          if (r.regexp) {
+            regexp += '(' + r.regexp + ')';
+            if (i < split.length - 1) {
+              regexp += '|';
+            }
+          } else {
+            excludes = excludes.concat(r.excludes);
+          }
+        }
+      } else {
+        if (str.indexOf('!') === 0) {
+          excludes.push('^((?!' + globStringToRegex(str.substring(1)).regexp + ').)*$');
+        } else {
+          if (str.indexOf('.') === 0) {
+            str = '*' + str;
+          }
+          regexp = '^' + str.replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&') + '$';
+          regexp = regexp.replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
+        }
+      }
+    }
+    return {regexp: regexp, excludes: excludes};
+  }
+
+  upload.validatePattern = function (file, val) {
+    if (!val) {
+      return true;
+    }
+    var pattern = globStringToRegex(val), valid = true;
+    if (pattern.regexp && pattern.regexp.length) {
+      var regexp = new RegExp(pattern.regexp, 'i');
+      valid = (file.type != null && regexp.test(file.type)) ||
+        (file.name != null && regexp.test(file.name));
+    }
+    var len = pattern.excludes.length;
+    while (len--) {
+      var exclude = new RegExp(pattern.excludes[len], 'i');
+      valid = valid && (file.type == null || exclude.test(file.type)) &&
+        (file.name == null || exclude.test(file.name));
+    }
+    return valid;
+  };
+
+  upload.ratioToFloat = function (val) {
+    var r = val.toString(), xIndex = r.search(/[x:]/i);
+    if (xIndex > -1) {
+      r = parseFloat(r.substring(0, xIndex)) / parseFloat(r.substring(xIndex + 1));
+    } else {
+      r = parseFloat(r);
+    }
+    return r;
+  };
+
+  upload.registerModelChangeValidator = function (ngModel, attr, scope) {
+    if (ngModel) {
+      ngModel.$formatters.push(function (files) {
+        if (ngModel.$dirty) {
+          var filesArray = files;
+          if (files && !angular.isArray(files)) {
+            filesArray = [files];
+          }
+          upload.validate(filesArray, 0, ngModel, attr, scope).then(function () {
+            upload.applyModelValidation(ngModel, filesArray);
+          });
+        }
+        return files;
+      });
+    }
+  };
+
+  function markModelAsDirty(ngModel, files) {
+    if (files != null && !ngModel.$dirty) {
+      if (ngModel.$setDirty) {
+        ngModel.$setDirty();
+      } else {
+        ngModel.$dirty = true;
+      }
+    }
+  }
+
+  upload.applyModelValidation = function (ngModel, files) {
+    markModelAsDirty(ngModel, files);
+    angular.forEach(ngModel.$ngfValidations, function (validation) {
+      ngModel.$setValidity(validation.name, validation.valid);
+    });
+  };
+
+  upload.getValidationAttr = function (attr, scope, name, validationName, file) {
+    var dName = 'ngf' + name[0].toUpperCase() + name.substr(1);
+    var val = upload.attrGetter(dName, attr, scope, {$file: file});
+    if (val == null) {
+      val = upload.attrGetter('ngfValidate', attr, scope, {$file: file});
+      if (val) {
+        var split = (validationName || name).split('.');
+        val = val[split[0]];
+        if (split.length > 1) {
+          val = val && val[split[1]];
+        }
+      }
+    }
+    return val;
+  };
+
+  upload.validate = function (files, prevLength, ngModel, attr, scope) {
+    ngModel = ngModel || {};
+    ngModel.$ngfValidations = ngModel.$ngfValidations || [];
+
+    angular.forEach(ngModel.$ngfValidations, function (v) {
+      v.valid = true;
+    });
+
+    var attrGetter = function (name, params) {
+      return upload.attrGetter(name, attr, scope, params);
+    };
+
+    var ignoredErrors = (upload.attrGetter('ngfIgnoreInvalid', attr, scope) || '').split(' ');
+    var runAllValidation = upload.attrGetter('ngfRunAllValidations', attr, scope);
+
+    if (files == null || files.length === 0) {
+      return upload.emptyPromise({'validFiles': files, 'invalidFiles': []});
+    }
+
+    files = files.length === undefined ? [files] : files.slice(0);
+    var invalidFiles = [];
+
+    function validateSync(name, validationName, fn) {
+      if (files) {
+        var i = files.length, valid = null;
+        while (i--) {
+          var file = files[i];
+          if (file) {
+            var val = upload.getValidationAttr(attr, scope, name, validationName, file);
+            if (val != null) {
+              if (!fn(file, val, i)) {
+                if (ignoredErrors.indexOf(name) === -1) {
+                  file.$error = name;
+                  (file.$errorMessages = (file.$errorMessages || {}))[name] = true;
+                  file.$errorParam = val;
+                  if (invalidFiles.indexOf(file) === -1) {
+                    invalidFiles.push(file);
+                  }
+                  if (!runAllValidation) {
+                    files.splice(i, 1);
+                  }
+                  valid = false;
+                } else {
+                  files.splice(i, 1);
+                }
+              }
+            }
+          }
+        }
+        if (valid !== null) {
+          ngModel.$ngfValidations.push({name: name, valid: valid});
+        }
+      }
+    }
+
+    validateSync('pattern', null, upload.validatePattern);
+    validateSync('minSize', 'size.min', function (file, val) {
+      return file.size + 0.1 >= upload.translateScalars(val);
+    });
+    validateSync('maxSize', 'size.max', function (file, val) {
+      return file.size - 0.1 <= upload.translateScalars(val);
+    });
+    var totalSize = 0;
+    validateSync('maxTotalSize', null, function (file, val) {
+      totalSize += file.size;
+      if (totalSize > upload.translateScalars(val)) {
+        files.splice(0, files.length);
+        return false;
+      }
+      return true;
+    });
+
+    validateSync('validateFn', null, function (file, r) {
+      return r === true || r === null || r === '';
+    });
+
+    if (!files.length) {
+      return upload.emptyPromise({'validFiles': [], 'invalidFiles': invalidFiles});
+    }
+
+    function validateAsync(name, validationName, type, asyncFn, fn) {
+      function resolveResult(defer, file, val) {
+        function resolveInternal(fn) {
+          if (fn()) {
+            if (ignoredErrors.indexOf(name) === -1) {
+              file.$error = name;
+              (file.$errorMessages = (file.$errorMessages || {}))[name] = true;
+              file.$errorParam = val;
+              if (invalidFiles.indexOf(file) === -1) {
+                invalidFiles.push(file);
+              }
+              if (!runAllValidation) {
+                var i = files.indexOf(file);
+                if (i > -1) files.splice(i, 1);
+              }
+              defer.resolve(false);
+            } else {
+              var j = files.indexOf(file);
+              if (j > -1) files.splice(j, 1);
+              defer.resolve(true);
+            }
+          } else {
+            defer.resolve(true);
+          }
+        }
+
+        if (val != null) {
+          asyncFn(file, val).then(function (d) {
+            resolveInternal(function () {
+              return !fn(d, val);
+            });
+          }, function () {
+            resolveInternal(function () {
+              return attrGetter('ngfValidateForce', {$file: file});
+            });
+          });
+        } else {
+          defer.resolve(true);
+        }
+      }
+
+      var promises = [upload.emptyPromise(true)];
+      if (files) {
+        files = files.length === undefined ? [files] : files;
+        angular.forEach(files, function (file) {
+          var defer = $q.defer();
+          promises.push(defer.promise);
+          if (type && (file.type == null || file.type.search(type) !== 0)) {
+            defer.resolve(true);
+            return;
+          }
+          if (name === 'dimensions' && upload.attrGetter('ngfDimensions', attr) != null) {
+            upload.imageDimensions(file).then(function (d) {
+              resolveResult(defer, file,
+                attrGetter('ngfDimensions', {$file: file, $width: d.width, $height: d.height}));
+            }, function () {
+              defer.resolve(false);
+            });
+          } else if (name === 'duration' && upload.attrGetter('ngfDuration', attr) != null) {
+            upload.mediaDuration(file).then(function (d) {
+              resolveResult(defer, file,
+                attrGetter('ngfDuration', {$file: file, $duration: d}));
+            }, function () {
+              defer.resolve(false);
+            });
+          } else {
+            resolveResult(defer, file,
+              upload.getValidationAttr(attr, scope, name, validationName, file));
+          }
+        });
+      }
+      var deffer = $q.defer();
+      $q.all(promises).then(function (values) {
+        var isValid = true;
+        for (var i = 0; i < values.length; i++) {
+          if (!values[i]) {
+            isValid = false;
+            break;
+          }
+        }
+        ngModel.$ngfValidations.push({name: name, valid: isValid});
+        deffer.resolve(isValid);
+      });
+      return deffer.promise;
+    }
+
+    var deffer = $q.defer();
+    var promises = [];
+
+    promises.push(validateAsync('maxHeight', 'height.max', /image/,
+      this.imageDimensions, function (d, val) {
+        return d.height <= val;
+      }));
+    promises.push(validateAsync('minHeight', 'height.min', /image/,
+      this.imageDimensions, function (d, val) {
+        return d.height >= val;
+      }));
+    promises.push(validateAsync('maxWidth', 'width.max', /image/,
+      this.imageDimensions, function (d, val) {
+        return d.width <= val;
+      }));
+    promises.push(validateAsync('minWidth', 'width.min', /image/,
+      this.imageDimensions, function (d, val) {
+        return d.width >= val;
+      }));
+    promises.push(validateAsync('dimensions', null, /image/,
+      function (file, val) {
+        return upload.emptyPromise(val);
+      }, function (r) {
+        return r;
+      }));
+    promises.push(validateAsync('ratio', null, /image/,
+      this.imageDimensions, function (d, val) {
+        var split = val.toString().split(','), valid = false;
+        for (var i = 0; i < split.length; i++) {
+          if (Math.abs((d.width / d.height) - upload.ratioToFloat(split[i])) < 0.01) {
+            valid = true;
+          }
+        }
+        return valid;
+      }));
+    promises.push(validateAsync('maxRatio', 'ratio.max', /image/,
+      this.imageDimensions, function (d, val) {
+        return (d.width / d.height) - upload.ratioToFloat(val) < 0.0001;
+      }));
+    promises.push(validateAsync('minRatio', 'ratio.min', /image/,
+      this.imageDimensions, function (d, val) {
+        return (d.width / d.height) - upload.ratioToFloat(val) > -0.0001;
+      }));
+    promises.push(validateAsync('maxDuration', 'duration.max', /audio|video/,
+      this.mediaDuration, function (d, val) {
+        return d <= upload.translateScalars(val);
+      }));
+    promises.push(validateAsync('minDuration', 'duration.min', /audio|video/,
+      this.mediaDuration, function (d, val) {
+        return d >= upload.translateScalars(val);
+      }));
+    promises.push(validateAsync('duration', null, /audio|video/,
+      function (file, val) {
+        return upload.emptyPromise(val);
+      }, function (r) {
+        return r;
+      }));
+
+    promises.push(validateAsync('validateAsyncFn', null, null,
+      function (file, val) {
+        return val;
+      }, function (r) {
+        return r === true || r === null || r === '';
+      }));
+
+    $q.all(promises).then(function () {
+
+      if (runAllValidation) {
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          if (file.$error) {
+            files.splice(i--, 1);
+          }
+        }
+      }
+
+      runAllValidation = false;
+      validateSync('maxFiles', null, function (file, val, i) {
+        return prevLength + i < val;
+      });
+
+      deffer.resolve({'validFiles': files, 'invalidFiles': invalidFiles});
+    });
+    return deffer.promise;
+  };
+
+  upload.imageDimensions = function (file) {
+    if (file.$ngfWidth && file.$ngfHeight) {
+      var d = $q.defer();
+      $timeout(function () {
+        d.resolve({width: file.$ngfWidth, height: file.$ngfHeight});
+      });
+      return d.promise;
+    }
+    if (file.$ngfDimensionPromise) return file.$ngfDimensionPromise;
+
+    var deferred = $q.defer();
+    $timeout(function () {
+      if (file.type.indexOf('image') !== 0) {
+        deferred.reject('not image');
+        return;
+      }
+      upload.dataUrl(file).then(function (dataUrl) {
+        var img = angular.element('<img>').attr('src', dataUrl)
+          .css('visibility', 'hidden').css('position', 'fixed')
+          .css('max-width', 'none !important').css('max-height', 'none !important');
+
+        function success() {
+          var width = img[0].naturalWidth || img[0].clientWidth;
+          var height = img[0].naturalHeight || img[0].clientHeight;
+          img.remove();
+          file.$ngfWidth = width;
+          file.$ngfHeight = height;
+          deferred.resolve({width: width, height: height});
+        }
+
+        function error() {
+          img.remove();
+          deferred.reject('load error');
+        }
+
+        img.on('load', success);
+        img.on('error', error);
+
+        var secondsCounter = 0;
+        function checkLoadErrorInCaseOfNoCallback() {
+          $timeout(function () {
+            if (img[0].parentNode) {
+              if (img[0].clientWidth) {
+                success();
+              } else if (secondsCounter++ > 10) {
+                error();
+              } else {
+                checkLoadErrorInCaseOfNoCallback();
+              }
+            }
+          }, 1000);
+        }
+
+        checkLoadErrorInCaseOfNoCallback();
+
+        angular.element(document.getElementsByTagName('body')[0]).append(img);
+      }, function () {
+        deferred.reject('load error');
+      });
+    });
+
+    file.$ngfDimensionPromise = deferred.promise;
+    file.$ngfDimensionPromise['finally'](function () {
+      delete file.$ngfDimensionPromise;
+    });
+    return file.$ngfDimensionPromise;
+  };
+
+  upload.mediaDuration = function (file) {
+    if (file.$ngfDuration) {
+      var d = $q.defer();
+      $timeout(function () {
+        d.resolve(file.$ngfDuration);
+      });
+      return d.promise;
+    }
+    if (file.$ngfDurationPromise) return file.$ngfDurationPromise;
+
+    var deferred = $q.defer();
+    $timeout(function () {
+      if (file.type.indexOf('audio') !== 0 && file.type.indexOf('video') !== 0) {
+        deferred.reject('not media');
+        return;
+      }
+      upload.dataUrl(file).then(function (dataUrl) {
+        var el = angular.element(file.type.indexOf('audio') === 0 ? '<audio>' : '<video>')
+          .attr('src', dataUrl).css('visibility', 'none').css('position', 'fixed');
+
+        function success() {
+          var duration = el[0].duration;
+          file.$ngfDuration = duration;
+          el.remove();
+          deferred.resolve(duration);
+        }
+
+        function error() {
+          el.remove();
+          deferred.reject('load error');
+        }
+
+        el.on('loadedmetadata', success);
+        el.on('error', error);
+        var count = 0;
+
+        function checkLoadError() {
+          $timeout(function () {
+            if (el[0].parentNode) {
+              if (el[0].duration) {
+                success();
+              } else if (count > 10) {
+                error();
+              } else {
+                checkLoadError();
+              }
+            }
+          }, 1000);
+        }
+
+        checkLoadError();
+
+        angular.element(document.body).append(el);
+      }, function () {
+        deferred.reject('load error');
+      });
+    });
+
+    file.$ngfDurationPromise = deferred.promise;
+    file.$ngfDurationPromise['finally'](function () {
+      delete file.$ngfDurationPromise;
+    });
+    return file.$ngfDurationPromise;
+  };
+  return upload;
+}
+]);
+
+ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadValidate, $q) {
+  var upload = UploadValidate;
+
+  /**
+   * Conserve aspect ratio of the original region. Useful when shrinking/enlarging
+   * images to fit into a certain area.
+   * Source:  http://stackoverflow.com/a/14731922
+   *
+   * @param {Number} srcWidth Source area width
+   * @param {Number} srcHeight Source area height
+   * @param {Number} maxWidth Nestable area maximum available width
+   * @param {Number} maxHeight Nestable area maximum available height
+   * @return {Object} { width, height }
+   */
+  var calculateAspectRatioFit = function (srcWidth, srcHeight, maxWidth, maxHeight, centerCrop) {
+    var ratio = centerCrop ? Math.max(maxWidth / srcWidth, maxHeight / srcHeight) :
+      Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+    return {
+      width: srcWidth * ratio, height: srcHeight * ratio,
+      marginX: srcWidth * ratio - maxWidth, marginY: srcHeight * ratio - maxHeight
+    };
+  };
+
+  // Extracted from https://github.com/romelgomez/angular-firebase-image-upload/blob/master/app/scripts/fileUpload.js#L89
+  var resize = function (imagen, width, height, quality, type, ratio, centerCrop, resizeIf) {
+    var deferred = $q.defer();
+    var canvasElement = document.createElement('canvas');
+    var imageElement = document.createElement('img');
+    imageElement.setAttribute('style', 'visibility:hidden;position:fixed;z-index:-100000');
+    document.body.appendChild(imageElement);
+
+    imageElement.onload = function () {
+      var imgWidth = imageElement.width, imgHeight = imageElement.height;
+      imageElement.parentNode.removeChild(imageElement);
+      if (resizeIf != null && resizeIf(imgWidth, imgHeight) === false) {
+        deferred.reject('resizeIf');
+        return;
+      }
+      try {
+        if (ratio) {
+          var ratioFloat = upload.ratioToFloat(ratio);
+          var imgRatio = imgWidth / imgHeight;
+          if (imgRatio < ratioFloat) {
+            width = imgWidth;
+            height = width / ratioFloat;
+          } else {
+            height = imgHeight;
+            width = height * ratioFloat;
+          }
+        }
+        if (!width) {
+          width = imgWidth;
+        }
+        if (!height) {
+          height = imgHeight;
+        }
+        var dimensions = calculateAspectRatioFit(imgWidth, imgHeight, width, height, centerCrop);
+        canvasElement.width = Math.min(dimensions.width, width);
+        canvasElement.height = Math.min(dimensions.height, height);
+        var context = canvasElement.getContext('2d');
+        context.drawImage(imageElement,
+          Math.min(0, -dimensions.marginX / 2), Math.min(0, -dimensions.marginY / 2),
+          dimensions.width, dimensions.height);
+        deferred.resolve(canvasElement.toDataURL(type || 'image/WebP', quality || 0.934));
+      } catch (e) {
+        deferred.reject(e);
+      }
+    };
+    imageElement.onerror = function () {
+      imageElement.parentNode.removeChild(imageElement);
+      deferred.reject();
+    };
+    imageElement.src = imagen;
+    return deferred.promise;
+  };
+
+  upload.dataUrltoBlob = function (dataurl, name, origSize) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    var blob = new window.Blob([u8arr], {type: mime});
+    blob.name = name;
+    blob.$ngfOrigSize = origSize;
+    return blob;
+  };
+
+  upload.isResizeSupported = function () {
+    var elem = document.createElement('canvas');
+    return window.atob && elem.getContext && elem.getContext('2d') && window.Blob;
+  };
+
+  if (upload.isResizeSupported()) {
+    // add name getter to the blob constructor prototype
+    Object.defineProperty(window.Blob.prototype, 'name', {
+      get: function () {
+        return this.$ngfName;
+      },
+      set: function (v) {
+        this.$ngfName = v;
+      },
+      configurable: true
+    });
+  }
+
+  upload.resize = function (file, options) {
+    if (file.type.indexOf('image') !== 0) return upload.emptyPromise(file);
+
+    var deferred = $q.defer();
+    upload.dataUrl(file, true).then(function (url) {
+      resize(url, options.width, options.height, options.quality, options.type || file.type,
+        options.ratio, options.centerCrop, options.resizeIf)
+        .then(function (dataUrl) {
+          if (file.type === 'image/jpeg' && options.restoreExif !== false) {
+            try {
+              dataUrl = upload.restoreExif(url, dataUrl);
+            } catch (e) {
+              setTimeout(function () {throw e;}, 1);
+            }
+          }
+          try {
+            var blob = upload.dataUrltoBlob(dataUrl, file.name, file.size);
+            deferred.resolve(blob);
+          } catch (e) {
+            deferred.reject(e);
+          }
+        }, function (r) {
+          if (r === 'resizeIf') {
+            deferred.resolve(file);
+          }
+          deferred.reject(r);
+        });
+    }, function (e) {
+      deferred.reject(e);
+    });
+    return deferred.promise;
+  };
+
+  return upload;
+}]);
+
+(function () {
+  ngFileUpload.directive('ngfDrop', ['$parse', '$timeout', '$window', 'Upload', '$http', '$q',
+    function ($parse, $timeout, $window, Upload, $http, $q) {
+      return {
+        restrict: 'AEC',
+        require: '?ngModel',
+        link: function (scope, elem, attr, ngModel) {
+          linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $window, Upload, $http, $q);
+        }
+      };
+    }]);
+
+  ngFileUpload.directive('ngfNoFileDrop', function () {
+    return function (scope, elem) {
+      if (dropAvailable()) elem.css('display', 'none');
+    };
+  });
+
+  ngFileUpload.directive('ngfDropAvailable', ['$parse', '$timeout', 'Upload', function ($parse, $timeout, Upload) {
+    return function (scope, elem, attr) {
+      if (dropAvailable()) {
+        var model = $parse(Upload.attrGetter('ngfDropAvailable', attr));
+        $timeout(function () {
+          model(scope);
+          if (model.assign) {
+            model.assign(scope, true);
+          }
+        });
+      }
+    };
+  }]);
+
+  function linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $window, upload, $http, $q) {
+    var available = dropAvailable();
+
+    var attrGetter = function (name, scope, params) {
+      return upload.attrGetter(name, attr, scope, params);
+    };
+
+    if (attrGetter('dropAvailable')) {
+      $timeout(function () {
+        if (scope[attrGetter('dropAvailable')]) {
+          scope[attrGetter('dropAvailable')].value = available;
+        } else {
+          scope[attrGetter('dropAvailable')] = available;
+        }
+      });
+    }
+    if (!available) {
+      if (attrGetter('ngfHideOnDropNotAvailable', scope) === true) {
+        elem.css('display', 'none');
+      }
+      return;
+    }
+
+    function isDisabled() {
+      return elem.attr('disabled') || attrGetter('ngfDropDisabled', scope);
+    }
+
+    if (attrGetter('ngfSelect') == null) {
+      upload.registerModelChangeValidator(ngModel, attr, scope);
+    }
+
+    var leaveTimeout = null;
+    var stopPropagation = $parse(attrGetter('ngfStopPropagation'));
+    var dragOverDelay = 1;
+    var actualDragOverClass;
+
+    elem[0].addEventListener('dragover', function (evt) {
+      if (isDisabled() || !upload.shouldUpdateOn('drop', attr, scope)) return;
+      evt.preventDefault();
+      if (stopPropagation(scope)) evt.stopPropagation();
+      // handling dragover events from the Chrome download bar
+      if (navigator.userAgent.indexOf('Chrome') > -1) {
+        var b = evt.dataTransfer.effectAllowed;
+        evt.dataTransfer.dropEffect = ('move' === b || 'linkMove' === b) ? 'move' : 'copy';
+      }
+      $timeout.cancel(leaveTimeout);
+      if (!actualDragOverClass) {
+        actualDragOverClass = 'C';
+        calculateDragOverClass(scope, attr, evt, function (clazz) {
+          actualDragOverClass = clazz;
+          elem.addClass(actualDragOverClass);
+          attrGetter('ngfDrag', scope, {$isDragging: true, $class: actualDragOverClass, $event: evt});
+        });
+      }
+    }, false);
+    elem[0].addEventListener('dragenter', function (evt) {
+      if (isDisabled() || !upload.shouldUpdateOn('drop', attr, scope)) return;
+      evt.preventDefault();
+      if (stopPropagation(scope)) evt.stopPropagation();
+    }, false);
+    elem[0].addEventListener('dragleave', function (evt) {
+      if (isDisabled() || !upload.shouldUpdateOn('drop', attr, scope)) return;
+      evt.preventDefault();
+      if (stopPropagation(scope)) evt.stopPropagation();
+      leaveTimeout = $timeout(function () {
+        if (actualDragOverClass) elem.removeClass(actualDragOverClass);
+        actualDragOverClass = null;
+        attrGetter('ngfDrag', scope, {$isDragging: false, $event: evt});
+      }, dragOverDelay || 100);
+    }, false);
+    elem[0].addEventListener('drop', function (evt) {
+      if (isDisabled() || !upload.shouldUpdateOn('drop', attr, scope)) return;
+      evt.preventDefault();
+      if (stopPropagation(scope)) evt.stopPropagation();
+      if (actualDragOverClass) elem.removeClass(actualDragOverClass);
+      actualDragOverClass = null;
+      extractFilesAndUpdateModel(evt.dataTransfer, evt, 'dropUrl');
+    }, false);
+    elem[0].addEventListener('paste', function (evt) {
+      if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1 &&
+        attrGetter('ngfEnableFirefoxPaste', scope)) {
+        evt.preventDefault();
+      }
+      if (isDisabled() || !upload.shouldUpdateOn('paste', attr, scope)) return;
+      extractFilesAndUpdateModel(evt.clipboardData || evt.originalEvent.clipboardData, evt, 'pasteUrl');
+    }, false);
+
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1 &&
+      attrGetter('ngfEnableFirefoxPaste', scope)) {
+      elem.attr('contenteditable', true);
+      elem.on('keypress', function (e) {
+        if (!e.metaKey && !e.ctrlKey) {
+          e.preventDefault();
+        }
+      });
+    }
+
+    function extractFilesAndUpdateModel(source, evt, updateOnType) {
+      if (!source) return;
+      // html needs to be calculated on the same process otherwise the data will be wiped
+      // after promise resolve or setTimeout.
+      var html;
+      try {
+        html = source && source.getData && source.getData('text/html');
+      } catch (e) {/* Fix IE11 that throw error calling getData */
+      }
+      extractFiles(source.items, source.files, attrGetter('ngfAllowDir', scope) !== false,
+        attrGetter('multiple') || attrGetter('ngfMultiple', scope)).then(function (files) {
+        if (files.length) {
+          updateModel(files, evt);
+        } else {
+          extractFilesFromHtml(updateOnType, html).then(function (files) {
+            updateModel(files, evt);
+          });
+        }
+      });
+    }
+
+    function updateModel(files, evt) {
+      upload.updateModel(ngModel, attr, scope, attrGetter('ngfChange') || attrGetter('ngfDrop'), files, evt);
+    }
+
+    function extractFilesFromHtml(updateOn, html) {
+      if (!upload.shouldUpdateOn(updateOn, attr, scope) || typeof html !== 'string') return upload.rejectPromise([]);
+      var urls = [];
+      html.replace(/<(img src|img [^>]* src) *=\"([^\"]*)\"/gi, function (m, n, src) {
+        urls.push(src);
+      });
+      var promises = [], files = [];
+      if (urls.length) {
+        angular.forEach(urls, function (url) {
+          promises.push(upload.urlToBlob(url).then(function (blob) {
+            files.push(blob);
+          }));
+        });
+        var defer = $q.defer();
+        $q.all(promises).then(function () {
+          defer.resolve(files);
+        }, function (e) {
+          defer.reject(e);
+        });
+        return defer.promise;
+      }
+      return upload.emptyPromise();
+    }
+
+    function calculateDragOverClass(scope, attr, evt, callback) {
+      var obj = attrGetter('ngfDragOverClass', scope, {$event: evt}), dClass = 'dragover';
+      if (angular.isString(obj)) {
+        dClass = obj;
+      } else if (obj) {
+        if (obj.delay) dragOverDelay = obj.delay;
+        if (obj.accept || obj.reject) {
+          var items = evt.dataTransfer.items;
+          if (items == null || !items.length) {
+            dClass = obj.accept;
+          } else {
+            var pattern = obj.pattern || attrGetter('ngfPattern', scope, {$event: evt});
+            var len = items.length;
+            while (len--) {
+              if (!upload.validatePattern(items[len], pattern)) {
+                dClass = obj.reject;
+                break;
+              } else {
+                dClass = obj.accept;
+              }
+            }
+          }
+        }
+      }
+      callback(dClass);
+    }
+
+    function extractFiles(items, fileList, allowDir, multiple) {
+      var maxFiles = upload.getValidationAttr(attr, scope, 'maxFiles');
+      if (maxFiles == null) {
+        maxFiles = Number.MAX_VALUE;
+      }
+      var maxTotalSize = upload.getValidationAttr(attr, scope, 'maxTotalSize');
+      if (maxTotalSize == null) {
+        maxTotalSize = Number.MAX_VALUE;
+      }
+      var includeDir = attrGetter('ngfIncludeDir', scope);
+      var files = [], totalSize = 0;
+
+      function traverseFileTree(entry, path) {
+        var defer = $q.defer();
+        if (entry != null) {
+          if (entry.isDirectory) {
+            var promises = [upload.emptyPromise()];
+            if (includeDir) {
+              var file = {type: 'directory'};
+              file.name = file.path = (path || '') + entry.name;
+              files.push(file);
+            }
+            var dirReader = entry.createReader();
+            var entries = [];
+            var readEntries = function () {
+              dirReader.readEntries(function (results) {
+                try {
+                  if (!results.length) {
+                    angular.forEach(entries.slice(0), function (e) {
+                      if (files.length <= maxFiles && totalSize <= maxTotalSize) {
+                        promises.push(traverseFileTree(e, (path ? path : '') + entry.name + '/'));
+                      }
+                    });
+                    $q.all(promises).then(function () {
+                      defer.resolve();
+                    }, function (e) {
+                      defer.reject(e);
+                    });
+                  } else {
+                    entries = entries.concat(Array.prototype.slice.call(results || [], 0));
+                    readEntries();
+                  }
+                } catch (e) {
+                  defer.reject(e);
+                }
+              }, function (e) {
+                defer.reject(e);
+              });
+            };
+            readEntries();
+          } else {
+            entry.file(function (file) {
+              try {
+                file.path = (path ? path : '') + file.name;
+                if (includeDir) {
+                  file = upload.rename(file, file.path);
+                }
+                files.push(file);
+                totalSize += file.size;
+                defer.resolve();
+              } catch (e) {
+                defer.reject(e);
+              }
+            }, function (e) {
+              defer.reject(e);
+            });
+          }
+        }
+        return defer.promise;
+      }
+
+      var promises = [upload.emptyPromise()];
+
+      if (items && items.length > 0 && $window.location.protocol !== 'file:') {
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].webkitGetAsEntry && items[i].webkitGetAsEntry() && items[i].webkitGetAsEntry().isDirectory) {
+            var entry = items[i].webkitGetAsEntry();
+            if (entry.isDirectory && !allowDir) {
+              continue;
+            }
+            if (entry != null) {
+              promises.push(traverseFileTree(entry));
+            }
+          } else {
+            var f = items[i].getAsFile();
+            if (f != null) {
+              files.push(f);
+              totalSize += f.size;
+            }
+          }
+          if (files.length > maxFiles || totalSize > maxTotalSize ||
+            (!multiple && files.length > 0)) break;
+        }
+      } else {
+        if (fileList != null) {
+          for (var j = 0; j < fileList.length; j++) {
+            var file = fileList.item(j);
+            if (file.type || file.size > 0) {
+              files.push(file);
+              totalSize += file.size;
+            }
+            if (files.length > maxFiles || totalSize > maxTotalSize ||
+              (!multiple && files.length > 0)) break;
+          }
+        }
+      }
+
+      var defer = $q.defer();
+      $q.all(promises).then(function () {
+        if (!multiple && !includeDir && files.length) {
+          var i = 0;
+          while (files[i] && files[i].type === 'directory') i++;
+          defer.resolve([files[i]]);
+        } else {
+          defer.resolve(files);
+        }
+      }, function (e) {
+        defer.reject(e);
+      });
+
+      return defer.promise;
+    }
+  }
+
+  function dropAvailable() {
+    var div = document.createElement('div');
+    return ('draggable' in div) && ('ondrop' in div) && !/Edge\/12./i.test(navigator.userAgent);
+  }
+
+})();
+
+// customized version of https://github.com/exif-js/exif-js
+ngFileUpload.service('UploadExif', ['UploadResize', '$q', function (UploadResize, $q) {
+  var upload = UploadResize;
+
+  upload.isExifSupported = function () {
+    return window.FileReader && new FileReader().readAsArrayBuffer && upload.isResizeSupported();
+  };
+
+  function applyTransform(ctx, orientation, width, height) {
+    switch (orientation) {
+      case 2:
+        return ctx.transform(-1, 0, 0, 1, width, 0);
+      case 3:
+        return ctx.transform(-1, 0, 0, -1, width, height);
+      case 4:
+        return ctx.transform(1, 0, 0, -1, 0, height);
+      case 5:
+        return ctx.transform(0, 1, 1, 0, 0, 0);
+      case 6:
+        return ctx.transform(0, 1, -1, 0, height, 0);
+      case 7:
+        return ctx.transform(0, -1, -1, 0, height, width);
+      case 8:
+        return ctx.transform(0, -1, 1, 0, 0, width);
+    }
+  }
+
+  upload.readOrientation = function (file) {
+    var defer = $q.defer();
+    var reader = new FileReader();
+    var slicedFile = file.slice ? file.slice(0, 64 * 1024) : file;
+    reader.readAsArrayBuffer(slicedFile);
+    reader.onerror = function (e) {
+      return defer.reject(e);
+    };
+    reader.onload = function (e) {
+      var result = {orientation: 1};
+      var view = new DataView(this.result);
+      if (view.getUint16(0, false) !== 0xFFD8) return defer.resolve(result);
+
+      var length = view.byteLength,
+        offset = 2;
+      while (offset < length) {
+        var marker = view.getUint16(offset, false);
+        offset += 2;
+        if (marker === 0xFFE1) {
+          if (view.getUint32(offset += 2, false) !== 0x45786966) return defer.resolve(result);
+
+          var little = view.getUint16(offset += 6, false) === 0x4949;
+          offset += view.getUint32(offset + 4, little);
+          var tags = view.getUint16(offset, little);
+          offset += 2;
+          for (var i = 0; i < tags; i++)
+            if (view.getUint16(offset + (i * 12), little) === 0x0112) {
+              var orientation = view.getUint16(offset + (i * 12) + 8, little);
+              if (orientation >= 2 && orientation <= 8) {
+                view.setUint16(offset + (i * 12) + 8, 1, little);
+                result.fixedArrayBuffer = e.target.result;
+              }
+              result.orientation = orientation;
+              return defer.resolve(result);
+            }
+        } else if ((marker & 0xFF00) !== 0xFF00) break;
+        else offset += view.getUint16(offset, false);
+      }
+      return defer.resolve(result);
+    };
+    return defer.promise;
+  };
+
+  function arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
+
+  upload.applyExifRotation = function (file) {
+    if (file.type.indexOf('image/jpeg') !== 0) {
+      return upload.emptyPromise(file);
+    }
+
+    var deferred = $q.defer();
+    upload.readOrientation(file).then(function (result) {
+      if (result.orientation < 2 || result.orientation > 8) {
+        return deferred.resolve(file);
+      }
+      upload.dataUrl(file, true).then(function (url) {
+        var canvas = document.createElement('canvas');
+        var img = document.createElement('img');
+
+        img.onload = function () {
+          try {
+            canvas.width = result.orientation > 4 ? img.height : img.width;
+            canvas.height = result.orientation > 4 ? img.width : img.height;
+            var ctx = canvas.getContext('2d');
+            applyTransform(ctx, result.orientation, img.width, img.height);
+            ctx.drawImage(img, 0, 0);
+            var dataUrl = canvas.toDataURL(file.type || 'image/WebP', 0.934);
+            dataUrl = upload.restoreExif(arrayBufferToBase64(result.fixedArrayBuffer), dataUrl);
+            var blob = upload.dataUrltoBlob(dataUrl, file.name);
+            deferred.resolve(blob);
+          } catch (e) {
+            return deferred.reject(e);
+          }
+        };
+        img.onerror = function () {
+          deferred.reject();
+        };
+        img.src = url;
+      }, function (e) {
+        deferred.reject(e);
+      });
+    }, function (e) {
+      deferred.reject(e);
+    });
+    return deferred.promise;
+  };
+
+  upload.restoreExif = function (orig, resized) {
+    var ExifRestorer = {};
+
+    ExifRestorer.KEY_STR = 'ABCDEFGHIJKLMNOP' +
+      'QRSTUVWXYZabcdef' +
+      'ghijklmnopqrstuv' +
+      'wxyz0123456789+/' +
+      '=';
+
+    ExifRestorer.encode64 = function (input) {
+      var output = '',
+        chr1, chr2, chr3 = '',
+        enc1, enc2, enc3, enc4 = '',
+        i = 0;
+
+      do {
+        chr1 = input[i++];
+        chr2 = input[i++];
+        chr3 = input[i++];
+
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+
+        if (isNaN(chr2)) {
+          enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
+          enc4 = 64;
+        }
+
+        output = output +
+          this.KEY_STR.charAt(enc1) +
+          this.KEY_STR.charAt(enc2) +
+          this.KEY_STR.charAt(enc3) +
+          this.KEY_STR.charAt(enc4);
+        chr1 = chr2 = chr3 = '';
+        enc1 = enc2 = enc3 = enc4 = '';
+      } while (i < input.length);
+
+      return output;
+    };
+
+    ExifRestorer.restore = function (origFileBase64, resizedFileBase64) {
+      if (origFileBase64.match('data:image/jpeg;base64,')) {
+        origFileBase64 = origFileBase64.replace('data:image/jpeg;base64,', '');
+      }
+
+      var rawImage = this.decode64(origFileBase64);
+      var segments = this.slice2Segments(rawImage);
+
+      var image = this.exifManipulation(resizedFileBase64, segments);
+
+      return 'data:image/jpeg;base64,' + this.encode64(image);
+    };
+
+
+    ExifRestorer.exifManipulation = function (resizedFileBase64, segments) {
+      var exifArray = this.getExifArray(segments),
+        newImageArray = this.insertExif(resizedFileBase64, exifArray);
+      return new Uint8Array(newImageArray);
+    };
+
+
+    ExifRestorer.getExifArray = function (segments) {
+      var seg;
+      for (var x = 0; x < segments.length; x++) {
+        seg = segments[x];
+        if (seg[0] === 255 & seg[1] === 225) //(ff e1)
+        {
+          return seg;
+        }
+      }
+      return [];
+    };
+
+
+    ExifRestorer.insertExif = function (resizedFileBase64, exifArray) {
+      var imageData = resizedFileBase64.replace('data:image/jpeg;base64,', ''),
+        buf = this.decode64(imageData),
+        separatePoint = buf.indexOf(255, 3),
+        mae = buf.slice(0, separatePoint),
+        ato = buf.slice(separatePoint),
+        array = mae;
+
+      array = array.concat(exifArray);
+      array = array.concat(ato);
+      return array;
+    };
+
+
+    ExifRestorer.slice2Segments = function (rawImageArray) {
+      var head = 0,
+        segments = [];
+
+      while (1) {
+        if (rawImageArray[head] === 255 & rawImageArray[head + 1] === 218) {
+          break;
+        }
+        if (rawImageArray[head] === 255 & rawImageArray[head + 1] === 216) {
+          head += 2;
+        }
+        else {
+          var length = rawImageArray[head + 2] * 256 + rawImageArray[head + 3],
+            endPoint = head + length + 2,
+            seg = rawImageArray.slice(head, endPoint);
+          segments.push(seg);
+          head = endPoint;
+        }
+        if (head > rawImageArray.length) {
+          break;
+        }
+      }
+
+      return segments;
+    };
+
+
+    ExifRestorer.decode64 = function (input) {
+      var chr1, chr2, chr3 = '',
+        enc1, enc2, enc3, enc4 = '',
+        i = 0,
+        buf = [];
+
+      // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
+      var base64test = /[^A-Za-z0-9\+\/\=]/g;
+      if (base64test.exec(input)) {
+        console.log('There were invalid base64 characters in the input text.\n' +
+          'Valid base64 characters are A-Z, a-z, 0-9, ' + ', ' / ',and "="\n' +
+          'Expect errors in decoding.');
+      }
+      input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
+
+      do {
+        enc1 = this.KEY_STR.indexOf(input.charAt(i++));
+        enc2 = this.KEY_STR.indexOf(input.charAt(i++));
+        enc3 = this.KEY_STR.indexOf(input.charAt(i++));
+        enc4 = this.KEY_STR.indexOf(input.charAt(i++));
+
+        chr1 = (enc1 << 2) | (enc2 >> 4);
+        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+        chr3 = ((enc3 & 3) << 6) | enc4;
+
+        buf.push(chr1);
+
+        if (enc3 !== 64) {
+          buf.push(chr2);
+        }
+        if (enc4 !== 64) {
+          buf.push(chr3);
+        }
+
+        chr1 = chr2 = chr3 = '';
+        enc1 = enc2 = enc3 = enc4 = '';
+
+      } while (i < input.length);
+
+      return buf;
+    };
+
+    return ExifRestorer.restore(orig, resized);  //<= EXIF
+  };
+
+  return upload;
+}]);
+
+
+/*! ngImgCrop v0.3.2 License: MIT */!function(){"use strict";var e=angular.module("ngImgCrop",[]);e.factory("cropAreaCircle",["cropArea",function(e){var t=function(){e.apply(this,arguments),this._boxResizeBaseSize=20,this._boxResizeNormalRatio=.9,this._boxResizeHoverRatio=1.2,this._iconMoveNormalRatio=.9,this._iconMoveHoverRatio=1.2,this._boxResizeNormalSize=this._boxResizeBaseSize*this._boxResizeNormalRatio,this._boxResizeHoverSize=this._boxResizeBaseSize*this._boxResizeHoverRatio,this._posDragStartX=0,this._posDragStartY=0,this._posResizeStartX=0,this._posResizeStartY=0,this._posResizeStartSize=0,this._boxResizeIsHover=!1,this._areaIsHover=!1,this._boxResizeIsDragging=!1,this._areaIsDragging=!1};return t.prototype=new e,t.prototype._calcCirclePerimeterCoords=function(e){var t=this._size/2,i=e*(Math.PI/180),r=this._x+t*Math.cos(i),s=this._y+t*Math.sin(i);return[r,s]},t.prototype._calcResizeIconCenterCoords=function(){return this._calcCirclePerimeterCoords(-45)},t.prototype._isCoordWithinArea=function(e){return Math.sqrt((e[0]-this._x)*(e[0]-this._x)+(e[1]-this._y)*(e[1]-this._y))<this._size/2},t.prototype._isCoordWithinBoxResize=function(e){var t=this._calcResizeIconCenterCoords(),i=this._boxResizeHoverSize/2;return e[0]>t[0]-i&&e[0]<t[0]+i&&e[1]>t[1]-i&&e[1]<t[1]+i},t.prototype._drawArea=function(e,t,i){e.arc(t[0],t[1],i/2,0,2*Math.PI)},t.prototype.draw=function(){e.prototype.draw.apply(this,arguments),this._cropCanvas.drawIconMove([this._x,this._y],this._areaIsHover?this._iconMoveHoverRatio:this._iconMoveNormalRatio),this._cropCanvas.drawIconResizeBoxNESW(this._calcResizeIconCenterCoords(),this._boxResizeBaseSize,this._boxResizeIsHover?this._boxResizeHoverRatio:this._boxResizeNormalRatio)},t.prototype.processMouseMove=function(e,t){var i="default",r=!1;if(this._boxResizeIsHover=!1,this._areaIsHover=!1,this._areaIsDragging)this._x=e-this._posDragStartX,this._y=t-this._posDragStartY,this._areaIsHover=!0,i="move",r=!0,this._events.trigger("area-move");else if(this._boxResizeIsDragging){i="nesw-resize";var s,o,a;o=e-this._posResizeStartX,a=this._posResizeStartY-t,s=o>a?this._posResizeStartSize+2*a:this._posResizeStartSize+2*o,this._size=Math.max(this._minSize,s),this._boxResizeIsHover=!0,r=!0,this._events.trigger("area-resize")}else this._isCoordWithinBoxResize([e,t])?(i="nesw-resize",this._areaIsHover=!1,this._boxResizeIsHover=!0,r=!0):this._isCoordWithinArea([e,t])&&(i="move",this._areaIsHover=!0,r=!0);return this._dontDragOutside(),angular.element(this._ctx.canvas).css({cursor:i}),r},t.prototype.processMouseDown=function(e,t){this._isCoordWithinBoxResize([e,t])?(this._areaIsDragging=!1,this._areaIsHover=!1,this._boxResizeIsDragging=!0,this._boxResizeIsHover=!0,this._posResizeStartX=e,this._posResizeStartY=t,this._posResizeStartSize=this._size,this._events.trigger("area-resize-start")):this._isCoordWithinArea([e,t])&&(this._areaIsDragging=!0,this._areaIsHover=!0,this._boxResizeIsDragging=!1,this._boxResizeIsHover=!1,this._posDragStartX=e-this._x,this._posDragStartY=t-this._y,this._events.trigger("area-move-start"))},t.prototype.processMouseUp=function(){this._areaIsDragging&&(this._areaIsDragging=!1,this._events.trigger("area-move-end")),this._boxResizeIsDragging&&(this._boxResizeIsDragging=!1,this._events.trigger("area-resize-end")),this._areaIsHover=!1,this._boxResizeIsHover=!1,this._posDragStartX=0,this._posDragStartY=0},t}]),e.factory("cropAreaSquare",["cropArea",function(e){var t=function(){e.apply(this,arguments),this._resizeCtrlBaseRadius=10,this._resizeCtrlNormalRatio=.75,this._resizeCtrlHoverRatio=1,this._iconMoveNormalRatio=.9,this._iconMoveHoverRatio=1.2,this._resizeCtrlNormalRadius=this._resizeCtrlBaseRadius*this._resizeCtrlNormalRatio,this._resizeCtrlHoverRadius=this._resizeCtrlBaseRadius*this._resizeCtrlHoverRatio,this._posDragStartX=0,this._posDragStartY=0,this._posResizeStartX=0,this._posResizeStartY=0,this._posResizeStartSize=0,this._resizeCtrlIsHover=-1,this._areaIsHover=!1,this._resizeCtrlIsDragging=-1,this._areaIsDragging=!1};return t.prototype=new e,t.prototype._calcSquareCorners=function(){var e=this._size/2;return[[this._x-e,this._y-e],[this._x+e,this._y-e],[this._x-e,this._y+e],[this._x+e,this._y+e]]},t.prototype._calcSquareDimensions=function(){var e=this._size/2;return{left:this._x-e,top:this._y-e,right:this._x+e,bottom:this._y+e}},t.prototype._isCoordWithinArea=function(e){var t=this._calcSquareDimensions();return e[0]>=t.left&&e[0]<=t.right&&e[1]>=t.top&&e[1]<=t.bottom},t.prototype._isCoordWithinResizeCtrl=function(e){for(var t=this._calcSquareCorners(),i=-1,r=0,s=t.length;s>r;r++){var o=t[r];if(e[0]>o[0]-this._resizeCtrlHoverRadius&&e[0]<o[0]+this._resizeCtrlHoverRadius&&e[1]>o[1]-this._resizeCtrlHoverRadius&&e[1]<o[1]+this._resizeCtrlHoverRadius){i=r;break}}return i},t.prototype._drawArea=function(e,t,i){var r=i/2;e.rect(t[0]-r,t[1]-r,i,i)},t.prototype.draw=function(){e.prototype.draw.apply(this,arguments),this._cropCanvas.drawIconMove([this._x,this._y],this._areaIsHover?this._iconMoveHoverRatio:this._iconMoveNormalRatio);for(var t=this._calcSquareCorners(),i=0,r=t.length;r>i;i++){var s=t[i];this._cropCanvas.drawIconResizeCircle(s,this._resizeCtrlBaseRadius,this._resizeCtrlIsHover===i?this._resizeCtrlHoverRatio:this._resizeCtrlNormalRatio)}},t.prototype.processMouseMove=function(e,t){var i="default",r=!1;if(this._resizeCtrlIsHover=-1,this._areaIsHover=!1,this._areaIsDragging)this._x=e-this._posDragStartX,this._y=t-this._posDragStartY,this._areaIsHover=!0,i="move",r=!0,this._events.trigger("area-move");else if(this._resizeCtrlIsDragging>-1){var s,o;switch(this._resizeCtrlIsDragging){case 0:s=-1,o=-1,i="nwse-resize";break;case 1:s=1,o=-1,i="nesw-resize";break;case 2:s=-1,o=1,i="nesw-resize";break;case 3:s=1,o=1,i="nwse-resize"}var a,n=(e-this._posResizeStartX)*s,h=(t-this._posResizeStartY)*o;a=n>h?this._posResizeStartSize+h:this._posResizeStartSize+n;var c=this._size;this._size=Math.max(this._minSize,a);var l=(this._size-c)/2;this._x+=l*s,this._y+=l*o,this._resizeCtrlIsHover=this._resizeCtrlIsDragging,r=!0,this._events.trigger("area-resize")}else{var u=this._isCoordWithinResizeCtrl([e,t]);if(u>-1){switch(u){case 0:i="nwse-resize";break;case 1:i="nesw-resize";break;case 2:i="nesw-resize";break;case 3:i="nwse-resize"}this._areaIsHover=!1,this._resizeCtrlIsHover=u,r=!0}else this._isCoordWithinArea([e,t])&&(i="move",this._areaIsHover=!0,r=!0)}return this._dontDragOutside(),angular.element(this._ctx.canvas).css({cursor:i}),r},t.prototype.processMouseDown=function(e,t){var i=this._isCoordWithinResizeCtrl([e,t]);i>-1?(this._areaIsDragging=!1,this._areaIsHover=!1,this._resizeCtrlIsDragging=i,this._resizeCtrlIsHover=i,this._posResizeStartX=e,this._posResizeStartY=t,this._posResizeStartSize=this._size,this._events.trigger("area-resize-start")):this._isCoordWithinArea([e,t])&&(this._areaIsDragging=!0,this._areaIsHover=!0,this._resizeCtrlIsDragging=-1,this._resizeCtrlIsHover=-1,this._posDragStartX=e-this._x,this._posDragStartY=t-this._y,this._events.trigger("area-move-start"))},t.prototype.processMouseUp=function(){this._areaIsDragging&&(this._areaIsDragging=!1,this._events.trigger("area-move-end")),this._resizeCtrlIsDragging>-1&&(this._resizeCtrlIsDragging=-1,this._events.trigger("area-resize-end")),this._areaIsHover=!1,this._resizeCtrlIsHover=-1,this._posDragStartX=0,this._posDragStartY=0},t}]),e.factory("cropArea",["cropCanvas",function(e){var t=function(t,i){this._ctx=t,this._events=i,this._minSize=80,this._cropCanvas=new e(t),this._image=new Image,this._x=0,this._y=0,this._size=200};return t.prototype.getImage=function(){return this._image},t.prototype.setImage=function(e){this._image=e},t.prototype.getX=function(){return this._x},t.prototype.setX=function(e){this._x=e,this._dontDragOutside()},t.prototype.getY=function(){return this._y},t.prototype.setY=function(e){this._y=e,this._dontDragOutside()},t.prototype.getSize=function(){return this._size},t.prototype.setSize=function(e){this._size=Math.max(this._minSize,e),this._dontDragOutside()},t.prototype.getMinSize=function(){return this._minSize},t.prototype.setMinSize=function(e){this._minSize=e,this._size=Math.max(this._minSize,this._size),this._dontDragOutside()},t.prototype._dontDragOutside=function(){var e=this._ctx.canvas.height,t=this._ctx.canvas.width;this._size>t&&(this._size=t),this._size>e&&(this._size=e),this._x<this._size/2&&(this._x=this._size/2),this._x>t-this._size/2&&(this._x=t-this._size/2),this._y<this._size/2&&(this._y=this._size/2),this._y>e-this._size/2&&(this._y=e-this._size/2)},t.prototype._drawArea=function(){},t.prototype.draw=function(){this._cropCanvas.drawCropArea(this._image,[this._x,this._y],this._size,this._drawArea)},t.prototype.processMouseMove=function(){},t.prototype.processMouseDown=function(){},t.prototype.processMouseUp=function(){},t}]),e.factory("cropCanvas",[function(){var e=[[-.5,-2],[-3,-4.5],[-.5,-7],[-7,-7],[-7,-.5],[-4.5,-3],[-2,-.5]],t=[[.5,-2],[3,-4.5],[.5,-7],[7,-7],[7,-.5],[4.5,-3],[2,-.5]],i=[[-.5,2],[-3,4.5],[-.5,7],[-7,7],[-7,.5],[-4.5,3],[-2,.5]],r=[[.5,2],[3,4.5],[.5,7],[7,7],[7,.5],[4.5,3],[2,.5]],s=[[-1.5,-2.5],[-1.5,-6],[-5,-6],[0,-11],[5,-6],[1.5,-6],[1.5,-2.5]],o=[[-2.5,-1.5],[-6,-1.5],[-6,-5],[-11,0],[-6,5],[-6,1.5],[-2.5,1.5]],a=[[-1.5,2.5],[-1.5,6],[-5,6],[0,11],[5,6],[1.5,6],[1.5,2.5]],n=[[2.5,-1.5],[6,-1.5],[6,-5],[11,0],[6,5],[6,1.5],[2.5,1.5]],h={areaOutline:"#fff",resizeBoxStroke:"#fff",resizeBoxFill:"#444",resizeBoxArrowFill:"#fff",resizeCircleStroke:"#fff",resizeCircleFill:"#444",moveIconFill:"#fff"};return function(c){var l=function(e,t,i){return[i*e[0]+t[0],i*e[1]+t[1]]},u=function(e,t,i,r){c.save(),c.fillStyle=t,c.beginPath();var s,o=l(e[0],i,r);c.moveTo(o[0],o[1]);for(var a in e)a>0&&(s=l(e[a],i,r),c.lineTo(s[0],s[1]));c.lineTo(o[0],o[1]),c.fill(),c.closePath(),c.restore()};this.drawIconMove=function(e,t){u(s,h.moveIconFill,e,t),u(o,h.moveIconFill,e,t),u(a,h.moveIconFill,e,t),u(n,h.moveIconFill,e,t)},this.drawIconResizeCircle=function(e,t,i){var r=t*i;c.save(),c.strokeStyle=h.resizeCircleStroke,c.lineWidth=2,c.fillStyle=h.resizeCircleFill,c.beginPath(),c.arc(e[0],e[1],r,0,2*Math.PI),c.fill(),c.stroke(),c.closePath(),c.restore()},this.drawIconResizeBoxBase=function(e,t,i){var r=t*i;c.save(),c.strokeStyle=h.resizeBoxStroke,c.lineWidth=2,c.fillStyle=h.resizeBoxFill,c.fillRect(e[0]-r/2,e[1]-r/2,r,r),c.strokeRect(e[0]-r/2,e[1]-r/2,r,r),c.restore()},this.drawIconResizeBoxNESW=function(e,r,s){this.drawIconResizeBoxBase(e,r,s),u(t,h.resizeBoxArrowFill,e,s),u(i,h.resizeBoxArrowFill,e,s)},this.drawIconResizeBoxNWSE=function(t,i,s){this.drawIconResizeBoxBase(t,i,s),u(e,h.resizeBoxArrowFill,t,s),u(r,h.resizeBoxArrowFill,t,s)},this.drawCropArea=function(e,t,i,r){var s=e.width/c.canvas.width,o=e.height/c.canvas.height,a=t[0]-i/2,n=t[1]-i/2;c.save(),c.strokeStyle=h.areaOutline,c.lineWidth=2,c.beginPath(),r(c,t,i),c.stroke(),c.clip(),i>0&&c.drawImage(e,a*s,n*o,i*s,i*o,a,n,i,i),c.beginPath(),r(c,t,i),c.stroke(),c.clip(),c.restore()}}}]),e.service("cropEXIF",[function(){function e(e){return!!e.exifdata}function t(e,t){t=t||e.match(/^data\:([^\;]+)\;base64,/im)[1]||"",e=e.replace(/^data\:([^\;]+)\;base64,/gim,"");for(var i=atob(e),r=i.length,s=new ArrayBuffer(r),o=new Uint8Array(s),a=0;r>a;a++)o[a]=i.charCodeAt(a);return s}function i(e,t){var i=new XMLHttpRequest;i.open("GET",e,!0),i.responseType="blob",i.onload=function(){(200==this.status||0===this.status)&&t(this.response)},i.send()}function r(e,r){function a(t){var i=s(t),a=o(t);e.exifdata=i||{},e.iptcdata=a||{},r&&r.call(e)}if(e.src)if(/^data\:/i.test(e.src)){var n=t(e.src);a(n)}else if(/^blob\:/i.test(e.src)){var h=new FileReader;h.onload=function(e){a(e.target.result)},i(e.src,function(e){h.readAsArrayBuffer(e)})}else{var c=new XMLHttpRequest;c.onload=function(){if(200!=this.status&&0!==this.status)throw"Could not load image";a(c.response),c=null},c.open("GET",e.src,!0),c.responseType="arraybuffer",c.send(null)}else if(window.FileReader&&(e instanceof window.Blob||e instanceof window.File)){var h=new FileReader;h.onload=function(e){u&&console.log("Got file of length "+e.target.result.byteLength),a(e.target.result)},h.readAsArrayBuffer(e)}}function s(e){var t=new DataView(e);if(u&&console.log("Got file of length "+e.byteLength),255!=t.getUint8(0)||216!=t.getUint8(1))return u&&console.log("Not a valid JPEG"),!1;for(var i,r=2,s=e.byteLength;s>r;){if(255!=t.getUint8(r))return u&&console.log("Not a valid marker at offset "+r+", found: "+t.getUint8(r)),!1;if(i=t.getUint8(r+1),u&&console.log(i),225==i)return u&&console.log("Found 0xFFE1 marker"),l(t,r+4,t.getUint16(r+2)-2);r+=2+t.getUint16(r+2)}}function o(e){var t=new DataView(e);if(u&&console.log("Got file of length "+e.byteLength),255!=t.getUint8(0)||216!=t.getUint8(1))return u&&console.log("Not a valid JPEG"),!1;for(var i=2,r=e.byteLength,s=function(e,t){return 56===e.getUint8(t)&&66===e.getUint8(t+1)&&73===e.getUint8(t+2)&&77===e.getUint8(t+3)&&4===e.getUint8(t+4)&&4===e.getUint8(t+5)};r>i;){if(s(t,i)){var o=t.getUint8(i+7);o%2!==0&&(o+=1),0===o&&(o=4);var n=i+8+o,h=t.getUint16(i+6+o);return a(e,n,h)}i++}}function a(e,t,i){for(var r,s,o,a,n,h=new DataView(e),l={},u=t;t+i>u;)28===h.getUint8(u)&&2===h.getUint8(u+1)&&(a=h.getUint8(u+2),a in _&&(o=h.getInt16(u+3),n=o+5,s=_[a],r=c(h,u+5,o),l.hasOwnProperty(s)?l[s]instanceof Array?l[s].push(r):l[s]=[l[s],r]:l[s]=r)),u++;return l}function n(e,t,i,r,s){var o,a,n,c=e.getUint16(i,!s),l={};for(n=0;c>n;n++)o=i+12*n+2,a=r[e.getUint16(o,!s)],!a&&u&&console.log("Unknown tag: "+e.getUint16(o,!s)),l[a]=h(e,o,t,i,s);return l}function h(e,t,i,r,s){var o,a,n,h,l,u,g=e.getUint16(t+2,!s),d=e.getUint32(t+4,!s),f=e.getUint32(t+8,!s)+i;switch(g){case 1:case 7:if(1==d)return e.getUint8(t+8,!s);for(o=d>4?f:t+8,a=[],h=0;d>h;h++)a[h]=e.getUint8(o+h);return a;case 2:return o=d>4?f:t+8,c(e,o,d-1);case 3:if(1==d)return e.getUint16(t+8,!s);for(o=d>2?f:t+8,a=[],h=0;d>h;h++)a[h]=e.getUint16(o+2*h,!s);return a;case 4:if(1==d)return e.getUint32(t+8,!s);for(a=[],h=0;d>h;h++)a[h]=e.getUint32(f+4*h,!s);return a;case 5:if(1==d)return l=e.getUint32(f,!s),u=e.getUint32(f+4,!s),n=new Number(l/u),n.numerator=l,n.denominator=u,n;for(a=[],h=0;d>h;h++)l=e.getUint32(f+8*h,!s),u=e.getUint32(f+4+8*h,!s),a[h]=new Number(l/u),a[h].numerator=l,a[h].denominator=u;return a;case 9:if(1==d)return e.getInt32(t+8,!s);for(a=[],h=0;d>h;h++)a[h]=e.getInt32(f+4*h,!s);return a;case 10:if(1==d)return e.getInt32(f,!s)/e.getInt32(f+4,!s);for(a=[],h=0;d>h;h++)a[h]=e.getInt32(f+8*h,!s)/e.getInt32(f+4+8*h,!s);return a}}function c(e,t,i){for(var r="",s=t;t+i>s;s++)r+=String.fromCharCode(e.getUint8(s));return r}function l(e,t){if("Exif"!=c(e,t,4))return u&&console.log("Not valid EXIF data! "+c(e,t,4)),!1;var i,r,s,o,a,h=t+6;if(18761==e.getUint16(h))i=!1;else{if(19789!=e.getUint16(h))return u&&console.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)"),!1;i=!0}if(42!=e.getUint16(h+2,!i))return u&&console.log("Not valid TIFF data! (no 0x002A)"),!1;var l=e.getUint32(h+4,!i);if(8>l)return u&&console.log("Not valid TIFF data! (First offset less than 8)",e.getUint32(h+4,!i)),!1;if(r=n(e,h,h+l,d,i),r.ExifIFDPointer){o=n(e,h,h+r.ExifIFDPointer,g,i);for(s in o){switch(s){case"LightSource":case"Flash":case"MeteringMode":case"ExposureProgram":case"SensingMethod":case"SceneCaptureType":case"SceneType":case"CustomRendered":case"WhiteBalance":case"GainControl":case"Contrast":case"Saturation":case"Sharpness":case"SubjectDistanceRange":case"FileSource":o[s]=p[s][o[s]];break;case"ExifVersion":case"FlashpixVersion":o[s]=String.fromCharCode(o[s][0],o[s][1],o[s][2],o[s][3]);break;case"ComponentsConfiguration":o[s]=p.Components[o[s][0]]+p.Components[o[s][1]]+p.Components[o[s][2]]+p.Components[o[s][3]]}r[s]=o[s]}}if(r.GPSInfoIFDPointer){a=n(e,h,h+r.GPSInfoIFDPointer,f,i);for(s in a){switch(s){case"GPSVersionID":a[s]=a[s][0]+"."+a[s][1]+"."+a[s][2]+"."+a[s][3]}r[s]=a[s]}}return r}var u=!1,g=this.Tags={36864:"ExifVersion",40960:"FlashpixVersion",40961:"ColorSpace",40962:"PixelXDimension",40963:"PixelYDimension",37121:"ComponentsConfiguration",37122:"CompressedBitsPerPixel",37500:"MakerNote",37510:"UserComment",40964:"RelatedSoundFile",36867:"DateTimeOriginal",36868:"DateTimeDigitized",37520:"SubsecTime",37521:"SubsecTimeOriginal",37522:"SubsecTimeDigitized",33434:"ExposureTime",33437:"FNumber",34850:"ExposureProgram",34852:"SpectralSensitivity",34855:"ISOSpeedRatings",34856:"OECF",37377:"ShutterSpeedValue",37378:"ApertureValue",37379:"BrightnessValue",37380:"ExposureBias",37381:"MaxApertureValue",37382:"SubjectDistance",37383:"MeteringMode",37384:"LightSource",37385:"Flash",37396:"SubjectArea",37386:"FocalLength",41483:"FlashEnergy",41484:"SpatialFrequencyResponse",41486:"FocalPlaneXResolution",41487:"FocalPlaneYResolution",41488:"FocalPlaneResolutionUnit",41492:"SubjectLocation",41493:"ExposureIndex",41495:"SensingMethod",41728:"FileSource",41729:"SceneType",41730:"CFAPattern",41985:"CustomRendered",41986:"ExposureMode",41987:"WhiteBalance",41988:"DigitalZoomRation",41989:"FocalLengthIn35mmFilm",41990:"SceneCaptureType",41991:"GainControl",41992:"Contrast",41993:"Saturation",41994:"Sharpness",41995:"DeviceSettingDescription",41996:"SubjectDistanceRange",40965:"InteroperabilityIFDPointer",42016:"ImageUniqueID"},d=this.TiffTags={256:"ImageWidth",257:"ImageHeight",34665:"ExifIFDPointer",34853:"GPSInfoIFDPointer",40965:"InteroperabilityIFDPointer",258:"BitsPerSample",259:"Compression",262:"PhotometricInterpretation",274:"Orientation",277:"SamplesPerPixel",284:"PlanarConfiguration",530:"YCbCrSubSampling",531:"YCbCrPositioning",282:"XResolution",283:"YResolution",296:"ResolutionUnit",273:"StripOffsets",278:"RowsPerStrip",279:"StripByteCounts",513:"JPEGInterchangeFormat",514:"JPEGInterchangeFormatLength",301:"TransferFunction",318:"WhitePoint",319:"PrimaryChromaticities",529:"YCbCrCoefficients",532:"ReferenceBlackWhite",306:"DateTime",270:"ImageDescription",271:"Make",272:"Model",305:"Software",315:"Artist",33432:"Copyright"},f=this.GPSTags={0:"GPSVersionID",1:"GPSLatitudeRef",2:"GPSLatitude",3:"GPSLongitudeRef",4:"GPSLongitude",5:"GPSAltitudeRef",6:"GPSAltitude",7:"GPSTimeStamp",8:"GPSSatellites",9:"GPSStatus",10:"GPSMeasureMode",11:"GPSDOP",12:"GPSSpeedRef",13:"GPSSpeed",14:"GPSTrackRef",15:"GPSTrack",16:"GPSImgDirectionRef",17:"GPSImgDirection",18:"GPSMapDatum",19:"GPSDestLatitudeRef",20:"GPSDestLatitude",21:"GPSDestLongitudeRef",22:"GPSDestLongitude",23:"GPSDestBearingRef",24:"GPSDestBearing",25:"GPSDestDistanceRef",26:"GPSDestDistance",27:"GPSProcessingMethod",28:"GPSAreaInformation",29:"GPSDateStamp",30:"GPSDifferential"},p=this.StringValues={ExposureProgram:{0:"Not defined",1:"Manual",2:"Normal program",3:"Aperture priority",4:"Shutter priority",5:"Creative program",6:"Action program",7:"Portrait mode",8:"Landscape mode"},MeteringMode:{0:"Unknown",1:"Average",2:"CenterWeightedAverage",3:"Spot",4:"MultiSpot",5:"Pattern",6:"Partial",255:"Other"},LightSource:{0:"Unknown",1:"Daylight",2:"Fluorescent",3:"Tungsten (incandescent light)",4:"Flash",9:"Fine weather",10:"Cloudy weather",11:"Shade",12:"Daylight fluorescent (D 5700 - 7100K)",13:"Day white fluorescent (N 4600 - 5400K)",14:"Cool white fluorescent (W 3900 - 4500K)",15:"White fluorescent (WW 3200 - 3700K)",17:"Standard light A",18:"Standard light B",19:"Standard light C",20:"D55",21:"D65",22:"D75",23:"D50",24:"ISO studio tungsten",255:"Other"},Flash:{0:"Flash did not fire",1:"Flash fired",5:"Strobe return light not detected",7:"Strobe return light detected",9:"Flash fired, compulsory flash mode",13:"Flash fired, compulsory flash mode, return light not detected",15:"Flash fired, compulsory flash mode, return light detected",16:"Flash did not fire, compulsory flash mode",24:"Flash did not fire, auto mode",25:"Flash fired, auto mode",29:"Flash fired, auto mode, return light not detected",31:"Flash fired, auto mode, return light detected",32:"No flash function",65:"Flash fired, red-eye reduction mode",69:"Flash fired, red-eye reduction mode, return light not detected",71:"Flash fired, red-eye reduction mode, return light detected",73:"Flash fired, compulsory flash mode, red-eye reduction mode",77:"Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",79:"Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",89:"Flash fired, auto mode, red-eye reduction mode",93:"Flash fired, auto mode, return light not detected, red-eye reduction mode",95:"Flash fired, auto mode, return light detected, red-eye reduction mode"},SensingMethod:{1:"Not defined",2:"One-chip color area sensor",3:"Two-chip color area sensor",4:"Three-chip color area sensor",5:"Color sequential area sensor",7:"Trilinear sensor",8:"Color sequential linear sensor"},SceneCaptureType:{0:"Standard",1:"Landscape",2:"Portrait",3:"Night scene"},SceneType:{1:"Directly photographed"},CustomRendered:{0:"Normal process",1:"Custom process"},WhiteBalance:{0:"Auto white balance",1:"Manual white balance"},GainControl:{0:"None",1:"Low gain up",2:"High gain up",3:"Low gain down",4:"High gain down"},Contrast:{0:"Normal",1:"Soft",2:"Hard"},Saturation:{0:"Normal",1:"Low saturation",2:"High saturation"},Sharpness:{0:"Normal",1:"Soft",2:"Hard"},SubjectDistanceRange:{0:"Unknown",1:"Macro",2:"Close view",3:"Distant view"},FileSource:{3:"DSC"},Components:{0:"",1:"Y",2:"Cb",3:"Cr",4:"R",5:"G",6:"B"}},_={120:"caption",110:"credit",25:"keywords",55:"dateCreated",80:"byline",85:"bylineTitle",122:"captionWriter",105:"headline",116:"copyright",15:"category"};this.getData=function(t,i){return(t instanceof Image||t instanceof HTMLImageElement)&&!t.complete?!1:(e(t)?i&&i.call(t):r(t,i),!0)},this.getTag=function(t,i){return e(t)?t.exifdata[i]:void 0},this.getAllTags=function(t){if(!e(t))return{};var i,r=t.exifdata,s={};for(i in r)r.hasOwnProperty(i)&&(s[i]=r[i]);return s},this.pretty=function(t){if(!e(t))return"";var i,r=t.exifdata,s="";for(i in r)r.hasOwnProperty(i)&&(s+="object"==typeof r[i]?r[i]instanceof Number?i+" : "+r[i]+" ["+r[i].numerator+"/"+r[i].denominator+"]\r\n":i+" : ["+r[i].length+" values]\r\n":i+" : "+r[i]+"\r\n");return s},this.readFromBinaryFile=function(e){return s(e)}}]),e.factory("cropHost",["$document","cropAreaCircle","cropAreaSquare","cropEXIF",function(e,t,i,r){var s=function(e){var t=e.getBoundingClientRect(),i=document.body,r=document.documentElement,s=window.pageYOffset||r.scrollTop||i.scrollTop,o=window.pageXOffset||r.scrollLeft||i.scrollLeft,a=r.clientTop||i.clientTop||0,n=r.clientLeft||i.clientLeft||0,h=t.top+s-a,c=t.left+o-n;return{top:Math.round(h),left:Math.round(c)}};return function(o,a,n){function h(){c.clearRect(0,0,c.canvas.width,c.canvas.height),null!==l&&(c.drawImage(l,0,0,c.canvas.width,c.canvas.height),c.save(),c.fillStyle="rgba(0, 0, 0, 0.65)",c.fillRect(0,0,c.canvas.width,c.canvas.height),c.restore(),u.draw())}var c=null,l=null,u=null,g=[100,100],d=[300,300],f=200,p="image/png",_=null,m=function(){if(null!==l){u.setImage(l);var e=[l.width,l.height],t=l.width/l.height,i=e;i[0]>d[0]?(i[0]=d[0],i[1]=i[0]/t):i[0]<g[0]&&(i[0]=g[0],i[1]=i[0]/t),i[1]>d[1]?(i[1]=d[1],i[0]=i[1]*t):i[1]<g[1]&&(i[1]=g[1],i[0]=i[1]*t),o.prop("width",i[0]).prop("height",i[1]).css({"margin-left":-i[0]/2+"px","margin-top":-i[1]/2+"px"}),u.setX(c.canvas.width/2),u.setY(c.canvas.height/2),u.setSize(Math.min(200,c.canvas.width/2,c.canvas.height/2))}else o.prop("width",0).prop("height",0).css({"margin-top":0});h()},v=function(e){return angular.isDefined(e.changedTouches)?e.changedTouches:e.originalEvent.changedTouches},S=function(e){if(null!==l){var t,i,r=s(c.canvas);"touchmove"===e.type?(t=v(e)[0].pageX,i=v(e)[0].pageY):(t=e.pageX,i=e.pageY),u.processMouseMove(t-r.left,i-r.top),h()}},z=function(e){if(e.preventDefault(),e.stopPropagation(),null!==l){var t,i,r=s(c.canvas);"touchstart"===e.type?(t=v(e)[0].pageX,i=v(e)[0].pageY):(t=e.pageX,i=e.pageY),u.processMouseDown(t-r.left,i-r.top),h()}},I=function(e){if(null!==l){var t,i,r=s(c.canvas);"touchend"===e.type?(t=v(e)[0].pageX,i=v(e)[0].pageY):(t=e.pageX,i=e.pageY),u.processMouseUp(t-r.left,i-r.top),h()}};this.getResultImageDataURI=function(){var e,t;return t=angular.element("<canvas></canvas>")[0],e=t.getContext("2d"),t.width=f,t.height=f,null!==l&&e.drawImage(l,(u.getX()-u.getSize()/2)*(l.width/c.canvas.width),(u.getY()-u.getSize()/2)*(l.height/c.canvas.height),u.getSize()*(l.width/c.canvas.width),u.getSize()*(l.height/c.canvas.height),0,0,f,f),null!==_?t.toDataURL(p,_):t.toDataURL(p)},this.setNewImageSource=function(e){if(l=null,m(),n.trigger("image-updated"),e){var t=new Image;"http"===e.substring(0,4).toLowerCase()&&(t.crossOrigin="anonymous"),t.onload=function(){n.trigger("load-done"),r.getData(t,function(){var e=r.getTag(t,"Orientation");if([3,6,8].indexOf(e)>-1){var i=document.createElement("canvas"),s=i.getContext("2d"),o=t.width,a=t.height,h=0,c=0,u=0;switch(e){case 3:h=-t.width,c=-t.height,u=180;break;case 6:o=t.height,a=t.width,c=-t.height,u=90;break;case 8:o=t.height,a=t.width,h=-t.width,u=270}i.width=o,i.height=a,s.rotate(u*Math.PI/180),s.drawImage(t,h,c),l=new Image,l.src=i.toDataURL("image/png")}else l=t;m(),n.trigger("image-updated")})},t.onerror=function(){n.trigger("load-error")},n.trigger("load-start"),t.src=e}},this.setMaxDimensions=function(e,t){if(d=[e,t],null!==l){var i=c.canvas.width,r=c.canvas.height,s=[l.width,l.height],a=l.width/l.height,n=s;n[0]>d[0]?(n[0]=d[0],n[1]=n[0]/a):n[0]<g[0]&&(n[0]=g[0],n[1]=n[0]/a),n[1]>d[1]?(n[1]=d[1],n[0]=n[1]*a):n[1]<g[1]&&(n[1]=g[1],n[0]=n[1]*a),o.prop("width",n[0]).prop("height",n[1]).css({"margin-left":-n[0]/2+"px","margin-top":-n[1]/2+"px"});var f=c.canvas.width/i,p=c.canvas.height/r,_=Math.min(f,p);u.setX(u.getX()*f),u.setY(u.getY()*p),u.setSize(u.getSize()*_)}else o.prop("width",0).prop("height",0).css({"margin-top":0});h()},this.setAreaMinSize=function(e){e=parseInt(e,10),isNaN(e)||(u.setMinSize(e),h())},this.setResultImageSize=function(e){e=parseInt(e,10),isNaN(e)||(f=e)},this.setResultImageFormat=function(e){p=e},this.setResultImageQuality=function(e){e=parseFloat(e),!isNaN(e)&&e>=0&&1>=e&&(_=e)},this.setAreaType=function(e){var r=u.getSize(),s=u.getMinSize(),o=u.getX(),a=u.getY(),g=t;"square"===e&&(g=i),u=new g(c,n),u.setMinSize(s),u.setSize(r),u.setX(o),u.setY(a),null!==l&&u.setImage(l),h()},c=o[0].getContext("2d"),u=new t(c,n),e.on("mousemove",S),o.on("mousedown",z),e.on("mouseup",I),e.on("touchmove",S),o.on("touchstart",z),e.on("touchend",I),this.destroy=function(){e.off("mousemove",S),o.off("mousedown",z),e.off("mouseup",S),e.off("touchmove",S),o.off("touchstart",z),e.off("touchend",S),o.remove()}}}]),e.factory("cropPubSub",[function(){return function(){var e={};this.on=function(t,i){return t.split(" ").forEach(function(t){e[t]||(e[t]=[]),e[t].push(i)}),this},this.trigger=function(t,i){return angular.forEach(e[t],function(e){e.call(null,i)}),this}}}]),e.directive("imgCrop",["$timeout","cropHost","cropPubSub",function(e,t,i){return{restrict:"E",scope:{image:"=",resultImage:"=",changeOnFly:"=",areaType:"@",areaMinSize:"=",resultImageSize:"=",resultImageFormat:"@",resultImageQuality:"=",onChange:"&",onLoadBegin:"&",onLoadDone:"&",onLoadError:"&"},template:"<canvas></canvas>",controller:["$scope",function(e){e.events=new i}],link:function(i,r){var s,o=i.events,a=new t(r.find("canvas"),{},o),n=function(e){var t=a.getResultImageDataURI();s!==t&&(s=t,angular.isDefined(e.resultImage)&&(e.resultImage=t),e.onChange({$dataURI:e.resultImage}))},h=function(t){return function(){e(function(){i.$apply(function(e){t(e)})})}};o.on("load-start",h(function(e){e.onLoadBegin({})})).on("load-done",h(function(e){e.onLoadDone({})})).on("load-error",h(function(e){e.onLoadError({})})).on("area-move area-resize",h(function(e){e.changeOnFly&&n(e)})).on("area-move-end area-resize-end image-updated",h(function(e){n(e)})),i.$watch("image",function(){a.setNewImageSource(i.image)}),i.$watch("areaType",function(){a.setAreaType(i.areaType),n(i)}),i.$watch("areaMinSize",function(){a.setAreaMinSize(i.areaMinSize),n(i)}),i.$watch("resultImageSize",function(){a.setResultImageSize(i.resultImageSize),n(i)}),i.$watch("resultImageFormat",function(){a.setResultImageFormat(i.resultImageFormat),n(i)}),i.$watch("resultImageQuality",function(){a.setResultImageQuality(i.resultImageQuality),n(i)}),i.$watch(function(){return[r[0].clientWidth,r[0].clientHeight]},function(e){a.setMaxDimensions(e[0],e[1]),n(i)},!0),i.$on("$destroy",function(){a.destroy()})}}}])}();
+/*!
+ * ui-select
+ * http://github.com/angular-ui/ui-select
+ * Version: 0.19.7 - 2017-04-15T14:28:36.649Z
+ * License: MIT
+ */
+!function(){"use strict";function e(e){return angular.isUndefined(e)||null===e}var t={TAB:9,ENTER:13,ESC:27,SPACE:32,LEFT:37,UP:38,RIGHT:39,DOWN:40,SHIFT:16,CTRL:17,ALT:18,PAGE_UP:33,PAGE_DOWN:34,HOME:36,END:35,BACKSPACE:8,DELETE:46,COMMAND:91,MAP:{91:"COMMAND",8:"BACKSPACE",9:"TAB",13:"ENTER",16:"SHIFT",17:"CTRL",18:"ALT",19:"PAUSEBREAK",20:"CAPSLOCK",27:"ESC",32:"SPACE",33:"PAGE_UP",34:"PAGE_DOWN",35:"END",36:"HOME",37:"LEFT",38:"UP",39:"RIGHT",40:"DOWN",43:"+",44:"PRINTSCREEN",45:"INSERT",46:"DELETE",48:"0",49:"1",50:"2",51:"3",52:"4",53:"5",54:"6",55:"7",56:"8",57:"9",59:";",61:"=",65:"A",66:"B",67:"C",68:"D",69:"E",70:"F",71:"G",72:"H",73:"I",74:"J",75:"K",76:"L",77:"M",78:"N",79:"O",80:"P",81:"Q",82:"R",83:"S",84:"T",85:"U",86:"V",87:"W",88:"X",89:"Y",90:"Z",96:"0",97:"1",98:"2",99:"3",100:"4",101:"5",102:"6",103:"7",104:"8",105:"9",106:"*",107:"+",109:"-",110:".",111:"/",112:"F1",113:"F2",114:"F3",115:"F4",116:"F5",117:"F6",118:"F7",119:"F8",120:"F9",121:"F10",122:"F11",123:"F12",144:"NUMLOCK",145:"SCROLLLOCK",186:";",187:"=",188:",",189:"-",190:".",191:"/",192:"`",219:"[",220:"\\",221:"]",222:"'"},isControl:function(e){var s=e.which;switch(s){case t.COMMAND:case t.SHIFT:case t.CTRL:case t.ALT:return!0}return!!(e.metaKey||e.ctrlKey||e.altKey)},isFunctionKey:function(e){return e=e.which?e.which:e,e>=112&&e<=123},isVerticalMovement:function(e){return~[t.UP,t.DOWN].indexOf(e)},isHorizontalMovement:function(e){return~[t.LEFT,t.RIGHT,t.BACKSPACE,t.DELETE].indexOf(e)},toSeparator:function(e){var s={ENTER:"\n",TAB:"\t",SPACE:" "}[e];return s?s:t[e]?void 0:e}};void 0===angular.element.prototype.querySelectorAll&&(angular.element.prototype.querySelectorAll=function(e){return angular.element(this[0].querySelectorAll(e))}),void 0===angular.element.prototype.closest&&(angular.element.prototype.closest=function(e){for(var t=this[0],s=t.matches||t.webkitMatchesSelector||t.mozMatchesSelector||t.msMatchesSelector;t;){if(s.bind(t)(e))return t;t=t.parentElement}return!1});var s=0,i=angular.module("ui.select",[]).constant("uiSelectConfig",{theme:"bootstrap",searchEnabled:!0,sortable:!1,placeholder:"",refreshDelay:1e3,closeOnSelect:!0,skipFocusser:!1,dropdownPosition:"auto",removeSelected:!0,resetSearchInput:!0,generateId:function(){return s++},appendToBody:!1,spinnerEnabled:!1,spinnerClass:"glyphicon glyphicon-refresh ui-select-spin",backspaceReset:!0}).service("uiSelectMinErr",function(){var e=angular.$$minErr("ui.select");return function(){var t=e.apply(this,arguments),s=t.message.replace(new RegExp("\nhttp://errors.angularjs.org/.*"),"");return new Error(s)}}).directive("uisTranscludeAppend",function(){return{link:function(e,t,s,i,c){c(e,function(e){t.append(e)})}}}).filter("highlight",function(){function e(e){return(""+e).replace(/([.?*+^$[\]\\(){}|-])/g,"\\$1")}return function(t,s){return s&&t?(""+t).replace(new RegExp(e(s),"gi"),'<span class="ui-select-highlight">$&</span>'):t}}).factory("uisOffset",["$document","$window",function(e,t){return function(s){var i=s[0].getBoundingClientRect();return{width:i.width||s.prop("offsetWidth"),height:i.height||s.prop("offsetHeight"),top:i.top+(t.pageYOffset||e[0].documentElement.scrollTop),left:i.left+(t.pageXOffset||e[0].documentElement.scrollLeft)}}}]);i.factory("$$uisDebounce",["$timeout",function(e){return function(t,s){var i;return function(){var c=this,n=Array.prototype.slice.call(arguments);i&&e.cancel(i),i=e(function(){t.apply(c,n)},s)}}}]),i.directive("uiSelectChoices",["uiSelectConfig","uisRepeatParser","uiSelectMinErr","$compile","$window",function(e,t,s,i,c){return{restrict:"EA",require:"^uiSelect",replace:!0,transclude:!0,templateUrl:function(t){t.addClass("ui-select-choices");var s=t.parent().attr("theme")||e.theme;return s+"/choices.tpl.html"},compile:function(i,n){if(!n.repeat)throw s("repeat","Expected 'repeat' expression.");var l=n.groupBy,a=n.groupFilter;if(l){var r=i.querySelectorAll(".ui-select-choices-group");if(1!==r.length)throw s("rows","Expected 1 .ui-select-choices-group but got '{0}'.",r.length);r.attr("ng-repeat",t.getGroupNgRepeatExpression())}var o=t.parse(n.repeat),u=i.querySelectorAll(".ui-select-choices-row");if(1!==u.length)throw s("rows","Expected 1 .ui-select-choices-row but got '{0}'.",u.length);u.attr("ng-repeat",o.repeatExpression(l)).attr("ng-if","$select.open");var d=i.querySelectorAll(".ui-select-choices-row-inner");if(1!==d.length)throw s("rows","Expected 1 .ui-select-choices-row-inner but got '{0}'.",d.length);d.attr("uis-transclude-append","");var p=c.document.addEventListener?u:d;return p.attr("ng-click","$select.select("+o.itemName+",$select.skipFocusser,$event)"),function(t,s,c,n){n.parseRepeatAttr(c.repeat,l,a),n.disableChoiceExpression=c.uiDisableChoice,n.onHighlightCallback=c.onHighlight,n.minimumInputLength=parseInt(c.minimumInputLength)||0,n.dropdownPosition=c.position?c.position.toLowerCase():e.dropdownPosition,t.$watch("$select.search",function(e){e&&!n.open&&n.multiple&&n.activate(!1,!0),n.activeIndex=n.tagging.isActivated?-1:0,!c.minimumInputLength||n.search.length>=c.minimumInputLength?n.refresh(c.refresh):n.items=[]}),c.$observe("refreshDelay",function(){var s=t.$eval(c.refreshDelay);n.refreshDelay=void 0!==s?s:e.refreshDelay}),t.$watch("$select.open",function(e){e?(i.attr("role","listbox"),n.refresh(c.refresh)):s.removeAttr("role")})}}}}]),i.controller("uiSelectCtrl",["$scope","$element","$timeout","$filter","$$uisDebounce","uisRepeatParser","uiSelectMinErr","uiSelectConfig","$parse","$injector","$window",function(s,i,c,n,l,a,r,o,u,d,p){function h(e,t,s){if(e.findIndex)return e.findIndex(t,s);for(var i,c=Object(e),n=c.length>>>0,l=0;l<n;l++)if(i=c[l],t.call(s,i,l,c))return l;return-1}function g(){y.resetSearchInput&&(y.search=x,y.selected&&y.items.length&&!y.multiple&&(y.activeIndex=h(y.items,function(e){return angular.equals(this,e)},y.selected)))}function f(e,t){var s,i,c=[];for(s=0;s<t.length;s++)for(i=0;i<e.length;i++)e[i].name==[t[s]]&&c.push(e[i]);return c}function v(e,t){var s=I.indexOf(e);t&&s===-1&&I.push(e),!t&&s>-1&&I.splice(s,1)}function m(e){return I.indexOf(e)>-1}function $(e){function t(e,t){var s=i.indexOf(e);t&&s===-1&&i.push(e),!t&&s>-1&&i.splice(s,1)}function s(e){return i.indexOf(e)>-1}if(e){var i=[];y.isLocked=function(e,i){var c=!1,n=y.selected[i];return n&&(e?(c=!!e.$eval(y.lockChoiceExpression),t(n,c)):c=s(n)),c}}}function b(e){var s=!0;switch(e){case t.DOWN:if(!y.open&&y.multiple)y.activate(!1,!0);else if(y.activeIndex<y.items.length-1)for(var i=++y.activeIndex;m(y.items[i])&&i<y.items.length;)y.activeIndex=++i;break;case t.UP:var c=0===y.search.length&&y.tagging.isActivated?-1:0;if(!y.open&&y.multiple)y.activate(!1,!0);else if(y.activeIndex>c)for(var n=--y.activeIndex;m(y.items[n])&&n>c;)y.activeIndex=--n;break;case t.TAB:y.multiple&&!y.open||y.select(y.items[y.activeIndex],!0);break;case t.ENTER:y.open&&(y.tagging.isActivated||y.activeIndex>=0)?y.select(y.items[y.activeIndex],y.skipFocusser):y.activate(!1,!0);break;case t.ESC:y.close();break;default:s=!1}return s}function w(){var e=i.querySelectorAll(".ui-select-choices-content"),t=e.querySelectorAll(".ui-select-choices-row");if(t.length<1)throw r("choices","Expected multiple .ui-select-choices-row but got '{0}'.",t.length);if(!(y.activeIndex<0)){var s=t[y.activeIndex],c=s.offsetTop+s.clientHeight-e[0].scrollTop,n=e[0].offsetHeight;c>n?e[0].scrollTop+=c-n:c<s.clientHeight&&(y.isGrouped&&0===y.activeIndex?e[0].scrollTop=0:e[0].scrollTop-=s.clientHeight-c)}}var y=this,x="";if(y.placeholder=o.placeholder,y.searchEnabled=o.searchEnabled,y.sortable=o.sortable,y.refreshDelay=o.refreshDelay,y.paste=o.paste,y.resetSearchInput=o.resetSearchInput,y.refreshing=!1,y.spinnerEnabled=o.spinnerEnabled,y.spinnerClass=o.spinnerClass,y.removeSelected=o.removeSelected,y.closeOnSelect=!0,y.skipFocusser=!1,y.search=x,y.activeIndex=0,y.items=[],y.open=!1,y.focus=!1,y.disabled=!1,y.selected=void 0,y.dropdownPosition="auto",y.focusser=void 0,y.multiple=void 0,y.disableChoiceExpression=void 0,y.tagging={isActivated:!1,fct:void 0},y.taggingTokens={isActivated:!1,tokens:void 0},y.lockChoiceExpression=void 0,y.clickTriggeredSelect=!1,y.$filter=n,y.$element=i,y.$animate=function(){try{return d.get("$animate")}catch(e){return null}}(),y.searchInput=i.querySelectorAll("input.ui-select-search"),1!==y.searchInput.length)throw r("searchInput","Expected 1 input.ui-select-search but got '{0}'.",y.searchInput.length);y.isEmpty=function(){return e(y.selected)||""===y.selected||y.multiple&&0===y.selected.length},y.activate=function(e,t){if(y.disabled||y.open)y.open&&!y.searchEnabled&&y.close();else{t||g(),s.$broadcast("uis:activate"),y.open=!0,y.activeIndex=y.activeIndex>=y.items.length?0:y.activeIndex,y.activeIndex===-1&&y.taggingLabel!==!1&&(y.activeIndex=0);var n=i.querySelectorAll(".ui-select-choices-content"),l=i.querySelectorAll(".ui-select-search");if(y.$animate&&y.$animate.on&&y.$animate.enabled(n[0])){var a=function(t,s){"start"===s&&0===y.items.length?(y.$animate.off("removeClass",l[0],a),c(function(){y.focusSearchInput(e)})):"close"===s&&(y.$animate.off("enter",n[0],a),c(function(){y.focusSearchInput(e)}))};y.items.length>0?y.$animate.on("enter",n[0],a):y.$animate.on("removeClass",l[0],a)}else c(function(){y.focusSearchInput(e),!y.tagging.isActivated&&y.items.length>1&&w()})}},y.focusSearchInput=function(e){y.search=e||y.search,y.searchInput[0].focus()},y.findGroupByName=function(e){return y.groups&&y.groups.filter(function(t){return t.name===e})[0]},y.parseRepeatAttr=function(e,t,i){function c(e){var c=s.$eval(t);if(y.groups=[],angular.forEach(e,function(e){var t=angular.isFunction(c)?c(e):e[c],s=y.findGroupByName(t);s?s.items.push(e):y.groups.push({name:t,items:[e]})}),i){var n=s.$eval(i);angular.isFunction(n)?y.groups=n(y.groups):angular.isArray(n)&&(y.groups=f(y.groups,n))}y.items=[],y.groups.forEach(function(e){y.items=y.items.concat(e.items)})}function n(e){y.items=e||[]}y.setItemsFn=t?c:n,y.parserResult=a.parse(e),y.isGrouped=!!t,y.itemProperty=y.parserResult.itemName;var l=y.parserResult.source,o=function(){var e=l(s);s.$uisSource=Object.keys(e).map(function(t){var s={};return s[y.parserResult.keyName]=t,s.value=e[t],s})};y.parserResult.keyName&&(o(),y.parserResult.source=u("$uisSource"+y.parserResult.filters),s.$watch(l,function(e,t){e!==t&&o()},!0)),y.refreshItems=function(e){e=e||y.parserResult.source(s);var t=y.selected;if(y.isEmpty()||angular.isArray(t)&&!t.length||!y.multiple||!y.removeSelected)y.setItemsFn(e);else if(void 0!==e&&null!==e){var i=e.filter(function(e){return angular.isArray(t)?t.every(function(t){return!angular.equals(e,t)}):!angular.equals(e,t)});y.setItemsFn(i)}"auto"!==y.dropdownPosition&&"up"!==y.dropdownPosition||s.calculateDropdownPos(),s.$broadcast("uis:refresh")},s.$watchCollection(y.parserResult.source,function(e){if(void 0===e||null===e)y.items=[];else{if(!angular.isArray(e))throw r("items","Expected an array but got '{0}'.",e);y.refreshItems(e),angular.isDefined(y.ngModel.$modelValue)&&(y.ngModel.$modelValue=null)}})};var E;y.refresh=function(e){void 0!==e&&(E&&c.cancel(E),E=c(function(){if(s.$select.search.length>=s.$select.minimumInputLength){var t=s.$eval(e);t&&angular.isFunction(t.then)&&!y.refreshing&&(y.refreshing=!0,t["finally"](function(){y.refreshing=!1}))}},y.refreshDelay))},y.isActive=function(e){if(!y.open)return!1;var t=y.items.indexOf(e[y.itemProperty]),s=t==y.activeIndex;return!(!s||t<0)&&(s&&!angular.isUndefined(y.onHighlightCallback)&&e.$eval(y.onHighlightCallback),s)};var S=function(e){return y.selected&&angular.isArray(y.selected)&&y.selected.filter(function(t){return angular.equals(t,e)}).length>0},I=[];y.isDisabled=function(e){if(y.open){var t=e[y.itemProperty],s=y.items.indexOf(t),i=!1;if(s>=0&&(angular.isDefined(y.disableChoiceExpression)||y.multiple)){if(t.isTag)return!1;y.multiple&&(i=S(t)),!i&&angular.isDefined(y.disableChoiceExpression)&&(i=!!e.$eval(y.disableChoiceExpression)),v(t,i)}return i}},y.select=function(t,i,c){if(e(t)||!m(t)){if(!y.items&&!y.search&&!y.tagging.isActivated)return;if(!t||!m(t)){if(y.clickTriggeredSelect=!1,c&&("click"===c.type||"touchend"===c.type)&&t&&(y.clickTriggeredSelect=!0),y.tagging.isActivated&&y.clickTriggeredSelect===!1){if(y.taggingLabel===!1)if(y.activeIndex<0){if(void 0===t&&(t=void 0!==y.tagging.fct?y.tagging.fct(y.search):y.search),!t||angular.equals(y.items[0],t))return}else t=y.items[y.activeIndex];else if(0===y.activeIndex){if(void 0===t)return;if(void 0!==y.tagging.fct&&"string"==typeof t){if(t=y.tagging.fct(t),!t)return}else"string"==typeof t&&(t=t.replace(y.taggingLabel,"").trim())}if(S(t))return void y.close(i)}g(),s.$broadcast("uis:select",t),y.closeOnSelect&&y.close(i)}}},y.close=function(e){y.open&&(y.ngModel&&y.ngModel.$setTouched&&y.ngModel.$setTouched(),y.open=!1,g(),s.$broadcast("uis:close",e))},y.setFocus=function(){y.focus||y.focusInput[0].focus()},y.clear=function(e){y.select(null),e.stopPropagation(),c(function(){y.focusser[0].focus()},0,!1)},y.toggle=function(e){y.open?(y.close(),e.preventDefault(),e.stopPropagation()):y.activate()},y.isLocked=function(){return!1},s.$watch(function(){return angular.isDefined(y.lockChoiceExpression)&&""!==y.lockChoiceExpression},$);var C=null,k=!1;y.sizeSearchInput=function(){var e=y.searchInput[0],t=y.$element[0],i=function(){return t.clientWidth*!!e.offsetParent},n=function(t){if(0===t)return!1;var s=t-e.offsetLeft;return s<50&&(s=t),y.searchInput.css("width",s+"px"),!0};y.searchInput.css("width","10px"),c(function(){null!==C||n(i())||(C=s.$watch(function(){k||(k=!0,s.$$postDigest(function(){k=!1,n(i())&&(C(),C=null)}))},angular.noop))})},y.searchInput.on("keydown",function(e){var i=e.which;~[t.ENTER,t.ESC].indexOf(i)&&(e.preventDefault(),e.stopPropagation()),s.$apply(function(){var s=!1;if((y.items.length>0||y.tagging.isActivated)&&(b(i)||y.searchEnabled||(e.preventDefault(),e.stopPropagation()),y.taggingTokens.isActivated)){for(var n=0;n<y.taggingTokens.tokens.length;n++)y.taggingTokens.tokens[n]===t.MAP[e.keyCode]&&y.search.length>0&&(s=!0);s&&c(function(){y.searchInput.triggerHandler("tagged");var s=y.search.replace(t.MAP[e.keyCode],"").trim();y.tagging.fct&&(s=y.tagging.fct(s)),s&&y.select(s,!0)})}}),t.isVerticalMovement(i)&&y.items.length>0&&w(),i!==t.ENTER&&i!==t.ESC||(e.preventDefault(),e.stopPropagation())}),y.searchInput.on("paste",function(e){var s;if(s=window.clipboardData&&window.clipboardData.getData?window.clipboardData.getData("Text"):(e.originalEvent||e).clipboardData.getData("text/plain"),s=y.search+s,s&&s.length>0)if(y.taggingTokens.isActivated){for(var i=[],c=0;c<y.taggingTokens.tokens.length;c++){var n=t.toSeparator(y.taggingTokens.tokens[c])||y.taggingTokens.tokens[c];if(s.indexOf(n)>-1){i=s.split(n);break}}0===i.length&&(i=[s]);var l=y.search;angular.forEach(i,function(e){var t=y.tagging.fct?y.tagging.fct(e):e;t&&y.select(t,!0)}),y.search=l||x,e.preventDefault(),e.stopPropagation()}else y.paste&&(y.paste(s),y.search=x,e.preventDefault(),e.stopPropagation())}),y.searchInput.on("tagged",function(){c(function(){g()})});var A=l(function(){y.sizeSearchInput()},50);angular.element(p).bind("resize",A),s.$on("$destroy",function(){y.searchInput.off("keyup keydown tagged blur paste"),angular.element(p).off("resize",A)}),s.$watch("$select.activeIndex",function(e){e&&i.find("input").attr("aria-activedescendant","ui-select-choices-row-"+y.generatedId+"-"+e)}),s.$watch("$select.open",function(e){e||i.find("input").removeAttr("aria-activedescendant")})}]),i.directive("uiSelect",["$document","uiSelectConfig","uiSelectMinErr","uisOffset","$compile","$parse","$timeout",function(e,t,s,i,c,n,l){return{restrict:"EA",templateUrl:function(e,s){var i=s.theme||t.theme;return i+(angular.isDefined(s.multiple)?"/select-multiple.tpl.html":"/select.tpl.html")},replace:!0,transclude:!0,require:["uiSelect","^ngModel"],scope:!0,controller:"uiSelectCtrl",controllerAs:"$select",compile:function(c,a){var r=/{(.*)}\s*{(.*)}/.exec(a.ngClass);if(r){var o="{"+r[1]+", "+r[2]+"}";a.ngClass=o,c.attr("ng-class",o)}return angular.isDefined(a.multiple)?c.append("<ui-select-multiple/>").removeAttr("multiple"):c.append("<ui-select-single/>"),a.inputId&&(c.querySelectorAll("input.ui-select-search")[0].id=a.inputId),function(c,a,r,o,u){function d(e){if(g.open){var t=!1;if(t=window.jQuery?window.jQuery.contains(a[0],e.target):a[0].contains(e.target),!t&&!g.clickTriggeredSelect){var s;if(g.skipFocusser)s=!0;else{var i=["input","button","textarea","select"],n=angular.element(e.target).controller("uiSelect");s=n&&n!==g,s||(s=~i.indexOf(e.target.tagName.toLowerCase()))}g.close(s),c.$digest()}g.clickTriggeredSelect=!1}}function p(){var t=i(a);m=angular.element('<div class="ui-select-placeholder"></div>'),m[0].style.width=t.width+"px",m[0].style.height=t.height+"px",a.after(m),$=a[0].style.width,e.find("body").append(a),a[0].style.position="absolute",a[0].style.left=t.left+"px",a[0].style.top=t.top+"px",a[0].style.width=t.width+"px"}function h(){null!==m&&(m.replaceWith(a),m=null,a[0].style.position="",a[0].style.left="",a[0].style.top="",a[0].style.width=$,g.setFocus())}var g=o[0],f=o[1];g.generatedId=t.generateId(),g.baseTitle=r.title||"Select box",g.focusserTitle=g.baseTitle+" focus",g.focusserId="focusser-"+g.generatedId,g.closeOnSelect=function(){return angular.isDefined(r.closeOnSelect)?n(r.closeOnSelect)():t.closeOnSelect}(),c.$watch("skipFocusser",function(){var e=c.$eval(r.skipFocusser);g.skipFocusser=void 0!==e?e:t.skipFocusser}),g.onSelectCallback=n(r.onSelect),g.onRemoveCallback=n(r.onRemove),g.ngModel=f,g.choiceGrouped=function(e){return g.isGrouped&&e&&e.name},r.tabindex&&r.$observe("tabindex",function(e){g.focusInput.attr("tabindex",e),a.removeAttr("tabindex")}),c.$watch(function(){return c.$eval(r.searchEnabled)},function(e){g.searchEnabled=void 0!==e?e:t.searchEnabled}),c.$watch("sortable",function(){var e=c.$eval(r.sortable);g.sortable=void 0!==e?e:t.sortable}),r.$observe("backspaceReset",function(){var e=c.$eval(r.backspaceReset);g.backspaceReset=void 0===e||e}),r.$observe("limit",function(){g.limit=angular.isDefined(r.limit)?parseInt(r.limit,10):void 0}),c.$watch("removeSelected",function(){var e=c.$eval(r.removeSelected);g.removeSelected=void 0!==e?e:t.removeSelected}),r.$observe("disabled",function(){g.disabled=void 0!==r.disabled&&r.disabled}),r.$observe("resetSearchInput",function(){var e=c.$eval(r.resetSearchInput);g.resetSearchInput=void 0===e||e}),r.$observe("paste",function(){g.paste=c.$eval(r.paste)}),r.$observe("tagging",function(){if(void 0!==r.tagging){var e=c.$eval(r.tagging);g.tagging={isActivated:!0,fct:e!==!0?e:void 0}}else g.tagging={isActivated:!1,fct:void 0}}),r.$observe("taggingLabel",function(){void 0!==r.tagging&&("false"===r.taggingLabel?g.taggingLabel=!1:g.taggingLabel=void 0!==r.taggingLabel?r.taggingLabel:"(new)")}),r.$observe("taggingTokens",function(){if(void 0!==r.tagging){var e=void 0!==r.taggingTokens?r.taggingTokens.split("|"):[",","ENTER"];g.taggingTokens={isActivated:!0,tokens:e}}}),r.$observe("spinnerEnabled",function(){var e=c.$eval(r.spinnerEnabled);g.spinnerEnabled=void 0!==e?e:t.spinnerEnabled}),r.$observe("spinnerClass",function(){var e=r.spinnerClass;g.spinnerClass=void 0!==e?r.spinnerClass:t.spinnerClass}),angular.isDefined(r.autofocus)&&l(function(){g.setFocus()}),angular.isDefined(r.focusOn)&&c.$on(r.focusOn,function(){l(function(){g.setFocus()})}),e.on("click",d),c.$on("$destroy",function(){e.off("click",d)}),u(c,function(e){var t=angular.element("<div>").append(e),i=t.querySelectorAll(".ui-select-match");if(i.removeAttr("ui-select-match"),i.removeAttr("data-ui-select-match"),1!==i.length)throw s("transcluded","Expected 1 .ui-select-match but got '{0}'.",i.length);a.querySelectorAll(".ui-select-match").replaceWith(i);var c=t.querySelectorAll(".ui-select-choices");if(c.removeAttr("ui-select-choices"),c.removeAttr("data-ui-select-choices"),1!==c.length)throw s("transcluded","Expected 1 .ui-select-choices but got '{0}'.",c.length);a.querySelectorAll(".ui-select-choices").replaceWith(c);var n=t.querySelectorAll(".ui-select-no-choice");n.removeAttr("ui-select-no-choice"),n.removeAttr("data-ui-select-no-choice"),1==n.length&&a.querySelectorAll(".ui-select-no-choice").replaceWith(n)});var v=c.$eval(r.appendToBody);(void 0!==v?v:t.appendToBody)&&(c.$watch("$select.open",function(e){e?p():h()}),c.$on("$destroy",function(){h()}));var m=null,$="",b=null,w="direction-up";c.$watch("$select.open",function(){"auto"!==g.dropdownPosition&&"up"!==g.dropdownPosition||c.calculateDropdownPos()});var y=function(e,t){e=e||i(a),t=t||i(b),b[0].style.position="absolute",b[0].style.top=t.height*-1+"px",a.addClass(w)},x=function(e,t){a.removeClass(w),e=e||i(a),t=t||i(b),b[0].style.position="",b[0].style.top=""},E=function(){l(function(){if("up"===g.dropdownPosition)y();else{a.removeClass(w);var t=i(a),s=i(b),c=e[0].documentElement.scrollTop||e[0].body.scrollTop;t.top+t.height+s.height>c+e[0].documentElement.clientHeight?y(t,s):x(t,s)}b[0].style.opacity=1})},S=!1;c.calculateDropdownPos=function(){if(g.open){if(b=angular.element(a).querySelectorAll(".ui-select-dropdown"),0===b.length)return;if(""!==g.search||S||(b[0].style.opacity=0,S=!0),!i(b).height&&g.$animate&&g.$animate.on&&g.$animate.enabled(b)){var e=!0;g.$animate.on("enter",b,function(t,s){"close"===s&&e&&(E(),e=!1)})}else E()}else{if(null===b||0===b.length)return;b[0].style.opacity=0,b[0].style.position="",b[0].style.top="",a.removeClass(w)}}}}}}]),i.directive("uiSelectMatch",["uiSelectConfig",function(e){function t(e,t){return e[0].hasAttribute(t)?e.attr(t):e[0].hasAttribute("data-"+t)?e.attr("data-"+t):e[0].hasAttribute("x-"+t)?e.attr("x-"+t):void 0}return{restrict:"EA",require:"^uiSelect",replace:!0,transclude:!0,templateUrl:function(s){s.addClass("ui-select-match");var i=s.parent(),c=t(i,"theme")||e.theme,n=angular.isDefined(t(i,"multiple"));return c+(n?"/match-multiple.tpl.html":"/match.tpl.html")},link:function(t,s,i,c){function n(e){c.allowClear=!!angular.isDefined(e)&&(""===e||"true"===e.toLowerCase())}c.lockChoiceExpression=i.uiLockChoice,i.$observe("placeholder",function(t){c.placeholder=void 0!==t?t:e.placeholder}),i.$observe("allowClear",n),n(i.allowClear),c.multiple&&c.sizeSearchInput()}}}]),i.directive("uiSelectMultiple",["uiSelectMinErr","$timeout",function(s,i){return{restrict:"EA",require:["^uiSelect","^ngModel"],controller:["$scope","$timeout",function(e,t){var s,i=this,c=e.$select;angular.isUndefined(c.selected)&&(c.selected=[]),e.$evalAsync(function(){s=e.ngModel}),i.activeMatchIndex=-1,i.updateModel=function(){s.$setViewValue(Date.now()),i.refreshComponent()},i.refreshComponent=function(){c.refreshItems&&c.refreshItems(),c.sizeSearchInput&&c.sizeSearchInput()},i.removeChoice=function(s){if(c.isLocked(null,s))return!1;var n=c.selected[s],l={};return l[c.parserResult.itemName]=n,c.selected.splice(s,1),i.activeMatchIndex=-1,c.sizeSearchInput(),t(function(){c.onRemoveCallback(e,{$item:n,$model:c.parserResult.modelMapper(e,l)})}),i.updateModel(),!0},i.getPlaceholder=function(){if(!c.selected||!c.selected.length)return c.placeholder}}],controllerAs:"$selectMultiple",link:function(c,n,l,a){function r(e){return angular.isNumber(e.selectionStart)?e.selectionStart:e.value.length}function o(e){function s(){switch(e){case t.LEFT:return~g.activeMatchIndex?u:l;case t.RIGHT:return~g.activeMatchIndex&&a!==l?o:(p.activate(),!1);case t.BACKSPACE:return~g.activeMatchIndex?g.removeChoice(a)?u:a:l;case t.DELETE:return!!~g.activeMatchIndex&&(g.removeChoice(g.activeMatchIndex),a)}}var i=r(p.searchInput[0]),c=p.selected.length,n=0,l=c-1,a=g.activeMatchIndex,o=g.activeMatchIndex+1,u=g.activeMatchIndex-1,d=a;return!(i>0||p.search.length&&e==t.RIGHT)&&(p.close(),d=s(),p.selected.length&&d!==!1?g.activeMatchIndex=Math.min(l,Math.max(n,d)):g.activeMatchIndex=-1,!0)}function u(e){if(void 0===e||void 0===p.search)return!1;var t=e.filter(function(e){return void 0!==p.search.toUpperCase()&&void 0!==e&&e.toUpperCase()===p.search.toUpperCase()}).length>0;return t}function d(e,t){var s=-1;if(angular.isArray(e))for(var i=angular.copy(e),c=0;c<i.length;c++)if(void 0===p.tagging.fct)i[c]+" "+p.taggingLabel===t&&(s=c);else{var n=i[c];angular.isObject(n)&&(n.isTag=!0),angular.equals(n,t)&&(s=c)}return s}var p=a[0],h=c.ngModel=a[1],g=c.$selectMultiple;p.multiple=!0,p.focusInput=p.searchInput,h.$isEmpty=function(e){return!e||0===e.length},h.$parsers.unshift(function(){for(var e,t={},s=[],i=p.selected.length-1;i>=0;i--)t={},t[p.parserResult.itemName]=p.selected[i],e=p.parserResult.modelMapper(c,t),s.unshift(e);return s}),h.$formatters.unshift(function(e){var t,s=p.parserResult&&p.parserResult.source(c,{$select:{search:""}}),i={};if(!s)return e;var n=[],l=function(e,s){if(e&&e.length){for(var l=e.length-1;l>=0;l--){if(i[p.parserResult.itemName]=e[l],t=p.parserResult.modelMapper(c,i),p.parserResult.trackByExp){var a=/(\w*)\./.exec(p.parserResult.trackByExp),r=/\.([^\s]+)/.exec(p.parserResult.trackByExp);if(a&&a.length>0&&a[1]==p.parserResult.itemName&&r&&r.length>0&&t[r[1]]==s[r[1]])return n.unshift(e[l]),!0}if(angular.equals(t,s))return n.unshift(e[l]),!0}return!1}};if(!e)return n;for(var a=e.length-1;a>=0;a--)l(p.selected,e[a])||l(s,e[a])||n.unshift(e[a]);return n}),c.$watchCollection(function(){return h.$modelValue},function(e,t){t!=e&&(angular.isDefined(h.$modelValue)&&(h.$modelValue=null),g.refreshComponent())}),h.$render=function(){if(!angular.isArray(h.$viewValue)){if(!e(h.$viewValue))throw s("multiarr","Expected model value to be array but got '{0}'",h.$viewValue);h.$viewValue=[]}p.selected=h.$viewValue,g.refreshComponent(),c.$evalAsync()},c.$on("uis:select",function(e,t){if(!(p.selected.length>=p.limit)){p.selected.push(t);var s={};s[p.parserResult.itemName]=t,i(function(){p.onSelectCallback(c,{$item:t,$model:p.parserResult.modelMapper(c,s)})}),g.updateModel()}}),c.$on("uis:activate",function(){g.activeMatchIndex=-1}),c.$watch("$select.disabled",function(e,t){t&&!e&&p.sizeSearchInput()}),p.searchInput.on("keydown",function(e){var s=e.which;c.$apply(function(){var i=!1;t.isHorizontalMovement(s)&&(i=o(s)),i&&s!=t.TAB&&(e.preventDefault(),e.stopPropagation())})}),p.searchInput.on("keyup",function(e){if(t.isVerticalMovement(e.which)||c.$evalAsync(function(){p.activeIndex=p.taggingLabel===!1?-1:0}),p.tagging.isActivated&&p.search.length>0){if(e.which===t.TAB||t.isControl(e)||t.isFunctionKey(e)||e.which===t.ESC||t.isVerticalMovement(e.which))return;if(p.activeIndex=p.taggingLabel===!1?-1:0,p.taggingLabel===!1)return;var s,i,n,l,a=angular.copy(p.items),r=angular.copy(p.items),o=!1,h=-1;if(void 0!==p.tagging.fct){if(n=p.$filter("filter")(a,{isTag:!0}),n.length>0&&(l=n[0]),a.length>0&&l&&(o=!0,a=a.slice(1,a.length),r=r.slice(1,r.length)),s=p.tagging.fct(p.search),r.some(function(e){return angular.equals(e,s)})||p.selected.some(function(e){return angular.equals(e,s)}))return void c.$evalAsync(function(){p.activeIndex=0,p.items=a});s&&(s.isTag=!0)}else{if(n=p.$filter("filter")(a,function(e){return e.match(p.taggingLabel)}),n.length>0&&(l=n[0]),i=a[0],void 0!==i&&a.length>0&&l&&(o=!0,a=a.slice(1,a.length),r=r.slice(1,r.length)),s=p.search+" "+p.taggingLabel,d(p.selected,p.search)>-1)return;if(u(r.concat(p.selected)))return void(o&&(a=r,c.$evalAsync(function(){p.activeIndex=0,p.items=a})));if(u(r))return void(o&&(p.items=r.slice(1,r.length)))}o&&(h=d(p.selected,s)),h>-1?a=a.slice(h+1,a.length-1):(a=[],s&&a.push(s),a=a.concat(r)),c.$evalAsync(function(){if(p.activeIndex=0,p.items=a,p.isGrouped){var e=s?a.slice(1):a;p.setItemsFn(e),s&&(p.items.unshift(s),p.groups.unshift({name:"",items:[s],tagging:!0}))}})}}),p.searchInput.on("blur",function(){i(function(){g.activeMatchIndex=-1})})}}}]),i.directive("uiSelectNoChoice",["uiSelectConfig",function(e){return{restrict:"EA",require:"^uiSelect",replace:!0,transclude:!0,templateUrl:function(t){t.addClass("ui-select-no-choice");var s=t.parent().attr("theme")||e.theme;return s+"/no-choice.tpl.html"}}}]),i.directive("uiSelectSingle",["$timeout","$compile",function(s,i){return{restrict:"EA",require:["^uiSelect","^ngModel"],link:function(c,n,l,a){var r=a[0],o=a[1];o.$parsers.unshift(function(t){if(e(t))return t;var s,i={};return i[r.parserResult.itemName]=t,s=r.parserResult.modelMapper(c,i)}),o.$formatters.unshift(function(t){if(e(t))return t;var s,i=r.parserResult&&r.parserResult.source(c,{$select:{search:""}}),n={};if(i){var l=function(e){return n[r.parserResult.itemName]=e,s=r.parserResult.modelMapper(c,n),s===t};if(r.selected&&l(r.selected))return r.selected;for(var a=i.length-1;a>=0;a--)if(l(i[a]))return i[a]}return t}),c.$watch("$select.selected",function(e){o.$viewValue!==e&&o.$setViewValue(e)}),o.$render=function(){r.selected=o.$viewValue},c.$on("uis:select",function(t,i){r.selected=i;var n={};n[r.parserResult.itemName]=i,s(function(){r.onSelectCallback(c,{$item:i,$model:e(i)?i:r.parserResult.modelMapper(c,n)})})}),c.$on("uis:close",function(e,t){s(function(){r.focusser.prop("disabled",!1),t||r.focusser[0].focus()},0,!1)}),c.$on("uis:activate",function(){u.prop("disabled",!0)});var u=angular.element("<input ng-disabled='$select.disabled' class='ui-select-focusser ui-select-offscreen' type='text' id='{{ $select.focusserId }}' aria-label='{{ $select.focusserTitle }}' aria-haspopup='true' role='button' />");i(u)(c),r.focusser=u,r.focusInput=u,n.parent().append(u),u.bind("focus",function(){c.$evalAsync(function(){r.focus=!0})}),u.bind("blur",function(){c.$evalAsync(function(){r.focus=!1})}),u.bind("keydown",function(e){return e.which===t.BACKSPACE&&r.backspaceReset!==!1?(e.preventDefault(),e.stopPropagation(),r.select(void 0),void c.$apply()):void(e.which===t.TAB||t.isControl(e)||t.isFunctionKey(e)||e.which===t.ESC||(e.which!=t.DOWN&&e.which!=t.UP&&e.which!=t.ENTER&&e.which!=t.SPACE||(e.preventDefault(),e.stopPropagation(),r.activate()),c.$digest()))}),u.bind("keyup input",function(e){e.which===t.TAB||t.isControl(e)||t.isFunctionKey(e)||e.which===t.ESC||e.which==t.ENTER||e.which===t.BACKSPACE||(r.activate(u.val()),u.val(""),c.$digest())})}}}]),i.directive("uiSelectSort",["$timeout","uiSelectConfig","uiSelectMinErr",function(e,t,s){return{require:["^^uiSelect","^ngModel"],link:function(t,i,c,n){if(null===t[c.uiSelectSort])throw s("sort","Expected a list to sort");var l=n[0],a=n[1],r=angular.extend({axis:"horizontal"},t.$eval(c.uiSelectSortOptions)),o=r.axis,u="dragging",d="dropping",p="dropping-before",h="dropping-after";t.$watch(function(){return l.sortable},function(e){e?i.attr("draggable",!0):i.removeAttr("draggable")}),i.on("dragstart",function(e){i.addClass(u),(e.dataTransfer||e.originalEvent.dataTransfer).setData("text",t.$index.toString())}),i.on("dragend",function(){v(u)});var g,f=function(e,t){this.splice(t,0,this.splice(e,1)[0])},v=function(e){angular.forEach(l.$element.querySelectorAll("."+e),function(t){angular.element(t).removeClass(e)})},m=function(e){e.preventDefault();var t="vertical"===o?e.offsetY||e.layerY||(e.originalEvent?e.originalEvent.offsetY:0):e.offsetX||e.layerX||(e.originalEvent?e.originalEvent.offsetX:0);t<this["vertical"===o?"offsetHeight":"offsetWidth"]/2?(v(h),i.addClass(p)):(v(p),i.addClass(h))},$=function(t){t.preventDefault();var s=parseInt((t.dataTransfer||t.originalEvent.dataTransfer).getData("text"),10);e.cancel(g),g=e(function(){b(s)},20)},b=function(e){var s=t.$eval(c.uiSelectSort),n=s[e],l=null;l=i.hasClass(p)?e<t.$index?t.$index-1:t.$index:e<t.$index?t.$index:t.$index+1,f.apply(s,[e,l]),a.$setViewValue(Date.now()),t.$apply(function(){t.$emit("uiSelectSort:change",{array:s,item:n,from:e,to:l})}),v(d),v(p),v(h),i.off("drop",$)};i.on("dragenter",function(){i.hasClass(u)||(i.addClass(d),i.on("dragover",m),i.on("drop",$))}),i.on("dragleave",function(e){e.target==i&&(v(d),v(p),v(h),i.off("dragover",m),i.off("drop",$))})}}}]),i.directive("uisOpenClose",["$parse","$timeout",function(e,t){return{restrict:"A",require:"uiSelect",link:function(s,i,c,n){n.onOpenCloseCallback=e(c.uisOpenClose),s.$watch("$select.open",function(e,i){e!==i&&t(function(){n.onOpenCloseCallback(s,{isOpen:e});
+})})}}}]),i.service("uisRepeatParser",["uiSelectMinErr","$parse",function(e,t){var s=this;s.parse=function(s){var i;if(i=s.match(/^\s*(?:([\s\S]+?)\s+as\s+)?(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(\s*[\s\S]+?)?(?:\s+track\s+by\s+([\s\S]+?))?\s*$/),!i)throw e("iexp","Expected expression in form of '_item_ in _collection_[ track by _id_]' but got '{0}'.",s);var c=i[5],n="";if(i[3]){c=i[5].replace(/(^\()|(\)$)/g,"");var l=i[5].match(/^\s*(?:[\s\S]+?)(?:[^\|]|\|\|)+([\s\S]*)\s*$/);l&&l[1].trim()&&(n=l[1],c=c.replace(n,""))}return{itemName:i[4]||i[2],keyName:i[3],source:t(c),filters:n,trackByExp:i[6],modelMapper:t(i[1]||i[4]||i[2]),repeatExpression:function(e){var t=this.itemName+" in "+(e?"$group.items":"$select.items");return this.trackByExp&&(t+=" track by "+this.trackByExp),t}}},s.getGroupNgRepeatExpression=function(){return"$group in $select.groups track by $group.name"}}])}(),angular.module("ui.select").run(["$templateCache",function(e){e.put("bootstrap/choices.tpl.html",'<ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu" ng-show="$select.open && $select.items.length > 0"><li class="ui-select-choices-group" id="ui-select-choices-{{ $select.generatedId }}"><div class="divider" ng-show="$select.isGrouped && $index > 0"></div><div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header" ng-bind="$group.name"></div><div ng-attr-id="ui-select-choices-row-{{ $select.generatedId }}-{{$index}}" class="ui-select-choices-row" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}" role="option"><span class="ui-select-choices-row-inner"></span></div></li></ul>'),e.put("bootstrap/match-multiple.tpl.html",'<span class="ui-select-match"><span ng-repeat="$item in $select.selected track by $index"><span class="ui-select-match-item btn btn-default btn-xs" tabindex="-1" type="button" ng-disabled="$select.disabled" ng-click="$selectMultiple.activeMatchIndex = $index;" ng-class="{\'btn-primary\':$selectMultiple.activeMatchIndex === $index, \'select-locked\':$select.isLocked(this, $index)}" ui-select-sort="$select.selected"><span class="close ui-select-match-close" ng-hide="$select.disabled" ng-click="$selectMultiple.removeChoice($index)">&nbsp;&times;</span> <span uis-transclude-append=""></span></span></span></span>'),e.put("bootstrap/match.tpl.html",'<div class="ui-select-match" ng-hide="$select.open && $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{\'btn-default-focus\':$select.focus}"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="{{ $select.baseTitle }} activate" ng-disabled="$select.disabled" ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted">{{$select.placeholder}}</span> <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left" ng-class="{\'ui-select-allow-clear\': $select.allowClear && !$select.isEmpty()}" ng-transclude=""></span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i> <a ng-show="$select.allowClear && !$select.isEmpty() && ($select.disabled !== true)" aria-label="{{ $select.baseTitle }} clear" style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span></div>'),e.put("bootstrap/no-choice.tpl.html",'<ul class="ui-select-no-choice dropdown-menu" ng-show="$select.items.length == 0"><li ng-transclude=""></li></ul>'),e.put("bootstrap/select-multiple.tpl.html",'<div class="ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control" ng-class="{open: $select.open}"><div><div class="ui-select-match"></div><input type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="ui-select-search input-xs" placeholder="{{$selectMultiple.getPlaceholder()}}" ng-disabled="$select.disabled" ng-click="$select.activate()" ng-model="$select.search" role="combobox" aria-expanded="{{$select.open}}" aria-label="{{$select.baseTitle}}" ng-class="{\'spinner\': $select.refreshing}" ondrop="return false;"></div><div class="ui-select-choices"></div><div class="ui-select-no-choice"></div></div>'),e.put("bootstrap/select.tpl.html",'<div class="ui-select-container ui-select-bootstrap dropdown" ng-class="{open: $select.open}"><div class="ui-select-match"></div><span ng-show="$select.open && $select.refreshing && $select.spinnerEnabled" class="ui-select-refreshing {{$select.spinnerClass}}"></span> <input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="{{ $select.baseTitle }}" aria-owns="ui-select-choices-{{ $select.generatedId }}" class="form-control ui-select-search" ng-class="{ \'ui-select-search-hidden\' : !$select.searchEnabled }" placeholder="{{$select.placeholder}}" ng-model="$select.search" ng-show="$select.open"><div class="ui-select-choices"></div><div class="ui-select-no-choice"></div></div>'),e.put("select2/choices.tpl.html",'<ul tabindex="-1" class="ui-select-choices ui-select-choices-content select2-results"><li class="ui-select-choices-group" ng-class="{\'select2-result-with-children\': $select.choiceGrouped($group) }"><div ng-show="$select.choiceGrouped($group)" class="ui-select-choices-group-label select2-result-label" ng-bind="$group.name"></div><ul id="ui-select-choices-{{ $select.generatedId }}" ng-class="{\'select2-result-sub\': $select.choiceGrouped($group), \'select2-result-single\': !$select.choiceGrouped($group) }"><li role="option" ng-attr-id="ui-select-choices-row-{{ $select.generatedId }}-{{$index}}" class="ui-select-choices-row" ng-class="{\'select2-highlighted\': $select.isActive(this), \'select2-disabled\': $select.isDisabled(this)}"><div class="select2-result-label ui-select-choices-row-inner"></div></li></ul></li></ul>'),e.put("select2/match-multiple.tpl.html",'<span class="ui-select-match"><li class="ui-select-match-item select2-search-choice" ng-repeat="$item in $select.selected track by $index" ng-class="{\'select2-search-choice-focus\':$selectMultiple.activeMatchIndex === $index, \'select2-locked\':$select.isLocked(this, $index)}" ui-select-sort="$select.selected"><span uis-transclude-append=""></span> <a href="javascript:;" class="ui-select-match-close select2-search-choice-close" ng-click="$selectMultiple.removeChoice($index)" tabindex="-1"></a></li></span>'),e.put("select2/match.tpl.html",'<a class="select2-choice ui-select-match" ng-class="{\'select2-default\': $select.isEmpty()}" ng-click="$select.toggle($event)" aria-label="{{ $select.baseTitle }} select"><span ng-show="$select.isEmpty()" class="select2-chosen">{{$select.placeholder}}</span> <span ng-hide="$select.isEmpty()" class="select2-chosen" ng-transclude=""></span> <abbr ng-if="$select.allowClear && !$select.isEmpty()" class="select2-search-choice-close" ng-click="$select.clear($event)"></abbr> <span class="select2-arrow ui-select-toggle"><b></b></span></a>'),e.put("select2/no-choice.tpl.html",'<div class="ui-select-no-choice dropdown" ng-show="$select.items.length == 0"><div class="dropdown-content"><div data-selectable="" ng-transclude=""></div></div></div>'),e.put("select2/select-multiple.tpl.html",'<div class="ui-select-container ui-select-multiple select2 select2-container select2-container-multi" ng-class="{\'select2-container-active select2-dropdown-open open\': $select.open, \'select2-container-disabled\': $select.disabled}"><ul class="select2-choices"><span class="ui-select-match"></span><li class="select2-search-field"><input type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="true" aria-owns="ui-select-choices-{{ $select.generatedId }}" aria-label="{{ $select.baseTitle }}" aria-activedescendant="ui-select-choices-row-{{ $select.generatedId }}-{{ $select.activeIndex }}" class="select2-input ui-select-search" placeholder="{{$selectMultiple.getPlaceholder()}}" ng-disabled="$select.disabled" ng-hide="$select.disabled" ng-model="$select.search" ng-click="$select.activate()" style="width: 34px;" ondrop="return false;"></li></ul><div class="ui-select-dropdown select2-drop select2-with-searchbox select2-drop-active" ng-class="{\'select2-display-none\': !$select.open || $select.items.length === 0}"><div class="ui-select-choices"></div></div></div>'),e.put("select2/select.tpl.html",'<div class="ui-select-container select2 select2-container" ng-class="{\'select2-container-active select2-dropdown-open open\': $select.open, \'select2-container-disabled\': $select.disabled, \'select2-container-active\': $select.focus, \'select2-allowclear\': $select.allowClear && !$select.isEmpty()}"><div class="ui-select-match"></div><div class="ui-select-dropdown select2-drop select2-with-searchbox select2-drop-active" ng-class="{\'select2-display-none\': !$select.open}"><div class="search-container" ng-class="{\'ui-select-search-hidden\':!$select.searchEnabled, \'select2-search\':$select.searchEnabled}"><input type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ng-class="{\'select2-active\': $select.refreshing}" role="combobox" aria-expanded="true" aria-owns="ui-select-choices-{{ $select.generatedId }}" aria-label="{{ $select.baseTitle }}" class="ui-select-search select2-input" ng-model="$select.search"></div><div class="ui-select-choices"></div><div class="ui-select-no-choice"></div></div></div>'),e.put("selectize/choices.tpl.html",'<div ng-show="$select.open" class="ui-select-choices ui-select-dropdown selectize-dropdown" ng-class="{\'single\': !$select.multiple, \'multi\': $select.multiple}"><div class="ui-select-choices-content selectize-dropdown-content"><div class="ui-select-choices-group optgroup"><div ng-show="$select.isGrouped" class="ui-select-choices-group-label optgroup-header" ng-bind="$group.name"></div><div role="option" class="ui-select-choices-row" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}"><div class="option ui-select-choices-row-inner" data-selectable=""></div></div></div></div></div>'),e.put("selectize/match-multiple.tpl.html",'<div class="ui-select-match" data-value="" ng-repeat="$item in $select.selected track by $index" ng-click="$selectMultiple.activeMatchIndex = $index;" ng-class="{\'active\':$selectMultiple.activeMatchIndex === $index}" ui-select-sort="$select.selected"><span class="ui-select-match-item" ng-class="{\'select-locked\':$select.isLocked(this, $index)}"><span uis-transclude-append=""></span> <span class="remove ui-select-match-close" ng-hide="$select.disabled" ng-click="$selectMultiple.removeChoice($index)">&times;</span></span></div>'),e.put("selectize/match.tpl.html",'<div ng-hide="$select.searchEnabled && ($select.open || $select.isEmpty())" class="ui-select-match"><span ng-show="!$select.searchEnabled && ($select.isEmpty() || $select.open)" class="ui-select-placeholder text-muted">{{$select.placeholder}}</span> <span ng-hide="$select.isEmpty() || $select.open" ng-transclude=""></span></div>'),e.put("selectize/no-choice.tpl.html",'<div class="ui-select-no-choice selectize-dropdown" ng-show="$select.items.length == 0"><div class="selectize-dropdown-content"><div data-selectable="" ng-transclude=""></div></div></div>'),e.put("selectize/select-multiple.tpl.html",'<div class="ui-select-container selectize-control multi plugin-remove_button" ng-class="{\'open\': $select.open}"><div class="selectize-input" ng-class="{\'focus\': $select.open, \'disabled\': $select.disabled, \'selectize-focus\' : $select.focus}" ng-click="$select.open && !$select.searchEnabled ? $select.toggle($event) : $select.activate()"><div class="ui-select-match"></div><input type="search" autocomplete="off" tabindex="-1" class="ui-select-search" ng-class="{\'ui-select-search-hidden\':!$select.searchEnabled}" placeholder="{{$selectMultiple.getPlaceholder()}}" ng-model="$select.search" ng-disabled="$select.disabled" aria-expanded="{{$select.open}}" aria-label="{{ $select.baseTitle }}" ondrop="return false;"></div><div class="ui-select-choices"></div><div class="ui-select-no-choice"></div></div>'),e.put("selectize/select.tpl.html",'<div class="ui-select-container selectize-control single" ng-class="{\'open\': $select.open}"><div class="selectize-input" ng-class="{\'focus\': $select.open, \'disabled\': $select.disabled, \'selectize-focus\' : $select.focus}" ng-click="$select.open && !$select.searchEnabled ? $select.toggle($event) : $select.activate()"><div class="ui-select-match"></div><input type="search" autocomplete="off" tabindex="-1" class="ui-select-search ui-select-toggle" ng-class="{\'ui-select-search-hidden\':!$select.searchEnabled}" ng-click="$select.toggle($event)" placeholder="{{$select.placeholder}}" ng-model="$select.search" ng-hide="!$select.isEmpty() && !$select.open" ng-disabled="$select.disabled" aria-label="{{ $select.baseTitle }}"></div><div class="ui-select-choices"></div><div class="ui-select-no-choice"></div></div>')}]);
+//# sourceMappingURL=select.min.js.map
+
+/**
+ * Angular Image Fallback
+ * (c) 2014-2016 Daniel Cohen. http://dcb.co.il
+ * License: MIT
+ * https://github.com/dcohenb/angular-img-fallback
+ */
+(function () {
+    angular.module('dcbImgFallback', [])
+
+        .directive('fallbackSrc', ['imageService', imageService => {
+
+            return {
+                restrict: 'A',
+                link: (scope, element, attr) => {
+
+                    // Update the service with the correct missing src if present, otherwise use the default image
+                    let newSrc = attr.fallbackSrc ? imageService.setMissing(attr.fallbackSrc) : imageService.getMissing();
+
+                    // Listen for errors on the element and if there are any replace the source with the fallback source
+                    let errorHandler = () => {
+
+                        // fallbackSrc may have changed since the link function ran, so try to grab it again.
+                        let newSrc = attr.fallbackSrc ? imageService.setMissing(attr.fallbackSrc) : imageService.getMissing();
+
+                        if (element[0].src !== newSrc) {
+                            element[0].src = newSrc;
+                        }
+                    };
+
+                    // Replace the loading image with missing image if `ng-src` link was broken
+                    if (element[0].src === imageService.getLoading()) {
+                        element[0].src = newSrc;
+                    }
+
+                    element.on('error', errorHandler);
+
+                    scope.$on('$destroy', () => {
+                        element.off('error', errorHandler);
+                    });
+
+                }
+            };
+        }])
+
+
+        .directive('loadingSrc', ['$interpolate', 'imageService', ($interpolate, imageService) => {
+
+            // Load the image source in the background and replace the element source once it's ready
+            let linkFunction = (scope, element, attr) => {
+                // Update the service with the correct loading src if present, otherwise use the default image
+                element[0].src = attr.loadingSrc ? imageService.setLoading(attr.loadingSrc) : imageService.getLoading();
+
+                let img = new Image();
+                img.src = $interpolate(attr.imgSrc)(scope);
+
+                img.onload = () => {
+                    img.onload = null;
+                    if (element[0].src !== img.src) {
+                        element[0].src = img.src;
+                    }
+                };
+            };
+
+            return {
+                restrict: 'A',
+                compile: (el, attr) => {
+                    // Take over the ng-src attribute to stop it from loading the image
+                    attr.imgSrc = attr.ngSrc;
+                    delete attr.ngSrc;
+
+                    return linkFunction;
+                }
+            };
+        }])
+
+        .factory('imageService', () => {
+            // Both images have the same prefix we can save some space on that
+            let base64prefix = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiPjxkZWZzPjxyYWRpYWxHcmFkaWVudCBpZD0icmFkaWFsLWdyYWRpZW50IiBjeD0iNTAwIiBjeT0iNTAwIiByPSI1MDAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNkZmRmZGYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5OTkiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI3JhZGlhbC1ncmFkaWVudCkiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjEwMDAiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNjAxIDQxNGwwIDBWNTg2bDAgMEgzOTlsMCAwVjQxNGwwIDBINjAxWm0wLTE0SDM5OUExNCAxNCAwIDAgMCAzODUgNDE0djE3M2ExNCAxNCAwIDAgMCAxNCAxNEg2MDFBMTQgMTQgMCAwIDAgNjE1IDU4NlY0MTRhMTQgMTQgMCAwIDAtMTQtMTRoMFpNNTc';
+
+            let loadingDefault = `${base64prefix}1IDUwMmE3NyA3NyAwIDAgMC0yNC01NCA3NiA3NiAwIDAgMC0yNS0xNiA3NSA3NSAwIDAgMC01NyAxQTc0IDc0IDAgMCAwIDQzMCA0NzQgNzMgNzMgMCAwIDAgNDMxIDUzMGE3MiA3MiAwIDAgMCAzOSAzOCA3MCA3MCAwIDAgMCA1NC0xIDY5IDY5IDAgMCAwIDM3LTM4IDY4IDY4IDAgMCAwIDQtMTZsMSAwYTEwIDEwIDAgMCAwIDEwLTEwYzAgMCAwLTEgMC0xaDBabS0xNSAyNmE2NyA2NyAwIDAgMS0zNyAzNSA2NiA2NiAwIDAgMS01MC0xIDY0IDY0IDAgMCAxLTM0LTM1QTYzIDYzIDAgMCAxIDQ0MCA0NzkgNjIgNjIgMCAwIDEgNDU0IDQ1OSA2MiA2MiAwIDAgMSA0NzQgNDQ2YTYxIDYxIDAgMCAxIDIzLTQgNjAgNjAgMCAwIDEgNDIgMTlBNTkgNTkgMCAwIDEgNTUyIDQ4MGE1OCA1OCAwIDAgMSA0IDIyaDBjMCAwIDAgMSAwIDFhMTAgMTAgMCAwIDAgOSAxMCA2NyA2NyAwIDAgMS01IDE1aDBaIi8+PC9zdmc+`;
+            let missingDefault = `${base64prefix}yIDQ1MGEyMiAyMiAwIDEgMS0yMi0yMkEyMiAyMiAwIDAgMSA1NzIgNDUwWk01ODYgNTcySDQxNFY1NDNsNTAtODYgNTggNzJoMTRsNTAtNDN2ODZaIi8+PC9zdmc+`;
+
+            return {
+                getLoading: () => {
+                    return loadingDefault;
+                },
+                getMissing: () => {
+                    return missingDefault;
+                },
+                setLoading: (newSrc) => {
+                    return loadingDefault = newSrc;
+                },
+                setMissing: (newSrc) => {
+                    return missingDefault = newSrc;
+                }
+            };
+        });
+}());
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.

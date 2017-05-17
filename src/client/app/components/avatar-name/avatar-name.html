@@ -1,0 +1,5 @@
+<img class="avatar__image" src="/images/avatar-personal.svg" alt="" ng-if="!vm.firstLetter && !vm.emailLetter">
+<div class="avatar__symbol-image" ng-if="vm.firstLetter || vm.emailLetter">
+    <div class="avatar__first-name">{{ vm.firstLetter ? vm.firstLetter : vm.emailLetter }}</div>
+    <div class="avatar__last-name" ng-if="vm.lastLetter">{{ vm.lastLetter }}</div>
+</div>
