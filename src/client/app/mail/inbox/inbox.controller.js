@@ -5,13 +5,17 @@
         .module('mail.inbox')
         .controller('InboxController', InboxController);
 
-    InboxController.$inject = ['$rootScope', '$state', 'mail', 'mailBox'];
+    InboxController.$inject = ['$rootScope', '$state', 'mail', 'mailBox', 'profile', 'messages'];
     /* @ngInject */
-    function InboxController($rootScope, $state, mail, mailBox) {
+    function InboxController($rootScope, $state, mail, mailBox, profile, messages) {
         var vm = this;
 
         vm.messages = {
             params: {
+                'per-page': 20,
+                'len': 100
+            },
+            defaultParams: {
                 'per-page': 20,
                 'len': 100
             },
@@ -24,9 +28,25 @@
             get();
         });
 
+        $rootScope.$on('search:mail', function (e, data) {
+            vm.messages.params = data.search;
+            // _.merge(vm.messages.params, data.search);
+            get();
+        });
+
+        $rootScope.$on('search:close', function (e, data) {
+            vm.messages.params = angular.copy(vm.messages.defaultParams);
+            vm.messages.params.mbox = $state.params.mbox;
+
+            console.log('vm.messages.params', vm.messages.params);
+
+            get();
+        });
+
         activate();
 
         function activate() {
+            vm.$state = $state;
 
             if ($state.params.filter) {
                 vm.messages.params.filter = $state.params.filter;
@@ -36,12 +56,28 @@
                 vm.messages.params.mbox = $state.params.mbox;
             }
 
-            get();
+            if ($state.params.tag_id) {
+                vm.messages.params.tag_id = $state.params.tag_id;
+            }
+
+            // get();
             getMailBox();
+
+            console.log('messages', messages.$promise);
+
+            messages.$promise.then(function (response) {
+                vm.messages.params.search = null;
+                vm.messages.checked = [];
+                vm.messages = _.assign(vm.messages, response.data);
+                _.forEach(vm.messages.items, function (message) {
+                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
+                });
+            });
         }
 
         function get() {
             mail.get(vm.messages.params).then(function (response) {
+                vm.messages.checked = [];
                 vm.messages = _.assign(vm.messages, response.data);
                 _.forEach(vm.messages.items, function (message) {
                     message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
