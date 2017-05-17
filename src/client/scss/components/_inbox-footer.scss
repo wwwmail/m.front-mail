@@ -21,6 +21,9 @@
 
     padding: 0 0px;
 
+    display: flex;
+    justify-content: flex-end;
+
   }
   &__new-message{
     position: absolute;
@@ -78,6 +81,7 @@
       }
     }
   }
+
   //@media only screen and (max-width: 360px) {
   //  &__group-option{
   //    max-width: 160px;
@@ -85,4 +89,7 @@
   //    text-overflow: ellipsis;
   //  }
   //}
+  &__new-btn{
+    margin: 0 0 15px;
+  }
 }

@@ -1946,6 +1946,7 @@
   display: flex;
   color: #000;
   font-weight: 100;
+  height: 42px;
 }
 .input-line__input {
   width: 100%;
@@ -1965,7 +1966,7 @@
 .input-line__label {
   position: absolute;
   margin: 0;
-  bottom: 3px;
+  bottom: 6px;
   font-size: 11px;
   color: rgba(0, 0, 0, 0.5);
 }
@@ -1974,7 +1975,7 @@
   margin: 0;
   bottom: 3px;
   right: 0;
-  font-size: 11px;
+  font-size: 15px;
 }
 .input-line:focus {
   border: 1px solid #fc0;
@@ -2593,6 +2594,8 @@
   min-height: 100%;
   margin: auto;
   padding: 0 0px;
+  display: flex;
+  justify-content: flex-end;
 }
 .inbox-footer__new-message {
   position: absolute;
@@ -2632,6 +2635,9 @@
 }
 .inbox-footer__group-option.is-more-switch .btn--icon {
   transform: rotate(180deg);
+}
+.inbox-footer__new-btn {
+  margin: 0 0 15px;
 }
 
 .date-sort {
@@ -3118,6 +3124,8 @@
   vertical-align: bottom;
   line-height: 22px;
   outline: none;
+  background: transparent;
+  overflow: auto;
 }
 .quick-reply__message-input {
   font: normal 16px/1.33 "HelveticaNeueCyr", sans-serif;
@@ -3280,6 +3288,22 @@
 
 .compose-send__item {
   margin-right: 5px;
+}
+.compose-send .note-toolbar.panel-heading {
+  display: none !important;
+}
+
+.compose__message {
+  padding: 10px;
+  font: normal 14px/1.3 Arial, sans-serif;
+  color: #282828;
+}
+
+.btn-arrow {
+  position: absolute;
+  right: 1px;
+  font-size: 14px;
+  color: #888888;
 }
 
 .body-message {
