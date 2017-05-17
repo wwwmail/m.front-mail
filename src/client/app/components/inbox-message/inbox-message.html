@@ -1,12 +1,12 @@
 <div class="inbox-message inbox-message--new"
      ng-class="{'inbox-message--importmant': vm.message.important,
                 'inbox-message--new': vm.message.active,
-                'inbox-message--checked': vm.messages.isChecked}"
+                'inbox-message--checked': vm.message.isChecked}"
      ng-mouseover="vm.message.hover = true" ng-mouseleave="vm.message.hover = false"
      ng-click="vm.goToUrl()"
      inbox-message-hover>
 
-    <!--ng-model="vm.messages.isChecked"-->
+
     <div class="inbox-message__left">
         <label ng-click="$event.stopPropagation();">
             <div class="inbox-message__avatar">
@@ -14,7 +14,7 @@
                     <img class="avatar__image" src="/images/avatar-personal.svg">
                     <div class="inbox-message__check-message"></div>
                     <input type="checkbox"
-                           ng-model="vm.messages.isChecked"
+                           ng-model="vm.message.isChecked"
                            style="display: none;"
                            data-checklist-model="vm.messages.checked"
                            data-checklist-value="vm.message">
