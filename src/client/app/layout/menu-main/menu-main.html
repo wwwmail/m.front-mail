@@ -1,7 +1,10 @@
 <div class="menu-main-layout scrollables">
         <!-- хедер меню-->
         <div class="menu-main-layout__header">
-            <img class=" menu-main-layout__header__logo img-responsive" src="/images/logo.png">
+            <img class="menu-main-layout__header__logo img-responsive" src="/images/logo.png">
+            <button class="menu-main-layout__button-close btn" type="button">
+                <span class="icon-double-arrow-left"></span>
+            </button>
         </div>
 
         <div class="menu-main-layout__user-info">
@@ -25,7 +28,7 @@
         <div class="menu-main-layout__item">
             <ul class="menu-main">
                 <li class="menu-main__item" ng-repeat="folder in vm.folders.items">
-                    <div class="menu-main__item__content" ng-if="!folder.isSub">
+                    <div class="menu-main__item-content" ng-if="!folder.isSub">
                         <a class="menu-main__link"
                            ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
                             <span class="icon-inbox menu-main__icon"></span>
@@ -36,7 +39,7 @@
                         </div>
                     </div>
 
-                    <div class="menu-main__item__content" ng-if="folder.isSub">
+                    <div class="menu-main__item-content" ng-if="folder.isSub">
                         <ul class="menu-main menu-main--additional">
                             <li class="menu-main__item">
                                 <a class="menu-main__link menu-main__link--active"
@@ -49,14 +52,11 @@
                     </div>
                 </li>
             </ul>
-
-
             <hr class="hr hr--main-menu">
-
 
             <ul class="menu-main">
                 <li class="menu-main__item">
-                    <div class="menu-main__item__content">
+                    <div class="menu-main__item-content">
                         <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})">
                             <span class="icon-important menu-main__icon"></span>
                             <span class="menu-mein__title">Важные</span>
@@ -65,7 +65,7 @@
                     </div>
                 </li>
                 <li class="menu-main__item">
-                    <div class="menu-main__item__content">
+                    <div class="menu-main__item-content">
                         <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})">
                             <span class="icon-clip menu-main__icon"></span>
                             <span class="menu-mein__title">С вложениями</span>
@@ -73,7 +73,7 @@
                     </div>
                 </li>
                 <li class="menu-main__item">
-                    <div class="menu-main__item__content">
+                    <div class="menu-main__item-content">
                         <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})">
                             <span class="icon-unread menu-main__icon"></span>
                             <span class="menu-mein__title">Непрочитанные</span>
@@ -88,7 +88,7 @@
             <!-- -->
             <ul class="menu-main">
                 <li class="menu-main__item">
-                    <div class="menu-main__item__content">
+                    <div class="menu-main__item-content">
                         <a class="menu-main__link" href="">
                             <span class="icon-tag-solid menu-main__icon menu-main__icon--select"></span>
                             <span class="menu-mein__title">Позже</span>
@@ -96,7 +96,7 @@
                     </div>
                 </li>
                 <li class="menu-main__item">
-                    <div class="menu-main__item__content">
+                    <div class="menu-main__item-content">
                         <a class="menu-main__link" href="">
                             <span class="icon-filter menu-main__icon"></span>
                             <span class="menu-mein__title">Фильтры</span>
@@ -115,7 +115,7 @@
                     </div>
                 </li>
                 <li class="menu-main__item">
-                    <div class="menu-main__item__content">
+                    <div class="menu-main__item-content">
                         <a class="menu-main__link" href="">
                             <span class="icon-settings menu-main__icon"></span>
                             <span class="menu-mein__title">Настройки</span>
