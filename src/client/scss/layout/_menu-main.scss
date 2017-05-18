@@ -13,36 +13,73 @@
 
   &__item {
 
-    &__content{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-flow: row wrap;
+    &.is-sub-menu{
 
-      width: 100%;
+      .menu-main__item-sub .menu-main__count{
+        //margin: auto 12px auto auto;
+      }
+      .menu-main__show-additional{
+        display: inline-block;
 
-      font: 300 18px/1 $mainFont;
-      color: $white-color;
+      }
+      &--open{
 
-      //&:hover {
-      //  background: rgba($yellow-select-main-menu-color, .1);
-      //}
+        .menu-main__show-additional {
+          transform: rotate(180deg);
+        }
+        .menu-main--additional{
+          background: rgba($yellow-lignt, .05);
+        }
+      }
+
     }
-  }
 
-  &__link {
-    display: block;
-    min-width: 80%;
+  }
+  &__item-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-flow: row nowrap;
+
+    width: 100%;
 
     font: 300 18px/1 $mainFont;
     color: $white-color;
 
-    padding: 14px 13px;
+    //&:hover {
+    //  background: rgba($yellow-select-main-menu-color, .1);
+    //}
+
+  }
+  &__item-sub{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-flow: row nowrap;
+
+    width: 100%;
+
+    font: 300 18px/1 $mainFont;
+    color: $white-color;
+
+  }
+
+  &__link {
+    display: block;
+    width: 100%;
+
+    font: 300 18px/1 $mainFont;
+    color: $white-color;
+
+    padding: 14px 20px 14px 13px;
 
     cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 
     &:hover {
-      color: $yellow-select-main-menu-color;
+      color: $white-color;
     }
     //
     //&:active, &:focus {
@@ -63,18 +100,32 @@
       }
     }
   }
+  &__title{
+
+  }
 
   &__count{
+    margin: auto;
     text-align: center;
-    color: $yellow-yandex;
-    font-size: 14px;
+    color: $white-color;
+    font-size: 13px;
+    opacity: 0.6;
+    //margin: auto 12px auto auto;
   }
 
   &__additional-option{
     cursor: pointer;
-    padding: 10px 7px 10px 14px;
+    padding: 10px 0 10px 7px;
+    margin-right: 7px;
     font-size: 24px;
-    min-width: 48px;
+    text-align: center;
+    min-width: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: hidden;
 
     //&:hover, &:active {
     //  background-color: rgba($yellow-yandex, .9);
@@ -84,6 +135,11 @@
     //    color: $menu-main-color!important;
     //  }
     //}
+  }
+  &__show-additional{
+    display: none;
+    font-size: 15px;
+    margin: 0 0 0 auto;
   }
 
   &__sub {
