@@ -20,6 +20,7 @@
         vm.openTagListPopup = openTagListPopup;
         vm.openLayoutFolder = openLayoutFolder;
         vm.close = close;
+        vm.setImportant = setImportant;
 
         activate();
 
@@ -110,6 +111,29 @@
             });
 
             close();
+        }
+
+        function setImportant() {
+            if (vm.message.important && !vm.message.isLoading) {
+                vm.message.isLoading = true;
+                mail.deflag({}, {
+                    messages: [vm.message],
+                    flag: 'Flagged'
+                }).then(function () {
+                    vm.message.isLoading = false;
+                });
+                vm.message.important = !vm.message.important;
+                return;
+            }
+
+            vm.message.isLoading = true;
+            mail.flag({}, {
+                messages: [vm.message],
+                flag: 'Flagged'
+            }).then(function () {
+                vm.message.isLoading = false;
+            });
+            vm.message.important = !vm.message.important;
         }
 
         function openLayoutFolder() {

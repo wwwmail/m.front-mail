@@ -77,8 +77,9 @@
             <span class="popup__item__title">Закрепить</span>
         </div>-->
 
-    <div class="popup__item">
+    <div class="popup__item" ng-click="vm.setImportant()">
         <span class="icon-important-solid popup__icon color--semi-dark-red"></span>
-        <span class="popup__item__title">Важное</span>
+        <span class="popup__item__title" ng-if="!vm.message.important">Важное</span>
+        <span class="popup__item__title" ng-if="vm.message.important">Не важное</span>
     </div>
 </div>
