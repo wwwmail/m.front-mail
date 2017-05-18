@@ -1,0 +1,97 @@
+.attach-item {
+  @include border-radius(3px);
+
+  position: relative;
+
+  width: 114px;
+  height: 72px;
+
+  overflow: hidden;
+
+  background: #f4f4f4;
+
+  &__name {
+    position: absolute;
+
+    top: 10px;
+    left: 10px;
+
+    font: bold 12px/1.1 $mainFont;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+  }
+
+  &__image {
+    max-width: 100%;
+  }
+
+  &__type {
+    @include border-radius(3px);
+
+    position: absolute;
+
+    height: 20px;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+
+    bottom: 10px;
+    left: 10px;
+
+
+    padding: 0 7px;
+
+    background: $red-btn-color;
+
+    color: #fff;
+    font: bold 12px/1 $mainFont;
+    text-transform: uppercase;
+  }
+
+  &__buttons {
+    display: none;
+
+    width: 100%;
+
+    position: absolute;
+
+    bottom: 10px;
+
+    justify-content: center;
+  }
+
+  &__button {
+    @include border-radius(3px);
+
+    color: #fff;
+    border: none;
+
+    background: rgba(0, 0, 0, .75);
+
+    &:first-child {
+      @include border-radius(3px 0 0 3px);
+    }
+
+    &:last-child {
+      @include border-radius(0 3px 3px 0);
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, .5)
+    }
+  }
+
+  &:hover {
+    .attach-item__type {
+      display: none;
+    }
+
+    .attach-item__buttons {
+      display: flex;
+    }
+  }
+}

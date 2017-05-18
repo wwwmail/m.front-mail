@@ -1,0 +1,46 @@
+.attach-upload {
+  &__list {
+    &:after {
+      @include clear;
+    }
+  }
+
+  &__item {
+    display: block;
+
+    width: 140px;
+    //height: 140px;
+
+    margin: 0 50px 40px 0;
+
+    float: left;
+  }
+
+  &__name {
+    margin-top: 10px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__image {
+    text-align: center;
+    width: 140px;
+    height: 140px;
+
+    overflow: hidden;
+
+    &--shadow {
+      box-shadow: 0 0 3px 1px rgba(0, 0, 0, .5);
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  &__links {
+    text-align: center;
+  }
+}

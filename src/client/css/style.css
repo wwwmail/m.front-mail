@@ -4144,6 +4144,112 @@
   color: #595959;
 }
 
+.attach-upload__list:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.attach-upload__item {
+  display: block;
+  width: 140px;
+  margin: 0 50px 40px 0;
+  float: left;
+}
+.attach-upload__name {
+  margin-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.attach-upload__image {
+  text-align: center;
+  width: 140px;
+  height: 140px;
+  overflow: hidden;
+}
+.attach-upload__image--shadow {
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5);
+}
+.attach-upload__image img {
+  max-width: 100%;
+}
+.attach-upload__links {
+  text-align: center;
+}
+
+.attach-item {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  position: relative;
+  width: 114px;
+  height: 72px;
+  overflow: hidden;
+  background: #f4f4f4;
+}
+.attach-item__name {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font: bold 12px/1.1 "HelveticaNeueCyr", sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.attach-item__image {
+  max-width: 100%;
+}
+.attach-item__type {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  position: absolute;
+  height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 10px;
+  left: 10px;
+  padding: 0 7px;
+  background: #cc0000;
+  color: #fff;
+  font: bold 12px/1 "HelveticaNeueCyr", sans-serif;
+  text-transform: uppercase;
+}
+.attach-item__buttons {
+  display: none;
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  justify-content: center;
+}
+.attach-item__button {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #fff;
+  border: none;
+  background: rgba(0, 0, 0, 0.75);
+}
+.attach-item__button:first-child {
+  -moz-border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px 0 0 3px;
+}
+.attach-item__button:last-child {
+  -moz-border-radius: 0 3px 3px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 3px 3px 0;
+}
+.attach-item__button:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+.attach-item:hover .attach-item__type {
+  display: none;
+}
+.attach-item:hover .attach-item__buttons {
+  display: flex;
+}
+
 body {
   width: 100%;
   height: 100%;
