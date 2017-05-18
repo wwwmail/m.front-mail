@@ -249,3 +249,17 @@
     @extend .icon-valide-ok;
   }
 }
+
+.btn-arrow{
+  position: absolute;
+  right: 1px;
+
+  font-size: 14px;
+  color: #888888;
+
+  &--active{
+
+  }
+
+
+}

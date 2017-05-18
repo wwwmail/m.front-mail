@@ -1,12 +1,3 @@
-.compose-send {
-  &__item {
-    margin-right: 5px;
-  }
-  .note-toolbar.panel-heading{
-    display: none!important;
-  }
-}
-
 .compose{
   &__header{
     margin-left: -20px;
@@ -15,6 +6,11 @@
 
   &__from{
     position: relative;
+
+    &--add-features{
+
+
+    }
 
   }
   &__letter-subject{
@@ -65,21 +61,5 @@
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
   }
-
-}
-
-$inpus-compose-text: #b3b3b8;
-
-.btn-arrow{
-  position: absolute;
-  right: 1px;
-
-  font-size: 14px;
-  color: #888888;
-
-  &--active{
-
-  }
-
 
 }

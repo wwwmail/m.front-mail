@@ -70,7 +70,6 @@
 @import "components/quick-reply";
 @import "components/to-whom";
 @import "components/info-sender";
-@import "components/compose-send";
 @import "components/body-message";
 @import "components/time-send";
 @import "components/choice-language";
@@ -87,7 +86,7 @@
 @import "components/attach-upload";
 @import "components/attach-item";
 @import "components/attachments";
-
+@import "components/compose";
 
 body {
   width: 100%;

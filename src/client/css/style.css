@@ -1791,6 +1791,13 @@
   top: -4px;
 }
 
+.btn-arrow {
+  position: absolute;
+  right: 1px;
+  font-size: 14px;
+  color: #888888;
+}
+
 [placeholder] {
   color: #999999;
 }
@@ -3507,69 +3514,6 @@
   }
 }
 
-.compose-send__item {
-  margin-right: 5px;
-}
-.compose-send .note-toolbar.panel-heading {
-  display: none !important;
-}
-
-.compose__header {
-  margin-left: -20px;
-  margin-right: -20px;
-}
-.compose__from {
-  position: relative;
-}
-.compose__letter-subject {
-  position: relative;
-}
-.compose__content {
-  position: relative;
-  min-height: 56px;
-  padding: 0 16px;
-  margin-top: 1px;
-  color: #222;
-  box-shadow: none;
-  font-size: 16px;
-}
-.compose__message {
-  position: relative;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  display: block;
-  height: auto;
-  line-height: 18px;
-  min-height: 205px;
-  max-width: 100%;
-  transform: translateZ(0);
-  color: #000;
-  white-space: normal;
-  outline: none;
-}
-.compose__btn-attach {
-  position: absolute;
-  top: 26px;
-  right: 0;
-  margin-right: 20px;
-}
-.compose__attachments {
-  white-space: nowrap;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  margin: 10px 12px;
-  -webkit-overflow-scrolling: touch;
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-}
-
-.btn-arrow {
-  position: absolute;
-  right: 1px;
-  font-size: 14px;
-  color: #888888;
-}
-
 .body-message {
   margin: 58px 22px;
   border-bottom: 1px solid #ecebea;
@@ -4265,6 +4209,55 @@
 }
 .attachments__item {
   margin: 0 6px 6px 0;
+}
+
+.compose__header {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.compose__from {
+  position: relative;
+}
+.compose__letter-subject {
+  position: relative;
+}
+.compose__content {
+  position: relative;
+  min-height: 56px;
+  padding: 0 16px;
+  margin-top: 1px;
+  color: #222;
+  box-shadow: none;
+  font-size: 16px;
+}
+.compose__message {
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  display: block;
+  height: auto;
+  line-height: 18px;
+  min-height: 205px;
+  max-width: 100%;
+  transform: translateZ(0);
+  color: #000;
+  white-space: normal;
+  outline: none;
+}
+.compose__btn-attach {
+  position: absolute;
+  top: 26px;
+  right: 0;
+  margin-right: 20px;
+}
+.compose__attachments {
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  margin: 10px 12px;
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 body {
