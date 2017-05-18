@@ -2318,9 +2318,6 @@
   position: relative;
   top: -2px;
 }
-.select-input-line .ui-select-match-close {
-  display: none;
-}
 .select-input-line .ui-select-choices-row.active > span {
   color: inherit !important;
   text-decoration: none;
