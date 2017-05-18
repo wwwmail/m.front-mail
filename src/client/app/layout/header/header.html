@@ -21,7 +21,8 @@
 
             <div class="header__right">
                 <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
-                        type="button" ng-click="vm.isSearch = true;"></button>
+                        type="button"
+                        ng-click="vm.isSearch = true;"></button>
             </div>
 
             <hr class="hr hr--header">
@@ -32,7 +33,9 @@
     <div class="header__search is-active" ng-if="vm.isSearch">
         <div class="header__container">
             <div class="header__left">
-                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"></button>
+                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"
+                        type="button"
+                        ng-click="vm.isSearch = false; vm.clearSearch();"></button>
             </div>
             <div class="header__right width--inh">
                 <form class="search-block widtn-inh search-block" ng-submit="vm.search()">
