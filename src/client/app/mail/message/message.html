@@ -130,10 +130,9 @@
 
     </div>
 
-
     <!-- Аттачи -->
-    <div class="flex flex--colum">
-        <div class="mail-message__attachments attachments">
+    <div class="mail-message__mail-attachments">
+        <div class="attachments">
             <div class="attachments__item" ng-repeat="attachment in vm.message.model.attachmentsData">
                 <attach-item attach="attachment" message="vm.message"></attach-item>
             </div>
