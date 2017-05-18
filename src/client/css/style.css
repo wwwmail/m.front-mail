@@ -2648,6 +2648,9 @@
   flex-flow: column nowrap;
   padding-right: 15px;
   width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .inbox-message__right {
   display: flex;
