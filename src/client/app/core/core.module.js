@@ -18,6 +18,7 @@
             'ui.select',
             'dcbImgFallback',
             'ngFileSaver',
-            'infinite-scroll'
+            'infinite-scroll',
+            'content-editable'
         ]);
 })();

@@ -140,7 +140,6 @@
     <!-- Тело сообщения -->
     <div class="mail-message__body">
         <div class="body-message">
-
             <!--Само сообщение-->
             <div class="body-message__content"
                  ng-bind-html="vm.getTrustHtml(vm.message.model.body)"></div>
@@ -152,29 +151,21 @@
     </div>
 
     <!-- Быстрый ответ-->
-    <div class="mail-message__reply">
-
-        <div class="mail-message__reply-container">
-
-            <div class="quick-reply">
-                <button class="quick-reply__write btn btn--not-style icon-write"></button>
-                <div class="quick-reply__message">
-                    <div class="quick-reply__message-input" contenteditable="true"></div>
+    <!--<div class="mail-message__reply">-->
+        <form class="mail-message__reply" name="sendForm" ng-submit="vm.send(sendForm)">
+            <div class="mail-message__reply-container">
+                <div class="quick-reply">
+                    <button class="quick-reply__write btn btn--not-style icon-write"></button>
+                    <div class="quick-reply__message">
+                        <div class="quick-reply__message-input"
+                             contenteditable="true"
+                             ng-model="vm.text"
+                             required>
+                        </div>
+                    </div>
+                    <button class="quick-reply__send btn btn--not-style">Отпр.</button>
                 </div>
-
-                <button class="quick-reply__send btn btn--not-style ">Отпр.</button>
             </div>
-
-        </div>
-
-
-        <!-- поле для ввода сообщения -->
-
-
-    </div>
-
+        </form>
+    <!--</div>-->
 </div>
-
-<!--<div class="layout__footer">-->
-<!--<footer></footer>-->
-<!--</div>-->
