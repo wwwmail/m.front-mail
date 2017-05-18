@@ -1714,6 +1714,12 @@
   z-index: 2;
   cursor: pointer;
 }
+.btn--light-hover {
+  opacity: 0.6 !important;
+}
+.btn--light-hover:hover {
+  opacity: 1 !important;
+}
 .btn--size_s {
   height: 26px;
   font-size: 13px;
@@ -1812,26 +1818,6 @@
   outline: none;
   border: 1px solid #ccb764;
   box-shadow: 0px 0px 10px 0px #f9e38b;
-}
-.input--compose-line {
-  position: relative;
-  top: 0;
-  padding-bottom: 6px;
-  padding-left: 0;
-  min-height: 25px;
-  line-height: 22px;
-  font-size: 14px;
-  color: #222;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  border: 0;
-  border-top: none !important;
-  border-right: none !important;
-  border-left: none !important;
 }
 .input--up-shadow {
   box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.15);
@@ -2038,16 +2024,24 @@
   display: flex;
   color: #000;
   font-weight: 100;
+  min-height: 58px;
+}
+.input-line--fixed-height {
   max-height: 58px;
-  height: 42px;
+  height: 58px;
 }
 .input-line__input {
+  position: relative;
+  top: -5px;
+  padding: 0 32px 5px;
+  min-height: 25px;
+  line-height: 22px;
+  font-size: 14px;
   width: 100%;
   display: block;
   border: none;
   outline: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  padding-left: 40px;
 }
 .input-line__input:active, .input-line__input:focus {
   border-bottom: 1px solid #fc0;
@@ -2057,7 +2051,8 @@
   width: 100%;
 }
 .input-line__label {
-  position: absolute;
+  position: relative;
+  padding-top: 32px;
   margin: 0;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.5);
@@ -2072,8 +2067,8 @@
 .input-line__title {
   position: absolute;
   z-index: 1;
-  top: 0;
-  left: 16px;
+  top: 12px;
+  left: 32px;
   font-size: 12px;
   line-height: 12px;
   font-family: "HelveticaNeueCyr", sans-serif;
@@ -2081,6 +2076,19 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   color: #222;
+  transform: translate3d(0, 177%, 0) scale(1.2);
+  transition: transform .250s;
+}
+.input-line.is-active .input-line__title, .input-line:hover .input-line__title, .input-line:focus .input-line__title, .input-line:active .input-line__title {
+  transform: inherit !important;
+  transition: transform .250s;
+}
+.input-line__btn-more {
+  position: absolute;
+  top: 26px;
+  right: 11px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 .input-line:focus {
   border: 1px solid #fc0;
@@ -2224,6 +2232,90 @@
 }
 .radio-button__checkbox:checked + .radio-button__label .radio-button__switch {
   right: 0px;
+}
+
+.select-input-line {
+  width: 100% !important;
+  background: transparent;
+  padding: 0 0 0 24px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none;
+  border-bottom: 1px solid !important;
+  border-color: #ccc !important;
+}
+.select-input-line:active, .select-input-line:focus, .select-input-line:hover {
+  border-bottom-color: #fc0 !important;
+}
+.select-input-line__match-tags .ui-select-match-item {
+  border: none !important;
+  padding: 0;
+  display: inline-flex;
+  margin: 0 15px 0 0 !important;
+}
+.select-input-line__match-tags .ui-select-match-item:hover, .select-input-line__match-tags .ui-select-match-item:active, .select-input-line__match-tags .ui-select-match-item:focus {
+  background-color: transparent !important;
+  color: #000;
+}
+.select-input-line__match-item {
+  padding: 0 10px 0 0;
+  background: transparent;
+}
+.select-input-line__match-item:hover, .select-input-line__match-item:active, .select-input-line__match-item:focus {
+  background-color: #fee481 !important;
+  color: #000;
+  border-radius: 100px;
+}
+.select-input-line__choices-tags {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25) !important;
+  padding: 0 !important;
+  max-height: 264px !important;
+  border-top: 2px solid #fc0 !important;
+}
+.select-input-line__choices-tags .ui-select-choices-row:hover {
+  background-color: #fee481 !important;
+}
+.select-input-line__choices-tags .ui-select-choices-row .ui-select-choices-group {
+  height: 43px;
+  display: inline-flex;
+  flex-flow: column;
+  align-items: center;
+}
+.select-input-line__choices-tags .ui-select-choices-row .tag-contact__name, .select-input-line__choices-tags .ui-select-choices-row .tag-contact__email {
+  min-width: 160px;
+  max-width: 200px;
+}
+.select-input-line__choices-tags .ui-select-choices-row-inner {
+  margin: 0 10px;
+  padding: 0 !important;
+  border: 1px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+.select-input-line__choices-tags .ui-select-choices-row-inner:hover {
+  background-color: transparent !important;
+}
+.select-input-line__choices-item {
+  height: 43px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+}
+.select-input-line .ui-select-search {
+  width: auto !important;
+  min-width: 50% !important;
+  position: relative;
+  top: -2px;
+}
+.select-input-line .ui-select-match-close {
+  display: none;
+}
+.select-input-line .ui-select-choices-row.active > span {
+  color: inherit !important;
+  text-decoration: none;
+  outline: 0;
+  background-color: transparent !important;
 }
 
 .checkbox-y {
@@ -3414,6 +3506,10 @@
   display: none !important;
 }
 
+.compose__header {
+  margin-left: -20px;
+  margin-right: -20px;
+}
 .compose__from {
   position: relative;
 }
@@ -3445,8 +3541,9 @@
 }
 .compose__btn-attach {
   position: absolute;
-  top: 5px;
+  top: 26px;
   right: 0;
+  margin-right: 20px;
 }
 .compose__attachments {
   white-space: nowrap;
@@ -4029,6 +4126,22 @@
 .ydx-i-flag {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAANCAYAAACQN/8FAAAARklEQVQoU2M44qz+H4gZJk6ciBczgBS+n9lMEBOrEGLi26Y0nBikCK7wTVEwToyi8GWgASFMtEKIZ0A6CGHSFBId4AOjEACJbA6LtUVjogAAAABJRU5ErkJggg==");
   background-repeat: no-repeat;
+}
+
+.tag-contact {
+  display: inline-flex;
+  align-items: center;
+}
+.tag-contact__name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #000;
+}
+.tag-contact__email {
+  color: #595959;
+}
+.tag-contact__phone {
+  color: #595959;
 }
 
 body {

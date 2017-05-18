@@ -164,6 +164,13 @@
     }
   }
 
+  &--light-hover{
+    opacity: .6!important;
+    &:hover{
+      opacity: 1!important;
+    }
+  }
+
   &--size_s {
     height: 26px;
     font-size: 13px;

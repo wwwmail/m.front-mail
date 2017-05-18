@@ -1,0 +1,20 @@
+.tag-contact {
+    display: inline-flex;
+    align-items: center;
+
+&__name {
+     white-space: nowrap;
+     text-overflow: ellipsis;
+     color: $textBlack;
+ }
+&__email {
+     color: $storage-text-color;
+ }
+&__phone {
+     color: $storage-text-color;
+ }
+}
+
+.ui-select-match-item {
+
+}
