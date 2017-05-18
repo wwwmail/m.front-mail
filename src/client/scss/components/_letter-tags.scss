@@ -19,7 +19,7 @@
 
     border-radius: 3px;
     padding-right: 27px;
-    margin-right: 9px;
+    margin-right: 6px;
 
     .letter-tags__icon{
 
@@ -140,6 +140,13 @@
     .letter-tags__icon{
       fill: $cp-silver;
     }
+  }
+
+  &__remove-icon{
+    font-size: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
 

@@ -27,26 +27,29 @@
         <!--основное меню -->
         <div class="menu-main-layout__item">
             <ul class="menu-main">
-                <li class="menu-main__item" ng-repeat="folder in vm.folders.items">
+                <li class="menu-main__item is-sub-menu is-sub-menu--open" ng-repeat="folder in vm.folders.items">
                     <div class="menu-main__item-content" ng-if="!folder.isSub">
                         <a class="menu-main__link"
                            ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
                             <span class="icon-inbox menu-main__icon"></span>
-                            <span class="menu-mein__title">{{ folder.caption }}</span>
+                            <span class="menu-main__title">{{ folder.caption }}</span>
                         </a>
                         <div class="menu-main__additional-option">
                             <span class="menu-main__count">{{ folder.messagesCount }}</span>
+                            <button class="menu-main__show-additional icon-arrow-down" type="button"></button>
                         </div>
                     </div>
 
                     <div class="menu-main__item-content" ng-if="folder.isSub">
                         <ul class="menu-main menu-main--additional">
-                            <li class="menu-main__item">
-                                <a class="menu-main__link menu-main__link--active"
+                            <li class="menu-main__item-sub">
+                                <a class="menu-main__link"
                                    ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
                                     <span class="icon-folder menu-main__icon"></span>
-                                    <span class="menu-mein__title">{{ folder.caption }}</span></a>
-                                <div class="menu-mein__additional-option"></div>
+                                    <span class="menu-main__title">{{ folder.caption }}</span></a>
+                                <div class="menu-main__additional-option">
+                                    <span class="menu-main__count">{{ folder.messagesCount }}</span>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -59,7 +62,7 @@
                     <div class="menu-main__item-content">
                         <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})">
                             <span class="icon-important menu-main__icon"></span>
-                            <span class="menu-mein__title">Важные</span>
+                            <span class="menu-main__title">Важные</span>
                         </a>
                         <div class="menu-main__additional-option"></div>
                     </div>
@@ -68,7 +71,7 @@
                     <div class="menu-main__item-content">
                         <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})">
                             <span class="icon-clip menu-main__icon"></span>
-                            <span class="menu-mein__title">С вложениями</span>
+                            <span class="menu-main__title">С вложениями</span>
                         </a>
                     </div>
                 </li>
@@ -76,7 +79,7 @@
                     <div class="menu-main__item-content">
                         <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})">
                             <span class="icon-unread menu-main__icon"></span>
-                            <span class="menu-mein__title">Непрочитанные</span>
+                            <span class="menu-main__title">Непрочитанные</span>
                         </a>
                     </div>
                 </li>
@@ -91,7 +94,7 @@
                     <div class="menu-main__item-content">
                         <a class="menu-main__link" href="">
                             <span class="icon-tag-solid menu-main__icon menu-main__icon--select"></span>
-                            <span class="menu-mein__title">Позже</span>
+                            <span class="menu-main__title">Позже</span>
                         </a>
                     </div>
                 </li>
@@ -99,7 +102,7 @@
                     <div class="menu-main__item-content">
                         <a class="menu-main__link" href="">
                             <span class="icon-filter menu-main__icon"></span>
-                            <span class="menu-mein__title">Фильтры</span>
+                            <span class="menu-main__title">Фильтры</span>
                         </a>
                         <div class="menu-main__additional-option">
 
@@ -118,7 +121,7 @@
                     <div class="menu-main__item-content">
                         <a class="menu-main__link" href="">
                             <span class="icon-settings menu-main__icon"></span>
-                            <span class="menu-mein__title">Настройки</span>
+                            <span class="menu-main__title">Настройки</span>
                         </a>
                     </div>
                 </li>

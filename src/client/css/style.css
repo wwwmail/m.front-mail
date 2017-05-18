@@ -601,7 +601,25 @@
 .menu-main__icon--select {
   color: #5a8eff;
 }
+.menu-main__item.is-sub-menu .menu-main__show-additional {
+  display: inline-block;
+}
+.menu-main__item.is-sub-menu--open .menu-main__show-additional {
+  transform: rotate(180deg);
+}
+.menu-main__item.is-sub-menu--open .menu-main--additional {
+  background: rgba(254, 228, 129, 0.05);
+}
 .menu-main__item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: row nowrap;
+  width: 100%;
+  font: 300 18px/1 "HelveticaNeueCyr", sans-serif;
+  color: #ffffff;
+}
+.menu-main__item-sub {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -634,9 +652,10 @@
   content: "";
 }
 .menu-main__count {
+  margin: auto;
   text-align: center;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.6;
 }
 .menu-main__additional-option {
@@ -645,7 +664,18 @@
   margin-right: 7px;
   font-size: 24px;
   text-align: center;
-  min-width: 60px;
+  min-width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: hidden;
+}
+.menu-main__show-additional {
+  display: none;
+  font-size: 15px;
+  margin: 0 0 0 auto;
 }
 .menu-main__sub .menu-main__link {
   padding-left: 70px;
@@ -3018,7 +3048,7 @@
 .letter-tags--poss-remove {
   border-radius: 3px;
   padding-right: 27px;
-  margin-right: 9px;
+  margin-right: 6px;
 }
 .letter-tags--poss-remove .letter-tags__icon {
   position: absolute;
@@ -3115,6 +3145,12 @@
 }
 .letter-tags--silver .letter-tags__icon {
   fill: #9e9e9e;
+}
+.letter-tags__remove-icon {
+  font-size: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .auth-form {
