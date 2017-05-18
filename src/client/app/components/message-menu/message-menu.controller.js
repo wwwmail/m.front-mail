@@ -3,17 +3,15 @@
 
     angular
         .module('app.components')
-        .controller('InboxFooterController', InboxFooterController);
+        .controller('MessageMenuController', MessageMenuController);
 
-    InboxFooterController.$inject = ['$state', '$scope', '$uibModal', 'mail', 'mailBox'];
+    MessageMenuController.$inject = ['$state', '$scope', '$uibModal', 'mail', 'mailBox', '$uibModalInstance', 'message', 'messages'];
     /* @ngInject */
-    function InboxFooterController($state, $scope, $uibModal, mail, mailBox) {
+    function MessageMenuController($state, $scope, $uibModal, mail, mailBox, $uibModalInstance, message, messages) {
         var vm = this;
 
         vm.isSeen = true;
 
-        vm.checkedAllMessages = checkedAllMessages;
-        vm.syncMail = syncMail;
         vm.move = move;
         vm.destroy = destroy;
         vm.triggerSeen = triggerSeen;
@@ -21,44 +19,27 @@
         vm.goToFwd = goToFwd;
         vm.openTagListPopup = openTagListPopup;
         vm.openLayoutFolder = openLayoutFolder;
-
-        $scope.$watch('vm.messages.checked', function (data) {
-            if (data && !data.length) {
-                vm.isAllChecked = false;
-            }
-        }, true);
+        vm.close = close;
 
         activate();
 
         function activate() {
             vm.$state = $state;
-            console.log('vm.state', vm.$state.current.name);
-        }
+            vm.messages = messages;
+            vm.message = message;
 
-        function checkedAllMessages() {
-            if (vm.isAllChecked && vm.messages.items) {
-                vm.messages.checked = angular.copy(vm.messages.items);
-                return;
-            }
-            vm.messages.checked = [];
-        }
-
-        function syncMail() {
-            if ($state.current.name === 'mail.inbox') {
-                $scope.$emit('mail:sync');
-                return;
-            }
-            $scope.$emit('folders:sync');
-            $state.go('mail.inbox', {mbox: 'INBOX'});
+            console.log('vm.messages', vm.messages);
         }
 
         function move(folder) {
             vm.messages = mail.moveToFolder(folder, vm.messages);
+            close();
         }
 
         function destroy() {
             vm.messages = mail.destroy(vm.messages);
             vm.messages = [];
+            close();
         }
 
         function triggerSeen() {
@@ -68,21 +49,24 @@
 
         function setSeen() {
             vm.messages = mail.setSeen(vm.messages);
+            close();
         }
 
         function setUnSeen() {
             vm.messages = mail.setUnSeen(vm.messages);
+            close();
         }
 
         function goToAnswer() {
             var data = mail.getAnswerData();
             $state.go('mail.compose', {
-                // to: data.fromAddress,
                 connection_id: data.connection_id,
                 mbox: data.mbox,
                 id: data.number,
                 re: true
             });
+
+            cancel();
         }
 
         function goToFwd() {
@@ -120,12 +104,22 @@
 
             modalInstance.result.then(function (response) {
                 vm.messages = response.result.messages;
-                // console.log('response', response);
             });
+
+            close();
         }
 
         function openLayoutFolder() {
             mailBox.openLayoutFolder();
+            close();
+        }
+
+        function cancel() {
+            $uibModalInstance.dismiss('cancel');
+        }
+
+        function close() {
+            $uibModalInstance.close({result: {messages: vm.messages}});
         }
     }
 })();

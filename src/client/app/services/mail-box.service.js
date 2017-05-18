@@ -63,12 +63,17 @@
             });
             // return resource.destroy(params, data).$promise;
         }
+        
+        function openLayoutFolder(data) {
+            $rootScope.$broadcast('mailBox:layout:open', data);
+        }
 
         return {
             get: get,
             create: create,
             update: update,
-            destroy: destroy
+            destroy: destroy,
+            openLayoutFolder: openLayoutFolder
         }
     }
 

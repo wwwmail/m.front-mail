@@ -5,15 +5,16 @@
         .module('app.components')
         .controller('InboxMessageController', InboxMessageController);
 
-    InboxMessageController.$inject = ['$state', '$scope', 'mail', 'tag', '$rootScope'];
+    InboxMessageController.$inject = ['$state', '$scope', 'mail', 'tag', '$rootScope', '$uibModal'];
     /* @ngInject */
-    function InboxMessageController($state, $scope, mail, tag, $rootScope) {
+    function InboxMessageController($state, $scope, mail, tag, $rootScope, $uibModal) {
         var vm = this;
 
         vm.getDate = getDate;
         vm.goToUrl = goToUrl;
         vm.setSeen = setSeen;
         vm.setImportant = setImportant;
+        vm.openMessageMenu = openMessageMenu;
 
         activate();
 
@@ -116,6 +117,31 @@
             }).then(function (response) {
                 vm.message.tags = response.data;
             })
+        }
+
+        function openMessageMenu() {
+            vm.messages.checked = [vm.message];
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/message-menu/message-menu.html',
+                controller: 'MessageMenuController',
+                controllerAs: 'vm',
+                resolve: {
+                    message: function () {
+                        return vm.message;
+                    },
+                    messages: function () {
+                        return vm.messages;
+                    }
+                },
+                size: 'sm',
+                windowClass: 'popup'
+            });
+
+            modalInstance.result.then(function (response) {
+                vm.messages = response.result.messages;
+                // console.log('response', response);
+            });
         }
     }
 })();

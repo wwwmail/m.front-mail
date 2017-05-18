@@ -1,0 +1,78 @@
+<div class="folder-layout" ng-if="vm.isOpen">
+    <div class="folder-layout__container">
+
+        <div class="folder-layout__header">
+            <div class="">
+                <span class="icon-d-folder folder-layout__icon"></span>
+                <span>Папки</span>
+            </div>
+            <span class="font__size12"
+                  ng-click="vm.close()">Закрыть</span>
+
+            <!--<hr class="hr hr&#45;&#45;folders hr&#45;&#45;bottom">-->
+
+        </div>
+
+        <div class="folder-layout__content scrollables">
+
+            <hr class="hr hr--folders hr--top">
+
+            <!-- Свои папки-->
+
+            <!-- Отделитель-->
+            <div class="folder-layout__separate mrg__bottom10">
+                <span class="font__size12">Мои папки</span>
+                <hr class="hr hr--folders hr--bottom">
+            </div>
+
+            <!-- Сами итемы-->
+            <div class="folder-layout__item"
+                 ng-repeat="folder in vm.folders.items"
+                 ng-click="vm.move(folder)"
+                 ng-if="folder.isSub">
+                <span class="icon-folder folder-layout__icon"></span>
+                <span class="folder-layout__title">{{ folder.caption }}</span>
+            </div>
+
+            <!--            <div class="folder-layout__item">
+                            <span class="icon-folder folder-layout__icon"></span>
+                            <span class="folder-layout__title">Моя папка 1</span>
+                        </div>
+
+                        <div class="folder-layout__item">
+                            <span class="icon-folder folder-layout__icon"></span>
+                            <span class="folder-layout__title">Моя папка 2</span>
+                        </div>
+
+                        <div class="folder-layout__item">
+                            <span class="icon-folder folder-layout__icon"></span>
+                            <span class="folder-layout__title">Моя папка 3</span>
+                        </div>-->
+
+
+            <!-- стандартные папки-->
+            <!-- Отделитель-->
+            <div class="folder-layout__separate mrg__bottom10">
+                <span class="font__size12">Основные папки</span>
+                <hr class="hr hr--folders hr--bottom">
+            </div>
+
+            <div class="folder-layout__item"
+                 ng-repeat="folder in vm.folders.items"
+                 ng-click="vm.move(folder)"
+                 ng-if="!folder.isSub && folder.name !== vm.$state.params.mbox">
+                <span class="{{ folder.icon }} folder-layout__icon"></span>
+                <span class="folder-layout__title">{{ folder.caption }}</span>
+            </div>
+
+        </div>
+
+        <div class="folder-layout__footer">
+            <hr class="hr hr--folders hr--top">
+            <span class="icon-settings folder-layout__icon"></span>
+            <span class="folder-layout__title">Управление папками</span>
+        </div>
+
+
+    </div>
+</div>

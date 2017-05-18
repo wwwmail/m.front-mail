@@ -64,6 +64,8 @@
 
 
     <div class="inbox-message__right">
-        <button class="inbox-message__right__btn btn btn--size_m btn--not-style btn--size_28 icon-more"></button>
+        <button class="inbox-message__right__btn btn btn--size_m btn--not-style btn--size_28 icon-more"
+                type="button"
+                ng-click="vm.openMessageMenu(); $event.stopPropagation();"></button>
     </div>
 </div>

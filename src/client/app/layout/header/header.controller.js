@@ -13,8 +13,13 @@
         vm.title = 'Header';
 
         vm.openMenu = openMenu;
+        vm.closeMenu = closeMenu;
 
         function openMenu() {
+            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
+        }
+
+        function closeMenu() {
             $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
         }
     }

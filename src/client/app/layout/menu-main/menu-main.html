@@ -2,7 +2,9 @@
         <!-- хедер меню-->
         <div class="menu-main-layout__header">
             <img class="menu-main-layout__header__logo img-responsive" src="/images/logo.png">
-            <button class="menu-main-layout__button-close btn" type="button">
+            <button class="menu-main-layout__button-close btn"
+                    type="button"
+                    ng-click="vm.closeMenu()">
                 <span class="icon-double-arrow-left"></span>
             </button>
         </div>
@@ -10,7 +12,6 @@
         <div class="menu-main-layout__user-info">
             <div class="menu-main-layout__avatar">
                 <div class="avatar avatar--size68 avatar--second-style">
-                    <!--<img class="avatar__image" src="/images/avatar-personal.svg" alt="">-->
                     <img class="avatar__image"
                          ng-src="{{ vm.user.profile.photo }}"
                          fallback-src="{{'/images/avatar-personal.svg'}}">

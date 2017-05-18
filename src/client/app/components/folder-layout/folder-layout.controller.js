@@ -2,19 +2,19 @@
     'use strict';
 
     angular
-        .module('app.layout')
-        .controller('MenuMainController', MenuMainController);
+        .module('app.components')
+        .controller('FolderLayoutController', FolderLayoutController);
 
-    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mailBox', 'CONFIG'];
-
+    FolderLayoutController.$inject = ['$scope', '$auth', '$state', '$uibModal', 'mailBox', 'mail'];
     /* @ngInject */
-    function MenuMainController($scope, $rootScope, $uibModal, $auth, mailBox, CONFIG) {
+    function FolderLayoutController($scope, $auth, $state, $uibModal, mailBox, mail) {
         var vm = this;
 
+        vm.folders = {};
         vm.standartFolders = [
             {
                 name: 'INBOX',
-                icon: 'icon-incoming'
+                icon: 'icon-folder'
             },
             {
                 name: 'Drafts',
@@ -22,7 +22,7 @@
             },
             {
                 name: 'Trash',
-                icon: 'icon-bin'
+                icon: 'icon-delete'
             },
             {
                 name: 'Sent',
@@ -31,17 +31,21 @@
             {
                 name: 'Junk',
                 icon: 'icon-spam'
+            },
+            {
+                name: 'Archive',
+                icon: 'icon-archive'
             }
         ];
 
         vm.folders = {};
 
-        $rootScope.$on('mail:sync', function () {
-            getMailBox();
-        });
+        vm.move = move;
+        vm.close = close;
+        vm.openFolderCreatePopup = openFolderCreatePopup;
 
-        $rootScope.$on('folders:sync', function () {
-            getMailBox();
+        $scope.$on('mailBox:layout:open', function() {
+            open();
         });
 
         $scope.$on('mailBox:update:success', function () {
@@ -56,18 +60,24 @@
             getMailBox();
         });
 
-        vm.openFolderCreatePopup = openFolderCreatePopup;
-        vm.closeMenu = closeMenu;
+        /////
 
         activate();
 
         function activate() {
+            // console.log('vm.messages', vm.messages, $state);
+
+            vm.$state = $state;
+
             getMailBox();
+        }
 
-            vm.user = $auth.user;
+        function open() {
+            vm.isOpen = true;
+        }
 
-            vm.user.profile.photo = CONFIG.MediaUrl + vm.user.profile.photo;
-            console.log('vm.user', vm.user);
+        function close() {
+            vm.isOpen = false;
         }
 
         function getMailBox() {
@@ -75,6 +85,16 @@
                 vm.folders = _.assign(vm.folders, response.data);
                 setIcons();
                 getMailBoxFormatted();
+            });
+        }
+
+        function setIcons() {
+            _.forEach(vm.folders.items, function (item) {
+                _.forEach(vm.standartFolders, function (standartFolder) {
+                    if (item.name === standartFolder.name) {
+                        item.icon = standartFolder.icon;
+                    }
+                });
             });
         }
 
@@ -109,14 +129,9 @@
             ]).reverse();
         }
 
-        function setIcons() {
-            _.forEach(vm.folders.items, function (item) {
-                _.forEach(vm.standartFolders, function (standartFolder) {
-                    if (item.name === standartFolder.name) {
-                        item.icon = standartFolder.icon;
-                    }
-                });
-            });
+        function move(folder) {
+            vm.messages = mail.moveToFolder(folder, vm.messages);
+            close();
         }
 
         function openFolderCreatePopup() {
@@ -130,14 +145,9 @@
                         $uibModalInstance.dismiss('cancel');
                     }
                 },
-                // controllerAs: 'vm',
                 size: 'sm',
                 windowClass: 'popup popup--folder-create'
             });
-        }
-
-        function closeMenu() {
-            $rootScope.isOpenMenu = false;
         }
     }
 })();

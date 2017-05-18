@@ -1,0 +1,73 @@
+<div class="popup__head">
+    <span class="popup__head__title">Действия с письмом</span>
+    <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s"></button>
+    <hr class="hr hr--popup">
+</div>
+
+<div class="popup__content scrollables">
+    <div class="popup__item" ng-click="vm.goToAnswer()">
+        <span class="icon-reply popup__icon"></span>
+        <span class="popup__item__title">Ответить</span>
+    </div>
+
+    <!--<div class="popup__item" ng-click="vm.goToFwd()">-->
+    <!--<span class="icon-reply-all popup__icon"></span>-->
+    <!--<span class="popup__item__title">Ответить всем</span>-->
+    <!--</div>-->
+
+    <div class="popup__item"
+         ng-click="vm.goToFwd()">
+        <span class="icon-forward popup__icon"></span>
+        <span class="popup__item__title">Переслать</span>
+    </div>
+
+    <div class="popup__item"
+         ng-if="vm.$state.params.mbox !== 'Trash'"
+         ng-click="vm.move({name: 'Trash'})">
+        <span class="icon-delete popup__icon color--light-red"></span>
+        <span class="popup__item__title">Удалить</span>
+    </div>
+
+    <div class="popup__item"
+         ng-if="vm.$state.params.mbox === 'Trash'"
+         ng-click="vm.destroy({name: 'Trash'})">
+        <span class="icon-delete popup__icon color--light-red"></span>
+        <span class="popup__item__title">Удалить</span>
+    </div>
+
+    <div class="popup__item" ng-click="vm.triggerSeen()">
+        <span class="icon-unread popup__icon"></span>
+        <span class="popup__item__title" ng-if="!vm.message.seen">Прочитано</span>
+        <span class="popup__item__title" ng-if="vm.message.seen">Не прочитано</span>
+    </div>
+
+    <div class="popup__item" ng-click="vm.openLayoutFolder()">
+        <span class="icon-folder popup__icon"></span>
+        <span class="popup__item__title">В папку</span>
+    </div>
+
+    <div class="popup__item" ng-click="vm.openTagListPopup()">
+        <span class="icon-tag popup__icon"></span>
+        <span class="popup__item__title">Теги</span>
+    </div>
+
+    <div class="popup__item" ng-click="vm.move({name: 'Archive'})">
+        <span class="icon-archive popup__icon"></span>
+        <span class="popup__item__title">В архив</span>
+    </div>
+
+    <div class="popup__item">
+        <span class="icon-spam popup__icon color--yellow"></span>
+        <span class="popup__item__title">Спам</span>
+    </div>
+
+    <!--    <div class="popup__item">
+            <span class="icon-pin popup__icon"></span>
+            <span class="popup__item__title">Закрепить</span>
+        </div>-->
+
+    <div class="popup__item">
+        <span class="icon-important-solid popup__icon color--semi-dark-red"></span>
+        <span class="popup__item__title">Важное</span>
+    </div>
+</div>
