@@ -33,6 +33,9 @@
     //align-content: center;
     padding-right: 15px;
     width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   &__right{

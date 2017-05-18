@@ -15,7 +15,7 @@
             </div>
 
             <div class="compose__letter-subject">
-                <div class="input-line input-line--full is-active">
+                <div class="input-line input-line--full">
                     <label class="input-line__label width--all">
                         <span class="input-line__title link--gray" href="">Тема</span>
                         <input class=" input--compose-line input-line__input width--all" type="text">
@@ -30,19 +30,21 @@
             </div>
         </div>
 
-        <div class="compose__attachments attachments">
-            <div class="attachments__item" ng-repeat="attachment in vm.message.model.attachmentsData">
-                <attach-item attach="attachment" message="vm.message"></attach-item>
-            </div>
-        </div>
-        <div class="row mrg__top20">
-            <div class="col-xs-12">
-                <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
-                               message="vm.sendForm"
-                               is-uploading="vm.isUploading"></attach-upload>
+        <div class="compose__attachments-upload ">
+            <!--<div class="attachments__item" ng-repeat="attachment in vm.message.model.attachmentsData">-->
+                <!--<attach-item attach="attachment" message="vm.message"></attach-item>-->
+            <!--</div>-->
 
+            <div class="attachments__item row mrg__top20">
+                <div class="col-xs-12">
+                    <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
+                                   message="vm.sendForm"
+                                   is-uploading="vm.isUploading"></attach-upload>
+
+                </div>
             </div>
         </div>
+
         <div class="compose__content">
             <div class="compose__message" contenteditable="true">
 
