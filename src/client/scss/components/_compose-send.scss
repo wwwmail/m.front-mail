@@ -8,22 +8,58 @@
 }
 
 .compose{
-
-
   &__header{
 
   }
+  &__from{
+    position: relative;
+
+  }
+  &__letter-subject{
+    position: relative;
+  }
+
   &__content{
 
+    position: relative;
+    min-height: 56px;
+    padding: 0 16px;
+    margin-top: 1px;
+    color: #222;
+
+    box-shadow: none;
+    font-size: 16px;
   }
   &__message{
 
-    padding: 10px;
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: block;
+    height: auto;
+    line-height: 18px;
+    min-height: 205px;
+    max-width: 100%;
+    transform: translateZ(0);
+    color: #000;
+    white-space: normal;
+    outline: none;
+  }
+  &__btn-attach{
+    position: absolute;
+    top:5px;
+    right: 0;
 
-    font: normal 14px/1.3 $mainThreeFont;
+  }
 
-    color: #282828;
-
+  &__attachments{
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    margin: 10px 12px;
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
   }
 
 

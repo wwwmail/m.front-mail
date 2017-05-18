@@ -1813,6 +1813,26 @@
   border: 1px solid #ccb764;
   box-shadow: 0px 0px 10px 0px #f9e38b;
 }
+.input--compose-line {
+  position: relative;
+  top: 0;
+  padding-bottom: 6px;
+  padding-left: 0;
+  min-height: 25px;
+  line-height: 22px;
+  font-size: 14px;
+  color: #222;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  border: 0;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+}
 .input--up-shadow {
   box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.15);
 }
@@ -2018,6 +2038,7 @@
   display: flex;
   color: #000;
   font-weight: 100;
+  max-height: 58px;
   height: 42px;
 }
 .input-line__input {
@@ -2038,8 +2059,7 @@
 .input-line__label {
   position: absolute;
   margin: 0;
-  bottom: 6px;
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(0, 0, 0, 0.5);
 }
 .input-line__links {
@@ -2048,6 +2068,19 @@
   bottom: 3px;
   right: 0;
   font-size: 15px;
+}
+.input-line__title {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 16px;
+  font-size: 12px;
+  line-height: 12px;
+  font-family: "HelveticaNeueCyr", sans-serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #222;
 }
 .input-line:focus {
   border: 1px solid #fc0;
@@ -3381,10 +3414,48 @@
   display: none !important;
 }
 
+.compose__from {
+  position: relative;
+}
+.compose__letter-subject {
+  position: relative;
+}
+.compose__content {
+  position: relative;
+  min-height: 56px;
+  padding: 0 16px;
+  margin-top: 1px;
+  color: #222;
+  box-shadow: none;
+  font-size: 16px;
+}
 .compose__message {
-  padding: 10px;
-  font: normal 14px/1.3 Arial, sans-serif;
-  color: #282828;
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  display: block;
+  height: auto;
+  line-height: 18px;
+  min-height: 205px;
+  max-width: 100%;
+  transform: translateZ(0);
+  color: #000;
+  white-space: normal;
+  outline: none;
+}
+.compose__btn-attach {
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+.compose__attachments {
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  margin: 10px 12px;
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 .btn-arrow {
