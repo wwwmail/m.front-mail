@@ -40,7 +40,7 @@
         function activate() {
             vm.$state = $state;
 
-            console.log('folder', vm.folder);
+            console.log('vm.$state', vm.$state);
 
             getCurrentFolder();
         }
