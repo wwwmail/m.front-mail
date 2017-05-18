@@ -1791,6 +1791,13 @@
   top: -4px;
 }
 
+.btn-arrow {
+  position: absolute;
+  right: 1px;
+  font-size: 14px;
+  color: #888888;
+}
+
 [placeholder] {
   color: #999999;
 }
@@ -3508,20 +3515,6 @@
   .info-sender__right-menu .icon-reply {
     display: none;
   }
-}
-
-.compose-send__item {
-  margin-right: 5px;
-}
-.compose-send .note-toolbar.panel-heading {
-  display: none !important;
-}
-
-.btn-arrow {
-  position: absolute;
-  right: 1px;
-  font-size: 14px;
-  color: #888888;
 }
 
 .body-message {
