@@ -55,7 +55,9 @@
     <div class="header__massege-replay">
         <div class="header__container">
             <div class="header__left">
-                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left">
+                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left"
+                        type="button"
+                        ui-sref="mail.inbox({mbox: vm.$state.params.mbox})">
                     <span class="font__arial font__size13 mrg__left5">Назад</span>
                 </button>
             </div>
