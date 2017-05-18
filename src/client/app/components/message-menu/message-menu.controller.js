@@ -67,7 +67,7 @@
                 re: true
             });
 
-            cancel();
+            close();
         }
 
         function goToFwd() {
@@ -86,6 +86,8 @@
                 ids: ids,
                 fwd: true
             });
+
+            close();
         }
 
         function openTagListPopup() {

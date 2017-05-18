@@ -25,7 +25,7 @@
                         messages: function (mail, $stateParams) {
                             var messages = {
                                 params: {
-                                    'per-page': 20,
+                                    'per-page': 10,
                                     'len': 100
                                 },
                                 checked: []

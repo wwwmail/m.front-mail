@@ -5,9 +5,9 @@
         .module('mail.message')
         .controller('MessageController', MessageController);
 
-    MessageController.$inject = ['mail', '$scope', '$state', '$sce', 'message', 'tag', '$rootScope'];
+    MessageController.$inject = ['mail', '$scope', '$state', '$sce', 'message', 'tag', '$rootScope', '$uibModal'];
     /* @ngInject */
-    function MessageController(mail, $scope, $state, $sce, message, tag, $rootScope) {
+    function MessageController(mail, $scope, $state, $sce, message, tag, $rootScope,  $uibModal) {
         var vm = this;
 
         vm.message = {};
@@ -30,6 +30,7 @@
         vm.setImportant = setImportant;
         vm.move = move;
         vm.destroy = destroy;
+        vm.openMessageMenu = openMessageMenu;
 
         $scope.$on('tag:message:add:success', function (e, data) {
             // console.log('data', data);
@@ -171,6 +172,31 @@
         function destroy() {
             vm.messages = mail.destroy(vm.messages);
             vm.messages = [];
+        }
+
+        function openMessageMenu() {
+            vm.messages.checked = [vm.message];
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/message-menu/message-menu.html',
+                controller: 'MessageMenuController',
+                controllerAs: 'vm',
+                resolve: {
+                    message: function () {
+                        return vm.message;
+                    },
+                    messages: function () {
+                        return vm.messages;
+                    }
+                },
+                size: 'sm',
+                windowClass: 'popup'
+            });
+
+            modalInstance.result.then(function (response) {
+                vm.messages = response.result.messages;
+                // console.log('response', response);
+            });
         }
 
     }

@@ -27,8 +27,11 @@
     </ul>
 </div>
 
+<!--vm.data._links.next-->
 <div class="inbox-list">
-    <inbox-message-list messages="vm.messages"></inbox-message-list>
+    <div infinite-scroll="vm.paginate()" infinite-scroll-distance="1">
+        <inbox-message-list messages="vm.messages"></inbox-message-list>
+    </div>
 </div>
 
 <inbox-footer messages="vm.messages"></inbox-footer>

@@ -35,7 +35,8 @@
                 </div>
 
                 <div class="info-sender__right-menu mrg__right">
-                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"></div>
+                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"
+                         ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div>
                     <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red"
                          ng-if="vm.$state.params.mbox !== 'Trash'"
                          ng-click="vm.move({name: 'Trash'})"></div>

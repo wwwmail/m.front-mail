@@ -5,18 +5,18 @@
         .module('mail.inbox')
         .controller('InboxController', InboxController);
 
-    InboxController.$inject = ['$rootScope', '$state', 'mail', 'mailBox', 'profile', 'messages'];
+    InboxController.$inject = ['$rootScope', '$state', '$http', 'mail', 'mailBox', 'profile', 'messages'];
     /* @ngInject */
-    function InboxController($rootScope, $state, mail, mailBox, profile, messages) {
+    function InboxController($rootScope, $state, $http, mail, mailBox, profile, messages) {
         var vm = this;
 
         vm.messages = {
             params: {
-                'per-page': 20,
+                'per-page': 10,
                 'len': 100
             },
             defaultParams: {
-                'per-page': 20,
+                'per-page': 10,
                 'len': 100
             },
             checked: []
@@ -43,6 +43,7 @@
         });
 
         vm.openTagList = openTagList;
+        vm.paginate = paginate;
 
         activate();
 
@@ -94,6 +95,20 @@
 
         function openTagList() {
             vm.isOpenTagList = true;
+        }
+
+        function paginate() {
+            if (vm.messages._links.next && !vm.messages.isLoading) {
+                vm.messages.isLoading = true;
+                $http.get(vm.messages._links.next.href).then(function (response) {
+                    vm.messages.isLoading = false;
+                    vm.messages.items = vm.messages.items.concat(response.data.data.items);
+                    vm.messages._links = response.data.data._links;
+                    vm.messages._meta = response.data.data._meta;
+
+                    console.log('pag', vm.messages);
+                });
+            }
         }
     }
 })();
