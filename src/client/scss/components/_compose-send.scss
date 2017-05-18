@@ -7,67 +7,6 @@
   }
 }
 
-.compose{
-  &__header{
-    margin-left: -20px;
-    margin-right: -20px;
-  }
-
-  &__from{
-    position: relative;
-
-  }
-  &__letter-subject{
-    position: relative;
-  }
-
-  &__content{
-
-    position: relative;
-    min-height: 56px;
-    padding: 0 16px;
-    margin-top: 1px;
-    color: #222;
-
-    box-shadow: none;
-    font-size: 16px;
-  }
-  &__message{
-
-    position: relative;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    display: block;
-    height: auto;
-    line-height: 18px;
-    min-height: 205px;
-    max-width: 100%;
-    transform: translateZ(0);
-    color: #000;
-    white-space: normal;
-    outline: none;
-  }
-  &__btn-attach{
-    position: absolute;
-    top: 26px;
-    right: 0;
-    margin-right: 20px;
-
-  }
-
-
-  &__attachments{
-    white-space: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    margin: 10px 12px;
-    -webkit-overflow-scrolling: touch;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-  }
-
-}
-
 $inpus-compose-text: #b3b3b8;
 
 .btn-arrow{
