@@ -73,10 +73,13 @@
 
   &--not-events{
     &:hover{
-      background: none;
+      background: none!important;
     }
     &:active{
-      background: none;
+      background: none!important;
+    }
+    &:focus{
+      outline: none!important;
     }
   }
 

@@ -8,7 +8,6 @@
   z-index: 51;
 
   &__header {
-
     display: inline-flex;
     align-items: center;
     width: 100%;
@@ -41,6 +40,8 @@
     background-color: $yellow-normal-light;
     color: $white-color;
     box-shadow: inset 0px 0px 12px -6px rgba(0,0,0,0.37);
+
+    z-index: 2;
 
     &:after{
       content: '';
@@ -89,7 +90,6 @@
     }
   }
 
-
   &__avatar{
     position: relative;
 
@@ -105,15 +105,12 @@
 
   }
 
-
-
   &__user-name{
     color: $user-name-main-menu-color;
-
   }
+
   &__user-mail{
     color: $user-mail-main-menu-color;
-
   }
 
   &__item{

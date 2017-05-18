@@ -894,6 +894,7 @@
   background-color: #ffdb4d;
   color: #ffffff;
   box-shadow: inset 0px 0px 12px -6px rgba(0, 0, 0, 0.37);
+  z-index: 2;
 }
 .menu-main-layout__button-close:after {
   content: '';
@@ -1159,6 +1160,7 @@
   box-sizing: content-box;
   z-index: 5;
   border-top: 1px solid #e4e2da;
+  background-color: #ffffff;
 }
 .mail-message__reply-container {
   position: relative;
@@ -1642,10 +1644,13 @@
   background: none;
 }
 .btn--not-events:hover {
-  background: none;
+  background: none !important;
 }
 .btn--not-events:active {
-  background: none;
+  background: none !important;
+}
+.btn--not-events:focus {
+  outline: none !important;
 }
 .btn--link-style {
   border: none;
@@ -2480,10 +2485,14 @@
 .avatar--size28 {
   width: 28px;
   height: 28px;
+  min-width: 28px;
+  min-height: 28px;
 }
 .avatar--size30 {
   width: 30px;
   height: 30px;
+  min-width: 30px;
+  min-height: 30px;
 }
 .avatar--size42 {
   width: 42px;
@@ -3574,6 +3583,7 @@
   min-width: 280px;
   min-height: 150px;
   background: #fff;
+  overflow: auto;
 }
 
 .time-send {

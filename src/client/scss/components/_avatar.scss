@@ -78,11 +78,15 @@
   &--size28 {
     width: 28px;
     height: 28px;
+    min-width: 28px;
+    min-height: 28px;
   }
 
   &--size30 {
     width: 30px;
     height: 30px;
+    min-width: 30px;
+    min-height: 30px;
   }
 
   &--size42 {
