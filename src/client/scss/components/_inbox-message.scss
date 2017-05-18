@@ -46,28 +46,16 @@
     max-width: 56px;
     width: 56px;
     height: 100%;
+  }
+  &__right-btn{
+    transform: rotate(90deg);
 
-    &:hover, &:active{
-      background-color: $yellow-yandex;
-    }
+    color: $btn-more-color!important;
+    font-size: 24px!important;
 
-
-    &__btn{
-      transform: rotate(90deg);
-
-      color: $btn-more-color!important;
-      font-size: 24px!important;
-
-      height: 100%!important;
-
-
-      padding: 0;
-      cursor: pointer;
-
-      &:hover, &:active{
-        background-color: $yellow-yandex;
-      }
-    }
+    height: 100%!important;
+    padding: 0;
+    cursor: pointer;
   }
 
   /* -------------------*/
