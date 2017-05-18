@@ -43,28 +43,6 @@
       box-shadow: $input-shadow-yellow;
     }
   }
-  &--compose-line{
-    position: relative;
-    top: 0;
-    padding-bottom: 6px;
-    padding-left: 0;
-    min-height: 25px;
-    line-height: 22px;
-    font-size: 14px;
-    color: #222;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
-    border: 0;
-    border-top: none!important;
-    border-right: none!important;
-    border-left: none!important;
-    &:focus{}
-
-  }
 
   &--up-shadow{
     box-shadow: $input-insert-shadow;

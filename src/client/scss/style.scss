@@ -39,6 +39,7 @@
 @import "ui/input-line";
 @import "ui/textarea";
 @import "ui/radio-button";
+@import "ui/select-input-line";
 @import "ui/checkbox-y/style.scss";
 @import "components/search-block";
 @import "components/validation";
@@ -82,6 +83,7 @@
 @import "components/important-tags";
 @import "components/inbox-message-list";
 @import 'font-icons/icomoon';
+@import "components/tag-contact";
 
 body {
   width: 100%;

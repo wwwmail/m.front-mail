@@ -1,0 +1,114 @@
+.select-input-line {
+  width: 100% !important;
+  background: transparent;
+  padding: 0 0 0 24px !important;
+  border-radius: 0!important;
+  box-shadow: none!important;
+  border: none;
+  border-bottom: 1px solid !important;
+  border-color: #ccc !important;
+
+  &:active, &:focus, &:hover{
+    border-bottom-color: $yellow-yandex!important;
+  }
+  &.ui-select-container > div{
+    //display: table;
+    //width: inherit;
+  }
+
+  &__match-tags{
+    //
+    //display: table-cell;
+    //background: transparent;
+
+    .ui-select-match-item{
+      border: none!important;
+      padding: 0;
+      display: inline-flex;
+      margin: 0 15px 0 0!important;
+
+      &:hover, &:active, &:focus{
+        background-color: transparent!important;
+        color: $black;
+      }
+    }
+
+  }
+  &__match-item{
+    padding: 0 10px 0 0;
+    background: transparent;
+    &:hover, &:active, &:focus{
+      background-color: $yellow-lignt!important;
+      color: $black;
+      border-radius: 100px;
+    }
+  }
+
+  &__choices-tags{
+
+    border: none!important;
+    border-radius: 0!important;
+    box-shadow: $popup-shadow!important;
+    padding: 0!important;
+    max-height: 264px!important;
+    border-top: 2px solid $yellow-yandex!important;
+
+    .ui-select-choices-row{
+
+
+      &:hover{
+        background-color: $yellow-lignt!important;
+      }
+      .ui-select-choices-group{
+        height: 43px;
+        display: inline-flex;
+        flex-flow: column;
+        align-items: center;
+      }
+      .tag-contact__name, .tag-contact__email{
+        min-width: 160px;
+        max-width: 200px;
+      }
+
+    }
+
+    .ui-select-choices-row-inner{
+
+      margin: 0 10px;
+      padding: 0!important;
+      border: 1px solid transparent;
+      border-bottom-color: rgba(0,0,0,.1);
+      &:hover{
+        background-color: transparent!important;
+      }
+      &:last-child{
+        //border-bottom-color:transparent;
+      }
+    }
+
+  }
+  &__choices-item{
+    height: 43px;
+    display: inline-flex;
+    align-items: center;
+    padding:0 14px;
+  }
+
+  .ui-select-search {
+    width: auto !important;
+    min-width: 50%!important;
+    position: relative;
+    top: -2px;
+  }
+
+  .ui-select-match-close {
+    display: none;
+  }
+
+  .ui-select-choices-row.active>span {
+    color: inherit!important;
+    text-decoration: none;
+    outline: 0;
+    background-color:  transparent!important;
+  }
+}

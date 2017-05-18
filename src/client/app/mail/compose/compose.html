@@ -4,22 +4,22 @@
         <div class="compose__header">
             <div class="compose__from">
                 <div class="input-line input-line--full">
-                    <label class="input-line__label">
-                        <span class="input-line__title link--gray link--hv-red font__size13" href="">Кому</span>
+                    <label class="input-line__label width--all">
+                        <span class="input-line__title link--gray" href="">Кому</span>
+                        <contact-to-add-select class="width--all" addresses="vm.sendForm.model.to"></contact-to-add-select>
+                        <button class="input-line__btn-more btn btn--not-style btn--light-hover icon-arrow-down font__size16" type="button"></button>
                     </label>
-
-                    <contact-to-add-select addresses="vm.sendForm.model.to"></contact-to-add-select>
                 </div>
             </div>
 
             <div class="compose__letter-subject">
-                <div class="input-line input-line--full">
+                <div class="input-line input-line--full is-active">
                     <label class="input-line__label width--all">
-                        <span class="input-line__title link--gray link--hv-red" href="">Тема</span>
+                        <span class="input-line__title link--gray" href="">Тема</span>
                         <input class=" input--compose-line input-line__input width--all" type="text" >
                     </label>
                 </div>
-                <button class="compose__btn-attach btn btn--not-style icon-clip font__size16" type="button"></button>
+                <button class="compose__btn-attach btn btn--not-style btn--light-hover icon-clip font__size16" type="button"></button>
             </div>
         </div>
 
