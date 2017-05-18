@@ -7,7 +7,7 @@
     -->
 
     <!-- Хедер для главной страници -->
-    <div class="header__main is-active" ng-if="!vm.isSearch && vm.$state.params.mbox === 'INBOX' && vm.$state.current.name !== 'mail.message'">
+    <div class="header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name !== 'mail.message'">
         <div class="header__container">
             <div class="header__left">
                 <button class="icon-menu btn btn--not-style btn--main-mobile-color header__icon padding--left"
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Хедер для страници поиска-->
-    <div class="header__search is-active" ng-if="vm.isSearch && vm.$state.params.mbox === 'INBOX' && vm.$state.current.name !== 'mail.message'">
+    <div class="header__search is-active" ng-if="vm.isSearch && vm.$state.current.name !== 'mail.message'">
         <div class="header__container">
             <div class="header__left">
                 <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"

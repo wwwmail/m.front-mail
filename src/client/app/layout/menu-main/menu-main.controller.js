@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mailBox', 'CONFIG'];
+    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mailBox', 'tag', 'CONFIG'];
 
     /* @ngInject */
-    function MenuMainController($scope, $rootScope, $uibModal, $auth, mailBox, CONFIG) {
+    function MenuMainController($scope, $rootScope, $uibModal, $auth, mailBox, tag, CONFIG) {
         var vm = this;
 
         vm.standartFolders = [
@@ -36,6 +36,10 @@
 
         vm.folders = {};
 
+        vm.tags = {
+            items: []
+        };
+
         $rootScope.$on('mail:sync', function () {
             getMailBox();
         });
@@ -56,6 +60,42 @@
             getMailBox();
         });
 
+        $scope.$on('mailBox:sync', function () {
+            getMailBox();
+        });
+
+        $scope.$on('tag:update:success', function () {
+            getTag();
+        });
+
+        $scope.$on('tag:create:success', function () {
+            getTag();
+        });
+
+        $scope.$on('tag:destroy:success', function () {
+            getTag();
+        });
+
+        // $rootScope.$on('mail:sync', function () {
+        //     getMailBox();
+        // });
+        //
+        // $rootScope.$on('folders:sync', function () {
+        //     getMailBox();
+        // });
+        //
+        // $scope.$on('mailBox:update:success', function () {
+        //     getMailBox();
+        // });
+        //
+        // $scope.$on('mailBox:create:success', function () {
+        //     getMailBox();
+        // });
+        //
+        // $scope.$on('mailBox:destroy:success', function () {
+        //     getMailBox();
+        // });
+
         vm.openFolderCreatePopup = openFolderCreatePopup;
         vm.closeMenu = closeMenu;
 
@@ -63,6 +103,7 @@
 
         function activate() {
             getMailBox();
+            getTag();
 
             vm.user = $auth.user;
 
@@ -133,6 +174,12 @@
                 // controllerAs: 'vm',
                 size: 'sm',
                 windowClass: 'popup popup--folder-create'
+            });
+        }
+
+        function getTag() {
+            tag.get().then(function (response) {
+                vm.tags.items = response.data;
             });
         }
 

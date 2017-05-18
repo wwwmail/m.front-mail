@@ -1,149 +1,143 @@
 <div class="menu-main-layout scrollables">
-        <!-- хедер меню-->
-        <div class="menu-main-layout__header">
-            <img class="menu-main-layout__header__logo img-responsive" src="/images/logo.png">
-            <button class="menu-main-layout__button-close btn"
-                    type="button"
-                    ng-click="vm.closeMenu()">
-                <span class="icon-double-arrow-left"></span>
-            </button>
+    <!-- хедер меню-->
+    <div class="menu-main-layout__header">
+        <img class="menu-main-layout__header__logo img-responsive" src="/images/logo.png">
+        <button class="menu-main-layout__button-close btn"
+                type="button"
+                ng-click="vm.closeMenu()">
+            <span class="icon-double-arrow-left"></span>
+        </button>
+    </div>
+
+    <div class="menu-main-layout__user-info">
+        <div class="menu-main-layout__avatar">
+            <div class="avatar avatar--size68 avatar--second-style">
+                <img class="avatar__image"
+                     ng-src="{{ vm.user.profile.photo }}"
+                     fallback-src="{{'/images/avatar-personal.svg'}}">
+            </div>
+            <button class="menu-main-layout__add-user  icon-cancel btn--circle btn--size_53 rotate--am90"></button>
         </div>
 
-        <div class="menu-main-layout__user-info">
-            <div class="menu-main-layout__avatar">
-                <div class="avatar avatar--size68 avatar--second-style">
-                    <img class="avatar__image"
-                         ng-src="{{ vm.user.profile.photo }}"
-                         fallback-src="{{'/images/avatar-personal.svg'}}">
+        <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
+        <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
+    </div>
+
+    <!--основное меню -->
+    <div class="menu-main-layout__item">
+        <ul class="menu-main">
+            <li class="menu-main__item is-sub-menu is-sub-menu--open" ng-repeat="folder in vm.folders.items">
+                <div class="menu-main__item-content" ng-if="!folder.isSub">
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
+                        <span class="icon-inbox menu-main__icon"></span>
+                        <span class="menu-main__title">{{ folder.caption }}</span>
+                    </a>
+                    <div class="menu-main__additional-option">
+                        <span class="menu-main__count">{{ folder.messagesCount }}</span>
+                        <button class="menu-main__show-additional icon-arrow-down btn--not-style btn--not-events"
+                                type="button"></button>
+                    </div>
                 </div>
 
-                <button class="menu-main-layout__add-user  icon-cancel btn--circle btn--size_53 rotate--am90"></button>
-
-            </div>
-
-            <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
-            <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
-        </div>
-
-        <!--основное меню -->
-        <div class="menu-main-layout__item">
-            <ul class="menu-main">
-                <li class="menu-main__item is-sub-menu is-sub-menu--open" ng-repeat="folder in vm.folders.items">
-                    <div class="menu-main__item-content" ng-if="!folder.isSub">
-                        <a class="menu-main__link"
-                           ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
-                            <span class="icon-inbox menu-main__icon"></span>
-                            <span class="menu-main__title">{{ folder.caption }}</span>
-                        </a>
-                        <div class="menu-main__additional-option">
-                            <span class="menu-main__count">{{ folder.messagesCount }}</span>
-                            <button class="menu-main__show-additional icon-arrow-down btn--not-style btn--not-events" type="button"></button>
-                        </div>
-                    </div>
-
-                    <div class="menu-main__item-content" ng-if="folder.isSub">
-                        <ul class="menu-main menu-main--additional">
-                            <li class="menu-main__item-sub">
-                                <a class="menu-main__link"
-                                   ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
-                                    <span class="icon-folder menu-main__icon"></span>
-                                    <span class="menu-main__title">{{ folder.caption }}</span></a>
-                                <div class="menu-main__additional-option">
-                                    <span class="menu-main__count">{{ folder.messagesCount }}</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-            <hr class="hr hr--main-menu">
-
-            <ul class="menu-main">
-                <li class="menu-main__item">
-                    <div class="menu-main__item-content">
-                        <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})">
-                            <span class="icon-important menu-main__icon"></span>
-                            <span class="menu-main__title">Важные</span>
-                        </a>
-                        <div class="menu-main__additional-option"></div>
-                    </div>
-                </li>
-                <li class="menu-main__item">
-                    <div class="menu-main__item-content">
-                        <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})">
-                            <span class="icon-clip menu-main__icon"></span>
-                            <span class="menu-main__title">С вложениями</span>
-                        </a>
-                    </div>
-                </li>
-                <li class="menu-main__item">
-                    <div class="menu-main__item-content">
-                        <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})">
-                            <span class="icon-unread menu-main__icon"></span>
-                            <span class="menu-main__title">Непрочитанные</span>
-                        </a>
-                    </div>
-                </li>
-            </ul>
-
-            <!-- -->
-            <hr class="hr hr--main-menu">
-
-            <!-- -->
-            <ul class="menu-main">
-                <li class="menu-main__item">
-                    <div class="menu-main__item-content">
-                        <a class="menu-main__link" href="">
-                            <span class="icon-tag-solid menu-main__icon menu-main__icon--select"></span>
-                            <span class="menu-main__title">Позже</span>
-                        </a>
-                    </div>
-                </li>
-                <li class="menu-main__item">
-                    <div class="menu-main__item-content">
-                        <a class="menu-main__link" href="">
-                            <span class="icon-filter menu-main__icon"></span>
-                            <span class="menu-main__title">Фильтры</span>
-                        </a>
-                        <div class="menu-main__additional-option">
-
-                            <div class="radio-button">
-                                <input type="checkbox" name="fiter" class="radio-button__checkbox" id="filter-switch" checked>
-                                <label class="radio-button__label" for="filter-switch">
-                                    <span class="radio-button__inner"></span>
-                                    <span class="radio-button__switch"></span>
-                                </label>
+                <div class="menu-main__item-content" ng-if="folder.isSub">
+                    <ul class="menu-main menu-main--additional">
+                        <li class="menu-main__item-sub">
+                            <a class="menu-main__link"
+                               ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
+                                <span class="icon-folder menu-main__icon"></span>
+                                <span class="menu-main__title">{{ folder.caption }}</span></a>
+                            <div class="menu-main__additional-option">
+                                <span class="menu-main__count">{{ folder.messagesCount }}</span>
                             </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <hr class="hr hr--main-menu">
+
+        <ul class="menu-main">
+            <li class="menu-main__item">
+                <div class="menu-main__item-content">
+                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})">
+                        <span class="icon-important menu-main__icon"></span>
+                        <span class="menu-main__title">Важные</span>
+                    </a>
+                    <div class="menu-main__additional-option"></div>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item-content">
+                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})">
+                        <span class="icon-clip menu-main__icon"></span>
+                        <span class="menu-main__title">С вложениями</span>
+                    </a>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item-content">
+                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})">
+                        <span class="icon-unread menu-main__icon"></span>
+                        <span class="menu-main__title">Непрочитанные</span>
+                    </a>
+                </div>
+            </li>
+        </ul>
+
+        <!-- -->
+        <hr class="hr hr--main-menu">
+
+        <!-- -->
+        <ul class="menu-main">
+            <li class="menu-main__item" ng-repeat="tag in vm.tags.items">
+                <div class="menu-main__item-content">
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})">
+                        <span class="icon-tag-solid menu-main__icon menu-main__icon--select"
+                              style="color: {{ tag.bgcolor }}"></span>
+                        <span class="menu-main__title">{{ tag.tag_name }}</span>
+                    </a>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item-content">
+                    <a class="menu-main__link" href>
+                        <span class="icon-filter menu-main__icon"></span>
+                        <span class="menu-main__title">Фильтры</span>
+                    </a>
+                    <div class="menu-main__additional-option">
+                        <div class="radio-button">
+                            <input type="checkbox" name="fiter" class="radio-button__checkbox" id="filter-switch"
+                                   checked>
+                            <label class="radio-button__label" for="filter-switch">
+                                <span class="radio-button__inner"></span>
+                                <span class="radio-button__switch"></span>
+                            </label>
                         </div>
-
                     </div>
-                </li>
-                <li class="menu-main__item">
-                    <div class="menu-main__item-content">
-                        <a class="menu-main__link" href="http://mailcz.devogic.com/settings/main" target="_blank">
-                            <span class="icon-settings menu-main__icon"></span>
-                            <span class="menu-main__title">Настройки</span>
-                        </a>
-                    </div>
-                </li>
-            </ul>
+                </div>
+            </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item-content">
+                    <a class="menu-main__link" href="http://mailcz.devogic.com/settings/main" target="_blank">
+                        <span class="icon-settings menu-main__icon"></span>
+                        <span class="menu-main__title">Настройки</span>
+                    </a>
+                </div>
+            </li>
+        </ul>
 
+    </div>
+
+    <!--футер-->
+    <div class="menu-main-layout__footer-menu">
+        <hr class="hr hr--main-menu">
+        <div class="mrg__left10 mrg__top10 mrg__bottom5">
+            <span class="">Полная |</span>
+            <span class="font__normal">Мобильная v 1.0</span>
         </div>
-
-        <!--футер-->
-        <div class="menu-main-layout__footer-menu">
-            <!-- -->
-            <hr class="hr hr--main-menu">
-            <div class="mrg__left10 mrg__top10 mrg__bottom5">
-                <span class="">Полная |</span>
-                <span class="font__normal">Мобильная v 1.0</span>
-
-            </div>
-
-
-        </div>
+    </div>
 
     <div class="scrollables--y"></div>
-
-
 </div>
