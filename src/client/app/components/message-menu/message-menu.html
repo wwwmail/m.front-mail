@@ -56,7 +56,16 @@
         <span class="popup__item__title">В архив</span>
     </div>
 
-    <div class="popup__item">
+    <div class="popup__item"
+         ng-if="vm.$state.params.mbox === 'Junk'"
+         ng-click="vm.move({name: 'Junk'})">
+        <span class="icon-spam popup__icon color--yellow"></span>
+        <span class="popup__item__title">Не спам</span>
+    </div>
+
+    <div class="popup__item"
+         ng-if="vm.$state.params.mbox !== 'Junk'"
+         ng-click="vm.move({name: 'Junk'})">
         <span class="icon-spam popup__icon color--yellow"></span>
         <span class="popup__item__title">Спам</span>
     </div>

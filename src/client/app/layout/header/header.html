@@ -7,7 +7,7 @@
     -->
 
     <!-- Хедер для главной страници -->
-    <div class="header__main is-active">
+    <div class="header__main is-active" ng-if="!vm.isSearch">
         <div class="header__container">
             <div class="header__left">
                 <button class="icon-menu btn btn--not-style btn--main-mobile-color header__icon padding--left"
@@ -15,42 +15,39 @@
             </div>
 
             <div class="header__center">
-                <span class="header__title-text">Входящие</span>
-                <span class="header__count-letters">28</span>
-
+                <span class="header__title-text">{{ vm.currentFolder.caption }}</span>
+                <span class="header__count-letters">{{ vm.currentFolder.messagesCount }}</span>
             </div>
 
             <div class="header__right">
-                <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"></button>
+                <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
+                        type="button" ng-click="vm.isSearch = true;"></button>
             </div>
 
             <hr class="hr hr--header">
-
         </div>
     </div>
 
     <!-- Хедер для страници поиска-->
-    <div class="header__search  ">
+    <div class="header__search is-active" ng-if="vm.isSearch">
         <div class="header__container">
             <div class="header__left">
                 <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"></button>
             </div>
-
-
             <div class="header__right width--inh">
-
-                <form class="search-block widtn-inh search-block" action="">
-                    <input class="input input--no-border input--no-focus input--size_l width--all" type="text"
-                           placeholder="Поиск писем">
-                    <button class="search-block__icon-close icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s mrg__right"></button>
-                    <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right"></button>
+                <form class="search-block widtn-inh search-block" ng-submit="vm.search()">
+                    <input class="input input--no-border input--no-focus input--size_l width--all"
+                           type="text"
+                           placeholder="Поиск писем"
+                           ng-model="vm.searchForm.model.search">
+                    <button class="search-block__icon-close icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s mrg__right"
+                            type="button"
+                            ng-click="vm.clearSearch()"></button>
+                    <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right"
+                            type="submit"></button>
                 </form>
-
-
             </div>
             <hr class="hr hr--header hr--yellow">
-
-
         </div>
     </div>
 
@@ -59,10 +56,9 @@
         <div class="header__container">
             <div class="header__left">
                 <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left">
-                    <span class="font__arial font__size13 mrg__left5 ">Назад</span>
+                    <span class="font__arial font__size13 mrg__left5">Назад</span>
                 </button>
             </div>
-
             <div class="header__right">
                 <button class="icon-arrow-up btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right_2"></button>
                 <button class="icon-arrow-down btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"></button>

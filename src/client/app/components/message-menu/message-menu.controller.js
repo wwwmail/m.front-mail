@@ -28,6 +28,7 @@
             vm.messages = messages;
             vm.message = message;
 
+            console.log('vm.message', vm.message);
             console.log('vm.messages', vm.messages);
         }
 
@@ -43,8 +44,8 @@
         }
 
         function triggerSeen() {
-            vm.isSeen ? setUnSeen() : setSeen();
-            vm.isSeen = !vm.isSeen;
+            vm.message.seen ? setUnSeen() : setSeen();
+            vm.message.seen = !vm.message.seen;
         }
 
         function setSeen() {

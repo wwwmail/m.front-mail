@@ -5,9 +5,9 @@
         .module('mail')
         .controller('MailController', MailController);
 
-    MailController.$inject = ['folder', 'tagResolve'];
+    MailController.$inject = ['folder', 'tagResolve', '$state'];
     /* @ngInject */
-    function MailController(folder, tagResolve) {
+    function MailController(folder, tagResolve, $state) {
         var vm = this;
 
         activate();

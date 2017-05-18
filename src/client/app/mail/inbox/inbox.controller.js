@@ -30,7 +30,6 @@
 
         $rootScope.$on('search:mail', function (e, data) {
             vm.messages.params = data.search;
-            // _.merge(vm.messages.params, data.search);
             get();
         });
 
