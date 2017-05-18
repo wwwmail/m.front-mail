@@ -52,6 +52,7 @@
 
             message.$promise.then(function (response) {
                 vm.message.model = response.data;
+                // vm.message.model = response.data;
                 vm.messages.checked.push(vm.message.model);
 
                 $rootScope.$broadcast('mailBox:sync');
@@ -175,7 +176,7 @@
         }
 
         function openMessageMenu() {
-            vm.messages.checked = [vm.message];
+            // vm.messages.checked = [vm.message.model];
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'app/components/message-menu/message-menu.html',
@@ -183,7 +184,7 @@
                 controllerAs: 'vm',
                 resolve: {
                     message: function () {
-                        return vm.message;
+                        return vm.message.model;
                     },
                     messages: function () {
                         return vm.messages;

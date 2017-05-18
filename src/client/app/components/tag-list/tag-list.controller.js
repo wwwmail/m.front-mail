@@ -86,7 +86,7 @@
         }
 
         function setImportant() {
-            vm.messages = mail.setImportant(vm.messages);
+            vm.messages = vm.messages.items[0].important ? mail.setImportant(vm.messages) : mail.setUnImportant(vm.messages);
         }
 
         function close() {

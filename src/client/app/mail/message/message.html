@@ -9,7 +9,6 @@
 
         <div class="info-sender">
             <div class="info-sender__head flex--inline">
-
                 <div class="info-sender__avatar flex">
                     <div class="avatar avatar--settings avatar--size42 avatar--second-style">
                         <avatar-name name="vm.message.model.from"
@@ -86,9 +85,8 @@
                 </div>
 
                 <div class="info-sender__message-info__item to-whom">
-                    <span class="to-whom__title width--min60"> Метки</span>
+                    <span class="to-whom__title width--min60">Метки</span>
                     <div class="inbox-message__labels">
-
                         <div class="inbox-message__label letter-tags letter-tags--poss-remove"
                              style="background: {{ tag.bgcolor }}; color: {{ tag.color }}"
                              ng-repeat="tag in vm.message.model.tags">
@@ -98,30 +96,8 @@
                                 <span class="letter-tags__remove-icon icon-remove-thick"></span>
                             </button>
                         </div>
-
-                        <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;red">-->
-                        <!--<span class="letter-tags__name">Метка 1</span>-->
-                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
-                        <!--</div>-->
-
-                        <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;orange">-->
-                        <!--<span class="letter-tags__name">Метка 1</span>-->
-                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
-                        <!--</div>-->
-
-                        <!--<div class="inbox-message__label letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;space-gray">-->
-                        <!--<span class="letter-tags__name">Метка 1</span>-->
-                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
-                        <!--</div>-->
-
-                        <!--<div class="letter-tags letter-tags&#45;&#45;poss-remove letter-tags&#45;&#45;space-gray">-->
-                        <!--<span class="letter-tags__name">Метка 1</span>-->
-                        <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;circle letter-tags__icon icon-cancel"></button>-->
-                        <!--</div>-->
-
                     </div>
                 </div>
-
 
             </div>
         </div>
@@ -151,21 +127,20 @@
     </div>
 
     <!-- Быстрый ответ-->
-    <!--<div class="mail-message__reply">-->
-        <form class="mail-message__reply" name="sendForm" ng-submit="vm.send(sendForm)">
-            <div class="mail-message__reply-container">
-                <div class="quick-reply">
-                    <button class="quick-reply__write btn btn--not-style icon-write"></button>
-                    <div class="quick-reply__message">
-                        <div class="quick-reply__message-input"
-                             contenteditable="true"
-                             ng-model="vm.text"
-                             required>
-                        </div>
+    <form class="mail-message__reply" name="sendForm" ng-submit="vm.send(sendForm)">
+        <div class="mail-message__reply-container">
+            <div class="quick-reply">
+                <button class="quick-reply__write btn btn--not-style icon-write"></button>
+                <div class="quick-reply__message">
+                    <div class="quick-reply__message-input"
+                         contenteditable="true"
+                         ng-model="vm.text"
+                         required>
                     </div>
-                    <button class="quick-reply__send btn btn--not-style">Отпр.</button>
                 </div>
+                <button class="quick-reply__send btn btn--not-style">Отпр.</button>
             </div>
-        </form>
-    <!--</div>-->
+        </div>
+    </form>
+
 </div>
