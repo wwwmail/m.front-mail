@@ -43,6 +43,8 @@
             get();
         });
 
+        vm.openTagList = openTagList;
+
         activate();
 
         function activate() {
@@ -89,6 +91,10 @@
             mailBox.get().then(function (response) {
                 vm.folders = _.assign(vm.folders, response.data);
             });
+        }
+
+        function openTagList() {
+            vm.isOpenTagList = true;
         }
     }
 })();

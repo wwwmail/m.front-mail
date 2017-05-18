@@ -5,9 +5,9 @@
         .module('app.components')
         .controller('InboxFooterController', InboxFooterController);
 
-    InboxFooterController.$inject = ['$state', '$scope', 'mail'];
+    InboxFooterController.$inject = ['$state', '$scope', '$uibModal', 'mail'];
     /* @ngInject */
-    function InboxFooterController($state, $scope, mail) {
+    function InboxFooterController($state, $scope, $uibModal, mail) {
         var vm = this;
 
         vm.isSeen = true;
@@ -19,6 +19,7 @@
         vm.triggerSeen = triggerSeen;
         vm.goToAnswer = goToAnswer;
         vm.goToFwd = goToFwd;
+        vm.openTagListPopup = openTagListPopup;
 
         $scope.$watch('vm.messages.checked', function (data) {
             if (data && !data.length) {
@@ -98,6 +99,27 @@
             $state.go('mail.compose', {
                 ids: ids,
                 fwd: true
+            });
+        }
+
+        function openTagListPopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/tag-list/tag-list.html',
+                controller: 'TagListController',
+                controllerAs: 'vm',
+                resolve: {
+                    messages: function () {
+                        return vm.messages;
+                    }
+                },
+                size: 'sm',
+                windowClass: 'popup'
+            });
+
+            modalInstance.result.then(function (response) {
+                vm.messages = response.result.messages;
+                // console.log('response', response);
             });
         }
     }

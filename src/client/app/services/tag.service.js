@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('tag', tag);
 
-    tag.$inject = ['CONFIG', '$resource', '$http', '$rootScope', 'mail'];
+    tag.$inject = ['CONFIG', '$resource', '$http', '$rootScope', '$auth'];
 
-    function tag(CONFIG, $resource, $http, $rootScope, mail) {
+    function tag(CONFIG, $resource, $http, $rootScope, $auth) {
         var API_URL = CONFIG.APIHost + '/tag';
 
         var resource = $resource(API_URL,
@@ -53,8 +53,9 @@
 
         function create(params, data) {
             return resource.create(params, data).$promise
-                .then(function () {
+                .then(function (response) {
                     $rootScope.$broadcast('tag:create:success');
+                    return response;
                 });
         }
 
@@ -74,21 +75,25 @@
         }
 
         function addTagToMessages(params, data) {
-            return resource.addTagToMessages(params, data).$promise;
+            return resource.addTagToMessages(params, data).$promise
+                .then(function (response) {
+                    $rootScope.$broadcast('tag:message:add:success');
+                    return response;
+                });
         }
 
         function deleteTagFromMessages(params, data) {
-            return resource.deleteTagFromMessages(params, data).$promise;
+            return resource.deleteTagFromMessages(params, data).$promise
+                .then(function (response) {
+                    $rootScope.$broadcast('tag:message:delete:success');
+                    return response;
+                });
         }
 
-        function setTag(item, data) {
+        function setTag(item, data, sync) {
             var messages = angular.copy(data);
 
-            var ids = [];
-
             _.forEach(messages.checked, function (messageChecked) {
-                ids.push(messageChecked.number);
-
                 var isset = false;
 
                 if (messageChecked.tags.length) {
@@ -109,19 +114,20 @@
 
             });
 
-            addTagToMessages({}, {
-                ids: ids,
-                mbox: messages.checked[0].mbox,
+            var response = addTagToMessages({}, {
+                messages: messages.checked,
                 tag_id: item.id
-            }).then(function (response) {
-                // messages.checked = [];
             });
+
+            if (sync) {
+                return response;
+            }
 
             messages.checked = [];
 
             _.forEach(messages.items, function (item) {
-                _.forEach(ids, function (id) {
-                    if (item.number === id) {
+                _.forEach(data.checked, function (checked) {
+                    if (item.number === checked.number) {
                         messages.checked.push(item);
                     }
                 });
@@ -133,11 +139,7 @@
         function setUnTag(item, data) {
             var messages = angular.copy(data);
 
-            var ids = [];
-
             _.forEach(messages.checked, function (messageChecked) {
-                ids.push(messageChecked.number);
-
                 _.forEach(messages.items, function (message) {
                     if (messageChecked.number === message.number) {
                         _.remove(message.tags, function (o) {
@@ -148,18 +150,15 @@
             });
 
             deleteTagFromMessages({}, {
-                ids: ids,
-                mbox: messages.checked[0].mbox,
+                messages: messages.checked,
                 tag_id: item.id
-            }).then(function (response) {
-                // vm.messages.checked = [];
             });
 
             messages.checked = [];
 
             _.forEach(messages.items, function (item) {
-                _.forEach(ids, function (id) {
-                    if (item.number === id) {
+                _.forEach(data.checked, function (checked) {
+                    if (item.number === checked.number) {
                         messages.checked.push(item);
                     }
                 });

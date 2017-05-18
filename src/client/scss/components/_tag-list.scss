@@ -1,102 +1,58 @@
 .tag-list {
-  width: 200px;
-  max-width: none !important;
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 
-  &__body {
-    padding: 0 12px;
+    height: 52px;
+
+    color: $textBlack;
+    font: 300 20px/1 $mainFont;
   }
 
-  &__name {
-    padding: 0;
-    margin: 0;
+  &__title {
+    margin-top: 4px;
 
-    &--important {
-      &:after {
-        content: "";
-        @extend .ydx-i-flag;
-
-        width: 10px;
-        height: 10px;
-        display: inline-block;
-      }
+    &--mrg-left {
+      margin-left: 35px;
+      margin-right: auto;
     }
   }
 
-  &__header {
-    display: block;
+  &__tick {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    margin-right: 0;
 
-    padding: 5px 12px;
+    &:before {
+      content: "";
 
-    color: #999;
-    font-size: 13px;
+      display: none;
+
+      position: absolute;
+      top: 4px;
+      right: 0;
+
+      width: 7px;
+      height: 14px;
+
+      border: solid $validtae-ok-green;
+      border-width: 0 3px 3px 0;
+
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
   }
 
-  &__first-letter {
-    font-size: 1.015625em;
-    display: inline-block;
-    height: 1em;
-    margin: 0 1px 0 0;
-    padding: 1px 2px 0;
-    text-transform: capitalize;
-    line-height: 1;
-    border-radius: 3px;
-    color: #fff;
-  }
+  &__checked {
+    display: none;
 
-  &__link {
-    display: block;
-
-    //margin-left: 7px;
-
-    color: #000;
-
-    font-size: 13px;
-
-    max-width: 100%;
-
-    padding: .39em 12px;
-
-    &:hover {
-      background: rgba(0, 0, 0, .2);
-    }
-
-    &--underline {
-        text-decoration: underline;
-    }
-
-    &--disabled {
-      color: #999 !important;
-      text-decoration: none;
-
-      margin-left: 0;
-
-      //&:before {
-      //  content: "•";
-      //  font-size: 16px;
-      //  margin-right: 2px;
-      //}
-
-      &:hover {
-        .folder-list__name {
-          text-decoration: none;
-          cursor: default;
+    &:checked + .is-selected {
+      display: block;
+        &:before {
+          display: block;
         }
-      }
-    }
-
-    &--new {
-      margin: 0;
-
-      padding-top: 6px;
-      padding-bottom: 6px;
-
-      &:hover {
-        background: rgba(0, 0, 0, .2);
-
-        .folder-list__name {
-          text-decoration: none;
-        }
-      }
     }
   }
 }

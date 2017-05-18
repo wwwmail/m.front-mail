@@ -1,0 +1,45 @@
+<div class="popup__head">
+    <span class="popup__head__title">Метки</span>
+    <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s"
+            type="button"
+            ng-click="vm.close()"></button>
+    <hr class="hr hr--popup">
+</div>
+
+<div class="popup__content scrollables">
+
+    {{ vm.unTags.items }}
+
+    <label class="tag-list__item">
+        <div class="letter-tags">
+            <span class="icon-important popup__icon popup__icon--not-size color--semi-dark-red"></span>
+        </div>
+        <span class="tag-list__title tag-list__title--mrg-left">Важное</span>
+        <input class="tag-list__checked" type="checkbox">
+        <span class="tag-list__tick is-selected"></span>
+    </label>
+
+    <label class="tag-list__item" ng-repeat="tag in vm.tags.items">
+        <div class="letter-tags" style="fill: {{ tag.bgcolor }}">
+            <svg class="letter-tags__icon">
+                <use xlink:href="#ico_label-message"></use>
+            </svg>
+        </div>
+        <span class="tag-list__title tag-list__title--mrg-left">
+                {{ tag.tag_name }}
+        </span>
+        <input class="tag-list__checked"
+               type="checkbox"
+               ng-change="vm.triggerTag(tag, checked)"
+               data-checklist-model="vm.unTags.items"
+               data-checklist-value="tag">
+        <span class="tag-list__tick is-selected"></span>
+    </label>
+</div>
+
+<div class="popup__footer">
+    <button class="btn btn--yellow btn--no-radius width--all height--min-inh font__size20"
+            ng-click="vm.close()">
+        Готово
+    </button>
+</div>
