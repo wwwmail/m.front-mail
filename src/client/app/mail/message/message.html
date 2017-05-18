@@ -40,7 +40,8 @@
                     <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red"
                          ng-if="vm.$state.params.mbox === 'Trash'"
                          ng-click="vm.destroy({name: 'Trash'})"></div>
-                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply"></div>
+                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply"
+                         ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></div>
                 </div>
 
             </div>
