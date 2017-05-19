@@ -76,6 +76,7 @@
 
     transform: translate3d(0,-100%,0);
     transition: transform .5s;
+    overflow: auto;
 
     &:before{
       content: '';
@@ -105,10 +106,7 @@
       z-index: 2;
 
     }
-    &__item{
-      margin: 6px 0;
-      z-index: 3;
-    }
+
 
     &.is-active{
       height: auto;
@@ -119,6 +117,22 @@
 
     }
 
+  }
+  &__message-info-item{
+    margin: 6px 0;
+    z-index: 3;
+  }
+
+  &__important-tags{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    padding: 1px 1px 1px 0;
+    &--small-title{
+      margin-right: 0px;
+      padding: 0;
+      font-size: 12px;
+    }
   }
 
   @media only screen and (max-width: 768px) {
