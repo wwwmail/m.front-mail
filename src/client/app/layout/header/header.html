@@ -24,7 +24,7 @@
                         type="button"
                         ng-click="vm.isSearch = true;"></button>
             </div>
-            <hr class="hr hr--header">
+            <hr class="hr hr--header hr--yellow">
         </div>
     </div>
 
@@ -49,7 +49,7 @@
                             type="submit"></button>
                 </form>
             </div>
-            <hr class="hr hr--header hr--yellow">
+            <!--<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">-->
         </div>
     </div>
 
@@ -60,7 +60,7 @@
                 <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left"
                         type="button"
                         ui-sref="mail.inbox({mbox: vm.$state.params.mbox})">
-                    <span class="font--arial font--size13 mrg__left5">Назад</span>
+                    <span class="font--arial font--size15 mrg__left5">Назад</span>
                 </button>
             </div>
             <div class="header__right">
@@ -75,7 +75,7 @@
     <div class="header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">
         <div class="header__container">
             <div class="header__left">
-                <button class="icon-cancel btn btn--not-style btn--main-mobile-color header__icon padding--left"
+                <button class="icon-cancel btn btn--not-style btn--main-mobile-color header__icon header__icon--close padding--hor12"
                         ui-sref="mail.inbox({mbox: 'INBOX'})">
                 </button>
             </div>
@@ -85,7 +85,7 @@
             </div>
 
             <div class="header__right">
-                <button class="btn btn--not-style btn--main-mobile-color header__icon mrg__right font--arial font--size15 padding--right icon-send"
+                <button class="btn btn--not-style btn--main-mobile-color header__icon mrg__right font--arial font--size15 padding--hor12 icon-send"
                         type="button"
                         ng-click="vm.send()">
                 </button>

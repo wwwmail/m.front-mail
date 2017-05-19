@@ -8,7 +8,6 @@
   min-height: 48px;
   height: 48px;
 
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.2)!important;
 
   background-color: $white-color;
   z-index: 2;
@@ -20,6 +19,7 @@
   &__search{
     display: none;
     visibility: hidden;
+    box-shadow: none!important;
   }
   &__massege-replay{
     display: none;
@@ -28,6 +28,8 @@
   &__message-new{
     display: none;
     visibility: hidden;
+
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2)!important;
     .icon-send{
       color: $blue;
     }
@@ -87,12 +89,20 @@
     font: 300 13px/1 $mainFont;
     &:before{
       font-size: 20px;
-
+    }
+    &--close{
+      &:before{
+        font-size: 16px!important;
+      }
     }
   }
 
+  &--not-shadow{
+    box-shadow: none!important;
+  }
+
   @media only screen and (max-width: 562px) {
-    &__content{
+    &__container{
       padding: 0 10px;
     }
   }

@@ -161,6 +161,9 @@
   &--left_2{
     padding-left: 2px!important;
   }
+  &--hor12{
+    padding: 0 12px!important;
+  }
 
 }
 
@@ -377,7 +380,8 @@
 }
 
 .hide-elm {
-  visibility: hidden;
+  visibility: hidden!important;
+  display: none!important;
 }
 
 .separate {

@@ -3,12 +3,7 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
-
-    //&:after {
-    //  @include clear;
-    //}
   }
-
   &__item {
     position: relative;
     z-index: 1;
@@ -55,7 +50,6 @@
 
       transform: rotate(45deg);
     }
-
   }
 
   &__name {
