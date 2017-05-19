@@ -1,7 +1,7 @@
 .select-input-line {
   width: 100% !important;
   background: transparent;
-  padding: 0 0 0 24px !important;
+  padding: 0 30px !important;
   border-radius: 0!important;
   box-shadow: none!important;
   border: none;
@@ -10,10 +10,58 @@
 
   &:active, &:focus, &:hover{
     border-bottom-color: $yellow-yandex!important;
+    &__match-item{
+      //background-color: $yellow-lignt!important;
+      //color: $black;
+      ////padding: 0 26px 0 0;
+      ////margin-right: -26px!important;
+    }
+    .ui-select-match-item{
+      &:active, &:focus, &:hover{
+        .close{
+          display: block!important;
+          opacity: .6;
+          z-index: 5;
+        }
+      }
+    }
   }
   &.ui-select-container > div{
     //display: table;
     //width: inherit;
+  }
+  .btn-primary{
+    background-color: transparent!important;
+    color: transparent!important;
+    border: none!important;
+    display: none!important;
+    max-width: 0!important;
+    height: 0!important;
+    opacity: 0!important;
+  }
+
+   .close{
+     position: absolute!important;
+     top: 0!important;
+     padding-top: 5px;
+     right: 5px!important;
+     color: transparent;
+     overflow: hidden;
+     width: 16px;
+     height: 20px;
+     line-height: 1!important;
+     display: none!important;
+
+     &:before{
+       //position: absolute;
+       font-family: 'icomoon' !important;
+       content: "\e908";
+       font-size: 10px;
+       color: #000!important;
+       display: flex;
+       justify-content: center;
+     }
+
   }
 
   &__match-tags{
@@ -25,22 +73,34 @@
       border: none!important;
       padding: 0;
       display: inline-flex;
-      margin: 0 15px 0 0!important;
+      margin: 0 5px 0 0!important;
 
       &:hover, &:active, &:focus{
         background-color: transparent!important;
         color: $black;
+        padding-right: 26px ;
       }
+    }
+
+    &:hover, &:active, &:focus{
+
     }
 
   }
   &__match-item{
-    padding: 0 10px 0 0;
-    background: transparent;
+    border-radius: 100px;
+    padding: 0 5px 0 0;
+
+    //background: transparent;
+    background-color:  #f6f5f3!important;
+    color: #222;
+
     &:hover, &:active, &:focus{
       background-color: $yellow-lignt!important;
       color: $black;
-      border-radius: 100px;
+      padding: 0 26px 0 0;
+      margin-right: -26px!important;
+
     }
   }
 
@@ -52,9 +112,9 @@
     padding: 0!important;
     max-height: 264px!important;
     border-top: 2px solid $yellow-yandex!important;
+    font-size:  14px!important;
 
     .ui-select-choices-row{
-
 
       &:hover{
         background-color: $yellow-lignt!important;

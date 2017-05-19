@@ -80,6 +80,7 @@
     color: rgba(0,0,0,.5);
   }
 
+
   &__links {
     position: absolute;
 
@@ -103,13 +104,12 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #222;
-    transform: translate3d(0, 177%, 0) scale(1.2);
+    transform: translate3d(10%, 177%, 0) scale(1.18);
     transition: transform .250s;
   }
 
   &.is-active, &:hover, &:focus, &:active{
     .input-line__title{
-
       transform: inherit!important;
       transition: transform .250s;
     }
@@ -148,5 +148,12 @@
   &--no-border {
     border: none;
   }
+
+  &--right-padding{
+    .select-input-line{
+      padding: 0 65px 0 30px !important;
+    }
+  }
+
 }
 

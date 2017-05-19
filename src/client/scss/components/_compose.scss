@@ -8,8 +8,20 @@
     position: relative;
 
     &--add-features{
+      visibility: hidden;
+      display: none;
+    }
 
+    &.is-show-features{
 
+      .compose__from--add-features{
+        visibility: visible;
+        display: block;
+
+      }
+      .input-line__btn-more{
+          transform: rotate(180deg)!important;
+      }
     }
 
   }
@@ -52,7 +64,7 @@
   }
 
 
-  &__attachments{
+  &__attachments-upload{
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
