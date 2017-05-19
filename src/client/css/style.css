@@ -162,71 +162,71 @@
   padding-left: 2px !important;
 }
 
-.font__helvetica {
-  font-family: "HelveticaNeueCyr", sans-serif;
+.font--helvetica {
+  font-family: "HelveticaNeueCyr", sans-serif !important;
 }
-.font__arial {
-  font-family: Arial, sans-serif;
+.font--arial {
+  font-family: Arial, sans-serif !important;
 }
-.font__verdana {
-  font-family: Verdana, sans-serif;
+.font--verdana {
+  font-family: Verdana, sans-serif !important;
 }
-.font__size7 {
+.font--size7 {
   font-size: 7px !important;
 }
-.font__size8 {
+.font--size8 {
   font-size: 8px !important;
 }
-.font__size9 {
+.font--size9 {
   font-size: 9px !important;
 }
-.font__size10 {
+.font--size10 {
   font-size: 10px !important;
 }
-.font__size11 {
+.font--size11 {
   font-size: 11px !important;
 }
-.font__size12 {
+.font--size12 {
   font-size: 12px !important;
 }
-.font__size13 {
+.font--size13 {
   font-size: 13px !important;
 }
-.font__size14 {
+.font--size14 {
   font-size: 14px !important;
 }
-.font__size15 {
+.font--size15 {
   font-size: 15px !important;
 }
-.font__size16 {
+.font--size16 {
   font-size: 16px !important;
 }
-.font__size18 {
+.font--size18 {
   font-size: 18px !important;
 }
-.font__size20 {
+.font--size20 {
   font-size: 20px !important;
 }
-.font__center {
-  text-align: center;
+.font--center {
+  text-align: center !important;
 }
-.font__right {
-  text-align: right;
+.font--right {
+  text-align: right !important;
 }
-.font__left {
-  text-align: left;
+.font--left {
+  text-align: left !important;
 }
-.font__bold {
-  font-weight: bold;
+.font--bold {
+  font-weight: bold !important;
 }
-.font__normal {
-  font-weight: normal;
+.font--normal {
+  font-weight: normal !important;
 }
-.font__weidth-Light {
-  font-weight: 300;
+.font--weidth-Light {
+  font-weight: 300 !important;
 }
-.font__weidth-UltraLight {
-  font-weight: 200;
+.font--weidth-UltraLight {
+  font-weight: 200 !important;
 }
 
 .width--all {
@@ -708,6 +708,7 @@
   width: 100%;
   min-height: 48px;
   height: 48px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2) !important;
   background-color: #ffffff;
   z-index: 2;
 }
@@ -723,11 +724,14 @@
   display: none;
   visibility: hidden;
 }
-.header__massege-new {
+.header__message-new {
   display: none;
   visibility: hidden;
 }
-.header__main.is-active, .header__search.is-active, .header__massege-replay.is-active, .header__massege-new.is-active {
+.header__message-new .icon-send {
+  color: #386ac0;
+}
+.header__main.is-active, .header__search.is-active, .header__massege-replay.is-active, .header__message-new.is-active {
   height: inherit;
   display: block;
   visibility: visible;
@@ -1410,6 +1414,7 @@
   background-color: #e4e2da;
   margin: 0;
   width: 200vw;
+  height: 2px !important;
 }
 .hr--inbox-footer {
   position: absolute;

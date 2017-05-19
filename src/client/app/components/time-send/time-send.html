@@ -3,7 +3,7 @@
         <img class="img-responsive" src="/images/cancel.svg">
     </div>
     <div class="time-send__content">
-        <div class="time-send__info font__size13" ng-if="vm.isInfoOpen">
+        <div class="time-send__info font--size13" ng-if="vm.isInfoOpen">
             Вы можете указать дату и время, когда письмо должно быть отправлено. Отправку письма можно отложить не более
             чем на один год с текущей даты.
         </div>
@@ -19,7 +19,7 @@
                     </label>
                 </div>
             </div>
-            <div class="time-send__planing-item font__size15">
+            <div class="time-send__planing-item font--size15">
                 <div uib-datepicker-popup="'dd-MMMM-yyyy'"
                      ng-model="vm.dateModel" is-open="vm.isDateOpen"
                      datepicker-options="vm.dateOptions"></div>
@@ -32,7 +32,7 @@
                 </button>
             </div>
             <div class="time-send__planing-item">
-                <a class="link link--gray font__size18"
+                <a class="link link--gray font--size18"
                    href
                    ng-click="vm.isInfoOpen = !vm.isInfoOpen">
                     <span class="icon-info"></span>
