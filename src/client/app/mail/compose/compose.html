@@ -2,14 +2,14 @@
     <div class="compose__container">
 
         <div class="compose__header">
-            <div class="compose__from is-show-features">
-                <div class="input-line input-line--full input-line--right-padding">
+            <div class="compose__from" ng-class="{'is-show-features', vm.isShowFeatures}">
+                <div class="input-line is-active input-line--full input-line--right-padding">
                     <label class="input-line__label width--all">
                         <span class="input-line__title link--gray" href="">Кому</span>
                         <contact-to-add-select class="width--all"
                                                addresses="vm.sendForm.model.to"></contact-to-add-select>
                         <button class="input-line__btn-more btn btn--not-style btn--light-hover icon-arrow-down font__size16"
-                                type="button"></button>
+                                type="button" ng-click="vm.isShowFeatures = !vm.isShowFeatures"></button>
                     </label>
                 </div>
                 <div class="compose__from--add-features">
@@ -18,7 +18,7 @@
                         <div class="input-line__label width--all">
                             <span class="input-line__title link--gray" href="">Копия</span>
                             <contact-to-add-select class="width--all"
-                                                   addresses="vm.sendForm.model.to"></contact-to-add-select>
+                                                   addresses="vm.sendForm.model.toCopy"></contact-to-add-select>
                         </div>
                     </div>
 
@@ -27,17 +27,17 @@
                         <div class="input-line__label width--all">
                             <span class="input-line__title link--gray" href="">Скрытая копия</span>
                             <contact-to-add-select class="width--all"
-                                                   addresses="vm.sendForm.model.to"></contact-to-add-select>
+                                                   addresses="vm.sendForm.model.toCopyHidden"></contact-to-add-select>
                         </div>
                     </div>
                     <!-- от кого-->
-                    <div class="input-line input-line--full">
-                        <div class="input-line__label width--all">
-                            <span class="input-line__title link--gray" href="">от кого</span>
-                            <contact-to-add-select class="width--all"
+<!--                    <div class="input-line input-line&#45;&#45;full">
+                        <div class="input-line__label width&#45;&#45;all">
+                            <span class="input-line__title link&#45;&#45;gray" href="">от кого</span>
+                            <contact-to-add-select class="width&#45;&#45;all"
                                                    addresses="vm.sendForm.model.to"></contact-to-add-select>
                         </div>
-                    </div>
+                    </div>-->
 
                 </div>
             </div>
