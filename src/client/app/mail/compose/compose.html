@@ -2,52 +2,59 @@
     <div class="compose__container">
 
         <div class="compose__header">
-            <div class="compose__from" ng-class="{'is-show-features', vm.isShowFeatures}">
-                <div class="input-line is-active input-line--full input-line--right-padding">
+            <div class="compose__from" ng-class="{'is-show-features': vm.isShowFeatures}">
+                <div class="input-line input-line--full input-line--right-padding"
+                     ng-class="{'is-active': vm.sendForm.model.to.length}">
                     <label class="input-line__label width--all">
-                        <span class="input-line__title link--gray" href="">Кому</span>
+                        <span class="input-line__title link--gray">Кому</span>
                         <contact-to-add-select class="width--all"
                                                addresses="vm.sendForm.model.to"></contact-to-add-select>
                         <button class="input-line__btn-more btn btn--not-style btn--light-hover icon-arrow-down font__size16"
-                                type="button" ng-click="vm.isShowFeatures = !vm.isShowFeatures"></button>
+                                type="button"
+                                ng-click="vm.isShowFeatures = !vm.isShowFeatures"></button>
                     </label>
                 </div>
-                <div class="compose__from--add-features">
+                <div class="compose__from--add-features" ng-if="vm.isShowFeatures">
+
                     <!-- копия-->
                     <div class="input-line input-line--full">
                         <div class="input-line__label width--all">
-                            <span class="input-line__title link--gray" href="">Копия</span>
+                            <span class="input-line__title link--gray">Копия</span>
                             <contact-to-add-select class="width--all"
                                                    addresses="vm.sendForm.model.toCopy"></contact-to-add-select>
                         </div>
                     </div>
 
                     <!--скрытая копия-->
-                    <div class="input-line input-line--full">
+                    <div class="input-line input-line--full"
+                         ng-class="{'is-active': vm.sendForm.model.toCopyHidden.length}">
                         <div class="input-line__label width--all">
-                            <span class="input-line__title link--gray" href="">Скрытая копия</span>
+                            <span class="input-line__title link--gray">Скрытая копия</span>
                             <contact-to-add-select class="width--all"
                                                    addresses="vm.sendForm.model.toCopyHidden"></contact-to-add-select>
                         </div>
                     </div>
                     <!-- от кого-->
-<!--                    <div class="input-line input-line&#45;&#45;full">
-                        <div class="input-line__label width&#45;&#45;all">
-                            <span class="input-line__title link&#45;&#45;gray" href="">от кого</span>
-                            <contact-to-add-select class="width&#45;&#45;all"
-                                                   addresses="vm.sendForm.model.to"></contact-to-add-select>
-                        </div>
-                    </div>-->
+                    <!--                    <div class="input-line input-line&#45;&#45;full">
+                                            <div class="input-line__label width&#45;&#45;all">
+                                                <span class="input-line__title link&#45;&#45;gray" href="">от кого</span>
+                                                <contact-to-add-select class="width&#45;&#45;all"
+                                                                       addresses="vm.sendForm.model.to"></contact-to-add-select>
+                                            </div>
+                                        </div>-->
 
                 </div>
             </div>
 
 
             <div class="compose__letter-subject">
-                <div class="input-line input-line--full">
+                <div class="input-line input-line--full"
+                     ng-class="{'is-active': vm.sendForm.model.subject.length}">
                     <label class="input-line__label width--all">
-                        <span class="input-line__title link--gray" href="">Тема</span>
-                        <input class=" input--compose-line input-line__input width--all" type="text">
+                        <span class="input-line__title link--gray">Тема</span>
+                        <input class=" input--compose-line input-line__input width--all"
+                               type="text"
+                               ng-model="vm.sendForm.model.subject">
                     </label>
                 </div>
                 <button class="compose__btn-attach btn btn--not-style btn--light-hover icon-clip font__size16"
@@ -60,14 +67,16 @@
         </div>
 
         <div class="compose__attachments-upload ">
-                    <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
-                                   message="vm.sendForm"
-                                   is-uploading="vm.isUploading"></attach-upload>
+            <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
+                           message="vm.sendForm"
+                           is-uploading="vm.isUploading"></attach-upload>
         </div>
 
         <div class="compose__content">
-            <div class="compose__message" contenteditable="true">
-
+            <div class="compose__message"
+                 contenteditable="true"
+                 ng-model="vm.sendForm.model.body"
+                 required>
             </div>
         </div>
 
