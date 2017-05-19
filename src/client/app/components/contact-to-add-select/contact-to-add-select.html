@@ -20,7 +20,7 @@
         </div>
     </ui-select-match>
 
-    <ui-select-choices class="select-input-line__choices-tags font-sizer--bigger-15"
+    <ui-select-choices class="select-input-line__choices-tags"
                        refresh="vm.findContacts($select.search)"
                        refresh-delay="500"
                        repeat="contact in (vm.contacts.items | filter: $select.search) track by contact.id">
