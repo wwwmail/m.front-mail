@@ -24,7 +24,6 @@
                         type="button"
                         ng-click="vm.isSearch = true;"></button>
             </div>
-
             <hr class="hr hr--header">
         </div>
     </div>
@@ -61,7 +60,7 @@
                 <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left"
                         type="button"
                         ui-sref="mail.inbox({mbox: vm.$state.params.mbox})">
-                    <span class="font__arial font__size13 mrg__left5">Назад</span>
+                    <span class="font--arial font--size13 mrg__left5">Назад</span>
                 </button>
             </div>
             <div class="header__right">
@@ -73,23 +72,22 @@
     </div>
 
     <!-- Хедер для страници создания письма-->
-    <div class="header__massege-replay">
+    <div class="header__message-new is-active">
         <div class="header__container">
             <div class="header__left">
-                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left">
+                <button class="icon-cancel btn btn--not-style btn--main-mobile-color header__icon padding--left">
                 </button>
             </div>
 
-            <div class="header__center mrg__left50">
-                <span class="header__title-text">Новое письмо</span>
+            <div class="header__center ">
+                <span class="header__title-text font--size18 font--bold">Новое письмо</span>
             </div>
 
             <div class="header__right">
-                <button class="btn btn--not-style btn--main-mobile-color header__icon mrg__right font__arial font__size15 padding--rignt">
-                    Отправить
+                <button class="btn btn--not-style btn--main-mobile-color header__icon mrg__right font--arial font--size15 padding--right icon-send">
                 </button>
             </div>
-            <hr class="hr hr--header hr--yellow">
+            <!--<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">-->
         </div>
     </div>
 

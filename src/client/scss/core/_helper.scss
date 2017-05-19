@@ -166,95 +166,95 @@
 
 .font {
 
-  &__helvetica{
-    font-family: $mainFont;
+  &--helvetica{
+    font-family: $mainFont!important;
 
   }
-  &__arial{
-    font-family: $mainThreeFont;
+  &--arial{
+    font-family: $mainThreeFont!important;
   }
 
-  &__verdana{
-    font-family: $mainSecondFont;
+  &--verdana{
+    font-family: $mainSecondFont!important;
   }
 
-  &__size7 {
+  &--size7 {
     font-size: 7px !important;
   }
 
-  &__size8 {
+  &--size8 {
     font-size: 8px !important;
   }
 
-  &__size9 {
+  &--size9 {
     font-size: 9px !important;
   }
 
-  &__size10 {
+  &--size10 {
     font-size: 10px !important;
   }
 
-  &__size11 {
+  &--size11 {
     font-size: 11px !important;
   }
 
-  &__size12 {
+  &--size12 {
     font-size: 12px !important;
   }
 
-  &__size13 {
+  &--size13 {
     font-size: 13px !important;
   }
 
-  &__size14 {
+  &--size14 {
     font-size: 14px !important;
   }
 
-  &__size15 {
+  &--size15 {
     font-size: 15px !important;
   }
 
-  &__size16 {
+  &--size16 {
     font-size: 16px !important;
   }
 
-  &__size18 {
+  &--size18 {
     font-size: 18px !important;
   }
-  &__size20 {
+  &--size20 {
     font-size: 20px !important;
   }
 
-  &__center {
-    text-align: center;
+  &--center {
+    text-align: center!important;
   }
 
-  &__right {
-    text-align: right;
+  &--right {
+    text-align: right!important;
   }
 
-  &__left {
-    text-align: left;
+  &--left {
+    text-align: left!important;
   }
 
-  &__bold {
-    font-weight: bold;
+  &--bold {
+    font-weight: bold!important;
   }
 
-  &__normal {
-    font-weight: normal;
+  &--normal {
+    font-weight: normal!important;
   }
 
-  &__weidth-Light{
-	font-weight: 300;
+  &--weidth-Light{
+	font-weight: 300!important;
   }
 
-  &__weidth-UltraLight{
-    font-weight: 200;
+  &--weidth-UltraLight{
+    font-weight: 200!important;
 
   }
 
-  &__weidth-r{
+  &--weidth-r{
 
   }
 
