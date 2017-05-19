@@ -128,10 +128,15 @@
     align-items: center;
     margin-right: 10px;
     padding: 1px 1px 1px 0;
+
     &--small-title{
-      margin-right: 0px;
+      display: inline-flex;
+      margin-right: 0;
       padding: 0;
       font-size: 12px;
+    }
+    &.is-hide{
+      display: none!important;
     }
   }
 

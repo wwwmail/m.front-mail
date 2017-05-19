@@ -3582,9 +3582,13 @@
   padding: 1px 1px 1px 0;
 }
 .info-sender__important-tags--small-title {
-  margin-right: 0px;
+  display: inline-flex;
+  margin-right: 0;
   padding: 0;
   font-size: 12px;
+}
+.info-sender__important-tags.is-hide {
+  display: none !important;
 }
 @media only screen and (max-width: 562px) {
   .info-sender__right-menu .icon-reply {
