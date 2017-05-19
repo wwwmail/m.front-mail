@@ -5,9 +5,9 @@
         .module('mail.compose')
         .controller('ComposeController', ComposeController);
 
-    ComposeController.$inject = ['mail', '$interval', '$state', '$rootScope', '$auth', 'contact', '$uibModal', 'Upload'];
+    ComposeController.$inject = ['mail', '$interval', '$state', '$scope', '$rootScope', '$auth', 'contact', '$uibModal', 'Upload'];
     /* @ngInject */
-    function ComposeController(mail, $interval, $state, $rootScope, $auth, contact, $uibModal, Upload) {
+    function ComposeController(mail, $interval, $state, $scope, $rootScope, $auth, contact, $uibModal, Upload) {
         var vm = this;
 
         vm.interval = {};
@@ -39,6 +39,10 @@
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             $interval.cancel(vm.interval);
+        });
+
+        $scope.$on('mail:send', function () {
+            send($scope.form);
         });
 
         activate();
@@ -86,7 +90,7 @@
                 mail.post({}, data);
             }
 
-            $state.go('mail.inbox');
+            $state.go('mail.inbox', {mbox: 'INBOX'});
         }
 
         function save(options) {

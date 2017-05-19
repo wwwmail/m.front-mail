@@ -22,6 +22,7 @@
         vm.closeMenu = closeMenu;
         vm.clearSearch = clearSearch;
         vm.search = search;
+        vm.send = send;
 
         $scope.$watch('vm.$state.params.mbox', function () {
             getCurrentFolder();
@@ -80,6 +81,10 @@
         function clearSearch() {
             vm.searchForm.model.search = '';
             $rootScope.$broadcast('search:close');
+        }
+
+        function send() {
+            $rootScope.$broadcast('mail:send');
         }
 
     }

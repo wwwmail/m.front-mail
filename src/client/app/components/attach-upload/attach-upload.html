@@ -11,17 +11,15 @@
                 <img src="/images/upload-file.png"
                      ng-if="attachment.mime !== 'image/jpeg' && attachment.mime !== 'image/png'">
             </div>
-
             <div class="attach-upload__name">
-                {{ attachment.fileName }}
-            </div>
-
-            <div class="text-center">
-                <spinner is-global="false" is-open="true" ng-if="vm.isUploading"></spinner>
+                {{ attachment.mime.split('/')[1]; }}
             </div>
             <div class="attach-upload__links" ng-if="!vm.isUploading">
                 <!--<a class="attach-upload__link" href="{{ vm.getLink(attachment) }}" target="_blank">Скачать</a>-->
                 <a class="attach-upload__delete icon-delete" href ng-click="vm.remove(attachment)"></a>
+            </div>
+            <div class="attach-upload__spinner">
+                <spinner is-global="false" is-open="true" ng-if="vm.isUploading"></spinner>
             </div>
         </div>
 
