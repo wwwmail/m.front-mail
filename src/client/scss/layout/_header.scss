@@ -15,6 +15,9 @@
   &__main{
     display: none;
     visibility: hidden;
+    background-color: $white-color;
+
+    z-index: 2;
   }
   &__search{
     display: none;
@@ -39,6 +42,7 @@
   &__massege-replay.is-active,
   &__message-new.is-active{
     height: inherit;
+
 
     display: block;
     visibility: visible;
