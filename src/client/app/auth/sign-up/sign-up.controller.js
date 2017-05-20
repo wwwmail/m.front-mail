@@ -34,7 +34,9 @@
                 data.phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
             }
 
-            $auth.submitRegistration(data)
+            $auth.submitRegistration(data, {
+                config: 'evilUser'
+            })
                 .then(function (response) {
                     vm.userForm.isLoading = false;
                     $state.go('mail.inbox');
