@@ -1,0 +1,39 @@
+.inbox-empty{
+
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  font: normal 16px/1 $mainFont;
+
+  &__icon{
+    @extend .icon-free-mail;
+    background-size: contain;
+    margin: 80px auto 0;
+    width: 132px;
+    height: 106px;
+  }
+  &__notif{
+    color: #8d8d8d;
+    text-align: center;
+    font-family: $mainFont;
+    letter-spacing: normal;
+    padding: 25px 0 15px;
+    font-weight: 800;
+  }
+  &__text{
+    display: block;
+    padding: 0 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: 400;
+  }
+  &__link{
+    text-decoration: underline;
+    color: #1f73c3;
+    padding-left: 5px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+}

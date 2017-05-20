@@ -4,7 +4,7 @@
   display: block;
 
   &__icon {
-    margin-right: 8px;
+    margin-right: 10px;
 
     &--select{
       color: $select-icon-main-menu-color;
@@ -65,7 +65,9 @@
   }
 
   &__link {
-    display: block;
+    display: flex;
+    align-items: center;
+
     width: 100%;
 
     font: 300 18px/1 $mainFont;
