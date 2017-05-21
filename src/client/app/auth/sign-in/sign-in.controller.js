@@ -5,9 +5,9 @@
         .module('auth.signIn')
         .controller('SignInController', SignInController);
 
-    SignInController.$inject = ['$scope', '$state', '$auth'];
+    SignInController.$inject = ['$scope', '$state', '$auth', 'profile'];
     /* @ngInject */
-    function SignInController($scope, $state, $auth) {
+    function SignInController($scope, $state, $auth, profile) {
         var vm = this;
 
         vm.userForm = {
@@ -24,12 +24,26 @@
 
         vm.login = login;
 
+        activate();
+
+        function activate() {
+            if ($state.params.token) {
+                $auth.setAuthHeaders({
+                    "Authorization": $state.params.token
+                });
+                $state.go('mail.inbox', {mbox: 'INBOX'});
+            }
+        }
+
         function login() {
             console.log(vm.userForm);
             vm.userForm.isLoading = true;
             $auth.submitLogin(vm.userForm.model)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
+
+                    profile.addStorageProfile(response);
+
                     $state.go('mail.inbox', {mbox: 'INBOX'});
                 })
                 .catch(function (response) {

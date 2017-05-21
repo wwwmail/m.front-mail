@@ -19,6 +19,7 @@
             'dcbImgFallback',
             'ngFileSaver',
             'infinite-scroll',
-            'content-editable'
+            'content-editable',
+            'LocalStorageModule'
         ]);
 })();

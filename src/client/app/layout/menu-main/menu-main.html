@@ -16,7 +16,9 @@
                      ng-src="{{ vm.user.profile.photo }}"
                      fallback-src="{{'/images/avatar-personal.svg'}}">
             </div>
-            <button class="menu-main-layout__add-user  icon-cancel btn--circle btn--size_53 rotate--am90"></button>
+            <button class="menu-main-layout__add-user  icon-cancel btn--circle btn--size_53 rotate--am90"
+                    type="button"
+                    ui-sref="signIn()"></button>
         </div>
 
         <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
@@ -34,7 +36,7 @@
                         <span class="menu-main__title">{{ folder.caption }}</span>
                     </a>
                     <div class="menu-main__additional-option">
-                        <span class="menu-main__count">{{ folder.messagesCount }}</span>
+                        <span class="menu-main__count" ng-if="folder.messagesCount">{{ folder.messagesCount }}</span>
                         <button class="menu-main__show-additional icon-arrow-down btn--not-style btn--not-events"
                                 type="button"></button>
                     </div>

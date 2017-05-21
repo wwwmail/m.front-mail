@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('profile', profile);
 
-    profile.$inject = ['CONFIG', '$resource', 'Upload', '$rootScope', '$auth', '$state'];
+    profile.$inject = ['CONFIG', '$resource', 'Upload', '$rootScope', '$auth', '$state', 'localStorageService'];
 
-    function profile(CONFIG, $resource, Upload, $rootScope, $auth, $state) {
+    function profile(CONFIG, $resource, Upload, $rootScope, $auth, $state, localStorageService) {
         var API_URL = CONFIG.APIHost + '/profile';
 
         var resource = $resource(API_URL,
@@ -108,6 +108,41 @@
             return resource.changePassword(params, data).$promise;
         }
 
+        function getStorageProfiles() {
+            return localStorageService.get('profiles');
+        }
+
+        function addStorageProfile(user) {
+            var profiles = getStorageProfiles();
+
+            if (!profiles || !profiles.length) {
+                profiles = [];
+            }
+
+            var isSet = false;
+
+            _.forEach(profiles, function (item) {
+                if (item.profile.email === user.profile.email) {
+                    isSet = true;
+                }
+            });
+
+            if (!isSet) {
+                profiles.push(user);
+                localStorageService.set('profiles', profiles);
+            }
+        }
+
+        function destroyStorageProfile(user) {
+            var profiles = getStorageProfiles();
+
+            _.remove(profiles, function (item) {
+                return user.profile.email === item.profile.email;
+            });
+
+            localStorageService.set('profiles', profiles);
+        }
+
         return {
             get: get,
             post: post,
@@ -115,7 +150,10 @@
             uploadAvatar: uploadAvatar,
             getCurrent: getCurrent,
             destroy: destroy,
-            changePassword: changePassword
+            changePassword: changePassword,
+            getStorageProfiles: getStorageProfiles,
+            addStorageProfile: addStorageProfile,
+            destroyStorageProfile: destroyStorageProfile
         }
     }
 
