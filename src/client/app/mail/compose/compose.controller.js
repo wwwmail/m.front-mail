@@ -90,6 +90,10 @@
                 mail.post({}, data);
             }
 
+            $rootScope.$broadcast('notify:message', {
+                message: 'Письмо успешно отправлено'
+            });
+
             $state.go('mail.inbox', {mbox: 'INBOX'});
         }
 

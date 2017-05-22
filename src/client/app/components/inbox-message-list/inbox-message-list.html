@@ -2,8 +2,9 @@
     <inbox-message
             message="message"
             messages="vm.messages"
-            ng-repeat="message in vm.messages.items"></inbox-message>
+            ng-repeat="message in vm.messages.items"
+            ng-if="!vm.messages.isSearch"></inbox-message>
     <div class="inbox-message-list__spinner">
-        <spinner is-open="true"></spinner>
+        <spinner is-open="vm.messages.isLoading"></spinner>
     </div>
 </div>

@@ -29,11 +29,13 @@
         });
 
         $rootScope.$on('search:mail', function (e, data) {
+            vm.messages.isSearch = true;
             vm.messages.params = data.search;
             get();
         });
 
         $rootScope.$on('search:close', function (e, data) {
+            vm.messages.isSearch = false;
             vm.messages.params = angular.copy(vm.messages.defaultParams);
             vm.messages.params.mbox = $state.params.mbox;
 
@@ -78,7 +80,9 @@
         }
 
         function get() {
+            vm.messages.isLoading = true;
             mail.get(vm.messages.params).then(function (response) {
+                vm.messages.isLoading = false;
                 vm.messages.checked = [];
                 vm.messages = _.assign(vm.messages, response.data);
                 _.forEach(vm.messages.items, function (message) {

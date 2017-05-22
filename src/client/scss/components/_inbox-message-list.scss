@@ -1,5 +1,11 @@
-.inbox-message-list{
-  &--indentation{
-    padding-bottom: 55px!important;
+.inbox-message-list {
+  &--indentation {
+    padding-bottom: 55px !important;
+  }
+
+  &__spinner {
+    padding: 20px;
+
+    text-align: center;
   }
 }

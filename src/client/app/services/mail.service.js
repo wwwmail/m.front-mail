@@ -109,6 +109,12 @@
 
             if (messages.isLoading || !messages.checked.length) return;
 
+            // console.log('folder', folder.caption);
+
+            $rootScope.$broadcast('notify:message', {
+                message: (messages.checked.length > 1 ? 'Письма' : 'Письмо') + ' ' + (messages.checked.length > 1 ? 'перемещены' : 'перемещено') + ' в папку <strong>' + folder.caption + '</strong>'
+            });
+
             move({}, {
                 messages: messages.checked,
                 mboxnew: folder.name

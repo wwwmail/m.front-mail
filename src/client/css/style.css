@@ -3711,6 +3711,7 @@
 }
 /* Loader */
 .spinner {
+  display: inline-block;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -3874,6 +3875,10 @@
 
 .inbox-message-list--indentation {
   padding-bottom: 55px !important;
+}
+.inbox-message-list__spinner {
+  padding: 20px;
+  text-align: center;
 }
 
 @font-face {

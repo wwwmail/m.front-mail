@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('HeaderController', HeaderController);
 
-    HeaderController.$inject = ['$rootScope', '$scope', '$state'];
+    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout'];
 
     /* @ngInject */
-    function HeaderController($rootScope, $scope, $state) {
+    function HeaderController($rootScope, $scope, $state, $timeout) {
         var vm = this;
         vm.title = 'Header';
 
@@ -18,6 +18,8 @@
 
         vm.currentFolder = {};
 
+        vm.notify = {};
+
         vm.openMenu = openMenu;
         vm.closeMenu = closeMenu;
         vm.clearSearch = clearSearch;
@@ -26,6 +28,15 @@
 
         $scope.$watch('vm.$state.params.mbox', function () {
             getCurrentFolder();
+        });
+
+        $scope.$on('notify:message', function (e, data) {
+            console.log('data', data);
+            vm.notify.isOpen = true;
+            vm.notify.message = data.message;
+            $timeout(function () {
+                vm.notify.isOpen = false;
+            }, 3000);
         });
 
         $scope.$watch('vm.searchForm.model.search', function (data, oldData) {
