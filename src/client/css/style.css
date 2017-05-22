@@ -3651,7 +3651,7 @@
 }
 .info-sender__important-tags--small-title {
   display: inline-flex;
-  margin-right: 0;
+  margin-right: 4px;
   padding: 0;
   font-size: 12px;
 }
