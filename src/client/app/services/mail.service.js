@@ -85,7 +85,7 @@
                 cmd: 'add-attach'
             };
 
-            _.forEach(files, function (file, i){
+            _.forEach(files, function (file, i) {
                 var name = 'file' + i;
                 foramttedData[name] = file;
             });
@@ -120,7 +120,10 @@
                 mboxnew: folder.name
             }).then(function () {
                 $rootScope.$broadcast('mailBox:sync');
-                $state.go('mail.inbox', {mbox: 'INBOX'});
+
+                if ($state.current.name !== 'mail.inbox') {
+                    $state.go('mail.inbox', {mbox: 'INBOX'});
+                }
             });
 
             _.forEach(messages.checked, function (checked) {
