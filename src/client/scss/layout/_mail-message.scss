@@ -1,17 +1,82 @@
 .mail-message {
   width: inherit;
 
-  &__head {
+  display: flex;
+  flex-flow: column;
+
+  background: $white-color;
+
+  margin-bottom: 12px;
+
+  border-bottom: 1px solid $mail-message-title--border-color;
+
+  &:before{
+    content: "";
+    position: absolute;
+    top:0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+    background: #fff;
+  }
+  &:before{
+    content: "";
+    position: fixed;
+    top:0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    background: #f6f5f3;
+  }
+
+  &__header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 48px;
+    z-index: 3;
+    background-color: $white-color;
+  }
+  &__header-container{
     position: relative;
     display: block;
-    width: auto;
+
+    width: 100%;
+    max-width: 768px;
+    min-height: 100%;
+
     box-sizing: border-box;
+
     z-index: 2;
+
+    padding: 0 22px;
+    margin: auto;
+  }
+  &__body{
+    position: relative;
+  }
+
+  &__mail-attachments, &__body{
+    &:after{
+      content: "";
+      position: absolute;
+      top: 0;
+      right: -100vw;
+      bottom: 0;
+      left: -100vw;
+      z-index: -1;
+
+      background: $white-color;
+    }
   }
 
   &__mail-attachments{
     position: relative;
     z-index: 1;
+    padding: 10px 0 0;
+    margin-top: 128px;
   }
 
   &__title {
@@ -106,7 +171,7 @@
   }
 
   @media only screen and (max-width: 562px) {
-    &__reply-container{
+    &__header-container, &__reply-container{
       padding: 0 10px;
     }
   }

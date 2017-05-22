@@ -1,14 +1,13 @@
 .body-message {
-  margin: 58px 22px;
-  border-bottom: 1px solid $mail-message-title--border-color;
-
+  margin: 5px 22px 58px;
   &__content {
     width: auto;
+    height: auto;
 
     min-width: 280px;
-    min-height: 150px;
 
     background: $massage-content-bg-color;
+    margin:  16px 0;
 
     overflow: auto;
   }

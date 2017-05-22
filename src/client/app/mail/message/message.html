@@ -1,110 +1,113 @@
 <div class="mail-message">
     <!-- Хедер сообщения -->
-    <div class="mail-message__head">
+    <div class="mail-message__header">
+        <div class="mail-message__header-container">
 
-        <div class="mail-message__title">
-            {{ vm.message.model.Subject }}
-        </div>
-
-        <div class="info-sender">
-            <div class="info-sender__head flex--inline">
-                <div class="info-sender__avatar flex">
-                    <div class="avatar avatar--settings avatar--size42 avatar--second-style">
-                        <avatar-name name="vm.message.model.from"
-                                     email="vm.message.model.to[0].fromAddress"></avatar-name>
-                    </div>
-                </div>
-
-                <div class="info-sender__title">
-                    <div class="info-sender__from-whom">
-                        <button class="info-sender__important-tags info-sender__important-tags--small-title important-tags--active is-hide" type="button"></button>
-                        {{ vm.message.model.from }}
-                        <!--<span class="info-sender__from-whom__mail-name">support@mail.cz</span>-->
-                        <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 padding--right_2 padding--left_2 mrg__left5"
-                                ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
-                                type="button"
-                                ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo"></button>
-                    </div>
-
-                    <div class="info-sender__date">
-                        <to-date date="vm.message.model.date.date"></to-date>
-                    </div>
-                </div>
-
-                <div class="info-sender__right-menu mrg__right">
-                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"
-                         ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div>
-                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
-                         ng-if="vm.$state.params.mbox !== 'Trash'"
-                         ng-click="vm.move({name: 'Trash'})"></div>
-                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
-                         ng-if="vm.$state.params.mbox === 'Trash'"
-                         ng-click="vm.destroy({name: 'Trash'})"></div>
-                    <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply padding--right"
-                         ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></div>
-                </div>
-
+            <div class="mail-message__title">
+                {{ vm.message.model.Subject }}
             </div>
 
-            <!--
-                для того чтобы отобразить боле подробную информацию по писью,
-                при нажатии на кнопу возле имени нужно к
-                info-sender__message-info добавить is-active
-                а info-sender__from-whom > button нужно заменить icon-arrow-down на icon-arrow-up
-                ну или добавить btn--rotate
-            -->
-
-            <div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo">
-                <div class="info-sender__message-info-item to-whom">
-                    <span class="to-whom__title width--min60">Кому</span>
-                    <div class="avatar avatar--settings avatar--size28 avatar--second-style">
-                        <avatar-name name="vm.message.model.to[0].name"
-                                     email="vm.message.model.to[0].address"></avatar-name>
-                    </div>
-                    <span class="to-whom__mail-recipient">
-                        {{ vm.message.model.to[0].name ? vm.message.model.to[0].name : vm.message.model.to[0].address }}
-                    </span>
-                </div>
-
-                <div class="info-sender__message-info-item to-whom">
-                    <span class="to-whom__title width--min60">От Кого</span>
-                    <div class="avatar avatar--settings avatar--size28 avatar--second-style"
-                         ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">
-                        <avatar-name name="vm.message.model.from"
-                                     email="vm.message.model.fromAddress"></avatar-name>
-                    </div>
-                    <span class="to-whom__mail-recipient to-whom__mail-recipient--name">
-                        {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
-                    </span>
-                </div>
-
-                <div class="info-sender__message-info-item to-whom">
-                    <span class="to-whom__title width--min60">Папка</span>
-                    <div class="to-whom__folders">
-                        <div class="to-whom__folder">{{ vm.message.model.mboxi18n }}</div>
-                    </div>
-                </div>
-
-                <div class="info-sender__message-info-item to-whom">
-                    <span class="to-whom__title width--min60">Метки</span>
-                    <div class="inbox-message__labels">
-                        <button class="info-sender__important-tags important-tags" type="button"></button>
-                        <div class="inbox-message__label letter-tags letter-tags--poss-remove"
-                             style="background: {{ tag.bgcolor }}; color: {{ tag.color }}"
-                             ng-repeat="tag in vm.message.model.tags">
-                            <span class="letter-tags__name">{{ tag.tag_name }}</span>
-                            <button class="btn btn--not-style btn--circle letter-tags__icon"
-                                    ng-click="vm.setUnTag(tag)">
-                                <span class="letter-tags__remove-icon icon-remove-thick"></span>
-                            </button>
+            <div class="info-sender">
+                <div class="info-sender__head flex--inline">
+                    <div class="info-sender__avatar flex">
+                        <div class="avatar avatar--settings avatar--size42 avatar--second-style">
+                            <avatar-name name="vm.message.model.from"
+                                         email="vm.message.model.to[0].fromAddress"></avatar-name>
                         </div>
                     </div>
+
+                    <div class="info-sender__title">
+                        <div class="info-sender__from-whom">
+                            <button class="info-sender__important-tags info-sender__important-tags--small-title important-tags--active is-hide" type="button"></button>
+                            {{ vm.message.model.from }}
+                            <!--<span class="info-sender__from-whom__mail-name">support@mail.cz</span>-->
+                            <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 padding--right_2 padding--left_2 mrg__left5"
+                                    ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
+                                    type="button"
+                                    ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo"></button>
+                        </div>
+
+                        <div class="info-sender__date">
+                            <to-date date="vm.message.model.date.date"></to-date>
+                        </div>
+                    </div>
+
+                    <div class="info-sender__right-menu mrg__right">
+                        <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"
+                             ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div>
+                        <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
+                             ng-if="vm.$state.params.mbox !== 'Trash'"
+                             ng-click="vm.move({name: 'Trash'})"></div>
+                        <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
+                             ng-if="vm.$state.params.mbox === 'Trash'"
+                             ng-click="vm.destroy({name: 'Trash'})"></div>
+                        <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply padding--right"
+                             ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></div>
+                    </div>
+
                 </div>
 
-            </div>
-        </div>
+                <!--
+                    для того чтобы отобразить боле подробную информацию по писью,
+                    при нажатии на кнопу возле имени нужно к
+                    info-sender__message-info добавить is-active
+                    а info-sender__from-whom > button нужно заменить icon-arrow-down на icon-arrow-up
+                    ну или добавить btn--rotate
+                -->
 
+                <div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo">
+                    <div class="info-sender__message-info-item to-whom">
+                        <span class="to-whom__title width--min60">Кому</span>
+                        <div class="avatar avatar--settings avatar--size28 avatar--second-style">
+                            <avatar-name name="vm.message.model.to[0].name"
+                                         email="vm.message.model.to[0].address"></avatar-name>
+                        </div>
+                        <span class="to-whom__mail-recipient">
+                        {{ vm.message.model.to[0].name ? vm.message.model.to[0].name : vm.message.model.to[0].address }}
+                    </span>
+                    </div>
+
+                    <div class="info-sender__message-info-item to-whom">
+                        <span class="to-whom__title width--min60">От Кого</span>
+                        <div class="avatar avatar--settings avatar--size28 avatar--second-style"
+                             ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">
+                            <avatar-name name="vm.message.model.from"
+                                         email="vm.message.model.fromAddress"></avatar-name>
+                        </div>
+                        <span class="to-whom__mail-recipient to-whom__mail-recipient--name">
+                        {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
+                    </span>
+                    </div>
+
+                    <div class="info-sender__message-info-item to-whom">
+                        <span class="to-whom__title width--min60">Папка</span>
+                        <div class="to-whom__folders">
+                            <div class="to-whom__folder">{{ vm.message.model.mboxi18n }}</div>
+                        </div>
+                    </div>
+
+                    <div class="info-sender__message-info-item to-whom">
+                        <span class="to-whom__title width--min60">Метки</span>
+                        <div class="inbox-message__labels">
+                            <button class="info-sender__important-tags important-tags" type="button"></button>
+                            <div class="inbox-message__label letter-tags letter-tags--poss-remove"
+                                 style="background: {{ tag.bgcolor }}; color: {{ tag.color }}"
+                                 ng-repeat="tag in vm.message.model.tags">
+                                <span class="letter-tags__name">{{ tag.tag_name }}</span>
+                                <button class="btn btn--not-style btn--circle letter-tags__icon"
+                                        ng-click="vm.setUnTag(tag)">
+                                    <span class="letter-tags__remove-icon icon-remove-thick"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
+
 
     <!-- Аттачи -->
     <div class="mail-message__mail-attachments">
@@ -124,9 +127,9 @@
         </div>
     </div>
 
-    <div class="mail-message__footer">
-        <div class="btn btn--not-events btn--not-style btn--main-mobile-color btn--size_20 icon-more mrg__right"></div>
-    </div>
+    <!--<div class="mail-message__footer">-->
+        <!--<div class="btn btn&#45;&#45;not-events btn&#45;&#45;not-style btn&#45;&#45;main-mobile-color btn&#45;&#45;size_20 icon-more mrg__right"></div>-->
+    <!--</div>-->
 
     <!-- Быстрый ответ-->
     <form class="mail-message__reply" name="sendForm" ng-submit="vm.send(sendForm)">
