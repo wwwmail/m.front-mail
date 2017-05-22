@@ -13,15 +13,19 @@
         vm.isOpen = false;
 
         $scope.$on('httpCallStarted', function () {
-            $timeout(function() {
-                vm.isOpen = true;
+            $timeout(function () {
+                if (vm.isGlobal) {
+                    vm.isOpen = true;
+                }
             });
         });
 
         $scope.$on('httpCallStopped', function () {
-            $timeout(function() {
-                vm.isOpen = false;
-            }, 250);
+            $timeout(function () {
+                if (vm.isGlobal) {
+                    vm.isOpen = false;
+                }
+            });
         });
 
     }

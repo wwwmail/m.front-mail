@@ -4,7 +4,10 @@
     angular
         .module('app.components')
         .component('spinner', {
-            bindings: {},
+            bindings: {
+                isGlobal: '=',
+                isOpen: '=?'
+            },
             templateUrl: 'app/components/spinner/spinner.html',
             controller: 'SpinnerController',
             controllerAs: 'vm'
