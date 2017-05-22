@@ -89,7 +89,10 @@
                     <div class="info-sender__message-info-item to-whom">
                         <span class="to-whom__title width--min60">Метки</span>
                         <div class="inbox-message__labels">
-                            <button class="info-sender__important-tags important-tags" type="button"></button>
+                            <button class="info-sender__important-tags important-tags"
+                                    ng-class="{'important-tags--active': vm.message.model.important}"
+                                    type="button"
+                                    ng-click="vm.setImportant()"></button>
                             <div class="inbox-message__label letter-tags letter-tags--poss-remove"
                                  style="background: {{ tag.bgcolor }}; color: {{ tag.color }}"
                                  ng-repeat="tag in vm.message.model.tags">
