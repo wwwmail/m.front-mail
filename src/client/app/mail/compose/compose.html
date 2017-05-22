@@ -25,15 +25,6 @@
                             </div>
                         </div>
 
-                        <!-- от кого-->
-                        <div class="input-line input-line--full">
-                            <div class="input-line__label width--all">
-                                <span class="input-line__title link--gray" href="">от кого</span>
-                                <contact-to-add-select class="width--all"
-                                                       addresses="vm.sendForm.model.from"></contact-to-add-select>
-                            </div>
-                        </div>
-
                         <!--скрытая копия-->
                         <div class="input-line input-line--full"
                              ng-class="{'is-active': vm.sendForm.model.toCopyHidden.length}">
@@ -43,51 +34,53 @@
                                                        addresses="vm.sendForm.model.toCopyHidden"></contact-to-add-select>
                             </div>
                         </div>
+
+                        <!-- от кого-->
+                        <div class="input-line input-line--full">
+                            <div class="input-line__label width--all">
+                                <span class="input-line__title link--gray" href="">от кого</span>
+                                <contact-to-add-select class="width--all"
+                                                       addresses="vm.sendForm.model.from"></contact-to-add-select>
+                            </div>
+                        </div>
+
                     </div>
 
-
-                    <!-- от кого-->
-                    <!--                    <div class="input-line input-line&#45;&#45;full">
-                                            <div class="input-line__label width&#45;&#45;all">
-                                                <span class="input-line__title link&#45;&#45;gray" href="">от кого</span>
-                                                <contact-to-add-select class="width&#45;&#45;all"
-                                                                       addresses="vm.sendForm.model.to"></contact-to-add-select>
-                                            </div>
-                                        </div>-->
+                    <!-- тема -->
+                    <div class="compose__letter-subject">
+                        <div class="input-line input-line--full"
+                             ng-class="{'is-active': vm.sendForm.model.subject.length}">
+                            <label class="input-line__label width--all">
+                                <span class="input-line__title link--gray">Тема</span>
+                                <input class=" input--compose-line input-line__input width--all"
+                                       type="text"
+                                       ng-model="vm.sendForm.model.subject">
+                            </label>
+                        </div>
+                        <button class="compose__btn-attach btn btn--not-style btn--light-hover icon-clip font--size16"
+                                type="button"
+                                type="file"
+                                multiple
+                                accept="**/*"
+                                ngf-select="vm.upload($files, $invalidFiles)"></button>
+                    </div>
 
                 </div>
-            </div>
 
-            <div class="compose__letter-subject">
-                <div class="input-line input-line--full"
-                     ng-class="{'is-active': vm.sendForm.model.subject.length}">
-                    <label class="input-line__label width--all">
-                        <span class="input-line__title link--gray">Тема</span>
-                        <input class=" input--compose-line input-line__input width--all"
-                               type="text"
-                               ng-model="vm.sendForm.model.subject">
-                    </label>
+
+                <div class="compose__attachments-upload ">
+                    <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
+                                   message="vm.sendForm"
+                                   is-uploading="vm.isUploading"></attach-upload>
                 </div>
-                <button class="compose__btn-attach btn btn--not-style btn--light-hover icon-clip font--size16"
-                        type="button"
-                        type="file"
-                        multiple
-                        accept="**/*"
-                        ngf-select="vm.upload($files, $invalidFiles)"></button>
-            </div>
-        </div>
 
-        <div class="compose__attachments-upload ">
-            <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
-                           message="vm.sendForm"
-                           is-uploading="vm.isUploading"></attach-upload>
-        </div>
-
-        <div class="compose__content">
-            <div class="compose__message"
-                 contenteditable="true"
-                 ng-model="vm.sendForm.model.body"
-                 required>
+                <div class="compose__content">
+                    <div class="compose__message"
+                         contenteditable="true"
+                         ng-model="vm.sendForm.model.body"
+                         required>
+                    </div>
+                </div>
             </div>
         </div>
 
