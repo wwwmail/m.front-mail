@@ -35,10 +35,10 @@
 </div>
 
 <div class="inbox-empty"
-     ng-if="vm.messages.params.mbox && vm.messages.params.mbox !== 'INBOX' && !vm.messages.params.search && !vm.messages.params.tag_id && !vm.messages.params.filter &&!vm.messages.items.length">
+     ng-if="vm.messages.params.mbox && !vm.messages.params.search && !vm.messages.params.tag_id && !vm.messages.params.filter &&!vm.messages.items.length">
     <span class="inbox-empty__icon"></span>
     <span class="inbox-empty__notif">Пустая папка</span>
-    <span class="inbox-empty__text">Перейти в папку<a class="inbox-empty__link"
+    <span class="inbox-empty__text" ng-if="vm.messages.params.mbox !== 'INBOX'">Перейти в папку<a class="inbox-empty__link"
                                                       ui-sref="mail.inbox({mbox: 'INBOX'})">«Входящие»</a></span>
 </div>
 
