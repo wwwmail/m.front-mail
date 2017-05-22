@@ -37,7 +37,7 @@
                              ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div>
                         <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
                              ng-if="vm.$state.params.mbox !== 'Trash'"
-                             ng-click="vm.move({name: 'Trash'})"></div>
+                             ng-click="vm.move({name: 'Trash', caption: 'Корзина'})"></div>
                         <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
                              ng-if="vm.$state.params.mbox === 'Trash'"
                              ng-click="vm.destroy({name: 'Trash'})"></div>

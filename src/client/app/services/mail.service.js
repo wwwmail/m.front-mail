@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('mail', mail);
 
-    mail.$inject = ['CONFIG', '$resource', '$http', '$rootScope', 'Upload'];
+    mail.$inject = ['CONFIG', '$resource', '$http', '$rootScope', 'Upload', '$state'];
 
-    function mail(CONFIG, $resource, $http, $rootScope, Upload) {
+    function mail(CONFIG, $resource, $http, $rootScope, Upload, $state) {
         var API_URL = CONFIG.APIHost + '/mail';
 
         var answerData = {};
@@ -120,6 +120,7 @@
                 mboxnew: folder.name
             }).then(function () {
                 $rootScope.$broadcast('mailBox:sync');
+                $state.go('mail.inbox', {mbox: 'INBOX'});
             });
 
             _.forEach(messages.checked, function (checked) {

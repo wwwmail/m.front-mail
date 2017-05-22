@@ -20,14 +20,14 @@
                     <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font--size20 flex flex--column align-items--cn color--light-red padding"
                             type="button"
                             ng-if="vm.$state.params.mbox !== 'Trash'"
-                            ng-click="vm.move({name: 'Trash', caption: 'Удалить'})">
+                            ng-click="vm.move({name: 'Trash', caption: 'Корзина'})">
                         <span class="font--arial font--size14 mrg__top5">Удалить</span>
                     </button>
 
                     <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font--size20 flex flex--column align-items--cn color--light-red padding"
                             type="button"
                             ng-if="vm.$state.params.mbox === 'Trash'"
-                            ng-click="vm.destroy({name: 'Trash', caption: 'Удалить'})">
+                            ng-click="vm.destroy({name: 'Trash'})">
                         <span class="font--arial font--size14 mrg__top5">Удалить</span>
                     </button>
 

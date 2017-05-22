@@ -25,7 +25,7 @@
 
     <div class="popup__item"
          ng-if="vm.$state.params.mbox !== 'Trash'"
-         ng-click="vm.move({name: 'Trash', caption: 'Удалить'})">
+         ng-click="vm.move({name: 'Trash', caption: 'Корзина'})">
         <span class="icon-delete popup__icon color--light-red"></span>
         <span class="popup__item__title">Удалить</span>
     </div>
@@ -60,14 +60,14 @@
 
     <div class="popup__item"
          ng-if="vm.$state.params.mbox === 'Junk'"
-         ng-click="vm.move({name: 'Junk', caption: 'Спам'})">
+         ng-click="vm.move({name: 'INBOX', caption: 'Входящие'})">
         <span class="icon-spam popup__icon color--yellow"></span>
         <span class="popup__item__title">Не спам</span>
     </div>
 
     <div class="popup__item"
          ng-if="vm.$state.params.mbox !== 'Junk'"
-         ng-click="vm.move({name: 'Junk', caption: 'Входящие'})">
+         ng-click="vm.move({name: 'Junk', caption: 'Спам'})">
         <span class="icon-spam popup__icon color--yellow"></span>
         <span class="popup__item__title">Спам</span>
     </div>
