@@ -24,6 +24,7 @@
                                                        addresses="vm.sendForm.model.toCopy"></contact-to-add-select>
                             </div>
                         </div>
+
                         <!--скрытая копия-->
                         <div class="input-line input-line--full"
                              ng-class="{'is-active': vm.sendForm.model.toCopyHidden.length}">
@@ -42,8 +43,10 @@
                                                        addresses="vm.sendForm.model.from"></contact-to-add-select>
                             </div>
                         </div>
+
                     </div>
 
+                    <!-- тема -->
                     <div class="compose__letter-subject">
                         <div class="input-line input-line--full"
                              ng-class="{'is-active': vm.sendForm.model.subject.length}">
@@ -61,23 +64,24 @@
                                 accept="**/*"
                                 ngf-select="vm.upload($files, $invalidFiles)"></button>
                     </div>
+
+                </div>
+
+
+                <div class="compose__attachments-upload ">
+                    <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
+                                   message="vm.sendForm"
+                                   is-uploading="vm.isUploading"></attach-upload>
+                </div>
+
+                <div class="compose__content">
+                    <div class="compose__message"
+                         contenteditable="true"
+                         ng-model="vm.sendForm.model.body"
+                         required>
+                    </div>
                 </div>
             </div>
-
-
-            <div class="compose__attachments-upload ">
-                <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
-                               message="vm.sendForm"
-                               is-uploading="vm.isUploading"></attach-upload>
-            </div>
-
-            <div class="compose__content">
-            <div class="compose__message"
-                 contenteditable="true"
-                 ng-model="vm.sendForm.model.body"
-                 required>
-            </div>
-        </div>
         </div>
 
     </form>

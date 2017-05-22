@@ -319,6 +319,12 @@
                 vm.sendForm.model.attachmentsData = message.attachmentsData;
                 // vm.sendForm.model.mbox = message.mbox;
                 // vm.sendForm.model.connection_id = message.connection_id;
+                vm.sendForm.model.to = [{
+                    first_name: message.from,
+                    emails: [{
+                        value: message.fromAddress
+                    }]
+                }];
 
                 console.log('one', vm.sendForm.model);
             });
