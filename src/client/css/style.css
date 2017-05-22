@@ -1185,7 +1185,7 @@
 .mail-message__mail-attachments:after, .mail-message__body:after {
   content: "";
   position: absolute;
-  top: 0;
+  top: -44px;
   right: -100vw;
   bottom: 0;
   left: -100vw;
