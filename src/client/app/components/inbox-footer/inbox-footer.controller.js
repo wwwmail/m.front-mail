@@ -11,6 +11,7 @@
         var vm = this;
 
         vm.isSeen = true;
+        vm.isMoreSwitch = false;
 
         vm.checkedAllMessages = checkedAllMessages;
         vm.syncMail = syncMail;

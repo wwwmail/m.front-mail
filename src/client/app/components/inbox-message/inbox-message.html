@@ -1,11 +1,10 @@
 <div class="inbox-message"
      ng-class="{'inbox-message--importmant': vm.message.important,
-                'inbox-message--new': vm.message.active,
+                'inbox-message--new': !vm.message.seen,
                 'inbox-message--checked': vm.message.isChecked}"
      ng-mouseover="vm.message.hover = true" ng-mouseleave="vm.message.hover = false"
      ng-click="vm.goToUrl()"
      inbox-message-hover>
-
 
     <div class="inbox-message__left">
         <label ng-click="$event.stopPropagation();">
@@ -27,7 +26,6 @@
                  ng-class="{'round--yellow': !vm.message.seen}"></div>
         </div>
     </div>
-
 
     <div class="inbox-message__center">
         <div class="inbox-message__head">
@@ -61,7 +59,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="inbox-message__right">
         <button class="inbox-message__right-btn btn btn--size_m btn--size_28 icon-more btn--not-style btn--not-events"
