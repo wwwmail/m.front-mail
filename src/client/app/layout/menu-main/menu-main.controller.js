@@ -123,6 +123,8 @@
             _.forEach(vm.folders.items, function (folder) {
                 var isSub = true;
 
+                folder.isOpen = false;
+
                 _.forEach(vm.standartFolders, function (standartFolder) {
                     if (folder.name == standartFolder.name) {
                         isSub = false;

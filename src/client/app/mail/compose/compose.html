@@ -25,26 +25,27 @@
                             </div>
                         </div>
 
-                    </div>
+                        <!-- от кого-->
+                        <div class="input-line input-line--full">
+                            <div class="input-line__label width--all">
+                                <span class="input-line__title link--gray" href="">от кого</span>
+                                <contact-to-add-select class="width--all"
+                                                       addresses="vm.sendForm.model.from"></contact-to-add-select>
+                            </div>
+                        </div>
 
-                    <!-- от кого-->
-                    <div class="input-line input-line--full">
-                        <div class="input-line__label width--all">
-                            <span class="input-line__title link--gray" href="">от кого</span>
-                            <contact-to-add-select class="width--all"
-                                                   addresses="vm.sendForm.model.from"></contact-to-add-select>
+                        <!--скрытая копия-->
+                        <div class="input-line input-line--full"
+                             ng-class="{'is-active': vm.sendForm.model.toCopyHidden.length}">
+                            <div class="input-line__label width--all">
+                                <span class="input-line__title link--gray">Скрытая копия</span>
+                                <contact-to-add-select class="width--all"
+                                                       addresses="vm.sendForm.model.toCopyHidden"></contact-to-add-select>
+                            </div>
                         </div>
                     </div>
 
-                    <!--скрытая копия-->
-                    <div class="input-line input-line--full"
-                         ng-class="{'is-active': vm.sendForm.model.toCopyHidden.length}">
-                        <div class="input-line__label width--all">
-                            <span class="input-line__title link--gray">Скрытая копия</span>
-                            <contact-to-add-select class="width--all"
-                                                   addresses="vm.sendForm.model.toCopyHidden"></contact-to-add-select>
-                        </div>
-                    </div>
+
                     <!-- от кого-->
                     <!--                    <div class="input-line input-line&#45;&#45;full">
                                             <div class="input-line__label width&#45;&#45;all">

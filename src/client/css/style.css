@@ -688,6 +688,9 @@
   font-size: 15px;
   margin: 0 0 0 auto;
 }
+.menu-main__show-additional:active, .menu-main__show-additional:focus {
+  outline: none;
+}
 .menu-main__sub .menu-main__link {
   padding-left: 70px;
 }

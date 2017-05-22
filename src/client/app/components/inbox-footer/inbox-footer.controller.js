@@ -12,6 +12,7 @@
 
         vm.isSeen = true;
         vm.isMoreSwitch = false;
+        vm.isShowFeatures = false;
 
         vm.checkedAllMessages = checkedAllMessages;
         vm.syncMail = syncMail;
