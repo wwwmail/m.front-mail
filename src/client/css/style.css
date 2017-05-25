@@ -1943,7 +1943,7 @@
   -moz-border-radius: 0 !important;
   -webkit-border-radius: 0;
   border-radius: 0 !important;
-  padding: 10px 0 15px;
+  padding: 10px 0 0;
 }
 .popup__container {
   position: relative;
@@ -2403,11 +2403,11 @@
 .select-input-line__match-item {
   border-radius: 100px;
   padding: 0 5px 0 0;
-  background-color: #f6f5f3 !important;
+  background: rgba(136, 158, 207, 0.55) !important;
   color: #222;
 }
 .select-input-line__match-item:hover, .select-input-line__match-item:active, .select-input-line__match-item:focus {
-  background-color: #fee481 !important;
+  background: #889ecf !important;
   color: #000;
   padding: 0 26px 0 0;
   margin-right: -26px !important;
@@ -3648,6 +3648,8 @@
   align-items: center;
   margin-right: 10px;
   padding: 1px 1px 1px 0;
+  border: none;
+  background: none;
 }
 .info-sender__important-tags--small-title {
   display: inline-flex;
