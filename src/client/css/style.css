@@ -1986,7 +1986,7 @@
 .popup__head__title {
   margin: auto;
   padding: 20px 0 20px 28px;
-  font: 500 1/16px "HelveticaNeueCyr", sans-serif;
+  font: 300 20px/1 "HelveticaNeueCyr", sans-serif;
 }
 .popup__content {
   width: 100%;
@@ -2054,7 +2054,7 @@
   font-size: 15px;
 }
 .popup--tags .popup__content {
-  max-height: calc(80vh - 60px);
+  max-height: calc(80vh - 80px);
 }
 .popup--tag-create .modal-dialog {
   width: 432px;
@@ -3863,7 +3863,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  height: 52px;
+  height: 45px;
   color: #000;
   font: 300 20px/1 "HelveticaNeueCyr", sans-serif;
 }
@@ -4446,7 +4446,7 @@
   justify-content: flex-start;
   align-items: center;
   padding: 2px 7px 0;
-  background: rgba(255, 204, 0, 0.4);
+  background: rgba(0, 0, 0, 0.4);
 }
 .attach-item__type-name {
   color: #ffffff;
