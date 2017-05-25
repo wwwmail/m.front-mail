@@ -2403,11 +2403,11 @@
 .select-input-line__match-item {
   border-radius: 100px;
   padding: 0 5px 0 0;
-  background: rgba(136, 158, 207, 0.55) !important;
+  background: #f6f5f3 !important;
   color: #222;
 }
 .select-input-line__match-item:hover, .select-input-line__match-item:active, .select-input-line__match-item:focus {
-  background: #889ecf !important;
+  background-color: #fee481 !important;
   color: #000;
   padding: 0 26px 0 0;
   margin-right: -26px !important;
@@ -2975,7 +2975,6 @@
   min-height: 55px;
 }
 .inbox-footer__group-option-content {
-  position: absolute;
   top: 1px;
   left: 0;
   display: flex;
@@ -2988,8 +2987,11 @@
   transition: .6s;
 }
 .inbox-footer__group-option-item {
+  position: relative;
+  z-index: 1000;
   min-width: 25%;
   color: #808080;
+  display: inline-flex;
 }
 
 .date-sort {
