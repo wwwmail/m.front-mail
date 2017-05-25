@@ -23,6 +23,7 @@
     display: none;
     visibility: hidden;
     box-shadow: none!important;
+    background-color:$white-color;
   }
   &__massege-replay{
     display: none;
@@ -31,6 +32,7 @@
   &__message-new{
     display: none;
     visibility: hidden;
+    background-color:$white-color;
 
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.2)!important;
     .icon-send{
@@ -80,8 +82,9 @@
   }
 
   &__count-letters{
-    font: 300 13px/1 $mainFont;
+    font: 100 15px/1 $mainFont;
     color: $yellow-yandex;
+
   }
 
   &__right{

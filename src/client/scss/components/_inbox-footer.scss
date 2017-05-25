@@ -34,6 +34,7 @@
   }
 
   &__group-option{
+    position: relative;
     min-height: 55px;
     z-index: 2;
     width: 100%;
@@ -90,6 +91,7 @@
     background: $white-color;
     transition: .6s;
   }
+
   &__group-option-item{
     position: relative;
     z-index: 1000;
