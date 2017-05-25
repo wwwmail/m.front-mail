@@ -117,7 +117,7 @@
                     }
                 },
                 size: 'sm',
-                windowClass: 'popup'
+                windowClass: 'popup popup--tags'
             });
 
             modalInstance.result.then(function (response) {
