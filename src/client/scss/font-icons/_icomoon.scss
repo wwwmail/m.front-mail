@@ -24,6 +24,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+//
+//.icon-cb-checked .path1:before {
+//  content: "\e909";
+//  color: rgb(255, 204, 0);
+//}
+//.icon-cb-checked .path2:before {
+//  content: "\e90a";
+//  margin-left: -1em;
+//  color: rgb(31, 29, 48);
+//}
+
 .icon-archive:before {
   content: "\e900";
 }
@@ -43,8 +54,8 @@
   content: "\e905";
 }
 .icon-arrow-up2:before {
-                  content: "\e906";
-                }
+  content: "\e906";
+}
 .icon-brush:before {
   content: "\e907";
 }
@@ -182,6 +193,10 @@
 .icon-write:before {
   content: "\e932";
 }
+.icon-download:before {
+  content: "\e933";
+}
+
 
 
 /* icons.data.svg.css ==================================*/

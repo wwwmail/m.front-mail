@@ -1,10 +1,13 @@
 .inbox-message-list {
+  position: relative;
   &--indentation {
     padding-bottom: 55px !important;
   }
 
   &__spinner {
-    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    padding: 60px;
 
     text-align: center;
   }

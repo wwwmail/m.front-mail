@@ -210,6 +210,9 @@
 .font--size20 {
   font-size: 20px !important;
 }
+.font--size21 {
+  font-size: 21px !important;
+}
 .font--center {
   text-align: center !important;
 }
@@ -777,7 +780,7 @@
   font: 300 15px/1 "HelveticaNeueCyr", sans-serif;
 }
 .header__count-letters {
-  font: 300 13px/1 "HelveticaNeueCyr", sans-serif;
+  font: 100 15px/1 "HelveticaNeueCyr", sans-serif;
   color: #fc0;
 }
 .header__right {
@@ -1138,12 +1141,12 @@
 }
 
 .mail-message {
+  position: relative;
   width: inherit;
   display: flex;
   flex-flow: column;
   background: #ffffff;
   margin-bottom: 12px;
-  border-bottom: 1px solid #ecebea;
 }
 .mail-message:before {
   content: "";
@@ -1164,6 +1167,14 @@
   bottom: 0;
   z-index: -1;
   background: #f6f5f3;
+}
+.mail-message:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -20px;
+  right: -20px;
+  border-bottom: 1px solid #ecebea;
 }
 .mail-message__header {
   position: fixed;
@@ -1389,12 +1400,13 @@
 }
 .hr--inbox-footer {
   position: absolute;
-  top: 0;
+  top: -1;
   left: -50vw;
   right: 50vw;
   background-color: #e4e2da;
   margin: 0;
   width: 200vw;
+  z-index: 10;
 }
 .hr--yellow {
   background-color: #fc0;
@@ -1945,7 +1957,8 @@
   -moz-border-radius: 0 !important;
   -webkit-border-radius: 0;
   border-radius: 0 !important;
-  padding: 10px 0 0;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25) !important;
+  border: none !important;
 }
 .popup__container {
   position: relative;
@@ -1972,7 +1985,8 @@
 }
 .popup__head__title {
   margin: auto;
-  padding-left: 28px;
+  padding: 20px 0 20px 28px;
+  font: 500 1/16px "HelveticaNeueCyr", sans-serif;
 }
 .popup__content {
   width: 100%;
@@ -2068,6 +2082,10 @@
 }
 .popup__close:hover {
   border-color: #CCC;
+}
+
+.modal-backdrop {
+  background-color: transparent !important;
 }
 
 .row--size15 > div {
@@ -2948,6 +2966,7 @@
   padding: 13px;
 }
 .inbox-footer__group-option {
+  position: relative;
   min-height: 55px;
   z-index: 2;
   width: 100%;
@@ -3933,11 +3952,16 @@
   font-family: 'icomoon' !important;
 }
 
+.inbox-message-list {
+  position: relative;
+}
 .inbox-message-list--indentation {
   padding-bottom: 55px !important;
 }
 .inbox-message-list__spinner {
-  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  padding: 60px;
   text-align: center;
 }
 
@@ -4171,6 +4195,10 @@
   content: "\e932";
 }
 
+.icon-download:before {
+  content: "\e933";
+}
+
 /* icons.data.svg.css ==================================*/
 .icon-crumbs-arrow, .bread-crumbs__item::after {
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220%200%2018%2018%22%20style%3D%22enable-background%3Anew%200%200%2018%2018%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cg%3E%0A%09%3Cpath%20d%3D%22M13.7%2C5.8c0.8%2C0.8%2C1.5%2C1.5%2C2%2C1.9s1.1%2C0.8%2C1.6%2C1v0.4c-0.6%2C0.3-1.1%2C0.6-1.7%2C1.1c-0.5%2C0.4-1.2%2C1.1-2%2C1.9H13%0A%09%09c0.6-1.2%2C1.1-2.1%2C1.7-2.7h-14V8.6h14c-0.4-0.6-0.8-1-0.9-1.3S13.3%2C6.5%2C13%2C5.8H13.7z%22/%3E%0A%3C/g%3E%0A%3C/svg%3E%0A");
@@ -4338,76 +4366,106 @@
 }
 
 .attach-item {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
   position: relative;
-  width: 114px;
-  height: 72px;
+  width: 84px;
+  height: 86px;
+  background: #4d4e48;
   overflow: hidden;
-  background: #f4f4f4;
+  cursor: pointer;
+  box-shadow: -8px 9px 35px -12px rgba(0, 0, 0, 0.28);
+}
+.attach-item:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+.attach-item:after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -18px;
+  right: -15px;
+  width: 21px;
+  height: 30px;
+  background-color: #ffffff;
+  transform: rotate(45deg);
+}
+.attach-item__size {
+  position: absolute;
+  bottom: 32px;
+  right: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 7px;
+  text-align: left;
+  color: #d9d9d9;
+  font: 400 13px/1 "HelveticaNeueCyr", sans-serif;
+  opacity: .8;
 }
 .attach-item__name {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  font: bold 12px/1.1 "HelveticaNeueCyr", sans-serif;
-  overflow: hidden;
+  top: 55px;
+  left: 7px;
+  opacity: .95;
+  width: 100%;
+}
+.attach-item__file-name {
+  display: block;
+  text-align: left;
+  color: #d9d9d9;
+  font: bold 10px/1 "HelveticaNeueCyr", sans-serif;
   text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0 6px 0 0;
 }
-.attach-item__image {
-  max-width: 100%;
-}
-.attach-item__type {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  position: absolute;
-  height: 20px;
-  display: inline-flex;
+.attach-item__image-block {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
-  bottom: 10px;
-  left: 10px;
-  padding: 0 7px;
-  background: #cc0000;
-  color: #fff;
-  font: bold 12px/1 "HelveticaNeueCyr", sans-serif;
-  text-transform: uppercase;
 }
-.attach-item__buttons {
-  display: none;
-  width: 100%;
+.attach-item__image {
+  max-width: 181%;
+  opacity: .3;
+}
+.attach-item__type {
   position: absolute;
-  bottom: 10px;
-  justify-content: center;
+  height: 17px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2px 7px 0;
+  background: rgba(255, 204, 0, 0.4);
+}
+.attach-item__type-name {
+  color: #ffffff;
+  font: bold 11px/1 "HelveticaNeueCyr", sans-serif;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .attach-item__button {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  color: #fff;
-  border: none;
-  background: rgba(0, 0, 0, 0.75);
-}
-.attach-item__button:first-child {
-  -moz-border-radius: 3px 0 0 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px 0 0 3px;
-}
-.attach-item__button:last-child {
-  -moz-border-radius: 0 3px 3px 0;
-  -webkit-border-radius: 0;
-  border-radius: 0 3px 3px 0;
-}
-.attach-item__button:hover {
-  background: rgba(0, 0, 0, 0.5);
-}
-.attach-item:hover .attach-item__type {
-  display: none;
-}
-.attach-item:hover .attach-item__buttons {
+  position: absolute;
+  top: 9px;
+  left: 9px;
   display: flex;
+  border-radius: 2px;
+  padding: 2px;
+  font-size: 18px;
+  color: #fc0;
+  border: none;
 }
 
 .attachments {

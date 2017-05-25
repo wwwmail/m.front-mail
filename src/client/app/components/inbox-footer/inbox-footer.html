@@ -6,12 +6,14 @@
             <button class="btn btn--red btn--size_62 btn--radius_3 icon-write" ui-sref="mail.compose"></button>
         </div>
 
+        <hr class="hr hr--inbox-footer">
+
         <!-- Нижнее меню опций для выделеных писем -->
         <div class="inbox-footer__group-option"
              ng-if="vm.messages.checked.length"
              ng-class="{'is-more-switch': vm.isMoreSwitch}">
 
-            <hr class="hr hr--inbox-footer">
+
 
             <div class="inbox-footer__group-option-wrapper">
                 <div class="inbox-footer__group-option-content">

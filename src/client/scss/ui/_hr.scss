@@ -64,12 +64,13 @@
   }
   &--inbox-footer {
     position: absolute;
-    top: 0;
+    top: -1;
     left: -50vw;
     right: 50vw;
     background-color: $header-border-color;
     margin: 0;
     width: 200vw;
+    z-index: 10;
   }
   &--yellow {
     background-color: $yellow-yandex;
