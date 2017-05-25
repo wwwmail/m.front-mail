@@ -90,15 +90,15 @@
   &__match-item{
     border-radius: 100px;
     padding: 0 5px 0 0;
-    background: rgba($select-input-line-active-item-color, .55)!important;
+    background: rgba($select-input-line-active-item-color, 1)!important;
 
     //background: transparent;
     //background-color:  #f6f5f3!important;
     color: #222;
 
     &:hover, &:active, &:focus{
-      //background-color: $yellow-lignt!important;
-      background: rgba($select-input-line-active-item-color, 1)!important;
+      background-color: $yellow-lignt!important;
+      //background: rgba($select-input-line-active-item-color, 1)!important;
       color: $black;
       padding: 0 26px 0 0;
       margin-right: -26px!important;
