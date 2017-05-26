@@ -34,7 +34,7 @@
                 <div class="menu-main__item-content" ng-if="!folder.isSub">
                     <a class="menu-main__link"
                        ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
-                        <span class="icon-inbox menu-main__icon"></span>
+                        <span class="{{ folder.icon }} menu-main__icon"></span>
                         <span class="menu-main__title">{{ folder.caption }}</span>
                     </a>
                     <div class="menu-main__additional-option">
