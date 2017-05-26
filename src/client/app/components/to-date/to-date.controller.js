@@ -13,7 +13,7 @@
         vm.convertDate = '';
 
         vm.calendarFormat = {
-            sameDay: 'hh:mm',
+            sameDay: 'HH:mm',
             nextDay: '[завтра]',
             nextWeek: 'dddd',
             lastDay: '[вчера] hh:mm',
@@ -22,7 +22,7 @@
         };
 
         vm.calendarSmallFormat = {
-            sameDay: 'hh:mm',
+            sameDay: 'HH:mm',
             nextDay: '[Tomorrow]',
             nextWeek: 'dddd',
             lastDay: 'D MMM',
