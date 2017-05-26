@@ -590,10 +590,10 @@
     padding: 0 10px;
   }
   .layout__menu-content {
-    max-width: 80% !important;
+    max-width: 75% !important;
   }
 }
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 320px) {
   .layout__menu-content {
     max-width: 100% !important;
   }
@@ -1758,6 +1758,11 @@
   height: 28px;
   font-size: 18px;
 }
+.btn--size_50 {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+}
 .btn--size_62 {
   width: 62px;
   height: 62px;
@@ -1765,6 +1770,9 @@
 }
 .btn--rotate {
   transform: rotate(180deg);
+}
+.btn--padding-5 {
+  padding: 5px;
 }
 
 .ok-validates {
@@ -2637,6 +2645,9 @@
   color: #ffffff;
   font: 500 18px/1 Arial, sans-serif;
 }
+.avatar__first-name, .avatar__last-name {
+  text-transform: uppercase;
+}
 .avatar--size20 {
   width: 20px;
   height: 20px;
@@ -2955,7 +2966,7 @@
   max-width: 768px;
   min-height: 100%;
   margin: auto;
-  padding: 0 0px;
+  padding: 0;
   display: flex;
   justify-content: flex-end;
 }
@@ -2963,7 +2974,7 @@
   position: absolute;
   right: 0;
   bottom: 0;
-  padding: 13px;
+  padding: 25px;
 }
 .inbox-footer__group-option {
   position: relative;
@@ -3967,8 +3978,8 @@
 
 @font-face {
   font-family: 'icomoon';
-  src: url("../../fonts/icomoon.eot?rhuj2v");
-  src: url("../../fonts/icomoon.eot?rhuj2v#iefix") format("embedded-opentype"), url("../../fonts/icomoon.ttf?rhuj2v") format("truetype"), url("../../fonts/icomoon.woff?rhuj2v") format("woff"), url("../../fonts/icomoon.svg?rhuj2v#icomoon") format("svg");
+  src: url("../../fonts/icomoon.eot?49tcow");
+  src: url("../../fonts/icomoon.eot?49tcow#iefix") format("embedded-opentype"), url("../../fonts/comoon.ttf?49tcow") format("truetype"), url("../../fonts/icomoon.woff?49tcow") format("woff"), url("../../fonts/icomoon.svg?49tcow#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }

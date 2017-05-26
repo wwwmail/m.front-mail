@@ -218,8 +218,13 @@
     font-size: 18px;
   }
 
-  &--size_62{
+  &--size_50{
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
 
+  &--size_62{
     width: 62px;
     height: 62px;
     font-size: 26px;
@@ -227,6 +232,9 @@
 
   &--rotate{
     transform: rotate(180deg);
+  }
+  &--padding-5{
+    padding: 5px;
   }
 
 }
