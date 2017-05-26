@@ -1,6 +1,8 @@
 (function () {
     'use strict';
 
+    moment.locale('ru');
+    
     var core = angular.module('app.core');
 
     core.config(function (toastrConfig) {
