@@ -51,6 +51,15 @@
             vm.user = $auth.user;
             vm.$state = $state;
 
+            vm.sendForm.model.from = $auth.user.profile.email;
+
+            //     getEmailSelectFormat({
+            //     email: $auth.user.profile.email,
+            //     // first_name: '123'
+            // });
+
+            console.log('vm.sendForm.model.from', vm.sendForm.model.from);
+
             vm.interval = $interval(function () {
                 if (vm.sendForm.model.to && !vm.$state.params.template) {
                     save();
@@ -290,15 +299,14 @@
                 id: message.number,
                 mbox: message.mbox,
                 connection_id: message.connection_id
-            })
-                .then(function (response) {
-                    vm.fwd.items.push(response.data);
-                    vm.fwd.checked.push(response.data);
+            }).then(function (response) {
+                vm.fwd.items.push(response.data);
+                vm.fwd.checked.push(response.data);
 
-                    if ($state.params.ids.length < 2) {
-                        pasteOneFwd(vm.fwd.items[0]);
-                    }
-                });
+                if ($state.params.ids.length < 2) {
+                    pasteOneFwd(vm.fwd.items[0]);
+                }
+            });
         }
 
         function pasteRe() {
@@ -325,10 +333,17 @@
                         value: message.fromAddress
                     }]
                 }];
-
-                console.log('one', vm.sendForm.model);
             });
 
+        }
+
+        function getEmailSelectFormat(data) {
+            return [{
+                first_name: data.first_name,
+                emails: [{
+                    value: data.email
+                }]
+            }];
         }
 
     }

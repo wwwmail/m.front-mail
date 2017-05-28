@@ -36,13 +36,22 @@
                         </div>
 
                         <!-- от кого-->
-                        <div class="input-line input-line--full">
-                            <div class="input-line__label width--all">
-                                <span class="input-line__title link--gray" href="">от кого</span>
-                                <contact-to-add-select class="width--all"
+                        <div class="input-line input-line--full"
+                             ng-class="{'is-active': vm.sendForm.model.from}">
+                            <label class="input-line__label width--all">
+                                <span class="input-line__title link--gray">Тема</span>
+                                <input class=" input--compose-line input-line__input width--all"
+                                       type="text"
+                                       ng-model="vm.sendForm.model.from" disabled>
+                            </label>
+                        </div>
+                       <!-- <div class="input-line input-line&#45;&#45;full">
+                            <div class="input-line__label width&#45;&#45;all">
+                                <span class="input-line__title link&#45;&#45;gray">от кого</span>
+                                <contact-to-add-select class="width&#45;&#45;all"
                                                        addresses="vm.sendForm.model.from"></contact-to-add-select>
                             </div>
-                        </div>
+                        </div>-->
 
                     </div>
 
