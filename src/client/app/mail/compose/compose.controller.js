@@ -277,21 +277,20 @@
         }
 
         function pasteOneFwd(message) {
-            console.log('message fwd', message);
             var fwd = '';
             fwd += '-------- Пересылаемое сообщение--------<br>';
             fwd += message.date.date + ' ' + message.from + ' ' + '<br>';
             fwd += message.body + '<br>';
             fwd += '-------- Конец пересылаемого сообщения --------';
-            fwd += '<br><br>' + vm.user.profile.sign;
+            fwd += '<br><br>';
+            fwd += vm.user.profile.sign || '';
+            vm.sendForm.model.number = message.number;
+            vm.sendForm.model.mbox = message.mbox;
+            vm.sendForm.model.connection_id = message.connection_id;
+            vm.sendForm.model.attachmentsData = message.attachmentsData;
             vm.sendForm.model.body = fwd;
-            vm.sendForm.model.subject = 'Fwd: ' + message.Subject;
-
-            // vm.sendForm.model.attachmentsData = message.attachmentsData;
-            // vm.sendForm.model.mbox = message.mbox;
-            // vm.sendForm.model.connection_id = message.connection_id;
-
-            console.log('one', vm.sendForm.model);
+            vm.sendForm.model.subject = 'Fwd: ';
+            vm.sendForm.model.subject += message.Subject || '';
         }
 
         function getFwdMessageById(message) {
