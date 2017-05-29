@@ -2446,14 +2446,30 @@
 .select-input-line__match-item {
   border-radius: 100px;
   padding: 0 5px 0 0;
-  background: #f6f5f3 !important;
+  background-color: #d8d8d8 !important;
   color: #222;
+}
+.select-input-line__match-item .avatar {
+  background-color: #d8d8d8 !important;
+  box-shadow: 0px 0px 0px 2px white, inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.select-input-line__match-item .avatar .avatar__first-name, .select-input-line__match-item .avatar .avatar__last-name {
+  font-size: 65% !important;
+  font-weight: bold;
+  color: #777 !important;
+  margin-top: -1px;
+}
+.select-input-line__match-item .tag-contact__name {
+  padding-left: 2px;
 }
 .select-input-line__match-item:hover, .select-input-line__match-item:active, .select-input-line__match-item:focus {
   background-color: #fee481 !important;
   color: #000;
   padding: 0 26px 0 0;
   margin-right: -26px !important;
+}
+.select-input-line__match-item:hover .avatar, .select-input-line__match-item:active .avatar, .select-input-line__match-item:focus .avatar {
+  background-color: #d8d8d8 !important;
 }
 .select-input-line__choices-tags {
   border: none !important;
@@ -2491,6 +2507,13 @@
   display: inline-flex;
   align-items: center;
   padding: 0 14px;
+}
+.select-input-line__choices-item .avatar {
+  background: #d8d8d8;
+}
+.select-input-line__choices-item .avatar .avatar__first-name, .select-input-line__choices-item .avatar .avatar__last-name {
+  font-size: 75% !important;
+  margin-top: 1px;
 }
 .select-input-line .ui-select-search {
   width: auto !important;
