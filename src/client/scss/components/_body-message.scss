@@ -1,12 +1,11 @@
 .body-message {
-  margin: 5px 22px 58px;
+  //margin: 5px 0;
   &__content {
     width: auto;
     height: auto;
-
     min-width: 280px;
 
-    background: $massage-content-bg-color;
+    //background: $massage-content-bg-color;
     margin:  16px 0;
 
     overflow: auto;

@@ -168,7 +168,6 @@
 }
 
 .font {
-
   &--helvetica{
     font-family: $mainFont!important;
 
@@ -343,17 +342,19 @@
 
 }
 .height{
-
-
+  &--all {
+    height: 100% !important;
+  }
   &--inh {
     height: inherit !important;
   }
   &--min-inh{
     min-height: inherit!important;
   }
+}
+.height-with-fixed-down{
 
 }
-
 .float {
   &--left {
     float: left;
@@ -431,6 +432,9 @@
     position: static!important;
   }
 
+  &--sticky {
+    position: sticky!important;
+  }
 }
 
 .overflow {
@@ -438,11 +442,11 @@
   overflow: auto;
 
   &--h{
-    overflow: hidden;
+    overflow: hidden!important;
   }
 
   &--v{
-    overflow: visible;
+    overflow: visible!important;
 
   }
 }
