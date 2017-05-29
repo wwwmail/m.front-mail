@@ -3,16 +3,23 @@
 
         <header folder="vm.folder"></header>
 
+        <folder-layout messages="vm.messages"></folder-layout>
+
         <div class="layout__menu" ng-class="{'layout__menu--is-active-menu': isOpenMenu}">
             <div class="layout__menu-content">
                 <menu-main></menu-main>
             </div>
+            <button class="layout__menu-closer btn--not-events btn--not-style"
+                    type="button"
+                    ng-click="vm.closeMenu()">
+            </button>
         </div>
     </div>
 
     <div class="layout__inner" layout-height>
         <div class="layout__content">
-            <ui-view></ui-view>
+            <ui-view class="height--min-inh height--all"></ui-view>
         </div>
     </div>
+
 </section>

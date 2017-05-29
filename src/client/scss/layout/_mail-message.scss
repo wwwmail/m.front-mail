@@ -1,92 +1,68 @@
 .mail-message {
-  position: relative;
-  width: inherit;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
 
-  background: $white-color;
 
-  margin-bottom: 12px;
-
-  //border-bottom: 1px solid $mail-message-title--border-color;
-
-  &:before{
-    content: "";
-    position: absolute;
-    top:0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 0;
-    background: #fff;
-  }
-  &:before{
-    content: "";
-    position: fixed;
-    top:0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    z-index: -1;
-    background: #f6f5f3;
-  }
-  &:after{
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: -20px;
-    right: -20px;
-    border-bottom: 1px solid #ecebea;
-}
-
-  &__header {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 48px;
-    z-index: 3;
-    background-color: $white-color;
-  }
-  &__header-container{
+  &__main-info{
     position: relative;
-    display: block;
+    flex: 1 0 auto;
 
-    width: 100%;
-    max-width: 768px;
-    min-height: 100%;
-
-    box-sizing: border-box;
-
-    z-index: 2;
-
-    padding: 0 22px;
-    margin: auto;
+    &:before{
+      content: "";
+      position: fixed;
+      top:0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      z-index: -1;
+      background: #f6f5f3;
+    }
   }
+
+  &__main-content{
+    background: #fff;
+
+  }
+
+  &__reply{
+    background: $white-color;
+    flex: 0 0 auto;
+  }
+
+
+  &__info{
+    position: relative;
+    top: 48px;
+    left: 0;
+    right: 0;
+    z-index: 5;
+
+    height: 72px;
+
+    background: #fff;
+    transform: translate3d(0,0,0);
+
+    display: flex;
+    align-items: center;
+  }
+
   &__body{
     position: relative;
-
-  }
-
-  &__mail-attachments, &__body{
-    &:after{
-      content: "";
-      position: absolute;
-      top: 0;
-      right: -100vw;
-      bottom: 0;
-      left: -100vw;
-      z-index: -1;
-
-      background: $white-color;
-    }
+    //flex: 1 0 auto;
+    margin-bottom: 10px;
+    z-index: 1;
   }
 
   &__mail-attachments{
     position: relative;
     z-index: 1;
     padding: 10px 0 0;
-    margin-top: 128px;
   }
 
   &__title {
@@ -96,29 +72,17 @@
     align-items: center;
 
     height: auto;
-    //min-height: 77px;
 
     font-size: 18px;
-    line-height: 22px;
 
-    margin: 0 0 18px;
-    padding: 16px 15px 16px 0;
+    padding: 16px 22px;
+
+    line-height: 22px;
+    min-height: 22px;
 
     color: $mail-message-title-color;
-    &:before{
-      content: "";
+    background-color: #f6f5f3;
 
-      position: absolute;
-      top: 0;
-      left: -100vw;
-
-      width: 1000vw;
-      height: 100%;
-
-      background: $mail-message-title-bg-color;
-
-      z-index: -1;
-    }
     &:after{
       content: "";
 
@@ -127,52 +91,9 @@
 
       left: -100vw;
       width: 1000vw;
-
       border-bottom: 1px solid $mail-message-title--border-color;
     }
   }
-
-  &__reply {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    height: auto;
-
-    min-height: 50px;
-    max-height: 120px;
-
-    display: flex;
-    align-items: flex-end;
-
-    box-sizing: content-box;
-    z-index: 5;
-    border-top: 1px solid $header-border-color;
-
-    background-color: $white-color;
-
-  }
-  &__reply-container{
-    position: relative;
-
-    display: flex;
-    align-items: center;
-
-    justify-content: space-between;
-    background: $white-color;
-
-    width: 100%;
-
-    max-width: 768px;
-    min-height: 100%;
-    padding: 2px 22px;
-
-    margin: auto auto 0;
-
-    //padding: 0 15px;
-  }
-
   &__footer{
     display: flex;
     align-items: center;
@@ -182,9 +103,32 @@
 
   @media only screen and (max-width: 562px) {
     &__header-container, &__reply-container{
-      padding: 0 10px;
+      //padding: 0 10px;
     }
   }
 
 }
 
+
+.wrapper{
+  padding-left: 22px;
+  padding-right: 22px;
+
+  &--is-margin{
+    margin-right: -22px;
+    margin-left: -22px;
+  }
+
+  @media only screen and (max-width: 562px) {
+    padding-left: 10px;
+    padding-right: 10px;
+
+    &--is-margin{
+      margin-right: -10px;
+      margin-left: -10px;
+    }
+  }
+
+
+
+}

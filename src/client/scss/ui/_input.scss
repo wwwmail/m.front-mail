@@ -6,6 +6,11 @@
   color: $input-hlaceholder-color;
 }
 
+[contenteditable=true]:empty::before {
+  content: attr(placeholder);
+  color: $input-hlaceholder-color;
+}
+
 .input {
   position: relative;
   display: block;

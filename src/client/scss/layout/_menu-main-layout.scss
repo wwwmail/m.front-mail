@@ -4,6 +4,7 @@
   height: 100%;
   box-sizing: border-box;
 
+
   background: $menu-main-color;
   z-index: 51;
 
@@ -82,11 +83,17 @@
 
     transform: rotate(-45deg);
     &:hover, &:active {
-      background-color: rgba($yellow-yandex, .9);
-      color: $menu-main-color;
+      //background-color: rgba($yellow-yandex, .9);
+      color: rgba($menu-main-color, .9);
     }
     &:focus{
      outline: none;
+    }
+    &:before{
+      content: "";
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 

@@ -1,0 +1,53 @@
+.message-reply{
+  position: relative;
+  width: 100%;
+
+  flex: 0 0 auto;
+
+  height: auto;
+
+  min-height: 50px;
+  max-height: 120px;
+
+  display: flex;
+  align-items: flex-end;
+
+  box-sizing: content-box;
+  z-index: 5;
+  //border-top: 1px solid $header-border-color;
+
+  background-color: $white-color;
+  &:before{
+    content: "";
+
+    position: absolute;
+    top: 0;
+    right: -100vw;
+    bottom: 0;
+    left: -100vw;
+
+    background: $white-color;
+
+  }
+
+  &__container{
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+    background: $white-color;
+
+    width: 100%;
+
+    max-width: 768px;
+    min-height: 100%;
+    padding: 2px 0px;
+
+    margin: auto auto 0;
+
+    //padding: 0 15px;
+  }
+
+}

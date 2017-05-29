@@ -146,12 +146,8 @@
 
   &__remove-icon{
     font-size: 7px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: absolute;
+    top: calc(50% - (7px / 2));
+    left: calc(50% - (7px / 2));
   }
-
-
-
-
 }
