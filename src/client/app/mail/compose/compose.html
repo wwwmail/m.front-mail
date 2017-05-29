@@ -16,8 +16,9 @@
                     </div>
                     <div class="compose__from--add-features" ng-if="vm.isShowFeatures">
 
-                        <!-- копия-->
-                        <div class="input-line input-line--full">
+                        <!--копия-->
+                        <div class="input-line input-line--full"
+                             ng-class="{'is-active': vm.sendForm.model.toCopy.length}">
                             <div class="input-line__label width--all">
                                 <span class="input-line__title link--gray">Копия</span>
                                 <contact-to-add-select class="width--all"
@@ -39,7 +40,7 @@
                         <div class="input-line input-line--full"
                              ng-class="{'is-active': vm.sendForm.model.from}">
                             <label class="input-line__label width--all">
-                                <span class="input-line__title link--gray">Тема</span>
+                                <span class="input-line__title link--gray">От кого</span>
                                 <input class=" input--compose-line input-line__input width--all"
                                        type="text"
                                        ng-model="vm.sendForm.model.from" disabled>
@@ -73,7 +74,6 @@
                                 accept="**/*"
                                 ngf-select="vm.upload($files, $invalidFiles)"></button>
                     </div>
-
                 </div>
 
 
