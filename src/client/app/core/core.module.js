@@ -20,6 +20,7 @@
             'ngFileSaver',
             'infinite-scroll',
             'content-editable',
-            'LocalStorageModule'
+            'LocalStorageModule',
+            'ngTagsInput'
         ]);
 })();

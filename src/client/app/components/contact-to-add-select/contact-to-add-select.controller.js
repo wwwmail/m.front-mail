@@ -14,8 +14,6 @@
             items: {}
         };
 
-        // vm.addresses = [];
-
         vm.selectContact = {};
 
         vm.getContacts = getContacts;
@@ -23,9 +21,7 @@
         vm.makeContact = makeContact;
         vm.openContactToAddPopup = openContactToAddPopup;
 
-        // $scope.$watch('vm.contacts.items', function (data) {
-        //
-        // }, true);
+        ////
 
         activate();
 
@@ -36,21 +32,15 @@
         function getContacts() {
             contact.get().then(function (response) {
                 vm.contacts.items = response.data;
-
-                // vm.contacts.items.push({isMore: true});
-
-                // console.log(vm.contacts.items);
             });
         }
 
         function findContacts(q) {
-            if (q) {
-                contact.get({q: q}).then(function (response) {
-                    vm.contacts.items = response.data;
-                });
-            }
-
-            getContacts();
+            return contact.get({q: q}).then(function (response) {
+                // vm.contacts.items = response.data;
+                return response.data;
+            });
+            // getContacts();
         }
 
         function makeContact(email) {

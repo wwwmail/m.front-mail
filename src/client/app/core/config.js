@@ -12,6 +12,10 @@
         });
     });
 
+    core.config(function (tagsInputConfigProvider) {
+        tagsInputConfigProvider.setDefaults('tagsInput', {placeholder: ''});
+    });
+
     core.config(function ($authProvider, CONFIG) {
 
         // the following shows the default values. values passed to this method
