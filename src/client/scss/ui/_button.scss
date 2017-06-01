@@ -23,6 +23,10 @@
     box-shadow: none;
   }
 
+  &:disabled{
+    color: #ccc;
+  }
+
   &--act--y-shw:active{
     background: $yellow-yandex;
     box-shadow: $button-shadow;
@@ -144,6 +148,9 @@
   &--main-mobile-color{
     color: $main-btn-color;
     fill: $main-btn-color;
+    &:hover,  &:focus, &:active{
+      opacity: .6!important;
+    }
   }
 
   &--s-gradient{
@@ -168,9 +175,9 @@
   }
 
   &--light-hover{
-    opacity: .6!important;
+    opacity: 1!important;
     &:hover{
-      opacity: 1!important;
+      opacity: .6!important;
     }
   }
 
@@ -237,6 +244,10 @@
     padding: 5px;
   }
 
+  &--mail-send{
+    color: #07c;
+  }
+
 }
 .ok-validates{
   position: relative;
@@ -266,8 +277,5 @@
   color: #888888;
 
   &--active{
-
   }
-
-
 }

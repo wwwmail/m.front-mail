@@ -1,0 +1,98 @@
+.tags-input{
+  width: auto;
+  background: transparent;
+  border: none;
+  min-height: 0px!important;
+  .host{
+    outline: none;
+    &:active, &:focus, &:hover{
+      outline: none!important;
+    }
+
+  }
+  .tags{
+    background: transparent;
+    padding: 0 175px 2px 56px!important;
+    border-radius: 0!important;
+    box-shadow: none!important;
+    border: none;
+    border-bottom: 1px solid !important;
+    border-color: #ccc !important;
+
+    //display: flex;
+    //align-items: center;
+    //justify-content: flex-start;
+
+    &.focused, &:active, &:focus, &:hover{
+      border: none;
+      border-bottom-color: $yellow-yandex!important;
+      outline: none!important;
+      box-shadow: $input-line-shadow!important;
+    }
+
+    .input{
+      height: auto;
+      //position: relative!important;
+      //top: 3px!important;
+    }
+
+    .tag-list{
+
+
+    }
+
+    .tag-item{
+      margin: 2px 5px;
+      padding: 0 10px 0 0;
+      height: 20px!important;
+      border-radius: 100px;
+      //background: rgba($select-input-line-active-item-color, .55)!important;
+      background-color: $select-input-line-active-item-color!important;
+      border: none!important;
+      line-height: 0!important;
+
+      .avatar {
+        box-shadow: $select-input-line-avatar-shadow, inset 0 0 0 1px rgba(0, 0, 0, .1);
+        .avatar__first-name, .avatar__last-name {
+          font-size: 95% !important;
+          line-height: 0;
+        }
+      }
+
+    }
+
+    .tag-contact{
+
+    }
+  }
+  .autocomplete{
+    margin: 1px 0 0;
+    padding: 0;
+    border-radius: 0!important;
+    box-shadow: $select-shadow!important;
+    border: none;
+    .suggestion-list{
+
+      .suggestion-item{
+        position: relative;
+        &:after{
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+
+          height: 1px;
+
+          margin: 0 10px;
+          background-color: $hr-main-color;
+
+        }
+        &:hover{
+          background-color: $yellow-lignt;
+        }
+      }
+    }
+  }
+}
+

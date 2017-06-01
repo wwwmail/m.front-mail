@@ -27,7 +27,7 @@
     line-height: 22px;
     min-height: 22px;
     word-wrap: break-word;
-    font-family: $mainFont, Helvetica,;
+    font-family: $mainFont, Helvetica;
     font-size: 18px;
     word-wrap: break-word;
     color: rgba(0, 0, 0, .8);
@@ -37,6 +37,15 @@
     opacity: 1!important;
     transform: translateY(0)!important;
     transition: transform .6s;
+  }
+
+  &--error-message{
+    background: $main-error-bg-color!important;
+
+    .pop-up-notification__notific{
+      color: $white-color;
+    }
+
   }
 
 }

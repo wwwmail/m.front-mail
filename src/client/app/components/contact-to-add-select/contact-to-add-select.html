@@ -1,63 +1,135 @@
-<ui-select class="select-input-line"
-           multiple
-           ng-model="vm.addresses"
-           tagging="vm.makeContact"
-           tagging-label="true"
-           theme="bootstrap"
-           ng-disabled="{{ vm.disabled }}">
+<!--<ui-select class="select-input-line"-->
+           <!--multiple-->
+           <!--ng-model="vm.addresses"-->
+           <!--tagging="vm.makeContact"-->
+           <!--tagging-label="true"-->
+           <!--theme="bootstrap"-->
+           <!--ng-disabled="{{ vm.disabled }}">-->
 
-    <ui-select-match class="select-input-line__match-tags">
-        <div class="select-input-line__match-item tag-contact font-sizer--bigger-15">
-            <div class="avatar avatar--size20 mrg__right7">
-                <avatar-name name="$item.first_name" email="$item.email"></avatar-name>
-            </div>
-            <div class="tag-contact__name" ng-if="$item.first_name">
-                {{ $item.first_name }}
-                {{ $item.last_name }}
-            </div>
-            <div class="tag-contact__email" ng-if="!$item.first_name">
-                {{ $item.emails[0].value }}
-            </div>
+    <!--<ui-select-match class="select-input-line__match-tags">-->
+        <!--<div class="select-input-line__match-item tag-contact font-sizer&#45;&#45;bigger-15">-->
+            <!--<div class="avatar avatar&#45;&#45;size20 mrg__right7">-->
+                <!--<avatar-name name="$item.first_name" email="$item.email"></avatar-name>-->
+            <!--</div>-->
+            <!--<div class="tag-contact__name" ng-if="$item.first_name">-->
+                <!--{{ $item.first_name }}-->
+                <!--{{ $item.last_name }}-->
+            <!--</div>-->
+            <!--<div class="tag-contact__email" ng-if="!$item.first_name">-->
+                <!--{{ $item.emails[0].value }}-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</ui-select-match>-->
+
+    <!--<ui-select-choices class="select-input-line__choices-tags"-->
+                       <!--refresh="vm.findContacts($select.search)"-->
+                       <!--refresh-delay="500"-->
+                       <!--repeat="contact in (vm.contacts.items | filter: $select.search) track by contact.id">-->
+
+        <!--<div class="select-input-line__choices-item tag-contact">-->
+            <!--<div class="avatar avatar&#45;&#45;size28 mrg__right16 avatar&#45;&#45;bg-color">-->
+                <!--<avatar-name name="contact.first_name" email="contact.email"></avatar-name>-->
+            <!--</div>-->
+            <!--<div class="tag-contact__name">-->
+                <!--{{ contact.first_name }}-->
+                <!--{{ contact.last_name }}-->
+            <!--</div>-->
+            <!--<div class="tag-contact__email">-->
+                <!--{{ contact.email }}-->
+            <!--</div>-->
+            <!--<div class="tag-contact__phone">-->
+                <!--{{ contact.phone }}-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</ui-select-choices>-->
+
+    <!--<div ui-select-choices-static>-->
+        <!--<div class="ui-select-choices-row pointer" ng-click="vm.openContactToAddPopup()">-->
+            <!--<div class="ui-select-choices-row-inner">-->
+                <!--<div class="select-input-line__choices-item tag-contact tag-contact&#45;&#45;more">-->
+                    <!--<div class="avatar avatar&#45;&#45;size28 mrg__right16 avatar&#45;&#45;bg-color">-->
+                        <!--<avatar-name name="'Contacts'" email="'Contacts'"></avatar-name>-->
+                    <!--</div>-->
+                    <!--<div class="tag-contact__name">-->
+                        <!--<a class="link">-->
+                            <!--Показать все контакты-->
+                        <!--</a>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+<!--</ui-select>-->
+
+
+<tags-input class="tags-input"
+            ng-model="vm.addresses"
+            type="email"
+            template="tag-template"
+            template-scope="vm"
+            display-property="first_name"
+            replace-spaces-with-dashes="true"
+            allow-dblclick-to-edit="true">
+
+    <auto-complete source="vm.findContacts($query)"
+                   min-length="0"
+                   load-on-focus="true"
+                   load-on-empty="true"
+                   max-results-to-show="5"
+                   auto-complete-after
+                   template="autocomplete-template">123</auto-complete>
+
+</tags-input>
+
+<script type="text/ng-template" id="tag-template">
+    <div class="tag-contact font-sizer--bigger-15 tag-contact__autocomplete-item"
+         uib-popover-template="'app/components/contact-to-add-select-menu/contact-to-add-select-menu-popover.html'"
+         popover-class="popover--tag-list"
+         popover-placement="bottom"
+         popover-animation="true"
+         popover-trigger="'outsideClick'"
+         ng-dblclick="$event.stopPropagation();">
+        <div class="avatar avatar--size20 mrg__right7">
+            <avatar-name name="data.first_name" email="data.email"></avatar-name>
         </div>
-    </ui-select-match>
-
-    <ui-select-choices class="select-input-line__choices-tags"
-                       refresh="vm.findContacts($select.search)"
-                       refresh-delay="500"
-                       repeat="contact in (vm.contacts.items | filter: $select.search) track by contact.id">
-
-        <div class="select-input-line__choices-item tag-contact">
-            <div class="avatar avatar--size28 mrg__right16 avatar--bg-color">
-                <avatar-name name="contact.first_name" email="contact.email"></avatar-name>
-            </div>
-            <div class="tag-contact__name">
-                {{ contact.first_name }}
-                {{ contact.last_name }}
-            </div>
-            <div class="tag-contact__email">
-                {{ contact.email }}
-            </div>
-            <div class="tag-contact__phone">
-                {{ contact.phone }}
-            </div>
+        <div class="tag-contact__name" ng-if="data.first_name">
+            {{ data.first_name }}
+            {{ data.last_name }}
         </div>
-    </ui-select-choices>
-
-    <div ui-select-choices-static>
-        <div class="ui-select-choices-row pointer" ng-click="vm.openContactToAddPopup()">
-            <div class="ui-select-choices-row-inner">
-                <div class="select-input-line__choices-item tag-contact tag-contact--more">
-                    <div class="avatar avatar--size28 mrg__right16 avatar--bg-color">
-                        <avatar-name name="'Contacts'" email="'Contacts'"></avatar-name>
-                    </div>
-                    <div class="tag-contact__name">
-                        <a class="link">
-                            Показать все контакты
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div class="tag-contact__email" ng-if="!data.first_name">
+            {{ data.emails[0].value }}
         </div>
     </div>
+</script>
 
-</ui-select>
+<script type="text/ng-template" id="autocomplete-template">
+    <div class="tag-contact">
+        <div class="avatar avatar--size28 mrg__right16 avatar--bg-color">
+            <avatar-name name="data.first_name" email="data.email"></avatar-name>
+        </div>
+        <div class="tag-contact__name">
+            {{ data.first_name }}
+            {{ data.last_name }}
+        </div>
+        <div class="tag-contact__email">
+            {{ data.email }}
+        </div>
+        <div class="tag-contact__phone">
+            {{ data.phone }}
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="autocomplete-template-footer">
+    <div class="tag-contact tag-contact--more" ng-click="vm.openContactToAddPopup()">
+        <div class="avatar avatar--size28 mrg__right16 avatar--bg-color">
+            <avatar-name name="'Contacts'" email="'Contacts'"></avatar-name>
+        </div>
+        <div class="tag-contact__name">
+            <a class="link">
+                Показать все контакты
+            </a>
+        </div>
+    </div>
+</script>
