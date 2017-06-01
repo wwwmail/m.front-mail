@@ -78,7 +78,7 @@
                    load-on-focus="true"
                    load-on-empty="true"
                    max-results-to-show="5"
-                   template="autocomplete-template">123</auto-complete>
+                   template="autocomplete-template"></auto-complete>
 
 </tags-input>
 
@@ -100,6 +100,7 @@
         <div class="tag-contact__email" ng-if="!data.first_name">
             {{ data.emails[0].value }}
         </div>
+        <button class="tag-remove btn btn--not-style icon-cancel" type="button"></button>
     </div>
 </script>
 
@@ -121,15 +122,15 @@
     </div>
 </script>
 
-<script type="text/ng-template" id="autocomplete-template-footer">
-    <div class="tag-contact tag-contact--more" ng-click="vm.openContactToAddPopup()">
-        <div class="avatar avatar--size28 mrg__right16 avatar--bg-color">
-            <avatar-name name="'Contacts'" email="'Contacts'"></avatar-name>
-        </div>
-        <div class="tag-contact__name">
-            <a class="link">
-                Показать все контакты
-            </a>
-        </div>
-    </div>
-</script>
+<!--<script type="text/ng-template" id="autocomplete-template-footer">-->
+    <!--<div class="tag-contact tag-contact&#45;&#45;more" ng-click="vm.openContactToAddPopup()">-->
+        <!--<div class="avatar avatar&#45;&#45;size28 mrg__right16 avatar&#45;&#45;bg-color">-->
+            <!--<avatar-name name="'Contacts'" email="'Contacts'"></avatar-name>-->
+        <!--</div>-->
+        <!--<div class="tag-contact__name">-->
+            <!--<a class="link">-->
+                <!--Показать все контакты-->
+            <!--</a>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</script>-->

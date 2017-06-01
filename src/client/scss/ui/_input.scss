@@ -30,6 +30,11 @@
 
   -webkit-appearance: none;
 
+  &:disabled{
+    background-color: $white-color;
+    //color: $input-hlaceholder-color;
+  }
+
   &:focus {
     border: 1px solid $yellow-yandex;
     outline: 1px solid $yellow-yandex;
@@ -37,6 +42,13 @@
   &--no-focus{
     border: none!important;
     outline: none!important;
+  }
+
+  &--compose-line{
+    &:disabled{
+      background-color: $white-color;
+      color: $input-hlaceholder-color;
+    }
   }
 
 
