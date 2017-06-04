@@ -1,0 +1,14 @@
+.inbox-plash{
+  padding: 10px 10px;
+  &__message{
+  }
+  &__title{
+    font: bold 18px/1 $mainFont;
+    color: $message-date-color;
+  }
+  &__text{
+    font-size: 13px;
+    color: #444;
+
+  }
+}

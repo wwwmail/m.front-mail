@@ -28,6 +28,13 @@
 </div>
 
 <!--vm.data._links.next-->
+<div class="inbox-plash">
+    <div class="inbox-plash__message ">
+        <div class="main-plash__text">В эту папку попадают письма, определённые, как нежелательные или вредоносные.</div>
+        <button class="btn btn--normal btn--not-events btn--size_s mrg__top8 font--size12 mrg__top5" type="button">Очистить папку</button>
+    </div>
+</div>
+
 <div class="inbox-list">
     <div infinite-scroll="vm.paginate()" infinite-scroll-distance="1">
         <inbox-message-list messages="vm.messages"></inbox-message-list>

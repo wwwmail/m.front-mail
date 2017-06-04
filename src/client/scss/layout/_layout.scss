@@ -40,7 +40,7 @@
     z-index: 3;
 
     background-color: rgba($black, 0);
-    overflow-y: hidden;
+    overflow: hidden;
     transition: all 1s;
     &--is-active-menu{
       //display: block;

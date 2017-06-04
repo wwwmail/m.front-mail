@@ -66,15 +66,87 @@
     align-items: center;
     flex-flow: column wrap;
 
-
     min-height: 180px;
 
     padding: 10px;
+
+    overflow-y: hidden;
+    overflow-x: auto;
+
   }
 
-  &__add-user{
-    position: absolute;
-    right: -80px;
+  &__users-list{
+    max-height: 180px;
+    //display: inline-flex;
+    //justify-content: flex-end;
+
+    display: block;
+    text-align: center;
+
+    white-space: nowrap;
+    margin-right: 0;
+
+  }
+  &__user-item {
+
+    //display: flex;
+    //justify-content: center;
+    //align-items: center;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+
+    position: relative;
+    top: 14px;
+
+    margin: 0 10px;
+
+    width: 60px;
+    height: 60px;
+
+    &--active {
+      top: auto;
+
+      display: inline-block;
+      text-align: center;
+      margin: auto;
+
+      width: auto;
+      height: auto;
+      .avatar {
+        width: 68px !important;
+        height: 68px !important;
+      }
+
+      .menu-main-layout__user-mail,
+      .menu-main-layout__user-name {
+        //visibility: visible;
+        display: block;
+
+      }
+      .menu-main-layout__add-user {
+        display: block;
+      }
+
+      .menu-main-layout__avatar {
+        width: 82px;
+        height: 82px;
+        border: 1px solid $white-color;
+        border-radius: 50%;
+        padding: 6px;
+      }
+    }
+    &--add-user {
+      //margin-right: -22%;
+      //left: -11px;
+    }
+  }
+
+  &__add-btn{
+    position: relative;
+    //right: -80px;
+
+    //display: none;
 
     border: none;
     background-color: $bth-add-use-color;
@@ -100,23 +172,26 @@
   &__avatar{
     position: relative;
 
+
     display: flex;
     align-items: center;
+    justify-content: center;
 
     background-color: transparent;
-
-    border: 1px solid $white-color;
-    border-radius: 50%;
-
-    padding: 6px;
+    border: 1px solid transparent;
+    margin: auto;
 
   }
 
   &__user-name{
+    //visibility: hidden;
+    display: none;
     color: $user-name-main-menu-color;
   }
 
   &__user-mail{
+    display: none;
+    //visibility: hidden;
     color: $user-mail-main-menu-color;
   }
 
@@ -142,4 +217,5 @@
   &__button-tarif {
 
   }
+
 }

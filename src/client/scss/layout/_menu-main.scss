@@ -150,6 +150,21 @@
       outline: none;
     }
   }
+  &__clear-brush{
+    display: none;
+    opacity: .5;
+    &:focus{
+      outline: none!important;
+    }
+    &:hover, &:active{
+      opacity: .8;
+    }
+
+    &--active{
+      display: block;
+    }
+
+  }
 
   &__sub {
     .menu-main__link {
