@@ -534,7 +534,7 @@
   left: 0;
   z-index: 3;
   background-color: transparent;
-  overflow-y: hidden;
+  overflow: hidden;
   transition: all 1s;
 }
 .layout__menu--is-active-menu {
@@ -742,6 +742,19 @@
 }
 .menu-main__show-additional:active, .menu-main__show-additional:focus {
   outline: none;
+}
+.menu-main__clear-brush {
+  display: none;
+  opacity: .5;
+}
+.menu-main__clear-brush:focus {
+  outline: none !important;
+}
+.menu-main__clear-brush:hover, .menu-main__clear-brush:active {
+  opacity: .8;
+}
+.menu-main__clear-brush--active {
+  display: block;
 }
 .menu-main__sub .menu-main__link {
   padding-left: 70px;
@@ -993,22 +1006,66 @@
   flex-flow: column wrap;
   min-height: 180px;
   padding: 10px;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
-.menu-main-layout__add-user {
-  position: absolute;
-  right: -80px;
+.menu-main-layout__users-list {
+  max-height: 180px;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  margin-right: 0;
+}
+.menu-main-layout__user-item {
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  position: relative;
+  top: 14px;
+  margin: 0 10px;
+  width: 60px;
+  height: 60px;
+}
+.menu-main-layout__user-item--active {
+  top: auto;
+  display: inline-block;
+  text-align: center;
+  margin: auto;
+  width: auto;
+  height: auto;
+}
+.menu-main-layout__user-item--active .avatar {
+  width: 68px !important;
+  height: 68px !important;
+}
+.menu-main-layout__user-item--active .menu-main-layout__user-mail,
+.menu-main-layout__user-item--active .menu-main-layout__user-name {
+  display: block;
+}
+.menu-main-layout__user-item--active .menu-main-layout__add-user {
+  display: block;
+}
+.menu-main-layout__user-item--active .menu-main-layout__avatar {
+  width: 82px;
+  height: 82px;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  padding: 6px;
+}
+.menu-main-layout__add-btn {
+  position: relative;
   border: none;
   background-color: #666d7b;
   color: #ffffff;
   transform: rotate(-45deg);
 }
-.menu-main-layout__add-user:hover, .menu-main-layout__add-user:active {
+.menu-main-layout__add-btn:hover, .menu-main-layout__add-btn:active {
   color: rgba(85, 93, 109, 0.9);
 }
-.menu-main-layout__add-user:focus {
+.menu-main-layout__add-btn:focus {
   outline: none;
 }
-.menu-main-layout__add-user:before {
+.menu-main-layout__add-btn:before {
   content: "";
   display: flex;
   justify-content: center;
@@ -1018,15 +1075,17 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: transparent;
-  border: 1px solid #ffffff;
-  border-radius: 50%;
-  padding: 6px;
+  border: 1px solid transparent;
+  margin: auto;
 }
 .menu-main-layout__user-name {
+  display: none;
   color: #ffffff;
 }
 .menu-main-layout__user-mail {
+  display: none;
   color: #a3a7b0;
 }
 .menu-main-layout__item {
@@ -1691,8 +1750,7 @@
   border-radius: 3px;
   outline: none;
   box-shadow: none;
-  background: 0 0;
-  -webkit-tap-highlight-color: #000;
+  background-color: #ffffff;
 }
 .btn--normal:hover {
   background-color: #ffeba0;
@@ -2881,6 +2939,10 @@
 .avatar--size42 {
   width: 42px;
   height: 42px;
+}
+.avatar--size53 {
+  width: 53px;
+  height: 53px;
 }
 .avatar--size68 {
   width: 68px;
@@ -4868,6 +4930,18 @@
   min-height: 100%;
   padding: 2px 0px;
   margin: auto auto 0;
+}
+
+.inbox-plash {
+  padding: 10px 10px;
+}
+.inbox-plash__title {
+  font: bold 18px/1 "HelveticaNeueCyr", sans-serif;
+  color: #7d7d7d;
+}
+.inbox-plash__text {
+  font-size: 13px;
+  color: #444;
 }
 
 body {

@@ -10,19 +10,66 @@
     </div>
 
     <div class="menu-main-layout__user-info">
-        <div class="menu-main-layout__avatar">
-            <div class="avatar avatar--size68 avatar--second-style">
-                <img class="avatar__image"
-                     ng-src="{{ vm.user.profile.photo }}"
-                     fallback-src="{{'/images/avatar-personal.svg'}}">
+        <div class="menu-main-layout__users-list">
+            <div class="menu-main-layout__user-item">
+                <button class="menu-main-layout__avatar">
+                    <div class="avatar avatar--size53 avatar--second-style">
+                        <img class="avatar__image"
+                             ng-src="{{ vm.user.profile.photo }}"
+                             fallback-src="{{'/images/avatar-personal.svg'}}">
+                    </div>
+                </button>
             </div>
-            <button class="menu-main-layout__add-user  icon-cancel btn--circle btn--size_53 rotate--am90"
-                    type="button"
-                    ui-sref="signIn()"></button>
+            <div class="menu-main-layout__user-item">
+                <button class="menu-main-layout__avatar">
+                    <div class="avatar avatar--size53 avatar--second-style">
+                        <img class="avatar__image"
+                             ng-src="{{ vm.user.profile.photo }}"
+                             fallback-src="{{'/images/avatar-personal.svg'}}">
+                    </div>
+                </button>
+            </div>
+            <div class="menu-main-layout__user-item">
+                <button class="menu-main-layout__avatar">
+                    <div class="avatar avatar--size53 avatar--second-style">
+                        <img class="avatar__image"
+                             ng-src="{{ vm.user.profile.photo }}"
+                             fallback-src="{{'/images/avatar-personal.svg'}}">
+                    </div>
+                </button>
+            </div>
+            <div class="menu-main-layout__user-item">
+                <button class="menu-main-layout__avatar">
+                    <div class="avatar avatar--size53 avatar--second-style">
+                        <img class="avatar__image"
+                             ng-src="{{ vm.user.profile.photo }}"
+                             fallback-src="{{'/images/avatar-personal.svg'}}">
+                    </div>
+                </button>
+            </div>
+
+            <div class="menu-main-layout__user-item menu-main-layout__user-item--active">
+                <div class="menu-main-layout__avatar">
+                    <div class="avatar avatar--size53 avatar--second-style">
+                        <img class="avatar__image"
+                             ng-src="{{ vm.user.profile.photo }}"
+                             fallback-src="{{'/images/avatar-personal.svg'}}">
+                    </div>
+                </div>
+
+                <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
+                <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
+            </div>
+
+            <div class="menu-main-layout__user-item menu-main-layout__user-item--add-user ">
+                <button class="menu-main-layout__add-btn  icon-cancel btn--circle btn--size_53 rotate--am90"
+                        type="button"
+                        ui-sref="signIn()">
+                </button>
+            </div>
         </div>
 
-        <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
-        <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
+
     </div>
 
     <!--основное меню -->
@@ -38,6 +85,7 @@
                         <span class="menu-main__title">{{ folder.caption }}</span>
                     </a>
                     <div class="menu-main__additional-option">
+                        <button class="menu-main__clear-brush menu-main__clear-brush--active icon-brush btn--not-style font--size12"></button>
                         <span class="menu-main__count"
                               ng-if="folder.messagesCount">{{ folder.messagesCount || '' }}</span>
                         <button class="menu-main__show-additional icon-arrow-down btn--not-style"
