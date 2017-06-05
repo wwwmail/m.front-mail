@@ -84,11 +84,6 @@
 
 <script type="text/ng-template" id="tag-template">
     <div class="tag-contact font-sizer--bigger-15 tag-contact__autocomplete-item"
-         uib-popover-template="'app/components/contact-to-add-select-menu/contact-to-add-select-menu-popover.html'"
-         popover-class="popover--tag-list"
-         popover-placement="bottom"
-         popover-animation="true"
-         popover-trigger="'outsideClick'"
          ng-dblclick="$event.stopPropagation();">
         <div class="avatar avatar--size20 mrg__right7">
             <avatar-name name="data.first_name" email="data.email"></avatar-name>
