@@ -31,25 +31,24 @@
     <!-- Хедер для страници поиска-->
     <div class="header__search is-active" ng-if="vm.isSearch && vm.$state.current.name === 'mail.inbox'">
         <div class="header__container">
-            <div class="header__left">
-                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"
-                        type="button"
-                        ng-click="vm.isSearch = false; vm.clearSearch();"></button>
-            </div>
+
             <div class="header__right width--inh">
                 <form class="search-block widtn-inh search-block" ng-submit="vm.search()">
+                    <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon padding mrg__right"
+                            type="submit"></button>
+
                     <input class="input input--no-border input--no-focus input--size_l width--all"
                            type="text"
                            placeholder="Поиск писем"
                            ng-model="vm.searchForm.model.search">
-                    <button class="search-block__icon-close icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s mrg__right"
-                            type="button"
-                            ng-click="vm.clearSearch()"></button>
-                    <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right"
-                            type="submit"></button>
                 </form>
             </div>
-            <!--<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">-->
+
+            <div class="header__left">
+                <button class="icon-cancel btn btn--not-style btn--size_xl btn--main-mobile-color   padding"
+                        type="button"
+                        ng-click="vm.isSearch = false; vm.clearSearch();"></button>
+            </div>
         </div>
     </div>
 
@@ -105,3 +104,31 @@
     </div>
 
 </div>
+
+<!-- Хедер для страници поиска-->
+<!--
+<div class="header__search is-active" ng-if="vm.isSearch && vm.$state.current.name === 'mail.inbox'">
+    <div class="header__container">
+        <div class="header__left">
+            <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"
+                    type="button"
+                    ng-click="vm.isSearch = false; vm.clearSearch();"></button>
+        </div>
+        <div class="header__right width--inh">
+            <form class="search-block widtn-inh search-block" ng-submit="vm.search()">
+                <input class="input input--no-border input--no-focus input--size_l width--all"
+                       type="text"
+                       placeholder="Поиск писем"
+                       ng-model="vm.searchForm.model.search">
+                <button class="search-block__icon-close icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s mrg__right"
+                        type="button"
+                        ng-click="vm.clearSearch()"></button>
+                <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right"
+                        type="submit"></button>
+            </form>
+        </div>
+        <!--<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">-->
+<!--
+    </div>
+</div>
+-->

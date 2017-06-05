@@ -8,7 +8,6 @@
   min-height: 48px;
   height: 48px;
 
-
   background-color: $white-color;
   z-index: 2;
 
@@ -19,12 +18,15 @@
 
     z-index: 2;
   }
+
   &__search{
     display: none;
     visibility: hidden;
-    box-shadow: none!important;
-    background-color:$white-color;
+    //box-shadow: none!important;
+    background-color: #f6f5f3;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2)!important;
   }
+
   &__massege-replay{
     display: none;
     visibility: hidden;

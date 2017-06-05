@@ -47,18 +47,22 @@
   &__message{
 
     position: relative;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     display: block;
     //height: auto;
     line-height: 20px;
-    min-height: 205px;
+    min-height: 100%;
     min-width: 100%;
     color: #000;
     white-space: normal;
     outline: none;
     background-color: $white-color;
     transform: translateZ(0);
+    &:before, &:after{
+      display: none!important;
+      color: $white-color;
+    }
   }
   &__btn-attach{
     position: absolute;
@@ -71,7 +75,7 @@
 
   &__attachments-upload{
     white-space: nowrap;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     margin: 10px 32px;
     -webkit-overflow-scrolling: touch;
