@@ -1000,14 +1000,19 @@
   opacity: .4;
 }
 .menu-main-layout__user-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column wrap;
-  min-height: 180px;
-  padding: 10px;
+  overflow: hidden;
+  min-height: 160px;
+}
+.menu-main-layout__user-info-container {
+  height: 180px;
+  padding-top: 20px;
   overflow-y: hidden;
   overflow-x: auto;
+}
+.menu-main-layout__user-info-container::-webkit-scrollbar {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 .menu-main-layout__users-list {
   max-height: 180px;
@@ -1023,8 +1028,6 @@
   position: relative;
   top: 14px;
   margin: 0 10px;
-  width: 60px;
-  height: 60px;
 }
 .menu-main-layout__user-item--active {
   top: auto;

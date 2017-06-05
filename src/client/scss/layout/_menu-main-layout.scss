@@ -61,17 +61,29 @@
   }
 
   &__user-info{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column wrap;
+    //display: -webkit-inline-box;
+    //justify-content: center;
+    //align-items: center;
+    //flex-flow: column wrap;
 
-    min-height: 180px;
+    overflow: hidden;
+    min-height: 160px;
 
-    padding: 10px;
+    //padding: 10px;
+  }
+  &__user-info-container{
+    height: 180px;
+
+    padding-top: 20px;
 
     overflow-y: hidden;
     overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
 
   }
 
@@ -101,8 +113,8 @@
 
     margin: 0 10px;
 
-    width: 60px;
-    height: 60px;
+    //width: 60px;
+    //height: 60px;
 
     &--active {
       top: auto;
