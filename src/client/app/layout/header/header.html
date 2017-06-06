@@ -95,10 +95,15 @@
     </div>
     
     <!-- Уведомления и статусы-->
-    <div class="pop-up-notification" ng-class="{'is-show': vm.notify.isOpen}">
-        <div class="pop-up-notification__container font--center">
-            <div class="pop-up-notification__notific"
-                 ng-bind-html="vm.notify.message"></div>
+
+    <div class="pop-up-notification pop-up-notification--error-message pop-up-notification--vg-style" ng-class="{'is-show': vm.notify.isOpen}" >
+        <div class="pop-up-notification__container">
+            <span class="pop-up-notification__validate-icon"></span>
+            <span class="pop-up-notification__notific" ng-bind-html="vm.notify.message">
+                Сообщение было успешно отправленно.
+                <!--<a class="pop-up-notification__link"> Смотреть почту</a>-->
+            </span>
+            <button class="pop-up-notification__close btn--not-style icon-remove-thick btn--main-mobile-color" type="button"></button>
         </div>
         <hr class="hr hr--header hr--size-h1">
     </div>
