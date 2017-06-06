@@ -57,7 +57,7 @@
         }
 
         function getFormatted(data) {
-            data.photo = CONFIG.MediaUrl + data.photo;
+            // data.photo = CONFIG.MediaUrl + data.photo;
 
             if (data.birthday) {
                 var date = moment(data.birthday);
