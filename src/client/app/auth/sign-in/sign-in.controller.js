@@ -27,15 +27,23 @@
         activate();
 
         function activate() {
-            if ($state.params.token) {
-                $auth.setAuthHeaders({
-                    "Authorization": "Bearer " + $state.params.token
-                });
+            vm.$state = $state;
 
-                $auth.validateUser().then(function() {
-                    $state.go('mail.inbox', {mbox: 'INBOX'});
-                });
+            if ($state.params.token) {
+                signWidthToken();
             }
+        }
+
+        function signWidthToken() {
+            vm.isTokenAuthLoading = true;
+
+            $auth.setAuthHeaders({
+                "Authorization": "Bearer " + $state.params.token
+            });
+
+            $auth.validateUser().then(function() {
+                $state.go('mail.inbox', {mbox: 'INBOX'});
+            });
         }
 
         function login() {

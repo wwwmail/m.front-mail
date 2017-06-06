@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mailBox', 'tag', 'CONFIG'];
+    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mailBox', 'tag', 'profile', 'CONFIG'];
 
     /* @ngInject */
-    function MenuMainController($scope, $rootScope, $uibModal, $auth, mailBox, tag, CONFIG) {
+    function MenuMainController($scope, $rootScope, $uibModal, $auth, mailBox, tag, profile, CONFIG) {
         var vm = this;
 
         vm.standartFolders = [
@@ -43,6 +43,10 @@
         vm.tags = {
             items: []
         };
+
+        vm.user = $auth.user;
+
+        vm.profiles = [];
 
         $rootScope.$on('mail:sync', function () {
             getMailBox();
@@ -80,39 +84,21 @@
             getTag();
         });
 
-        // $rootScope.$on('mail:sync', function () {
-        //     getMailBox();
-        // });
-        //
-        // $rootScope.$on('folders:sync', function () {
-        //     getMailBox();
-        // });
-        //
-        // $scope.$on('mailBox:update:success', function () {
-        //     getMailBox();
-        // });
-        //
-        // $scope.$on('mailBox:create:success', function () {
-        //     getMailBox();
-        // });
-        //
-        // $scope.$on('mailBox:destroy:success', function () {
-        //     getMailBox();
-        // });
-
         vm.openFolderCreatePopup = openFolderCreatePopup;
         vm.closeMenu = closeMenu;
+        vm.setAuthProfile = setAuthProfile;
 
         activate();
 
         function activate() {
             getMailBox();
             getTag();
+            getProfiles();
 
-            vm.user = $auth.user;
+            // vm.user = $auth.user;
 
-            vm.user.profile.photo = CONFIG.MediaUrl + vm.user.profile.photo;
-            console.log('vm.user', vm.user);
+            // vm.user.profile.photo = CONFIG.MediaUrl + vm.user.profile.photo;
+            // console.log('vm.user', vm.user);
         }
 
         function getMailBox() {
@@ -191,6 +177,17 @@
 
         function closeMenu() {
             $rootScope.isOpenMenu = false;
+        }
+
+        function getProfiles() {
+            vm.profiles = profile.getStorageProfiles();
+        }
+
+        function setAuthProfile(profile) {
+            $auth.setAuthHeaders({
+                "Authorization": profile.access_token
+            });
+            location.reload();
         }
     }
 })();
