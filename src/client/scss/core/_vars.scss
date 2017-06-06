@@ -8,6 +8,7 @@ $textWhile: #ffffff;
 $light-red: #e76a50;
 $red: #d23100;
 $blue: #386ac0;
+$main-logo-orange: #fb981f;
 
 
 $main-border-color: #cccccc;
@@ -91,6 +92,8 @@ $checkbox-auth-color: #808080;
 
 $link-color: #2052ea;
 
+$link-color-search:#1f73c3;
+
 $hr-auth-color: #d6d6d6;
 $hr-main-color: #e5e5e5;
 $hr-popup-color: #eeeeee;
@@ -135,6 +138,18 @@ $message-date-color: #7d7d7d;
 $messafe-from-whom-color: #333333;
 $massage-content-bg-color: #fff;
 
+$radio-btn-text-label-color: #bcbcbc;
+$radio-btn-tag-color: #f8f8f8;
+$radio-btn-tag-border-color: #b3b0a7;
+$radio-btn-border-color: #bfbaac;
+
+
+$radibutton-border-color: #c0c2c4;
+$radiobutton-border-cheked-color: #c1b275;
+
+$main-switch-border-cheked-color: #ccbd80;
+
+
 //border
 $avatar-border-color: $main-border-color;
 $quick-reply-border-color: $main-border-color;
@@ -153,9 +168,14 @@ $popup-shadow: 0 0 12px rgba($black,.25);
 $input-line-shadow: 0px 1px 0px 0px rgba($yellow-yandex,1);
 $select-shadow: 0px 16px 26px -7px rgba(0,0,0,0.32);
 
+$tags-field-border-color: #8e8e8e;
+
 
 /* Gradient */
 
+$radio-btn-border-gradient: linear-gradient(to bottom, #bfbaac 0%,#e5e1d0 99%);
+
+$radio-btn-gradient: linear-gradient(to bottom, #099502 0%, #d0ffd4 99%);
 
 $btn-gradient: linear-gradient(to bottom, #fefefe 0%,#efefef 100%);
 

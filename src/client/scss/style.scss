@@ -41,6 +41,8 @@
 @import "ui/select-input-line";
 @import "ui/checkbox-y/style.scss";
 @import "ui/tags-input";
+@import "ui/radiobutton";
+@import "ui/select-list";
 @import "components/search-block";
 @import "components/validation";
 @import 'components/avatar';
@@ -91,6 +93,7 @@
 @import "components/pop-up-notification";
 @import "components/message-reply";
 @import "components/inbox-plash";
+@import "components/search-filters";
 
 body {
   width: 100%;
