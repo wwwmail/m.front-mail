@@ -28,7 +28,8 @@
           transition: transform .4s;
         }
         .menu-main--additional{
-          background: rgba($yellow-lignt, .05);
+          //background: rgba($yellow-lignt, .05);
+          background-color: $menu-link-bg-active;
           transition: all 1s;
         }
       }
@@ -45,7 +46,7 @@
     width: 100%;
 
     font: 300 18px/1 $mainFont;
-    color: $white-color;
+    color: $menu-text-color;
 
     //&:hover {
     //  background: rgba($yellow-select-main-menu-color, .1);
@@ -61,7 +62,7 @@
     width: 100%;
 
     font: 300 18px/1 $mainFont;
-    color: $white-color;
+    color: $menu-text-color;
 
   }
 
@@ -71,10 +72,10 @@
 
     width: 100%;
 
-    font: 400 18px/1 $mainFont;
-    color: $white-color;
+    font: 400 14px/1 $mainFont;
+    color: $menu-text-color;
 
-    padding: 14px 20px 14px 13px;
+    padding: 8px 20px 8px 13px;
 
     cursor: pointer;
     text-overflow: ellipsis;
@@ -82,11 +83,11 @@
     overflow: hidden;
 
     &:hover {
-      color: $white-color;
+      color: $menu-text-color;
     }
 
     &:hover, &:active, &:focus {
-      color: $yellow-select-main-menu-color!important;
+     color:  $textBlack;//$yellow-select-main-menu-color!important;
     }
 
     &--gray {
@@ -94,7 +95,7 @@
     }
 
     &--active {
-      color: $yellow-select-main-menu-color;
+      color:  $textBlack; //$yellow-select-main-menu-color!important;
     }
 
     &--open {
@@ -112,7 +113,7 @@
   &__count{
     margin: auto;
     text-align: center;
-    color: $white-color;
+    color: $menu-text-color;
     font-size: 13px;
     opacity: 0.6;
     //margin: auto 12px auto auto;
@@ -120,7 +121,7 @@
 
   &__additional-option{
     cursor: pointer;
-    padding: 10px 0 10px 7px;
+    padding: 8px 0 8px 7px;
     margin-right: 7px;
     font-size: 24px;
     text-align: center;
