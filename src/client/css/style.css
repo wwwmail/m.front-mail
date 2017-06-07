@@ -799,7 +799,6 @@
 .header__search {
   display: none;
   visibility: hidden;
-  background-color: #f6f5f3;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2) !important;
 }
 .header__massege-replay {
