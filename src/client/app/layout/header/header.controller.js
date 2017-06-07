@@ -39,6 +39,11 @@
             }, 3000);
         });
 
+        $scope.$on('mail:isSend', function (e, data) {
+            console.log('mail:isSend', data);
+            vm.isSend = data.isSend;
+        });
+
         $scope.$watch('vm.searchForm.model.search', function (data, oldData) {
             if (data === '') {
                 clearSearch();

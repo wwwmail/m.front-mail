@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mailBox', 'tag', 'profile', 'CONFIG'];
+    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
 
     /* @ngInject */
-    function MenuMainController($scope, $rootScope, $uibModal, $auth, mailBox, tag, profile, CONFIG) {
+    function MenuMainController($scope, $rootScope, $uibModal, $auth, mail, mailBox, tag, profile, CONFIG) {
         var vm = this;
 
         vm.standartFolders = [
@@ -87,6 +87,7 @@
         vm.openFolderCreatePopup = openFolderCreatePopup;
         vm.closeMenu = closeMenu;
         vm.setAuthProfile = setAuthProfile;
+        vm.clearFolder = clearFolder;
 
         activate();
 
@@ -188,6 +189,16 @@
                 "Authorization": profile.access_token
             });
             location.reload();
+        }
+
+        function clearFolder(e, folder) {
+            e.stopPropagation();
+            mail.deleteAll({}, {
+                mbox: folder.name,
+                connection_id: vm.user.profile.default_connection_id
+            }).then(function () {
+                $scope.$emit('mail:sync');
+            });
         }
     }
 })();

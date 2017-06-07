@@ -36,7 +36,6 @@
 
                     <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
                     <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
-
                 </div>
 
                 <div class="menu-main-layout__user-item menu-main-layout__user-item--add-user ">
@@ -62,7 +61,12 @@
                         <span class="menu-main__title">{{ folder.caption }}</span>
                     </a>
                     <div class="menu-main__additional-option">
-                        <button class="menu-main__clear-brush menu-main__clear-brush--active icon-brush btn--not-style font--size12"></button>
+                        <button class="menu-main__clear-brush icon-brush btn--not-style font--size12"
+                                type="button"
+                                ng-class="{'menu-main__link--gray': !folder.messagesCount,
+                                    'menu-main__clear-brush--active': (folder.name === 'Junk' || folder.name === 'Trash') && folder.messagesCount
+                                }"
+                                ng-click="vm.clearFolder($event, folder);"></button>
                         <span class="menu-main__count"
                               ng-if="folder.messagesCount">{{ folder.messagesCount || '' }}</span>
                         <button class="menu-main__show-additional icon-arrow-down btn--not-style"

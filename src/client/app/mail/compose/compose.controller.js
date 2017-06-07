@@ -45,6 +45,14 @@
             send($scope.form);
         });
 
+        $scope.$watch('vm.sendForm.model.body', function (data, oldData) {
+            if (data) {
+                $rootScope.$broadcast('mail:isSend', {isSend: true});
+            } else {
+                $rootScope.$broadcast('mail:isSend', {isSend: false});
+            }
+        }, true);
+
         activate();
 
         function activate() {
