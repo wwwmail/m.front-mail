@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
 
-  color: $white-color;
+  color: $menu-text-color;
 
   z-index: 5;
 
@@ -44,7 +44,8 @@
     align-items: center;
 
     font: 400 16px/1 $mainFont;
-    color: $yellow-yandex;
+    //color: $yellow-yandex;
+    color: $textBlack;
   }
 
   &__footer{
