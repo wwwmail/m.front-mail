@@ -2416,7 +2416,7 @@
 .radio-button__inner:after {
   content: "";
   padding-right: 10px;
-  background-color: #eeeeee;
+  background-color: #d9d9d9;
   color: #FFFFFF;
   text-align: right;
 }
@@ -5123,52 +5123,76 @@
   content: "\e93b";
 }
 
-.icon-archive2:before {
+.icon-archive-desk:before {
   content: "\e93c";
 }
 
-.icon-bin-solid:before {
+.icon-bin-solid-desk:before {
   content: "\e93d";
 }
 
-.icon-folder2:before {
+.icon-folder-desk:before {
   content: "\e93e";
 }
 
-.icon-folder-star:before {
+.icon-folder-star-desk:before {
   content: "\e93f";
 }
 
-.icon-forward2:before {
+.icon-forward-desk:before {
   content: "\e940";
 }
 
-.icon-full-screen2:before {
+.icon-full-screen-desk:before {
   content: "\e941";
 }
 
-.icon-pin2:before {
+.icon-pin-desk:before {
   content: "\e942";
 }
 
-.icon-read:before {
+.icon-read-desk:before {
   content: "\e943";
 }
 
-.icon-redirect:before {
+.icon-redirect-desk:before {
   content: "\e944";
 }
 
-.icon-reply2:before {
+.icon-reply-desk:before {
   content: "\e945";
 }
 
-.icon-spam-solid:before {
+.icon-spam-solid-desk:before {
   content: "\e946";
 }
 
-.icon-tag2:before {
+.icon-tag-desk:before {
   content: "\e947";
+}
+
+.icon-write-desk:before {
+  content: "\e948";
+}
+
+.icon-unlink-desk:before {
+  content: "\e949";
+}
+
+.icon-undo-desk:before {
+  content: "\e94a";
+}
+
+.icon-settings-desk:before {
+  content: "\e94b";
+}
+
+.icon-phone-contact-desk:before {
+  content: "\e94c";
+}
+
+.icon-circle-desk:before {
+  content: "\e94d";
 }
 
 /* icons.data.svg.css ==================================*/

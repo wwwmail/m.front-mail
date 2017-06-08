@@ -14,7 +14,7 @@
         vm.standartFolders = [
             {
                 name: 'INBOX',
-                icon: 'icon-folder2'
+                icon: 'icon-folder-desk'
             },
             {
                 name: 'Drafts',
@@ -34,7 +34,7 @@
             },
             {
                 name: 'Archive',
-                icon: 'icon-archive2'
+                icon: 'icon-archive-desk'
             }
         ];
 

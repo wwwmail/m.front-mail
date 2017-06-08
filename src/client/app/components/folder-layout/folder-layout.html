@@ -9,7 +9,7 @@
             <span class="font--size12"
                   ng-click="vm.close()">Закрыть</span>
 
-            <!--<hr class="hr hr&#45;&#45;folders hr&#45;&#45;bottom">-->
+            <!--<hr class="hr hr&#45;&#45;folders hr&#45;&#45;bottom">ы-->
 
         </div>
 
@@ -30,7 +30,7 @@
                  ng-repeat="folder in vm.folders.items"
                  ng-click="vm.move(folder)"
                  ng-if="folder.isSub">
-                <span class="icon-folder folder-layout__icon"></span>
+                <span class="icon-folder-desk folder-layout__icon"></span>
                 <span class="folder-layout__title">{{ folder.caption }}</span>
             </div>
 
