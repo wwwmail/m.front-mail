@@ -34,7 +34,7 @@
             },
             {
                 name: 'Archive',
-                icon: 'icon-archive2'
+                icon: 'icon-archive-desk'
             }
         ];
 

@@ -33,7 +33,8 @@
     &:after {
       content: "";
       padding-right: 10px;
-      background-color: #eeeeee;
+      //background-color: #eeeeee;
+      background-color: $silver-avatar-bg-color;
       color: #FFFFFF;
       text-align: right;
     }
