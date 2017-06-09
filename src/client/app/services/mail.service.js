@@ -300,6 +300,12 @@
             return resource.deleteAll(params, data).$promise;
         }
 
+        function setPaginate(data) {
+            $rootScope.$broadcast('mail.paginate', {
+                paginate: data
+            });
+        }
+
         return {
             get: get,
             post: post,
@@ -319,7 +325,8 @@
             upload: upload,
             setFwdData: setFwdData,
             getFwdData: getFwdData,
-            deleteAll: deleteAll
+            deleteAll: deleteAll,
+            setPaginate: setPaginate
         }
     }
 

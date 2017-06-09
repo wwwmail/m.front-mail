@@ -12,11 +12,11 @@
 
         vm.userForm = {
             isLoading: false,
-            model: {},
+            model: {
+                phone: '420'
+            },
             validations: {
-                phone: {
-                    'required': 'Введите номер'
-                }
+                phone: {}
             }
         };
 
@@ -34,9 +34,7 @@
                 data.phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
             }
 
-            $auth.submitRegistration(data, {
-                config: 'evilUser'
-            })
+            $auth.submitRegistration(data)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
                     $state.go('mail.inbox');

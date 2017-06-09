@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('HeaderController', HeaderController);
 
-    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout'];
+    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'mail'];
 
     /* @ngInject */
-    function HeaderController($rootScope, $scope, $state, $timeout) {
+    function HeaderController($rootScope, $scope, $state, $timeout, mail) {
         var vm = this;
         vm.title = 'Header';
 
@@ -44,6 +44,11 @@
             vm.isSend = data.isSend;
         });
 
+        $scope.$on('mail.paginate', function (e, data) {
+            // console.log('paginate', data.paginate);
+            vm.paginate = data.paginate;
+        });
+
         $scope.$watch('vm.searchForm.model.search', function (data, oldData) {
             if (data === '') {
                 clearSearch();
@@ -56,6 +61,7 @@
 
         function activate() {
             vm.$state = $state;
+            vm.paginate = mail.paginate;
 
             console.log('vm.$state', vm.$state);
 

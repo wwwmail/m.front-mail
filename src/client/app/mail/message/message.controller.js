@@ -60,6 +60,8 @@
                 getTags();
 
                 mail.setAnswerData(vm.message.model);
+
+                getPaginateMessage(vm.message.model);
             });
         }
 
@@ -198,6 +200,20 @@
                 vm.messages = response.result.messages;
                 // console.log('response', response);
             });
+        }
+
+        function getPaginateMessage() {
+            mail.getById({
+                id: $state.params.id,
+                mbox: $state.params.mbox,
+                connection_id: $state.params.connection_id,
+                part: 'headnhtml',
+                neighbours: 1
+            }).then(function (response) {
+                vm.paginate = response.data;
+
+                mail.setPaginate(vm.paginate);
+            })
         }
     }
 })();

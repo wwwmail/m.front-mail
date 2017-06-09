@@ -4850,10 +4850,7 @@
   padding-bottom: 55px !important;
 }
 .inbox-message-list__spinner {
-  position: absolute;
-  left: calc(50% - (120px / 2));
-  bottom: 0;
-  padding: 60px;
+  padding: 20px;
   text-align: center;
 }
 

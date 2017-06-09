@@ -73,6 +73,7 @@
         }
 
         function open() {
+            console.log('vm.messages', vm.messages, $state);
             vm.isOpen = true;
         }
 

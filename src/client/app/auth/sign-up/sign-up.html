@@ -115,12 +115,14 @@
                         <!--для Отключения выделения блока подложкой просто добавляем юsms-bg  -->
                         <div class="form__field-item mrg__bottom25 mrg__top30 flex flex--row-wrap ">
                             <div class="field-style flex--inline">
-                                <input class="input input--size_l input--up-shadow width--inh mrg__right5"
+                                <input class="input input--size_l input--up-shadow width--inh"
                                        type="text"
                                        name="phone"
                                        ng-model="vm.userForm.model.phone"
-                                       placeholder="+420 xxx xxx xxx"
-                                       ui-mask="+420 999-999-999"
+                                       ui-mask-placeholder
+                                       ui-mask-placeholder-char="x"
+                                       ui-mask="+999 999-999-999"
+                                       ui-options="{allowInvalidValue: true, clearOnBlur: false}"
                                        required>
 
                                 <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button"
@@ -133,7 +135,6 @@
                                                    messages="vm.userForm.validations.phone"></validation-errors>
                                 <span class="notific notific--auth" ng-if="vm.codeResult">
                                     На номер +420 xxx xxx xxx был отправлен код проверки
-                                    <span class="color--red font--size18">Код: {{ vm.codeResult.code }}</span>
                                 </span>
 
                             </div>
@@ -193,8 +194,8 @@
 
                                 <!--наш чекбокс -->
                                 <label class="checkbox-y__label checkbox-y checkbox-y--chek-top" for="isChecked">
-                                    <input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked"
-                                           ng-model="isChecked">
+                                    <input class="checkbox-y__input" id="isChecked" type="checkbox" name="agree"
+                                           ng-model="vm.userForm.model.agree">
                                     <div class="checkbox-y__body">
                                             <span class="checkbox-y__icon icon-mark">
                                             </span>
@@ -204,6 +205,10 @@
                                             class="link link-aith" href="">Пользовательском соглашении</a>
                                         </span>
                                 </label>
+
+                                <validation-errors data="userForm.agree"
+                                                   server="vm.userForm.errors"
+                                                   messages="vm.userForm.validations.agree"></validation-errors>
 
                             </div>
                         </div>

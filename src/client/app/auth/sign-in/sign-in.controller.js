@@ -42,7 +42,13 @@
             });
 
             $auth.validateUser().then(function() {
-                $state.go('mail.inbox', {mbox: 'INBOX'});
+                if ($state.params.compose) {
+                    $state.go('mail.compose');
+                }
+
+                if (!$state.params.compose) {
+                    $state.go('mail.inbox', {mbox: 'INBOX'});
+                }
             });
         }
 
