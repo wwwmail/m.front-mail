@@ -5593,7 +5593,6 @@
 .pop-up-notification__notific {
   line-height: 22px;
   min-height: 22px;
-  word-wrap: break-word;
   font-family: "HelveticaNeueCyr", sans-serif, Helvetica;
   font-size: 18px;
   word-wrap: break-word;
