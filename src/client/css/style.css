@@ -64,11 +64,17 @@
 .mrg__left10 {
   margin-left: 10px !important;
 }
+.mrg__left14 {
+  margin-left: 14px !important;
+}
 .mrg__left50 {
   margin-left: 50px !important;
 }
 .mrg__right10 {
   margin-right: 10px !important;
+}
+.mrg__right14 {
+  margin-right: 14px !important;
 }
 .mrg__top5 {
   margin-top: 5px !important;
@@ -692,7 +698,7 @@
   display: flex;
   align-items: baseline;
   width: 100%;
-  font: 400 14px/1 "HelveticaNeueCyr", sans-serif;
+  font: 400 15px/1 "HelveticaNeueCyr", sans-serif;
   color: rgba(0, 0, 0, 0.5);
   padding: 8px 20px 8px 13px;
   cursor: pointer;
@@ -1040,7 +1046,7 @@
   display: inline-block;
   text-align: center;
   margin: auto;
-  width: auto;
+  width: 85%;
   height: auto;
 }
 .menu-main-layout__user-item--active .avatar {
@@ -1062,7 +1068,9 @@
   padding: 6px;
 }
 .menu-main-layout__add-btn {
-  position: relative;
+  position: absolute;
+  top: 15px;
+  right: 0;
   border: 1px solid rgba(0, 0, 0, 0.5);
   background-color: #f3f5f7;
   color: rgba(0, 0, 0, 0.5);
@@ -1827,8 +1835,14 @@
   height: 53px;
   font-size: 20px;
 }
-.btn--size_20 {
-  font-size: 20px;
+.btn--size_40 {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+}
+.btn--size_20x20 {
+  width: 20px;
+  height: 20px;
 }
 .btn--size_20x20 {
   width: 20px;
