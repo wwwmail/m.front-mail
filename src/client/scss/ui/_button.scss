@@ -245,7 +245,11 @@
   }
 
   &--mail-send{
-    color: #07c;
+    color: $white-color;
+    background-color: $main-logo-orange;
+    &:hover, &:active, &:focus{
+      color: $white-color;
+    }
   }
 
 }

@@ -412,8 +412,16 @@
 
 }
 .align-items{
-  &--cn{
-    align-items: center;
+  &--cn {
+    align-items: center!important;
+  }
+
+  &--st {
+    align-items: flex-start!important;
+  }
+
+  &--en{
+    align-items: flex-end!important;
   }
 }
 

@@ -14,37 +14,16 @@
   color: $textBlack;
   font-weight: 100;
 
-  //max-height: 58px;
-  min-height:  58px;
+  min-height: 58px;
 
-  //height: 42px;
-  &--fixed-height{
+  &--fixed-height {
     max-height: 58px;
     height: 58px;
   }
 
   &__input {
-    //position: relative;
-    //top: 0;
-    //padding-bottom: 6px;
-    //padding-left: 0;
-    //min-height: 25px;
-    //line-height: 22px;
-    //font-size: 14px;
-    //color: #222;
-    //white-space: pre-wrap;
-    //word-wrap: break-word;
-    //box-sizing: border-box;
-    //-webkit-tap-highlight-color: rgba(0,0,0,0);
-    //-webkit-tap-highlight-color: transparent;
-    //outline: none;
-    //border: 0;
-    //border-top: none!important;
-    //border-right: none!important;
-    //border-left: none!important;
-    //
     position: relative;
-    top: -5px;
+    //top: -5px;
 
     padding: 0 32px 5px;
 
@@ -73,13 +52,15 @@
 
   &__label {
     position: relative;
-    padding-top: 32px;
+    //padding-top: 32px;
 
     margin: 0;
     font-size: 12px;
-    color: rgba(0,0,0,.5);
-  }
+    color: rgba(0, 0, 0, .5);
 
+    display: flex;
+    align-items: flex-end;
+  }
 
   &__links {
     position: absolute;
@@ -92,7 +73,7 @@
     font-size: 15px;
   }
 
-  &__title{
+  &__title {
     position: absolute;
     z-index: 1;
     top: 30px;
@@ -107,20 +88,35 @@
     transition: transform .250s;
   }
 
-  &.is-active, &:hover, &:focus, &:active{
-    .input-line__title{
-      transform: translate3d(-8.322%, -147%, 0) scale(0.833333333333333333333333);
-      transition: transform .250s;
+  &.is-active, &:hover, &:focus, &:active {
+    .input-line__title {
+      //transform: translate3d(-8.322%, -147%, 0) scale(0.833333333333333333333333);
+      //transition: transform .250s;
     }
 
   }
 
-  &__btn-more{
+  &__btn-more {
     position: absolute;
     top: 26px;
     right: 11px;
     margin-right: 10px;
     cursor: pointer;
+
+    color: $main-logo-orange;
+
+    &:hover, &:active, &:focus{
+      color: $main-logo-orange!important;
+      opacity: .6;
+    }
+
+    &:before {
+      position: absolute;
+      top: 0px;
+      left: 2px;
+
+      content: "+";
+    }
   }
 
   &:focus {
@@ -148,8 +144,8 @@
     border: none;
   }
 
-  &--right-padding{
-    .select-input-line{
+  &--right-padding {
+    .select-input-line {
       padding: 0 65px 0 30px !important;
     }
   }
