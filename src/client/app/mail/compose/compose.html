@@ -5,8 +5,7 @@
                 <div class="compose__from" ng-class="{'is-show-features': vm.isShowFeatures}">
 
                     <div class="input-line align-items--en">
-                        <!--ng-model="vm.sendForm.model.from"-->
-                        <ui-select ng-model=""
+                        <ui-select ng-model="vm.sendForm.model.from_connection"
                                    class="select-input-line select-list select-list--size_l select-list--no-border select-list--not-border-of-sides width-inh "
                                    theme="select2"
                                    search-enabled="false">
@@ -19,7 +18,6 @@
                                 <div ng-bind="connection.email"></div>
                             </ui-select-choices>
                         </ui-select>
-
                     </div>
 
 
