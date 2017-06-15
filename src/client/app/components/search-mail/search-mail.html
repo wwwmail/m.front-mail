@@ -83,19 +83,15 @@
                        ng-change="vm.search(); vm.isOpenFilters = false"
                        value="important">
                 <div class="checkbox-big__body"></div>
-                <span class="checkbox-big__text " role="presentation">
+                <span class="checkbox-big__text" role="presentation">
                 С вложениями
             </span>
             </label>
         </div>
 
         <div class="search-filters__item">
-            <div class="radiobutton main-switch-3 radiobutton--size_sm">
-                <button class="search-filters__button-tab" type="button">2017:</button>
-                <button class="search-filters__button-tab search-filters__button-tab--is-choose" type="button">Июнь
-                </button>
-                <button class="search-filters__button-tab" type="button">Вся почта</button>
-            </div>
+            <date-sort from="vm.from"
+                       to="vm.to"></date-sort>
         </div>
     </div>
 </div>

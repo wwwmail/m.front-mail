@@ -97,9 +97,17 @@
         vm.search = search;
         vm.onSearchChange = onSearchChange;
 
-        $scope.$watch('vm.isOpenDate', function (date, oldData) {
-            if (!date) {
-                setDefaultDate();
+        $scope.$watch('vm.from', function (data, oldData) {
+            if (data) {
+                search();
+                vm.isOpenFilters = false;
+            }
+        });
+
+        $scope.$watch('vm.to', function (data, oldData) {
+            if (data) {
+                search();
+                vm.isOpenFilters = false;
             }
         });
 
@@ -108,11 +116,6 @@
         function activate() {
             getTags();
             getMailBox();
-        }
-
-        function setDefaultDate() {
-            vm.date.from = moment().startOf('month').toDate();
-            vm.date.to = moment().endOf('month').toDate();
         }
 
         function search() {
@@ -142,9 +145,9 @@
                 data.mbox = vm.folders.selected.name;
             }
 
-            if (vm.date.start && vm.date.end) {
-                data.search_start = moment(vm.date.from).unix();
-                data.search_end = moment(vm.date.to).unix();
+            if (vm.from && vm.to) {
+                data.search_start = vm.from;
+                data.search_end = vm.to;
             }
 
             console.log('params', data);
