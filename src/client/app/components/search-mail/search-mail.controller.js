@@ -12,6 +12,8 @@
 
         vm.isOpenDate = false;
 
+        vm.date = {};
+
         vm.tags = {
             selected: {
                 tag_name: 'Все метки',
@@ -22,8 +24,6 @@
                 id: undefined
             }]
         };
-
-        vm.date = {};
 
         vm.standartFolders = [
             {
@@ -94,9 +94,8 @@
             model: {}
         };
 
-        vm.title = "Search component";
-
         vm.search = search;
+        vm.onSearchChange = onSearchChange;
 
         $scope.$watch('vm.isOpenDate', function (date, oldData) {
             if (!date) {
@@ -117,7 +116,6 @@
         }
 
         function search() {
-
             var data = {};
 
             if (vm.folders.selected.name === 'ALL') {
@@ -148,6 +146,8 @@
                 data.search_start = moment(vm.date.from).unix();
                 data.search_end = moment(vm.date.to).unix();
             }
+
+            console.log('params', data);
 
             $rootScope.$broadcast('search:mail', {
                 search: data
@@ -201,6 +201,10 @@
             ]).reverse();
         }
 
-
+        function onSearchChange() {
+            if (!vm.searchForm.model.search) {
+                $rootScope.$broadcast('search:close', {});
+            }
+        }
     }
 })();

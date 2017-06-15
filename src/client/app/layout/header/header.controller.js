@@ -45,7 +45,6 @@
         });
 
         $scope.$on('mail.paginate', function (e, data) {
-            // console.log('paginate', data.paginate);
             vm.paginate = data.paginate;
         });
 
@@ -82,9 +81,6 @@
                     vm.currentFolder = folder;
                 }
             });
-
-            console.log('currentFolder', vm.folder.data.items, vm.$state.params.mbox);
-            console.log('currentFolder', vm.currentFolder);
         }
 
         function search() {
@@ -95,7 +91,7 @@
                 data.search_part = 'text';
             }
 
-            $rootScope.$broadcast('search:mail', {
+            $rootScope.$broadcast('search:mailQuery', {
                 search: data
             });
         }

@@ -3,35 +3,36 @@
         <div class="radiobutton main-switch radiobutton--size_sm width--all">
             <input class="main-switch__input"
                    type="radio"
-                   name="gender"
-                   value="1"
-                   ng-model="vm.profileForm.gender">
+                   name="folder"
+                   ng-change="vm.search()"
+                   ng-value="'ALL'"
+                   ng-model="vm.folders.selected.name">
             <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">Вся почта</span>
             <input class="main-switch__input"
                    type="radio"
-                   name="gender"
-                   value="2"
-                   ng-model="vm.profileForm.gender">
-            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">Женский</span>
+                   name="folder"
+                   ng-change="vm.search()"
+                   ng-value="'INBOX'"
+                   ng-model="vm.folders.selected.name">
+            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">Входящие</span>
         </div>
         <button class="search-result__button-filter btn btn--not-style btn--size_sm btn--main-mobile-color font--size18 padding--right"
-                ng-click="vm.isOpenFilters = !vm.isOpenFilters"
-                type="button">
+                type="button"
+                ng-click="vm.isOpenFilters = !vm.isOpenFilters">
             <span class="icon-equalize"></span>
         </button>
         <hr class="hr hr--header hr--size-h1">
     </div>
 
-    <div class="search-result__filters search-filters" ng-if="vm.isOpenFilters">
+    <div class="search-filters" ng-if="vm.isOpenFilters">
         <div class="search-filters__item">
             <ui-select ng-model="vm.searchParts.selected"
                        search-enabled="false"
                        class="select-list select-list--size_m select-list--not-border-of-sides width--inh"
                        theme="select2"
-                       on-select="vm.search()">
+                       on-select="vm.search(); vm.isOpenFilters = false">
                 <ui-select-match
-                        class="select-list__body select-list--size_m width--inh"
-                        placeholder="Искать по папкам">
+                        class="select-list__body select-list--size_m width--inh">
                     {{ $select.selected.name }}
                 </ui-select-match>
                 <ui-select-choices repeat="item in vm.searchParts.list track by $index">
@@ -45,10 +46,9 @@
                        class="select-list select-list--size_m select-list--not-border-of-sides width--inh"
                        search-enabled="false"
                        theme="select2"
-                       on-select="vm.search()">
+                       on-select="vm.search(); vm.isOpenFilters = false">
                 <ui-select-match
-                        class="select-list__body select-list--size_m width--inh"
-                        placeholder="Искать по меткам">
+                        class="select-list__body select-list--size_m width--inh">
                     {{ $select.selected.caption }}
                 </ui-select-match>
                 <ui-select-choices repeat="item in vm.folders.items track by $index">
@@ -62,13 +62,11 @@
                        search-enabled="false"
                        class="select-list select-list--size_m select-list--not-border-of-sides width--inh"
                        theme="select2"
-                       on-select="vm.search()">
+                       on-select="vm.search(); vm.isOpenFilters = false">
                 <ui-select-match
-                        class="select-list__body select-list--size_m width--inh"
-                        placeholder="Искать по основным категориям">
+                        class="select-list__body select-list--size_m width--inh">
                     {{ $select.selected.tag_name }}
                 </ui-select-match>
-
                 <ui-select-choices repeat="item in vm.tags.items track by $index">
                     {{ item.tag_name }}
                 </ui-select-choices>
@@ -82,7 +80,7 @@
                        type="checkbox"
                        name="isAttach"
                        ng-model="vm.searchForm.isAttach"
-                       ng-change="vm.search()"
+                       ng-change="vm.search(); vm.isOpenFilters = false"
                        value="important">
                 <div class="checkbox-big__body"></div>
                 <span class="checkbox-big__text " role="presentation">
@@ -93,37 +91,11 @@
 
         <div class="search-filters__item">
             <div class="radiobutton main-switch-3 radiobutton--size_sm">
-
-                <button class="search-filters__button-tab " type="button">2017:</button>
+                <button class="search-filters__button-tab" type="button">2017:</button>
                 <button class="search-filters__button-tab search-filters__button-tab--is-choose" type="button">Июнь
                 </button>
                 <button class="search-filters__button-tab" type="button">Вся почта</button>
             </div>
-        </div>
-
-        <!--<div ng-if="vm.isOpenDate">-->
-        <!--<div class="search-filters__item">-->
-        <!--<div class="">Указать точные даты</div>-->
-        <!--</div>-->
-
-        <!--</div>-->
-
-        <!--<div class="search-filters__item">-->
-        <!--<a class="search-filters__link"-->
-        <!--ng-if="!vm.isOpenDate"-->
-        <!--ng-click="vm.isOpenDate = true; $event.stopPropagation();">Указать точные даты</a>-->
-        <!--<a class="search-filters__link"-->
-        <!--ng-if="vm.isOpenDate"-->
-        <!--ng-click="vm.isOpenDate = false; $event.stopPropagation();">Письма по месяцам</a>-->
-        <!--</div>-->
-    </div>
-
-    <div class="search-result__content">
-        <span class="search-result__message-hint">В папке «Черновики» не нашлось писем по вашему запросу</span>
-        <span class="search-result__message-hint"></span>
-
-        <div class="search-result__message-hint">Попробуйте поискат
-            <a class="search-result__link">по всей почте</a>
         </div>
     </div>
 </div>

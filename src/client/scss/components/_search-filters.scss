@@ -2,16 +2,13 @@
   width: 100%;
   max-width: 414px;
 
-
+  margin: 0 auto;
   padding: 0 3px;
-  //margin: auto;
-  //z-index: 100;
-  background-color: #fff;
 
+  background-color: #fff;
 
   &__item {
     margin: 16px 0;
-
   }
 
   &__exact-date {
