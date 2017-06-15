@@ -1037,16 +1037,24 @@
   display: inline-block;
   text-align: center;
   vertical-align: top;
+  right: -15%;
   position: relative;
   top: 14px;
-  margin: 0 10px;
+  margin: 0;
+  padding-left: 10px;
+}
+.menu-main-layout__user-item:first-child {
+  padding-left: 0;
+  margin-left: -15%;
 }
 .menu-main-layout__user-item--active {
   top: auto;
+  right: auto;
   display: inline-block;
   text-align: center;
-  margin: auto;
-  width: 85%;
+  margin: auto !important;
+  padding-left: 0 !important;
+  width: 100%;
   height: auto;
 }
 .menu-main-layout__user-item--active .avatar {
@@ -1069,8 +1077,8 @@
 }
 .menu-main-layout__add-btn {
   position: absolute;
-  top: 15px;
-  right: 0;
+  top: calc(50% - 20px);
+  right: -60px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   background-color: #f3f5f7;
   color: rgba(0, 0, 0, 0.5);

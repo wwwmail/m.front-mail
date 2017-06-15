@@ -91,15 +91,15 @@
 
   &__users-list{
     max-height: 180px;
-    //display: inline-flex;
-    //justify-content: flex-end;
 
     display: block;
+    //justify-content: flex-end;
+
+    //display: block;block;
     text-align: center;
 
     white-space: nowrap;
     margin-right: 0;
-
   }
 
   &__user-item {
@@ -110,22 +110,31 @@
     display: inline-block;
     text-align: center;
     vertical-align: top;
+    right: -15%;
 
     position: relative;
     top: 14px;
 
-    margin: 0 10px;
+    margin: 0;
+    padding-left: 10px;
+
+    &:first-child{
+      padding-left: 0;
+      margin-left: -15%;
+    }
 
     &--active {
       top: auto;
+      right: auto;
 
       display: inline-block;
 
       text-align: center;
 
-      margin: auto;
+      margin: auto!important;
+      padding-left: 0!important;
 
-      width: 85%;
+      width: 100%;
       height: auto;
 
       .avatar {
@@ -159,8 +168,8 @@
 
   &__add-btn{
     position: absolute;
-    top: 15px;
-    right: 0;
+    top: calc(50% - 20px);
+    right: -60px;
 
     border: 1px solid $menu-text-color;
     background-color: $menu-main-color;
@@ -232,5 +241,4 @@
   &__button-tarif {
 
   }
-
 }
