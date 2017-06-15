@@ -10,6 +10,11 @@
     function ComposeController(mail, $interval, $state, $scope, $rootScope, $auth, contact, $uibModal, Upload) {
         var vm = this;
 
+        vm.connections = {
+            selected: {},
+            items: []
+        };
+
         vm.interval = {};
 
         vm.fwd = {
@@ -92,6 +97,7 @@
             }
 
             pasteSign();
+            getConnectionsList();
         }
 
         function send(form) {
@@ -351,6 +357,21 @@
                     value: data.email
                 }]
             }];
+        }
+
+        function getConnectionsList() {
+            vm.connections.selected = {
+                id: vm.user.profile.default_connection_id,
+                email: vm.user.profile.email
+            };
+
+            vm.connections.items.push({
+                id: vm.user.profile.default_connection_id,
+                email: vm.user.profile.email
+            });
+
+            vm.connections.items = vm.connections.items.concat(vm.user.profile.connections);
+            vm.sendForm.model.from_connection = vm.connections.selected.id;
         }
 
     }

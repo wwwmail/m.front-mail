@@ -12,7 +12,6 @@
     <div class="menu-main-layout__user-info">
         <div class="menu-main-layout__user-info-container">
             <div class="menu-main-layout__users-list ">
-
                 <div class="menu-main-layout__user-item"
                      ng-repeat="profile in vm.profiles"
                      ng-if="profile.profile.email !== vm.user.profile.email">
@@ -32,17 +31,13 @@
                                  media-url="vm.user.profile.photo"
                                  fallback-src="{{'/images/avatar-personal.svg'}}">
                         </div>
+                        <button class="menu-main-layout__add-btn  icon-cancel btn--circle btn--size_40 rotate--am90"
+                                type="button"
+                                ui-sref="signIn()">
+                        </button>
                     </div>
-
                     <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
                     <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
-                </div>
-
-                <div class="menu-main-layout__user-item menu-main-layout__user-item--add-user ">
-                    <button class="menu-main-layout__add-btn  icon-cancel btn--circle btn--size_53 rotate--am90"
-                            type="button"
-                            ui-sref="signIn()">
-                    </button>
                 </div>
             </div>
         </div>
@@ -182,3 +177,4 @@
 
     <div class="scrollables--y"></div>
 </div>
+

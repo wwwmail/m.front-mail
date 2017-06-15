@@ -4,8 +4,8 @@
   height: 100%;
   box-sizing: border-box;
 
-
   background: $menu-main-color;
+
   z-index: 51;
 
   &__header {
@@ -72,6 +72,7 @@
     //padding: 10px;
     margin: 5px 0 ;
   }
+
   &__user-info-container{
     height: 180px;
 
@@ -90,16 +91,17 @@
 
   &__users-list{
     max-height: 180px;
-    //display: inline-flex;
-    //justify-content: flex-end;
 
     display: block;
+    //justify-content: flex-end;
+
+    //display: block;block;
     text-align: center;
 
     white-space: nowrap;
     margin-right: 0;
-
   }
+
   &__user-item {
 
     //display: flex;
@@ -108,24 +110,33 @@
     display: inline-block;
     text-align: center;
     vertical-align: top;
+    right: -15%;
 
     position: relative;
     top: 14px;
 
-    margin: 0 10px;
+    margin: 0;
+    padding-left: 10px;
 
-    //width: 60px;
-    //height: 60px;
+    &:first-child{
+      padding-left: 0;
+      margin-left: -15%;
+    }
 
     &--active {
       top: auto;
+      right: auto;
 
       display: inline-block;
-      text-align: center;
-      margin: auto;
 
-      width: auto;
+      text-align: center;
+
+      margin: auto!important;
+      padding-left: 0!important;
+
+      width: 100%;
       height: auto;
+
       .avatar {
         width: 68px !important;
         height: 68px !important;
@@ -156,10 +167,9 @@
   }
 
   &__add-btn{
-    position: relative;
-    //right: -80px;
-
-    //display: none;
+    position: absolute;
+    top: calc(50% - 20px);
+    right: -60px;
 
     border: 1px solid $menu-text-color;
     background-color: $menu-main-color;
@@ -185,13 +195,13 @@
   &__avatar{
     position: relative;
 
-
     display: flex;
     align-items: center;
     justify-content: center;
 
     background-color: transparent;
     border: 1px solid transparent;
+
     margin: auto;
 
   }
@@ -231,5 +241,4 @@
   &__button-tarif {
 
   }
-
 }

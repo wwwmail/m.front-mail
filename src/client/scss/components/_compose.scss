@@ -20,7 +20,11 @@
 
       }
       .input-line__btn-more{
-          transform: rotate(180deg)!important;
+        opacity: .6;
+
+        &:before{
+          content: "-";
+        }
       }
     }
 
@@ -60,8 +64,8 @@
     background-color: $white-color;
     transform: translateZ(0);
     &:before, &:after{
-      display: none!important;
-      color: $white-color;
+      //display: none!important;
+      //color: $white-color;
     }
   }
   &__btn-attach{
