@@ -1,33 +1,129 @@
+<div>
+    <div class="search-result__header">
+        <div class="radiobutton main-switch radiobutton--size_sm width--all">
+            <input class="main-switch__input"
+                   type="radio"
+                   name="gender"
+                   value="1"
+                   ng-model="vm.profileForm.gender">
+            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">Вся почта</span>
+            <input class="main-switch__input"
+                   type="radio"
+                   name="gender"
+                   value="2"
+                   ng-model="vm.profileForm.gender">
+            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">Женский</span>
+        </div>
+        <button class="search-result__button-filter btn btn--not-style btn--size_sm btn--main-mobile-color font--size18 padding--right"
+                ng-click="vm.isOpenFilters = !vm.isOpenFilters"
+                type="button">
+            <span class="icon-equalize"></span>
+        </button>
+        <hr class="hr hr--header hr--size-h1">
+    </div>
 
+    <div class="search-result__filters search-filters" ng-if="vm.isOpenFilters">
+        <div class="search-filters__item">
+            <ui-select ng-model="vm.searchParts.selected"
+                       search-enabled="false"
+                       class="select-list select-list--size_m select-list--not-border-of-sides width--inh"
+                       theme="select2"
+                       on-select="vm.search()">
+                <ui-select-match
+                        class="select-list__body select-list--size_m width--inh"
+                        placeholder="Искать по папкам">
+                    {{ $select.selected.name }}
+                </ui-select-match>
+                <ui-select-choices repeat="item in vm.searchParts.list track by $index">
+                    <div ng-bind-html="item.name"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
 
-<!--<div class="search-mail" search-mail-open>-->
-<!--<div class="search-mail__close" ng-if="isOpen">-->
+        <div class="search-filters__item">
+            <ui-select ng-model="vm.folders.selected"
+                       class="select-list select-list--size_m select-list--not-border-of-sides width--inh"
+                       search-enabled="false"
+                       theme="select2"
+                       on-select="vm.search()">
+                <ui-select-match
+                        class="select-list__body select-list--size_m width--inh"
+                        placeholder="Искать по меткам">
+                    {{ $select.selected.caption }}
+                </ui-select-match>
+                <ui-select-choices repeat="item in vm.folders.items track by $index">
+                    <div ng-class="{'mrg__left10': item.isSub}" ng-bind-html="item.caption"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
 
-<!--<button class="btn-y btn-y&#45;&#45;white btn-y&#45;&#45;close" ng-click="close()">-->
-<!--<img class="btn-y__icon" src="/images/cancel.svg" alt="close search">-->
-<!--</button>-->
+        <div class="search-filters__item">
+            <ui-select ng-model="vm.tags.selected"
+                       search-enabled="false"
+                       class="select-list select-list--size_m select-list--not-border-of-sides width--inh"
+                       theme="select2"
+                       on-select="vm.search()">
+                <ui-select-match
+                        class="select-list__body select-list--size_m width--inh"
+                        placeholder="Искать по основным категориям">
+                    {{ $select.selected.tag_name }}
+                </ui-select-match>
 
+                <ui-select-choices repeat="item in vm.tags.items track by $index">
+                    {{ item.tag_name }}
+                </ui-select-choices>
+            </ui-select>
+        </div>
 
-<!--&lt;!&ndash;<button class="button button_theme_islands button_size_m button__control i-bem"&ndash;&gt;-->
-<!--&lt;!&ndash;data-bem='{"button":{}}' role="button" type="button"&ndash;&gt;-->
-<!--&lt;!&ndash;ng-click="close()"><span class="button__text">&ndash;&gt;-->
-<!--&lt;!&ndash;<img src="/images/cancel.svg" alt="close search">&ndash;&gt;-->
-<!--&lt;!&ndash;</span>&ndash;&gt;-->
-<!--&lt;!&ndash;</button>&ndash;&gt;-->
-<!--</div>-->
+        <div class="search-filters__item">
+            <label class="checkbox-big__label checkbox-big checkbox-big--size15" for="isAttach">
+                <input class="checkbox-big__input"
+                       id="isAttach"
+                       type="checkbox"
+                       name="isAttach"
+                       ng-model="vm.searchForm.isAttach"
+                       ng-change="vm.search()"
+                       value="important">
+                <div class="checkbox-big__body"></div>
+                <span class="checkbox-big__text " role="presentation">
+                С вложениями
+            </span>
+            </label>
+        </div>
 
-<!--<div class="search-mail__group">-->
-<!--<form ng-submit="vm.search()" novalidate>-->
-<!--<div class="control-group" role="group">-->
-<!--<span class="input input&#45;&#45;no-border input_theme_islands input_size_m input_type_search i-bem"-->
-<!--data-bem='{"input":{}}'><span class="input__box search-mail__input">-->
-<!--<input class="input__control" placeholder="Введите запрос" type="search"-->
-<!--ng-model="model" ng-click="open()"/></span></span>-->
-<!--<button class="button button_theme_islands button_size_m button__control i-bem"-->
-<!--data-bem='{"button":{}}' role="button" type="submit"-->
-<!--ng-click="open()"><span class="button__text">Поиск</span>-->
-<!--</button>-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</div>-->
+        <div class="search-filters__item">
+            <div class="radiobutton main-switch-3 radiobutton--size_sm">
+
+                <button class="search-filters__button-tab " type="button">2017:</button>
+                <button class="search-filters__button-tab search-filters__button-tab--is-choose" type="button">Июнь
+                </button>
+                <button class="search-filters__button-tab" type="button">Вся почта</button>
+            </div>
+        </div>
+
+        <!--<div ng-if="vm.isOpenDate">-->
+        <!--<div class="search-filters__item">-->
+        <!--<div class="">Указать точные даты</div>-->
+        <!--</div>-->
+
+        <!--</div>-->
+
+        <!--<div class="search-filters__item">-->
+        <!--<a class="search-filters__link"-->
+        <!--ng-if="!vm.isOpenDate"-->
+        <!--ng-click="vm.isOpenDate = true; $event.stopPropagation();">Указать точные даты</a>-->
+        <!--<a class="search-filters__link"-->
+        <!--ng-if="vm.isOpenDate"-->
+        <!--ng-click="vm.isOpenDate = false; $event.stopPropagation();">Письма по месяцам</a>-->
+        <!--</div>-->
+    </div>
+
+    <div class="search-result__content">
+        <span class="search-result__message-hint">В папке «Черновики» не нашлось писем по вашему запросу</span>
+        <span class="search-result__message-hint"></span>
+
+        <div class="search-result__message-hint">Попробуйте поискат
+            <a class="search-result__link">по всей почте</a>
+        </div>
+    </div>
+</div>
