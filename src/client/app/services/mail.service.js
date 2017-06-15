@@ -83,20 +83,23 @@
         }
 
         function upload(params, data, files) {
-            var foramttedData = {
-                to: data.to,
-                body: data.body,
-                cmd: 'add-attach'
+            var formattedData = {
+                id: params.id,
+                mbox: params.mbox
             };
 
-            _.forEach(files, function (file, i) {
+            _.forEach(files, function (file, i){
                 var name = 'file' + i;
-                foramttedData[name] = file;
+                formattedData[name] = file;
             });
+
+            if (params.id) {
+                formattedData.id = params.id;
+            }
 
             return Upload.upload({
                 url: CONFIG.APIHost + '/mails/add-attach',
-                data: foramttedData
+                data: formattedData
             });
         }
 

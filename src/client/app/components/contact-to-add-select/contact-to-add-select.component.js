@@ -6,7 +6,8 @@
         .component('contactToAddSelect', {
             bindings: {
                 addresses: '=',
-                disabled: '@?'
+                disabled: '@?',
+                placeholder: '@?'
             },
             templateUrl: 'app/components/contact-to-add-select/contact-to-add-select.html',
             controller: 'ContactToAddSelectController',

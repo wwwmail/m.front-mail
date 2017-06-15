@@ -1,14 +1,14 @@
-
 <tags-input class="tags-input"
             ng-model="vm.addresses"
             type="email"
+            name="{{ vm.name }}"
             template="tag-template"
             template-scope="vm"
             display-property="first_name"
             key-property="id"
             replace-spaces-with-dashes="true"
             allow-dblclick-to-edit="true"
-            placeholder="csdcd">
+            placeholder="{{ vm.placeholder }}">
 
     <auto-complete source="vm.findContacts($query)"
                    min-length="0"
@@ -53,16 +53,3 @@
         </div>
     </div>
 </script>
-
-<!--<script type="text/ng-template" id="autocomplete-template-footer">-->
-    <!--<div class="tag-contact tag-contact&#45;&#45;more" ng-click="vm.openContactToAddPopup()">-->
-        <!--<div class="avatar avatar&#45;&#45;size28 mrg__right16 avatar&#45;&#45;bg-color">-->
-            <!--<avatar-name name="'Contacts'" email="'Contacts'"></avatar-name>-->
-        <!--</div>-->
-        <!--<div class="tag-contact__name">-->
-            <!--<a class="link">-->
-                <!--Показать все контакты-->
-            <!--</a>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</script>-->
