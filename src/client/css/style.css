@@ -3290,10 +3290,15 @@
 .select-list:hover {
   box-shadow: none;
 }
+.select-list__body:focus, .select-list__body:active, .select-list__body:hover {
+  box-shadow: none !important;
+  outline: none !important;
+  border: transparent !important;
+}
 .select-list__body.select2-choice {
   display: flex;
   align-items: center;
-  padding: 0 0 0 8px;
+  padding: 0;
   overflow: hidden;
   position: relative;
   height: 32px !important;
@@ -3327,12 +3332,11 @@
 }
 .select-list .ui-select-dropdown.select2-drop-active {
   border-color: rgba(195, 196, 201, 0.6) !important;
-  border-top-width: 1px !important;
   border-top-style: solid !important;
-  border-top-color: rgba(195, 196, 201, 0.6) !important;
-  margin-top: 4px;
+  border-top: 2px solid #fc0 !important;
+  margin: 0 -30px 0 !important;
   border-radius: 2px !important;
-  box-shadow: 0px 16px 26px -7px rgba(0, 0, 0, 0.32) !important;
+  box-shadow: none !important;
 }
 .select-list .ui-select-dropdown.select2-drop-active:focus, .select-list .ui-select-dropdown.select2-drop-active:active {
   outline: none;
@@ -3348,7 +3352,7 @@
   margin: 0 !important;
 }
 .select-list .select2-results .select2-result-label {
-  padding: 6px 20px 6px;
+  padding: 6px 30px 6px;
 }
 .select-list .select2-results .select2-highlighted {
   background: #fee481;
