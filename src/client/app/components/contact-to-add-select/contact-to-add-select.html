@@ -8,7 +8,8 @@
             key-property="id"
             replace-spaces-with-dashes="true"
             allow-dblclick-to-edit="true"
-            placeholder="{{ vm.placeholder }}">
+            placeholder="{{ vm.placeholder }}"
+            autofocus="vm.isAutofocus">
 
     <auto-complete source="vm.findContacts($query)"
                    min-length="0"
