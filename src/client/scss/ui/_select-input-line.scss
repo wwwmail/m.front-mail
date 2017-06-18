@@ -8,6 +8,7 @@
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
 
+
   &:active, &:focus, &:hover{
     border-bottom-color: $yellow-yandex!important;
     &__match-item{
@@ -30,6 +31,12 @@
   &.ui-select-container > div{
     //display: table;
     //width: inherit;
+  }
+
+  &--min-height{
+    min-height: 58px;
+    display: flex!important;
+    align-items: center!important;
   }
 
   .btn-primary{

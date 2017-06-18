@@ -1,10 +1,12 @@
-//[placeholder] {
-//  color: $input-hlaceholder-color;
-//}
-//
-//::-webkit-input-placeholder {
-//  color: $input-hlaceholder-color;
-//}
+[placeholder] {
+  color: $input-hlaceholder-color;
+  font-size: 16px;
+}
+
+::-webkit-input-placeholder {
+  color: $input-hlaceholder-color;
+  font-size: 16px;
+}
 
 .input-line {
   position: relative;
@@ -25,11 +27,12 @@
     position: relative;
     //top: -5px;
 
-    padding: 0 32px 5px;
+    padding: 0 62px 5px 32px;
 
-    min-height: 25px;
-    line-height: 22px;
-    font-size: 14px;
+    min-height: 100%;
+    line-height: 21px;
+    font-size: 16px;
+
 
     width: 100%;
 
@@ -98,7 +101,7 @@
 
   &__btn-more {
     position: absolute;
-    top: 26px;
+    top: 19px;
     right: 11px;
     margin-right: 10px;
     cursor: pointer;

@@ -12,14 +12,17 @@
   }
   .tags {
     background: transparent;
-    padding: 0 54px 0 30px !important;
-    border-radius: 0 !important;
     box-shadow: none !important;
+
+    padding: 4px 100px 0 30px !important;
+
     border: none;
     border-bottom: 1px solid !important;
     border-color: #ccc !important;
+    border-radius: 0 !important;
 
-    padding-bottom: 5px !important;
+    min-height: 48px;
+    //padding-bottom: 5px !important;
 
     //display: flex;
     //align-items: center;
@@ -33,12 +36,14 @@
     }
 
     .input {
-      height: 20px;
-      //position: relative!important;
-      //top: 3px!important;
+      min-width: 40px;
+      max-width: 100%;
+      //height: 48px;
+      //height: 100%;
+
       white-space: pre-wrap;
       word-wrap: break-word;
-      max-width: 100%;
+
       padding-left: 0 !important;
     }
 
@@ -157,13 +162,6 @@
         }
         &:hover {
           background-color: $yellow-lignt;
-        }
-        .avatar {
-          background-color: $select-input-line-active-item-color !important;
-          .avatar__first-name, .avatar__last-name {
-            font-size: 95% !important;
-            line-height: 0;
-          }
         }
       }
     }

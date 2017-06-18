@@ -41,18 +41,24 @@
 
 <script type="text/ng-template" id="autocomplete-template">
     <div class="tag-contact">
-        <div class="avatar avatar--size28 mrg__right16 avatar--bg-color">
+        <div class="tag-contact__avatar avatar avatar--size28 mrg__right16 avatar--bg-color">
             <avatar-name name="data.first_name" email="data.emails[0].value"></avatar-name>
         </div>
-        <div class="tag-contact__name">
-            {{ data.first_name }}
-            {{ data.last_name }}
+
+        <div class="tag-contact__info">
+            <div class="tag-contact__name">
+                {{ data.first_name }}
+                {{ data.last_name }}
+            </div>
+            <div class="tag-contact__email"
+
+                 ng-if="data.emails[0].value">
+                {{ data.emails[0].value }}
+            </div>
+            <!--ng-class="{'mrg__left10': data.first_name}"-->
+
         </div>
-        <div class="tag-contact__email"
-             ng-class="{'mrg__left10': data.first_name}"
-             ng-if="data.emails[0].value">
-            {{ data.emails[0].value }}
-        </div>
+
         <div class="tag-contact__phone"
              ng-class="{'mrg__left10': data.first_name || data.emails[0].value}"
              ng-if="data.phone">
