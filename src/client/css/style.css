@@ -2980,7 +2980,7 @@
 .tags-input .tags .tag-remove {
   display: none;
   position: absolute;
-  top: 0;
+  top: 5px;
   bottom: 0;
   right: -5px;
   padding: 0;

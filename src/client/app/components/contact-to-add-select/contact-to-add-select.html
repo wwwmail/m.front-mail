@@ -24,7 +24,7 @@
     <div class="tag-contact font-sizer--bigger-15 tag-contact__autocomplete-item"
          ng-dblclick="$event.stopPropagation();">
         <div class="avatar avatar--size20 mrg__right7">
-            <avatar-name name="data.first_name" email="data.email"></avatar-name>
+            <avatar-name name="data.first_name" email="data.emails[0].value"></avatar-name>
         </div>
         <div class="tag-contact__name" ng-if="data.first_name">
             {{ data.first_name }}
@@ -33,23 +33,29 @@
         <div class="tag-contact__email" ng-if="!data.first_name">
             {{ data.emails[0].value }}
         </div>
-        <button class="tag-remove btn btn--not-style icon-cancel" type="button" ng-click="$removeTag()"></button>
+        <a class="tag-remove btn btn--not-style icon-cancel"
+           href
+           ng-click="$removeTag()"></a>
     </div>
 </script>
 
 <script type="text/ng-template" id="autocomplete-template">
     <div class="tag-contact">
         <div class="avatar avatar--size28 mrg__right16 avatar--bg-color">
-            <avatar-name name="data.first_name" email="data.email"></avatar-name>
+            <avatar-name name="data.first_name" email="data.emails[0].value"></avatar-name>
         </div>
         <div class="tag-contact__name">
             {{ data.first_name }}
             {{ data.last_name }}
         </div>
-        <div class="tag-contact__email">
-            {{ data.email }}
+        <div class="tag-contact__email"
+             ng-class="{'mrg__left10': data.first_name}"
+             ng-if="data.emails[0].value">
+            {{ data.emails[0].value }}
         </div>
-        <div class="tag-contact__phone">
+        <div class="tag-contact__phone"
+             ng-class="{'mrg__left10': data.first_name || data.emails[0].value}"
+             ng-if="data.phone">
             {{ data.phone }}
         </div>
     </div>

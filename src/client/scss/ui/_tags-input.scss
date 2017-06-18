@@ -21,7 +21,6 @@
 
     padding-bottom: 5px !important;
 
-
     //display: flex;
     //align-items: center;
     //justify-content: flex-start;
@@ -40,7 +39,7 @@
       white-space: pre-wrap;
       word-wrap: break-word;
       max-width: 100%;
-      padding-left: 0!important;
+      padding-left: 0 !important;
     }
 
     .tag-list {
@@ -84,7 +83,7 @@
       &--invalid {
         background-color: #e00 !important;
         color: $white-color !important;
-        .avatar{
+        .avatar {
           display: none;
         }
         .tag-contact {
@@ -92,7 +91,7 @@
           padding-left: 11px;
           height: 20px;
         }
-        .tag-contact__name{
+        .tag-contact__name {
           color: $white-color !important;
 
         }
@@ -118,7 +117,7 @@
       display: none;
       position: absolute;
       //top: calc(50% - (9px /2));
-      top: 0;
+      top: 5px;
       bottom: 0;
       right: -5px;
       padding: 0;
