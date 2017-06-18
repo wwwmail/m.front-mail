@@ -683,7 +683,7 @@
   flex-flow: row nowrap;
   width: 100%;
   font: 300 18px/1 "HelveticaNeueCyr", sans-serif;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
 }
 .menu-main__item-sub {
   display: flex;
@@ -692,14 +692,14 @@
   flex-flow: row nowrap;
   width: 100%;
   font: 300 18px/1 "HelveticaNeueCyr", sans-serif;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
 }
 .menu-main__link {
   display: flex;
   align-items: baseline;
   width: 100%;
   font: 400 15px/1 "HelveticaNeueCyr", sans-serif;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
   padding: 8px 20px 8px 13px;
   cursor: pointer;
   text-overflow: ellipsis;
@@ -707,7 +707,7 @@
   overflow: hidden;
 }
 .menu-main__link:hover {
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
 }
 .menu-main__link:hover, .menu-main__link:active, .menu-main__link:focus {
   color: #000;
@@ -728,7 +728,7 @@
 .menu-main__count {
   margin: auto;
   text-align: center;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
   font-size: 13px;
   opacity: 0.6;
 }
@@ -994,7 +994,7 @@
   width: 50px;
   height: 50px;
   background-color: #ffdb4d;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
   box-shadow: inset 0px 0px 12px -6px rgba(0, 0, 0, 0.37);
   z-index: 2;
 }
@@ -1079,9 +1079,9 @@
   position: absolute;
   top: calc(50% - 20px);
   right: -60px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
   background-color: #f3f5f7;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
   transform: rotate(-45deg);
 }
 .menu-main-layout__add-btn:hover, .menu-main-layout__add-btn:active {
@@ -1107,11 +1107,11 @@
 }
 .menu-main-layout__user-name {
   display: none;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
 }
 .menu-main-layout__user-mail {
   display: none;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
 }
 .menu-main-layout__item {
   flex: 1 0 auto;
@@ -1382,7 +1382,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
   z-index: 5;
   background: #f3f5f7;
 }
@@ -2340,10 +2340,8 @@
   right: 11px;
   margin-right: 10px;
   cursor: pointer;
-  color: #fb981f;
 }
 .input-line__btn-more:hover, .input-line__btn-more:active, .input-line__btn-more:focus {
-  color: #fb981f !important;
   opacity: .6;
 }
 .input-line__btn-more:before {
