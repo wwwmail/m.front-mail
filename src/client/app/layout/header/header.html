@@ -78,6 +78,8 @@
     </div>
 
     <!-- Хедер для страници создания письма-->
+
+    <!-- Хедер для страници создания письма-->
     <div class="header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">
         <div class="header__container">
             <div class="header__left">
@@ -86,17 +88,40 @@
                 </button>
             </div>
 
+            <div class="header__center ">
+                <span class="header__title-text font--size18 font--bold">Новое письмо</span>
+            </div>
+
             <div class="header__right">
-                <button class="btn btn--mail-send btn--size_s header__icon mrg__right14 font--arial font--size15 padding--hor12 width--inh"
+                <button class="btn btn--not-style btn--mail-send header__icon mrg__right font--arial font--size15 padding--hor12 icon-send"
                         type="button"
                         ng-click="vm.send()"
-                        ng-disabledd="!vm.isSend">
-                     Отправить
+                        ng-disabled="!vm.isSend">
                 </button>
             </div>
             <!--<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">-->
         </div>
     </div>
+
+    <!--<div class="header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">-->
+        <!--<div class="header__container">-->
+            <!--<div class="header__left">-->
+                <!--<button class="icon-cancel btn btn&#45;&#45;not-style btn&#45;&#45;main-mobile-color header__icon header__icon&#45;&#45;close padding&#45;&#45;hor12"-->
+                        <!--ui-sref="mail.inbox({mbox: 'INBOX'})">-->
+                <!--</button>-->
+            <!--</div>-->
+
+            <!--<div class="header__right">-->
+                <!--<button class="btn btn&#45;&#45;mail-send btn&#45;&#45;size_s header__icon mrg__right14 font&#45;&#45;arial font&#45;&#45;size15 padding&#45;&#45;hor12 width&#45;&#45;inh"-->
+                        <!--type="button"-->
+                        <!--ng-click="vm.send()"-->
+                        <!--ng-disabledd="!vm.isSend">-->
+                     <!--Отправить-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
 
     <!-- Уведомления и статусы-->
 

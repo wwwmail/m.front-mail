@@ -1793,7 +1793,7 @@
   fill: #808080;
 }
 .btn--main-mobile-color:hover, .btn--main-mobile-color:focus, .btn--main-mobile-color:active {
-  opacity: 0.6 !important;
+  opacity: .6 !important;
 }
 .btn--s-gradient {
   background: linear-gradient(to bottom, #fefefe 0%, #efefef 100%);
@@ -1816,7 +1816,7 @@
   opacity: 1 !important;
 }
 .btn--light-hover:hover {
-  opacity: 0.6 !important;
+  opacity: .6 !important;
 }
 .btn--size_s {
   height: 26px;
@@ -1878,11 +1878,7 @@
   padding: 5px;
 }
 .btn--mail-send {
-  color: #ffffff;
-  background-color: #fb981f;
-}
-.btn--mail-send:hover, .btn--mail-send:active, .btn--mail-send:focus {
-  color: #ffffff;
+  color: #386ac0;
 }
 
 .ok-validates {
