@@ -94,6 +94,7 @@
   &__icon{
     color: $header-icon-color;
     font: 300 13px/1 $mainFont;
+    overflow: visible;
     &:before{
       font-size: 20px;
     }

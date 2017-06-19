@@ -859,6 +859,7 @@
 .header__icon {
   color: #808080;
   font: 300 13px/1 "HelveticaNeueCyr", sans-serif;
+  overflow: visible;
 }
 .header__icon:before {
   font-size: 20px;
@@ -2295,7 +2296,7 @@
 .input-line__input {
   position: relative;
   padding: 0 62px 5px 32px;
-  min-height: 100%;
+  min-height: 58px;
   line-height: 21px;
   font-size: 16px;
   width: 100%;
@@ -2506,9 +2507,9 @@
 .select-input-line {
   width: 100% !important;
   background: transparent;
+  box-shadow: none !important;
   padding: 0 30px !important;
   border-radius: 0 !important;
-  box-shadow: none !important;
   border: none;
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
@@ -2701,9 +2702,15 @@
   box-shadow: none !important;
   outline: none !important;
 }
+.select-input-line .select-list__body {
+  margin: auto !important;
+}
 .select-input-line .select-list__body:focus, .select-input-line .select-list__body:active {
   box-shadow: none !important;
   outline: none !important;
+}
+.select-input-line .select2-drop {
+  left: 0;
 }
 .select-input-line .select-list__body, .select-input-line .select-list__body > .select2-arrow {
   background-color: transparent !important;
@@ -2915,7 +2922,7 @@
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
   border-radius: 0 !important;
-  min-height: 48px;
+  min-height: 46px;
 }
 .tags-input .tags.focused, .tags-input .tags:active, .tags-input .tags:focus, .tags-input .tags:hover {
   border: none;
@@ -2928,6 +2935,7 @@
   max-width: 100%;
   white-space: pre-wrap;
   word-wrap: break-word;
+  margin: 0 2px;
   padding-left: 0 !important;
 }
 .tags-input .tags .tag-item {
@@ -3267,7 +3275,10 @@
 
 .select-list {
   position: relative;
-  display: block;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
   width: inherit;
   box-sizing: border-box;
   text-overflow: clip;
@@ -3336,7 +3347,6 @@
   border-color: rgba(195, 196, 201, 0.6) !important;
   border-top-style: solid !important;
   border-top: 2px solid #fc0 !important;
-  margin: 0 -30px 0 !important;
   border-radius: 2px !important;
   box-shadow: none !important;
 }
@@ -3481,6 +3491,10 @@
   display: flex;
   align-items: center;
   height: 40px;
+}
+.search-block__icon {
+  overflow: visible !important;
+  padding-top: 2px !important;
 }
 .search-block__icon-close {
   position: relative;
