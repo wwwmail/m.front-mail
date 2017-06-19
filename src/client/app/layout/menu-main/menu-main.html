@@ -10,8 +10,8 @@
     </div>
 
     <div class="menu-main-layout__user-info">
-        <div class="menu-main-layout__user-info-container">
-            <div class="menu-main-layout__users-list ">
+        <div class="menu-main-layout__user-info-container" scroll-left>
+            <div class="menu-main-layout__users-list">
                 <div class="menu-main-layout__user-item"
                      ng-repeat="profile in vm.profiles"
                      ng-if="profile.profile.email !== vm.user.profile.email">
