@@ -14,7 +14,7 @@
                                     {{ $select.selected.user_name }} ({{ $select.selected.email }})
                                 </div>
                                 <div ng-if="!$select.selected.user_name">
-                                    $select.selected.email
+                                    {{ $select.selected.email }}
                                 </div>
                             </ui-select-match>
                             <ui-select-choices repeat="connection.id as connection in vm.connections.items"
