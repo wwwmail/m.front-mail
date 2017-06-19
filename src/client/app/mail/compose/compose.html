@@ -10,7 +10,12 @@
                                    search-enabled="false">
                             <ui-select-match class="select-list__body select-list--size_l width--all"
                                              placeholder="От кого">
-                                {{ $select.selected.email }}
+                                <div ng-if="$select.selected.user_name">
+                                    {{ $select.selected.user_name }} ({{ $select.selected.email }})
+                                </div>
+                                <div ng-if="!$select.selected.user_name">
+                                    $select.selected.email
+                                </div>
                             </ui-select-match>
                             <ui-select-choices repeat="connection.id as connection in vm.connections.items"
                                                ng-value="$select.selected.id">

@@ -457,7 +457,9 @@
 
             var userConnection = {
                 id: vm.user.profile.default_connection_id,
-                email: vm.user.profile.email
+                email: vm.user.profile.email,
+                sign: vm.user.profile.sign,
+                user_name: vm.user.profile.user_name
             };
 
             vm.connections.items.push(userConnection);
