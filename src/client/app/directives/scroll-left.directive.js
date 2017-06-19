@@ -16,8 +16,6 @@
         return directive;
 
         function link(scope, element, attrs) {
-            // $(element).scrollLeft($(this).height());
-
             $(document).ready(function () {
                 $('.menu-main-layout__user-info-container').scrollLeft($(this).height());
             });
