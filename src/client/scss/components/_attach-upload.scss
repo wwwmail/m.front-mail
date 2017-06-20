@@ -4,6 +4,7 @@
     flex-flow: row wrap;
     justify-content: flex-start;
   }
+
   &__item {
     position: relative;
     z-index: 1;
@@ -21,7 +22,8 @@
 
     margin: 0 6px 5px 0;
     overflow: hidden;
-    &:before{
+
+    &:before {
       content: "";
       position: absolute;
       top: 0;
@@ -35,7 +37,8 @@
 
       //transform: rotate(45deg);
     }
-    &:after{
+
+    &:after {
       content: "";
       position: absolute;
       z-index: 3;
@@ -62,7 +65,7 @@
     padding: 0 6px;
 
     color: $white-color;
-    font: bold  10px/1 $mainSecondFont;
+    font: bold 10px/1 $mainSecondFont;
     text-transform: uppercase;
     display: flex;
     align-items: center;
@@ -82,6 +85,9 @@
     overflow: hidden;
     opacity: 0.5;
 
+    background-size: cover;
+    background-position: center;
+
     &--shadow {
       //box-shadow: 0 0 3px 1px rgba(0, 0, 0, .5);
     }
@@ -96,8 +102,8 @@
     right: 8px;
     bottom: 20px;
   }
-  &__delete{
 
+  &__delete {
     color: $textBlack;
     font-size: 18px;
   }

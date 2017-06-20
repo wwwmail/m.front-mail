@@ -1,14 +1,24 @@
 <div class="attach-upload">
     <div class="attach-upload__list">
         <div class="attach-upload__item" ng-repeat="attachment in vm.attachmentsData">
-            <div class="attach-upload__image"
-                 ng-class="{'attach-upload__image--shadow': attachment.mime === 'image/jpeg' || attachment.mime === 'image/png'}">
+<!--            <div class="attach-upload__image"
+                 ng-class="{'attach-upload__image&#45;&#45;shadow': attachment.mime === 'image/jpeg' || attachment.mime === 'image/png'}">
                 <img ng-src="{{ vm.getLink(attachment) }}"
                      fallback-src="{{'/images/upload-image.png'}}"
                      ng-if="attachment.mime === 'image/jpeg' || attachment.mime === 'image/png'">
                 <img src="/images/upload-file.png"
                      ng-if="attachment.mime !== 'image/jpeg' && attachment.mime !== 'image/png'">
-            </div>
+            </div>-->
+
+            <div class="attach-upload__image"
+                 style="background-image: url('{{ vm.getLink(attachment) }}')"
+                 ng-if="attachment.mime === 'image/jpeg' || attachment.mime === 'image/png'"
+                 ng-class="{'attach-upload__image--shadow': attachment.mime === 'image/jpeg' || attachment.mime === 'image/png'}"></div>
+
+            <div class="attach-upload__image"
+                 style="background-image: url('/images/upload-file.png')"
+                 ng-if="attachment.mime !== 'image/jpeg' && attachment.mime !== 'image/png'"></div>
+
             <div class="attach-upload__name">
                 {{ attachment.mime.split('/')[1]; }}
             </div>

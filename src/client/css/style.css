@@ -5477,6 +5477,8 @@
   height: 98px;
   overflow: hidden;
   opacity: 0.5;
+  background-size: cover;
+  background-position: center;
 }
 .attach-upload__image img {
   max-width: 120%;
@@ -5561,6 +5563,14 @@
 .attach-item__image {
   max-width: 181%;
   opacity: .3;
+  width: 84px;
+  height: 86px;
+  background-size: cover;
+  background-position: center;
+}
+.attach-item__image--file {
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 .attach-item__type {
   position: absolute;
