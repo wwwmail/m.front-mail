@@ -132,12 +132,12 @@
     margin: auto 0;
     &:before {
       content: "\e90c";
+      color: $validtae-ok-green;
       font-family: 'icomoon' !important;
       speak: none;
       line-height: 1;
     }
   }
-
 }
 
 /*     старый стиль
