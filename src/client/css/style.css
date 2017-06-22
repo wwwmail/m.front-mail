@@ -5805,6 +5805,7 @@
 }
 .pop-up-notification__validate-icon:before {
   content: "\e90c";
+  color: #099502;
   font-family: 'icomoon' !important;
   speak: none;
   line-height: 1;
