@@ -51,6 +51,7 @@
                 ng-repeat="folder in vm.folders.items">
                 <div class="menu-main__item-content" ng-if="!folder.isSub">
                     <a class="menu-main__link"
+                       ng-click="vm.closeMenu();"
                        ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
                         <span class="{{ folder.icon }} menu-main__icon"></span>
                         <span class="menu-main__title">{{ folder.caption }}</span>
@@ -77,6 +78,7 @@
                         <ul class="menu-main menu-main--additional">
                             <li class="menu-main__item-sub">
                                 <a class="menu-main__link"
+                                   ng-click="vm.closeMenu();"
                                    ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined})">
                                     <span class="icon-folder-desk menu-main__icon"></span>
                                     <span class="menu-main__title">{{ folderSub.caption }}</span></a>
@@ -96,7 +98,9 @@
         <ul class="menu-main">
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})">
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})"
+                       ng-click="vm.closeMenu();">
                         <span class="icon-important-desk menu-main__icon"></span>
                         <span class="menu-main__title">Важные</span>
                     </a>
@@ -105,7 +109,9 @@
             </li>
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})">
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})"
+                       ng-click="vm.closeMenu();">
                         <span class="icon-attach-desk menu-main__icon"></span>
                         <span class="menu-main__title">С вложениями</span>
                     </a>
@@ -113,7 +119,9 @@
             </li>
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})">
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})"
+                       ng-click="vm.closeMenu();">
                         <span class="icon-unread-solid-desk menu-main__icon"></span>
                         <span class="menu-main__title">Непрочитанные</span>
                     </a>
@@ -129,7 +137,8 @@
             <li class="menu-main__item" ng-repeat="tag in vm.tags.items">
                 <div class="menu-main__item-content">
                     <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})">
+                       ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})"
+                       ng-click="vm.closeMenu();">
                         <span class="icon-tag-solid menu-main__icon menu-main__icon--select"
                               style="color: {{ tag.bgcolor }}"></span>
                         <span class="menu-main__title">{{ tag.tag_name }}</span>
