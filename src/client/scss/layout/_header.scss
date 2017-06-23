@@ -43,7 +43,8 @@
   &__search.is-active,
   &__massege-replay.is-active,
   &__message-new.is-active{
-    height: inherit;
+    height: 100%;
+    min-height: inherit;
 
 
     display: block;
