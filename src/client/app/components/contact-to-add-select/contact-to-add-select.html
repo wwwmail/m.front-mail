@@ -8,10 +8,12 @@
             key-property="id"
             replace-spaces-with-dashes="true"
             allow-dblclick-to-edit="true"
+            ng-focus="isTagFocus = true"
+            ng-blur="isTagFocus = false"
             placeholder="{{ vm.placeholder }}"
             autofocus="vm.isAutofocus">
 
-    <auto-complete source="vm.findContacts($query)"
+    <auto-complete source="vm.findContacts($query, isTagFocus)"
                    min-length="0"
                    load-on-focus="true"
                    load-on-empty="true"
