@@ -10,6 +10,8 @@
     function mailBox(CONFIG, $resource, $http, $rootScope) {
         var API_URL = CONFIG.APIHost + '/mail-box';
 
+        var cacheList = [];
+
         var resource = $resource(API_URL,
             {},
             {
@@ -33,7 +35,11 @@
         );
 
         function get(params, data) {
-            return resource.get(params, data).$promise;
+            return resource.get(params, data).$promise
+                .then(function (response) {
+                    cacheList = response.data;
+                    return response;
+                });
         }
 
         function create(params, data) {
@@ -68,12 +74,17 @@
             $rootScope.$broadcast('mailBox:layout:open', data);
         }
 
+        function getCacheList() {
+            return cacheList;
+        }
+
         return {
             get: get,
             create: create,
             update: update,
             destroy: destroy,
-            openLayoutFolder: openLayoutFolder
+            openLayoutFolder: openLayoutFolder,
+            getCacheList: getCacheList
         }
     }
 
