@@ -53,11 +53,8 @@
                     url: API_URL + '/export'
                 },
                 find: {
-                    method: 'GET',
-                    url: API_URL + '/find/:q',
-                    params: {
-                        q: '@q'
-                    }
+                    method: 'POST',
+                    url: API_URL + '/find'
                 }
             }
         );

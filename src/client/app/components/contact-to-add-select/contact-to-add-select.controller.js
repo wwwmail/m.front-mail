@@ -38,7 +38,7 @@
         function findContacts(q, isTagFocus) {
             if (isTagFocus) {
                 if (q) {
-                    var res = contact.find({q: q});
+                    var res = contact.find({}, {q: q});
                 } else {
                     var res = contact.get({q: q});
                 }
