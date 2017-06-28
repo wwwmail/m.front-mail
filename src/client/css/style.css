@@ -1284,7 +1284,7 @@
 }
 
 .mail-message {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -4730,14 +4730,14 @@
 .body-message {
   overflow-x: hidden;
   overflow-y: auto;
-  height: 100%;
 }
 .body-message__content {
   width: auto;
-  height: 100%;
+  height: auto;
   min-width: 280px;
   margin: 16px 0;
-  overflow: scroll;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 .time-send {
