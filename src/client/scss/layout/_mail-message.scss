@@ -5,7 +5,7 @@
   right: 0;
   bottom: 0;
   box-sizing: border-box;
-  height: 100%;
+  //height: 100%;
 
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   &__main-info{
     position: relative;
     flex: 1 0 auto;
-    height: auto;
+    //height: auto;
 
     &:before{
       content: "";
