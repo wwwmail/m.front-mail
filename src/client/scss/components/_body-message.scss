@@ -12,6 +12,8 @@
     margin:  16px 0;
 
     overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translateZ(0px);
     //overflow-x: hidden;
   }
 }
