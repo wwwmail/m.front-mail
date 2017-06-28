@@ -4727,13 +4727,17 @@
   }
 }
 
+.body-message {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 .body-message__content {
   width: auto;
   height: auto;
   min-width: 280px;
   margin: 16px 0;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 .time-send {
