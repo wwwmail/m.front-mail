@@ -16,7 +16,7 @@
             {
                 state: 'home',
                 config: {
-                    url: '/',
+                    url: '/?version&token&page',
                     templateUrl: 'app/marketing/home/home.html',
                     controller: 'HomeController',
                     controllerAs: 'vm',

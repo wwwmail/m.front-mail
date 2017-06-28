@@ -97,7 +97,7 @@
             getTag();
             getProfiles();
 
-            // vm.user = $auth.user;
+            vm.user = $auth.user;
 
             // vm.user.profile.photo = CONFIG.MediaUrl + vm.user.profile.photo;
             // console.log('vm.user', vm.user);
@@ -105,7 +105,7 @@
         
         function goToDesktopVersion(target) {
             // alert(target);
-            window.location.href = target;
+            window.location.href = target + '&token=' + vm.user.access_token.split(' ')[1];
             // window.location.reload(true);
         }
 
