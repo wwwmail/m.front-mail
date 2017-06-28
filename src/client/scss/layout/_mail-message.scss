@@ -5,7 +5,7 @@
   right: 0;
   bottom: auto;
 
-  min-height: calc(100vh - 47px);
+  min-height: calc(100vh - 50px);
 
   display: flex;
   flex-direction: column;
@@ -91,11 +91,16 @@
       content: "";
 
       position: absolute;
+      top: 0;
       bottom: 0;
-
       left: -100vw;
+      z-index: -1;
+
       width: 1000vw;
+
       border-bottom: 1px solid $mail-message-title--border-color;
+
+      background-color: #f6f5f3;
     }
   }
   &__footer{
