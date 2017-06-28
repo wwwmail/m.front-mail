@@ -89,6 +89,17 @@
   &__image {
     max-width: 181%;
     opacity: .3;
+
+    width: 84px;
+    height: 86px;
+
+    background-size: cover;
+    background-position: center;
+
+    &--file {
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
   }
 
   &__type {

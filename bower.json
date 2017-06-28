@@ -87,7 +87,7 @@
     },
     "ng-tags-input": {
       "main": [
-        "ng-tags-input.min.js"
+        "ng-tags-input.js"
       ]
     }
   }

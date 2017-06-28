@@ -3,68 +3,69 @@
         <div class="compose__container">
             <div class="compose__header">
                 <div class="compose__from" ng-class="{'is-show-features': vm.isShowFeatures}">
+                    <div class="input-line flex align-items--cn">
+                        <ui-select ng-model="vm.sendForm.model.from_connection"
+                                   class="select-input-line select-list select-list--size_l select-input-line--min-height select-list--no-border select-list--not-border-of-sides width-inh "
+                                   theme="select2"
+                                   search-enabled="false">
+                            <ui-select-match class="select-list__body select-list--size_l width--all"
+                                             placeholder="От кого">
+                                <div ng-if="$select.selected.user_name">
+                                    {{ $select.selected.user_name }} ({{ $select.selected.email }})
+                                </div>
+                                <div ng-if="!$select.selected.user_name">
+                                    {{ $select.selected.email }}
+                                </div>
+                            </ui-select-match>
+                            <ui-select-choices repeat="connection.id as connection in vm.connections.items"
+                                               ng-value="$select.selected.id">
+                                <div ng-bind="connection.email"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+
                     <div class="input-line input-line--full input-line--right-padding"
                          ng-class="{'is-active': vm.sendForm.model.to.length}">
                         <label class="input-line__label width--all">
-                            <span class="input-line__title link--gray">Кому</span>
                             <contact-to-add-select class="width--all"
+                                                   placeholder="Кому"
                                                    addresses="vm.sendForm.model.to"></contact-to-add-select>
-                            <button class="input-line__btn-more btn btn--not-style btn--light-hover icon-arrow-down font__size16"
+                            <button class="input-line__btn-more btn btn--not-style btn--light-hover font__size16"
                                     type="button"
-                                    ng-click="vm.isShowFeatures = !vm.isShowFeatures"></button>
+                                    ng-click="vm.isShowFeatures = !vm.isShowFeatures">Копия
+                            </button>
                         </label>
                     </div>
-                    <div class="compose__from--add-features" ng-if="vm.isShowFeatures">
 
-                        <!--копия-->
+                    <div class="compose__from--add-features" ng-if="vm.isShowFeatures">
                         <div class="input-line input-line--full"
                              ng-class="{'is-active': vm.sendForm.model.toCopy.length}">
                             <div class="input-line__label width--all">
-                                <span class="input-line__title link--gray">Копия</span>
                                 <contact-to-add-select class="width--all"
-                                                       addresses="vm.sendForm.model.toCopy"></contact-to-add-select>
+                                                       placeholder="Копия"
+                                                       addresses="vm.sendForm.model.toCopy"
+                                                       is-autofocus="true"></contact-to-add-select>
                             </div>
                         </div>
 
-                        <!--скрытая копия-->
                         <div class="input-line input-line--full"
                              ng-class="{'is-active': vm.sendForm.model.toCopyHidden.length}">
                             <div class="input-line__label width--all">
-                                <span class="input-line__title link--gray">Скрытая копия</span>
                                 <contact-to-add-select class="width--all"
+                                                       placeholder="Скрытая копия"
                                                        addresses="vm.sendForm.model.toCopyHidden"></contact-to-add-select>
                             </div>
                         </div>
-
-                        <!-- от кого-->
-                        <div class="input-line input-line--full"
-                             ng-class="{'is-active': vm.sendForm.model.from}">
-                            <label class="input-line__label width--all">
-                                <span class="input-line__title link--gray">От кого</span>
-                                <input class=" input--compose-line input-line__input width--all"
-                                       type="text"
-                                       ng-model="vm.sendForm.model.from" disabled>
-                            </label>
-                        </div>
-                       <!-- <div class="input-line input-line&#45;&#45;full">
-                            <div class="input-line__label width&#45;&#45;all">
-                                <span class="input-line__title link&#45;&#45;gray">от кого</span>
-                                <contact-to-add-select class="width&#45;&#45;all"
-                                                       addresses="vm.sendForm.model.from"></contact-to-add-select>
-                            </div>
-                        </div>-->
-
                     </div>
 
-                    <!-- тема -->
                     <div class="compose__letter-subject">
                         <div class="input-line input-line--full"
                              ng-class="{'is-active': vm.sendForm.model.subject.length}">
                             <label class="input-line__label width--all">
-                                <span class="input-line__title link--gray">Тема</span>
                                 <input class=" input--compose-line input-line__input width--all"
                                        type="text"
-                                       ng-model="vm.sendForm.model.subject">
+                                       ng-model="vm.sendForm.model.subject"
+                                       placeholder="Тема">
                             </label>
                         </div>
                         <button class="compose__btn-attach btn btn--not-style btn--light-hover icon-clip font--size16"
@@ -76,7 +77,6 @@
                     </div>
                 </div>
 
-
                 <div class="compose__attachments-upload ">
                     <attach-upload attachments-data="vm.sendForm.model.attachmentsData"
                                    message="vm.sendForm"
@@ -87,7 +87,10 @@
                     <div class="compose__message"
                          contenteditable="true"
                          ng-model="vm.sendForm.model.body"
-                         required>
+                         ng-model-options="{ debounce: 250 }"
+                         required
+                         placeholder="Введите ваше сообщение..."
+                         onclick="$(this).focus();">
                         <div>
                             <br>
                         </div>

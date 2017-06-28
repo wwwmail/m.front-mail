@@ -7,13 +7,15 @@
 </div>
 
 <div class="popup__content scrollables">
-    <label class="tag-list__item" ng-click="vm.setImportant()">
+    <label class="tag-list__item">
         <div class="letter-tags">
             <span class="icon-important popup__icon popup__icon--not-size color--semi-dark-red"></span>
         </div>
-        <span class="tag-list__title tag-list__title--mrg-left" ng-if="!vm.messages.items[0].important">Важное</span>
-        <span class="tag-list__title tag-list__title--mrg-left" ng-if="vm.messages.items[0].important">Не важное</span>
-        <input class="tag-list__checked" type="checkbox">
+        <span class="tag-list__title tag-list__title--mrg-left" ng-if="vm.isImportant">Важное</span>
+        <span class="tag-list__title tag-list__title--mrg-left" ng-if="!vm.isImportant">Не важное</span>
+        <input class="tag-list__checked" type="checkbox"
+               ng-model="vm.isImportant"
+               ng-change="vm.setImportant()">
         <span class="tag-list__tick is-selected"></span>
     </label>
 

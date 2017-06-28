@@ -9,18 +9,13 @@ $light-red: #e76a50;
 $red: #d23100;
 $blue: #386ac0;
 $main-logo-orange: #fb981f;
-
-
 $main-border-color: #cccccc;
 
 $storage-text-color: #595959;
 
 $inpus-compose-text: #b3b3b8;
 
-
-
 $yellow-select-main-menu-color: #e7cb42;
-
 
 $hr-main-menu-color: #656c7b;
 $user-mail-main-menu-color: #a3a7b0;
@@ -38,11 +33,7 @@ $inbox-message-round-color: #bcbcbc;
 $inbox-message-checked: #f6f5f3;
 $inbox-message-avatar-checked: #e4e4e3;
 
-
-
-
 /* Color pallete for mails tags  */
-
 $cp-red: #f44336;
 $cp-purpure: #e91e63;
 $cp-orange: #ffc107;
@@ -83,7 +74,7 @@ $avatar-symbol-color: #ffffff;
 
 $header-color: #e1e5eb;
 $menu-main-color: #f3f5f7;;      //$menu-main-color: #555d6d;
-$menu-text-color: rgba(0, 0, 0, 0.5);
+$menu-text-color: rgba(0, 0, 0, 1);
 $menu-link-bg-active: rgba(0, 0, 0, 0.03);
 $crumb-link-color: #1a3dc1;
 
@@ -100,6 +91,8 @@ $hr-auth-color: #d6d6d6;
 $hr-main-color: #e5e5e5;
 $hr-popup-color: #eeeeee;
 
+//notification
+$notification-bg: #f6edb4;
 
 $sillver-input-plsah-color: #9e9e9e;
 
@@ -122,7 +115,6 @@ $input-border-color-black-yellow: #ccb764;
 $select-input-line-active-item-color: #d8d8d8;
 $select-input-line-active-item-hover-color: #cfcfcf;
 $select-input-line-avatar-shadow: 0px 0px 0px 2px rgba(255,255,255,1);
-
 
 $yellow-yandex: #fc0;
 $yellow-normal-light: #ffdb4d;

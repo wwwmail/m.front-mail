@@ -1,20 +1,38 @@
 .tag-contact {
-    display: inline-flex;
-    align-items: center;
+  display: inline-flex;
+  align-items: center;
 
-&__name {
-     white-space: nowrap;
-     text-overflow: ellipsis;
-     color: $textBlack;
- }
-&__email {
-     color: $storage-text-color;
- }
-&__phone {
-     color: $storage-text-color;
- }
-}
+  &__avatar{
+    background-color: $select-input-line-active-item-color !important;
+    .avatar__first-name, .avatar__last-name {
+      color: rgba($textBlack, .5);
+      //font-size: 10px!important;
+      font-size: 67% !important;
 
-.ui-select-match-item {
+      line-height: 0;
+    }
+  }
+
+  &__name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $textBlack;
+  }
+  &__email {
+    //color: $storage-text-color;
+    color: $textBlack;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 1px;
+
+  }
+  &__phone {
+    color: $storage-text-color;
+  }
+
+  &__info {
+    display: flex;
+    flex-flow: column;
+  }
 
 }

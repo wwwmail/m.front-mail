@@ -36,12 +36,20 @@
     margin-left: 10px !important;
   }
 
+  &__left14{
+    margin-left: 14px !important;
+  }
+
   &__left50 {
     margin-left: 50px !important;
   }
 
   &__right10 {
     margin-right: 10px !important;
+  }
+
+  &__right14 {
+    margin-right: 14px !important;
   }
 
   &__top5 {
@@ -158,9 +166,18 @@
     padding-right: 2px!important;
   }
 
+  &--rignt_30{
+    padding-right: 30px!important;
+  }
+
   &--left_2{
     padding-left: 2px!important;
   }
+
+  &--left_12{
+    padding-left: 12px!important;
+  }
+
   &--hor12{
     padding: 0 12px!important;
   }
@@ -412,8 +429,16 @@
 
 }
 .align-items{
-  &--cn{
-    align-items: center;
+  &--cn {
+    align-items: center!important;
+  }
+
+  &--st {
+    align-items: flex-start!important;
+  }
+
+  &--en{
+    align-items: flex-end!important;
   }
 }
 

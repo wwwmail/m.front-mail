@@ -27,9 +27,9 @@
         };
 
         this.$get = RouterHelper;
-        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger'];
+        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger', 'mailBox'];
         /* @ngInject */
-        function RouterHelper($location, $rootScope, $state, $timeout, logger) {
+        function RouterHelper($location, $rootScope, $state, $timeout, logger, mailBox) {
             var handlingStateChangeError = false;
             var hasOtherwise = false;
             var stateCounts = {
@@ -98,8 +98,15 @@
                     function (event, toState, toParams, fromState, fromParams) {
                         stateCounts.changes++;
                         handlingStateChangeError = false;
-                        var title = config.docTitle + ' ' + (toState.title || '');
-                        $rootScope.title = title; // data bind to <title>
+                        // var title = config.docTitle + ' ' + (toState.title || '');
+                        var title = 'Mail.cz';
+
+                        if (toState.name === 'mail.inbox') {
+                            var folderName = _.result(_.find(mailBox.getCacheList().items, {'name': toParams.mbox}), 'caption');
+                            title = folderName + ' - ' + title;
+                        }
+
+                        $rootScope.title = title;
                         $rootScope.isOpenMenu = false;
                     }
                 );

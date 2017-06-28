@@ -1,12 +1,16 @@
 .select-input-line {
   width: 100% !important;
+
   background: transparent;
-  padding: 0 30px !important;
-  border-radius: 0!important;
   box-shadow: none!important;
+
+  padding: 0 30px !important;
+
+  border-radius: 0!important;
   border: none;
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
+
 
   &:active, &:focus, &:hover{
     border-bottom-color: $yellow-yandex!important;
@@ -26,10 +30,18 @@
       }
     }
   }
+
   &.ui-select-container > div{
     //display: table;
     //width: inherit;
   }
+
+  &--min-height{
+    min-height: 58px;
+    display: flex!important;
+    align-items: center!important;
+  }
+
   .btn-primary{
     background-color: transparent!important;
     color: transparent!important;
@@ -39,6 +51,30 @@
     height: 0!important;
     opacity: 0!important;
   }
+  &:focus, &:active ,&:hover{
+    box-shadow: none!important;
+    outline: none!important;
+  }
+
+  .select-list__body{
+    margin: auto!important;
+    &:focus, &:active{
+      box-shadow: none!important;
+      outline: none!important;
+    }
+  }
+  .select2-drop{
+    //margin: 0 auto!important;
+    left: 0;
+  }
+
+  .select-list__body, .select-list__body > .select2-arrow{
+    background-color: transparent!important;
+  }
+
+
+
+  /*
 
    .close{
      position: absolute!important;
@@ -63,7 +99,6 @@
      }
 
   }
-
   &__match-tags{
     //
     //display: table-cell;
@@ -200,4 +235,5 @@
     outline: 0;
     background-color:  transparent!important;
   }
+    */
 }

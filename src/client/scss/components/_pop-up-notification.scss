@@ -2,6 +2,8 @@
   position: relative;
   z-index: -1;
 
+  visibility: hidden;
+
   overflow: hidden;
   transform: translateY(-100%);
   opacity: 0;
@@ -43,6 +45,7 @@
 
 
   &.is-show{
+    visibility: visible;
     opacity: 1!important;
     transform: translateY(0)!important;
     transition: transform .6s;
@@ -55,7 +58,7 @@
     margin: auto;
     border-radius: 4px;
     box-shadow: $popup-shadow;
-    background-color: #ffefd7;
+    background-color: $notification-bg;
 
     z-index: 100;
 
@@ -127,14 +130,15 @@
     width: 13px;
     height: 18px;
     margin: auto 0;
+
     &:before {
       content: "\e90c";
+      color: $validtae-ok-green;
       font-family: 'icomoon' !important;
       speak: none;
       line-height: 1;
     }
   }
-
 }
 
 /*     старый стиль

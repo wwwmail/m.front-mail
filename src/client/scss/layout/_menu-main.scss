@@ -53,6 +53,7 @@
     //}
 
   }
+
   &__item-sub{
     display: flex;
     align-items: center;
@@ -72,7 +73,7 @@
 
     width: 100%;
 
-    font: 400 14px/1 $mainFont;
+    font: 400 15px/1 $mainFont;
     color: $menu-text-color;
 
     padding: 8px 20px 8px 13px;
@@ -107,7 +108,6 @@
   &__title{
     position: relative;
     top: -2px;
-
   }
 
   &__count{
@@ -142,6 +142,7 @@
     //  }
     //}
   }
+
   &__show-additional{
     display: none;
     font-size: 15px;
@@ -151,6 +152,7 @@
       outline: none;
     }
   }
+
   &__clear-brush{
     display: none;
     opacity: .5;

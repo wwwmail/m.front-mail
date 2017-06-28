@@ -35,12 +35,26 @@
             });
         }
 
-        function findContacts(q) {
-            return contact.get({q: q}).then(function (response) {
-                // vm.contacts.items = response.data;
-                return response.data;
-            });
-            // getContacts();
+        function findContacts(q, isTagFocus) {
+            if (isTagFocus) {
+                if (q) {
+                    var res = contact.find({}, {q: q});
+                } else {
+                    var res = contact.get({q: q});
+                }
+
+                return res.then(function (response) {
+                    var contacts = response.data;
+
+                    _.forEach(contacts, function (item) {
+                        if (!item.first_name) {
+                            item.first_name = item.emails[0].value;
+                        }
+                    });
+
+                    return contacts;
+                });
+            }
         }
 
         function makeContact(email) {

@@ -3,11 +3,12 @@
 
     angular
         .module('app.core')
-        .constant('CONFIG',
-            {
-                DebugMode: true,
-                APIHost: 'http://apimail.devogic.com',
-                MediaUrl: 'http://apimail.devogic.com/'
-            }
+        .constant('CONFIG', window.appConfig
+            // {
+            //     DebugMode: true,
+            //     APIHost: window.appConfig.APIHost,
+            //     MediaUrl: window.appConfig.MediaUrl,
+            //     AttachUrl: window.appConfig.AttachUrl
+            // }
         );
 })();

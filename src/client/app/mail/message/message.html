@@ -120,10 +120,11 @@
             <div class="mail-message__mail-attachments">
                 <div class="attachments">
                     <div class="attachments__item" ng-repeat="attachment in vm.message.model.attachmentsData">
-                        <attach-item attach="attachment" message="vm.message"></attach-item>
+                        <attach-item attach="attachment" message="vm.message.model"></attach-item>
                     </div>
                 </div>
             </div>
+            
             <!-- Тело сообщения -->
             <div class="mail-message__body">
                 <div class="body-message">

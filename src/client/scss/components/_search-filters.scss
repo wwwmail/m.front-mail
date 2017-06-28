@@ -2,16 +2,13 @@
   width: 100%;
   max-width: 414px;
 
-
+  margin: 0 auto;
   padding: 0 3px;
-  //margin: auto;
-  //z-index: 100;
-  background-color: #fff;
 
+  background-color: #fff;
 
   &__item {
     margin: 16px 0;
-
   }
 
   &__exact-date {
@@ -35,16 +32,22 @@
   }
 
   &__button-tab {
-    display: inline-block;
+    display: block;
+
     height: 30px;
+
     padding: 0 8px;
     margin: 0 4px;
-    border-radius: 1px;
-    line-height: 30px;
-    background: none;
+
     border: none;
     outline: none;
+    border-radius: 1px;
+
     font-size: 15px;
+    white-space: nowrap;
+    line-height: 30px;
+
+    background: none;
 
     &:focus, &:active, &:hover{
       background: none;
@@ -55,5 +58,11 @@
       background-color: #ffeaae;
     }
   }
+
+  &__date-sort{
+  display: flex;
+
+  overflow-x: scroll;
+}
 
 }

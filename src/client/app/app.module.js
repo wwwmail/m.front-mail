@@ -9,7 +9,7 @@
         'app.layout',
         'marketing',
         'auth',
-        'mail',
-        'settings'
+        'mail'
+        // 'settings'
     ]);
 })();

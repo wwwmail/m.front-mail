@@ -28,19 +28,30 @@
             get();
         });
 
-        $rootScope.$on('search:mail', function (e, data) {
-            vm.messages.isSearch = true;
+        $rootScope.$on('mail:inbox:messages:update', function (e, data) {
+            // console.log(data);
+            vm.messages = data;
+            // get();
+        });
+
+        $rootScope.$on('search:mailQuery', function (e, data) {
             vm.messages.params = data.search;
+            vm.searchQuery = data.search;
+            vm.messages.isSearch = true;
+            get();
+        });
+
+        $rootScope.$on('search:mail', function (e, data) {
+            vm.messages.params = data.search;
+            vm.messages.params = _.assign(vm.messages.params, vm.searchQuery);
+            vm.messages.isSearch = true;
             get();
         });
 
         $rootScope.$on('search:close', function (e, data) {
-            vm.messages.isSearch = false;
             vm.messages.params = angular.copy(vm.messages.defaultParams);
             vm.messages.params.mbox = $state.params.mbox;
-
-            console.log('vm.messages.params', vm.messages.params);
-
+            vm.messages.isSearch = false;
             get();
         });
 
@@ -64,7 +75,6 @@
                 vm.messages.params.tag_id = $state.params.tag_id;
             }
 
-            // get();
             getMailBox();
 
             console.log('messages', messages.$promise);

@@ -23,11 +23,11 @@
     box-shadow: none;
   }
 
-  &:disabled{
+  &:disabled {
     color: #ccc;
   }
 
-  &--act--y-shw:active{
+  &--act--y-shw:active {
     background: $yellow-yandex;
     box-shadow: $button-shadow;
   }
@@ -70,56 +70,56 @@
     border: none;
     background: none;
     text-align: center;
-    &:active, &:hover, &:focus{
+    &:active, &:hover, &:focus {
       background: none;
     }
   }
 
-  &--not-events{
-    &:hover{
-      background: none!important;
+  &--not-events {
+    &:hover {
+      background: none !important;
     }
-    &:active{
-      background: none!important;
+    &:active {
+      background: none !important;
     }
-    &:focus{
-      outline: none!important;
+    &:focus {
+      outline: none !important;
     }
   }
 
-  &--link-style{
+  &--link-style {
     border: none;
     background: none;
     text-align: center;
 
     border-bottom: 1px dotted $notific-auth-color;
-    border-radius: 0!important;
+    border-radius: 0 !important;
 
     padding: 0;
     height: inherit;
     border-radius: 0;
 
-    width: auto!important;
-    height: auto!important;
+    width: auto !important;
+    height: auto !important;
 
     margin: 16px auto 0px;
     display: inherit;
 
     color: $notific-auth-color;
-    &:hover{
+    &:hover {
       background: none;
-     }
+    }
   }
 
-  &--circle{
+  &--circle {
     border-radius: 50%;
   }
 
-  &--no-radius{
-    border-radius: 0!important;
+  &--no-radius {
+    border-radius: 0 !important;
   }
 
-  &--radius_3{
+  &--radius_3 {
     border-radius: 6px;
   }
 
@@ -135,9 +135,9 @@
       border-color: $yellow-hard-light;
     }
 
-    &:disabled{
+    &:disabled {
       background: none;
-      &:hover{
+      &:hover {
         background: none;
         border-color: $avatar-border-color;
       }
@@ -145,25 +145,25 @@
     }
   }
 
-  &--main-mobile-color{
+  &--main-mobile-color {
     color: $main-btn-color;
     fill: $main-btn-color;
-    &:hover,  &:focus, &:active{
-      opacity: .6!important;
+    &:hover, &:focus, &:active {
+      opacity: .6 !important;
     }
   }
 
-  &--s-gradient{
+  &--s-gradient {
     background: $btn-gradient;
 
   }
 
-  &--attach{
+  &--attach {
     overflow: hidden;
     padding: 0 5px;
     z-index: 1;
 
-    &__elm-hide{
+    &__elm-hide {
       position: absolute;
       top: 0;
       width: 100%;
@@ -174,10 +174,10 @@
     }
   }
 
-  &--light-hover{
-    opacity: 1!important;
-    &:hover{
-      opacity: .6!important;
+  &--light-hover {
+    opacity: 1 !important;
+    &:hover {
+      opacity: .6 !important;
     }
   }
 
@@ -204,58 +204,71 @@
     line-height: 18px;
   }
 
-  &--size_53{
+  &--size_53 {
     width: 53px;
     height: 53px;
     font-size: 20px;
   }
 
-  &--size_20{
-    font-size: 20px;
+  &--size_40 {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
   }
 
-  &--size_20x20{
+  &--size_20x20 {
     width: 20px;
     height: 20px;
   }
 
-  &--size_28{
+  &--size_20x20 {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--size_28 {
     width: 28px;
     height: 28px;
     font-size: 18px;
   }
 
-  &--size_50{
+  &--size_50 {
     width: 50px;
     height: 50px;
     font-size: 24px;
   }
 
-  &--size_62{
+  &--size_62 {
     width: 62px;
     height: 62px;
     font-size: 26px;
   }
 
-  &--rotate{
+  &--rotate {
     transform: rotate(180deg);
   }
-  &--padding-5{
+  &--padding-5 {
     padding: 5px;
   }
 
-  &--mail-send{
+  &--mail-send {
     color: #07c;
+
+    //background-color: $main-logo-orange;
+    &:hover, &:active, &:focus {
+      //color: $white-color;
+    }
   }
 
 }
-.ok-validates{
+
+.ok-validates {
   position: relative;
   color: $validtae-ok-green;;
   font: 13px/1 $mainFont;
 
   padding: 0 15px 0 35px;
-  &:before{
+  &:before {
 
     content: '';
     width: 20px;
@@ -269,13 +282,13 @@
   }
 }
 
-.btn-arrow{
+.btn-arrow {
   position: absolute;
   right: 1px;
 
   font-size: 14px;
   color: #888888;
 
-  &--active{
+  &--active {
   }
 }

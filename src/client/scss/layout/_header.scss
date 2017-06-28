@@ -43,7 +43,8 @@
   &__search.is-active,
   &__massege-replay.is-active,
   &__message-new.is-active{
-    height: inherit;
+    height: 100%;
+    min-height: inherit;
 
 
     display: block;
@@ -94,6 +95,7 @@
   &__icon{
     color: $header-icon-color;
     font: 300 13px/1 $mainFont;
+    overflow: visible;
     &:before{
       font-size: 20px;
     }

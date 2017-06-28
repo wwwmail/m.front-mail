@@ -1,6 +1,11 @@
 .select-list {
   position: relative;
-  display: block;
+
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
   width: inherit;
 
   box-sizing: border-box;
@@ -32,11 +37,16 @@
   /* Hes delete styles*/
 
   &__body {
+    &:focus, &:active, &:hover{
+      box-shadow: none!important;
+      outline: none!important;
+      border: transparent!important;
+    }
     &.select2-choice {
       display: flex;
       align-items: center;
 
-      padding: 0 0 0 8px;
+      padding: 0;
 
       overflow: hidden;
       position: relative;
@@ -88,14 +98,18 @@
   .ui-select-dropdown.select2-drop-active{
     border-color: rgba($button-border-color, .6)!important;
 
-    border-top-width: 1px !important;
-    border-top-style: solid!important;
-    border-top-color: rgba($button-border-color, .6)!important ;
 
-    margin-top: 4px;
+    border-top-style: solid!important;
+    //border-top-color: rgba($button-border-color, .6)!important ;
+    border-top: 2px solid $yellow-yandex !important;
+
+    //margin: 0 -30px 0!important;
+
+
+    //margin:  0 auto!important;
 
     border-radius: 2px!important;
-    box-shadow: $select-shadow!important;
+    box-shadow: none!important;
 
     &:focus,&:active{
       outline: none;
@@ -119,7 +133,7 @@
   }
 
   .select2-results .select2-result-label {
-    padding: 6px 20px 6px;
+    padding: 6px 30px 6px;
   }
 
   .select2-results .select2-highlighted {

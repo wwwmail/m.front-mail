@@ -5,15 +5,16 @@
         .module('app.components')
         .controller('TagListController', TagListController);
 
-    TagListController.$inject = ['$uibModal', '$scope', '$uibModalInstance', 'tag', 'mail', 'messages'];
+    TagListController.$inject = ['$uibModal', '$rootScope', '$scope', '$uibModalInstance', 'tag', 'mail', 'messages'];
     /* @ngInject */
-    function TagListController($uibModal, $scope, $uibModalInstance, tag, mail, messages) {
+    function TagListController($uibModal, $rootScope, $scope, $uibModalInstance, tag, mail, messages) {
         var vm = this;
 
         vm.tags = {
             checked: [],
             items: []
         };
+
         vm.unTags = {
             items: []
         };
@@ -26,9 +27,9 @@
         vm.close = close;
         vm.triggerTag = triggerTag;
 
-        $scope.$watch('vm.unTags.items', function (data, oldData) {
-            // console.log('unTags', data);
-        }, true);
+        // $scope.$watch('vm.unTags.items', function (data, oldData) {
+        //     // console.log('unTags', data);
+        // }, true);
 
         ////
 
@@ -36,6 +37,13 @@
 
         function activate() {
             vm.messages = messages;
+
+            vm.isImportant = true;
+
+            if (_.find(vm.messages.checked, {important: false})) {
+                vm.isImportant = false;
+            }
+
             get();
         }
 
@@ -86,7 +94,12 @@
         }
 
         function setImportant() {
-            vm.messages = vm.messages.items[0].important ? mail.setImportant(vm.messages) : mail.setUnImportant(vm.messages);
+            if (_.find(vm.messages.checked, {important: false})) {
+                vm.messages = mail.setImportant(vm.messages);
+                return;
+            }
+
+            vm.messages = mail.setUnImportant(vm.messages);
         }
 
         function close() {
@@ -95,6 +108,8 @@
                     messages: vm.messages
                 }
             });
+
+            $rootScope.$broadcast('mail:inbox:messages:update', vm.messages);
         }
     }
 })();

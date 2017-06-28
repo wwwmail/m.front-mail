@@ -53,8 +53,8 @@
                     url: API_URL + '/export'
                 },
                 find: {
-                    method: 'GET',
-                    url: API_URL + '/find/:q'
+                    method: 'POST',
+                    url: API_URL + '/find'
                 }
             }
         );
@@ -131,6 +131,10 @@
             $rootScope.$broadcast('contact:sync');
         }
 
+        function find(params, data) {
+            return resource.find(params, data).$promise;
+        }
+
         return {
             get: get,
             getById: getById,
@@ -142,7 +146,8 @@
             getByGroup: getByGroup,
             uploadContacts: uploadContacts,
             exportContacts: exportContacts,
-            sync: sync
+            sync: sync,
+            find: find
         }
     }
 

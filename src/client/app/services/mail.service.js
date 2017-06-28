@@ -83,20 +83,23 @@
         }
 
         function upload(params, data, files) {
-            var foramttedData = {
-                to: data.to,
-                body: data.body,
-                cmd: 'add-attach'
+            var formattedData = {
+                id: params.id,
+                mbox: params.mbox
             };
 
-            _.forEach(files, function (file, i) {
+            _.forEach(files, function (file, i){
                 var name = 'file' + i;
-                foramttedData[name] = file;
+                formattedData[name] = file;
             });
+
+            if (params.id) {
+                formattedData.id = params.id;
+            }
 
             return Upload.upload({
                 url: CONFIG.APIHost + '/mails/add-attach',
-                data: foramttedData
+                data: formattedData
             });
         }
 
@@ -120,7 +123,7 @@
             });
 
             move({}, {
-                messages: messages.checked,
+                messages: filterMessage(messages.checked),
                 mboxnew: folder.name
             }).then(function () {
                 $rootScope.$broadcast('mailBox:sync');
@@ -158,7 +161,7 @@
                 url: API_URL + '/' + 1,
                 method: 'DELETE',
                 data: {
-                    messages: messages.checked
+                    messages: filterMessage(messages.checked),
                 },
                 headers: {
                     "Content-Type": "application/json;charset=utf-8"
@@ -178,7 +181,7 @@
             messages.isLoading = true;
 
             flag({}, {
-                messages: messages.checked,
+                messages: filterMessage(messages.checked),
                 flag: 'Seen'
             }).then(function (response) {
                 messages.isLoading = false;
@@ -206,7 +209,7 @@
             messages.isLoading = true;
 
             deflag({}, {
-                messages: messages.checked,
+                messages: filterMessage(messages.checked),
                 flag: 'Seen'
             }).then(function (response) {
                 messages.isLoading = false;
@@ -234,21 +237,22 @@
             messages.isLoading = true;
 
             flag({}, {
-                messages: messages.checked,
+                messages: filterMessage(messages.checked),
                 flag: 'Flagged'
             }).then(function (response) {
                 messages.isLoading = false;
             });
 
-            _.forEach(messages.checked, function (checked) {
-                _.forEach(messages.items, function (item) {
-                    if (checked.number == item.number) {
+            messages.checked = [];
+
+            _.forEach(messages.items, function (item) {
+                _.forEach(data.checked, function (checked) {
+                    if (item.number === checked.number) {
                         item.important = true;
+                        messages.checked.push(item);
                     }
                 });
             });
-
-            messages.checked = [];
 
             return messages;
         }
@@ -261,21 +265,22 @@
             messages.isLoading = true;
 
             deflag({}, {
-                messages: messages.checked,
+                messages: filterMessage(messages.checked),
                 flag: 'Flagged'
             }).then(function (response) {
                 messages.isLoading = false;
             });
 
-            _.forEach(messages.checked, function (checked) {
-                _.forEach(messages.items, function (item) {
-                    if (checked.number == item.number) {
+            messages.checked = [];
+
+            _.forEach(messages.items, function (item) {
+                _.forEach(data.checked, function (checked) {
+                    if (item.number === checked.number) {
                         item.important = false;
+                        messages.checked.push(item);
                     }
                 });
             });
-
-            messages.checked = [];
 
             return messages;
         }
@@ -306,6 +311,18 @@
             });
         }
 
+        function filterMessage(messages) {
+            var data = [];
+            _.forEach(messages, function(item) {
+                data.push({
+                    number: item.number,
+                    connection_id: item.connection_id,
+                    mbox: item.mbox
+                })
+            });
+            return data;
+        }
+
         return {
             get: get,
             post: post,
@@ -329,5 +346,4 @@
             setPaginate: setPaginate
         }
     }
-
 })();

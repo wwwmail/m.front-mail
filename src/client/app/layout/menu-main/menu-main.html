@@ -10,9 +10,8 @@
     </div>
 
     <div class="menu-main-layout__user-info">
-        <div class="menu-main-layout__user-info-container">
-            <div class="menu-main-layout__users-list ">
-
+        <div class="menu-main-layout__user-info-container" scroll-left>
+            <div class="menu-main-layout__users-list">
                 <div class="menu-main-layout__user-item"
                      ng-repeat="profile in vm.profiles"
                      ng-if="profile.profile.email !== vm.user.profile.email">
@@ -32,17 +31,13 @@
                                  media-url="vm.user.profile.photo"
                                  fallback-src="{{'/images/avatar-personal.svg'}}">
                         </div>
+                        <button class="menu-main-layout__add-btn  icon-cancel btn--circle btn--size_40 rotate--am90"
+                                type="button"
+                                ui-sref="signIn()">
+                        </button>
                     </div>
-
                     <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
                     <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
-                </div>
-
-                <div class="menu-main-layout__user-item menu-main-layout__user-item--add-user ">
-                    <button class="menu-main-layout__add-btn  icon-cancel btn--circle btn--size_53 rotate--am90"
-                            type="button"
-                            ui-sref="signIn()">
-                    </button>
                 </div>
             </div>
         </div>
@@ -56,6 +51,7 @@
                 ng-repeat="folder in vm.folders.items">
                 <div class="menu-main__item-content" ng-if="!folder.isSub">
                     <a class="menu-main__link"
+                       ng-click="vm.closeMenu();"
                        ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
                         <span class="{{ folder.icon }} menu-main__icon"></span>
                         <span class="menu-main__title">{{ folder.caption }}</span>
@@ -82,6 +78,7 @@
                         <ul class="menu-main menu-main--additional">
                             <li class="menu-main__item-sub">
                                 <a class="menu-main__link"
+                                   ng-click="vm.closeMenu();"
                                    ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined})">
                                     <span class="icon-folder-desk menu-main__icon"></span>
                                     <span class="menu-main__title">{{ folderSub.caption }}</span></a>
@@ -101,8 +98,10 @@
         <ul class="menu-main">
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})">
-                        <span class="icon-important-desk menu-main__icon"></span>
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})"
+                       ng-click="vm.closeMenu();">
+                        <span class="icon-icon-flag-light menu-main__icon"></span>
                         <span class="menu-main__title">Важные</span>
                     </a>
                     <div class="menu-main__additional-option"></div>
@@ -110,16 +109,20 @@
             </li>
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})">
-                        <span class="icon-attach-desk menu-main__icon"></span>
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})"
+                       ng-click="vm.closeMenu();">
+                        <span class="icon-icon-screpka menu-main__icon"></span>
                         <span class="menu-main__title">С вложениями</span>
                     </a>
                 </div>
             </li>
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})">
-                        <span class="icon-unread-solid-desk menu-main__icon"></span>
+                    <a class="menu-main__link"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})"
+                       ng-click="vm.closeMenu();">
+                        <span class="icon-icon-mail-light menu-main__icon"></span>
                         <span class="menu-main__title">Непрочитанные</span>
                     </a>
                 </div>
@@ -134,7 +137,8 @@
             <li class="menu-main__item" ng-repeat="tag in vm.tags.items">
                 <div class="menu-main__item-content">
                     <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})">
+                       ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})"
+                       ng-click="vm.closeMenu();">
                         <span class="icon-tag-solid menu-main__icon menu-main__icon--select"
                               style="color: {{ tag.bgcolor }}"></span>
                         <span class="menu-main__title">{{ tag.tag_name }}</span>
@@ -161,24 +165,24 @@
             </li>
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" href="http://mailcz.devogic.com/settings/main" target="_blank">
+                    <a class="menu-main__link" ng-click="vm.goToDesktopVersion('http://m.mailcz.devogic.com/?version=desktop&page=settings.main')" target="_blank">
                         <span class="icon-settings-desk menu-main__icon"></span>
                         <span class="menu-main__title">Настройки</span>
                     </a>
                 </div>
             </li>
         </ul>
-
     </div>
 
     <div class="menu-main-layout__footer-menu">
         <hr class="hr hr--main-menu">
         <div class="mrg__left10 mrg__top10 mrg__bottom5">
-            <a href="?is-mobile=true"></a>
-            <span class="">Полная |</span>
+            <span class="link link--gray"
+                  ng-click="vm.goToDesktopVersion('http://m.mailcz.devogic.com/?version=desktop&page=mail.inbox')">Полная |</span>
             <span class="font--normal">Мобильная v 1.0</span>
         </div>
     </div>
 
     <div class="scrollables--y"></div>
 </div>
+
