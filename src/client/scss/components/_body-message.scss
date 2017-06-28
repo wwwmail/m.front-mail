@@ -11,8 +11,8 @@
     //background: $massage-content-bg-color;
     margin:  16px 0;
 
-    overflow: auto;
-    overflow-x: hidden;
+    overflow: scroll;
+    //overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
 }

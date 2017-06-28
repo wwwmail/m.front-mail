@@ -4732,8 +4732,7 @@
   height: auto;
   min-width: 280px;
   margin: 16px 0;
-  overflow: auto;
-  overflow-x: hidden;
+  overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }
 
