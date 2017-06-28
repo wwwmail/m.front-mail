@@ -28,6 +28,12 @@
             get();
         });
 
+        $rootScope.$on('mail:inbox:messages:update', function (e, data) {
+            // console.log(data);
+            vm.messages = data;
+            // get();
+        });
+
         $rootScope.$on('search:mailQuery', function (e, data) {
             vm.messages.params = data.search;
             vm.searchQuery = data.search;
