@@ -1,32 +1,32 @@
 .mail-message {
-  //position: absolute;
-  //top: 0;
-  //left: 0;
-  //right: 0;
-  //bottom: 0;
-  //box-sizing: border-box;
-  //height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  height: 100%;
 
-  //display: flex;
-  //flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-  //&__main-info {
-  //  position: relative;
-  //  flex: 1 0 auto;
-  //  height: auto;
-  //
-  //  &:before {
-  //    content: "";
-  //    position: fixed;
-  //    top: auto;
-  //    right: 0;
-  //    left: 0;
-  //    bottom: 48px;
-  //    height: 15px;
-  //    z-index: -1;
-  //    background: #f6f5f3;
-  //  }
-  //}
+  &__main-info {
+    //position: relative;
+    //flex: 1 0 auto;
+    //height: auto;
+    //
+    //&:before {
+    //  content: "";
+    //  position: fixed;
+    //  top: auto;
+    //  right: 0;
+    //  left: 0;
+    //  bottom: 48px;
+    //  height: 15px;
+    //  z-index: -1;
+    //  background: #f6f5f3;
+    //}
+  }
 
   &__main-content {
     background: #fff;
