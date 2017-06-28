@@ -1284,7 +1284,7 @@
 }
 
 .mail-message {
-  position: sticky;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -4733,7 +4733,7 @@
 }
 .body-message__content {
   width: auto;
-  height: auto;
+  height: 1000px;
   min-width: 280px;
   margin: 16px 0;
   overflow: auto;
