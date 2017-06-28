@@ -4982,7 +4982,7 @@
 @font-face {
   font-family: 'icomoon';
   src: url("../../fonts/icomoon.eot?49tcow");
-  src: url("../../fonts/icomoon.eot?49tcow#iefix") format("embedded-opentype"), url("../../fonts/comoon.ttf?49tcow") format("truetype"), url("../../fonts/icomoon.woff?49tcow") format("woff"), url("../../fonts/icomoon.svg?49tcow#icomoon") format("svg");
+  src: url("../../fonts/icomoon.eot?49tcow#iefix") format("embedded-opentype"), url("../../fonts/icomoon.ttf?49tcow") format("truetype"), url("../../fonts/icomoon.woff?49tcow") format("woff"), url("../../fonts/icomoon.svg?49tcow#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -5315,6 +5315,18 @@
 
 .icon-circle-desk:before {
   content: "\e94d";
+}
+
+.icon-icon-screpka:before {
+  content: "\e94e";
+}
+
+.icon-icon-mail-light:before {
+  content: "\e94f";
+}
+
+.icon-icon-flag-light:before {
+  content: "\e950";
 }
 
 /* icons.data.svg.css ==================================*/
