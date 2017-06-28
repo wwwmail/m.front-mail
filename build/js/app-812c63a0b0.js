@@ -25,12 +25,6 @@
     ]);
 })();
 
-(function() {
-  'use strict';
-
-  angular.module('app.components', []);
-})();
-
 (function () {
     'use strict';
 
@@ -56,6 +50,12 @@
             'LocalStorageModule',
             'ngTagsInput'
         ]);
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('app.components', []);
 })();
 
 (function() {
@@ -106,26 +106,12 @@
     ]);
 })();
 (function() {
-  'use strict';
-
-  angular.module('blocks.logger', []);
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('blocks.router', [
-    'ui.router',
-    'blocks.logger'
-  ]);
-})();
-
-(function() {
     'use strict';
 
-    angular.module('auth.passwordReset', [
+    angular.module('auth.signUp', [
         'app.core',
-        'app.components'
+        'app.components',
+        'app.services'
     ]);
 })();
 
@@ -150,23 +136,37 @@
 (function() {
     'use strict';
 
-    angular.module('auth.signUp', [
+    angular.module('auth.passwordReset', [
         'app.core',
-        'app.components',
-        'app.services'
+        'app.components'
     ]);
 })();
 
-(function () {
-    'use strict';
+(function() {
+  'use strict';
 
-    angular.module('mail.compose', []);
+  angular.module('blocks.logger', []);
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('blocks.router', [
+    'ui.router',
+    'blocks.logger'
+  ]);
 })();
 
 (function () {
     'use strict';
 
     angular.module('mail.inbox', []);
+})();
+
+(function () {
+    'use strict';
+
+    angular.module('mail.compose', []);
 })();
 
 (function () {
@@ -1850,224 +1850,63 @@
     'use strict';
 
     angular
-        .module('blocks.logger')
-        .factory('logger', logger);
+        .module('auth.signUp')
+        .controller('SignUpController', SignUpController);
 
-    logger.$inject = ['$log', 'toastr'];
-
+    SignUpController.$inject = ['$state', '$auth', 'authService'];
     /* @ngInject */
-    function logger($log, toastr) {
-        var service = {
-            showToasts: true,
-            error: error,
-            info: info,
-            success: success,
-            warning: warning,
-
-            // straight to console; bypass toastr
-            log: $log.log
-        };
-
-        return service;
-        /////////////////////
-
-        function error(message, data, title) {
-            toastr.error(message, title);
-            $log.error('Error: ' + message, data);
-        }
-
-        function info(message, data, title) {
-            toastr.info(message, title);
-            $log.info('Info: ' + message, data);
-        }
-
-        function success(message, data, title) {
-            toastr.success(message, title);
-            $log.info('Success: ' + message, data);
-        }
-
-        function warning(message, data, title) {
-            toastr.warning(message, title);
-            $log.warn('Warning: ' + message, data);
-        }
-    }
-}());
-
-/* Help configure the state-base ui.router */
-(function () {
-    'use strict';
-
-    angular
-        .module('blocks.router')
-        .provider('routerHelper', routerHelperProvider);
-
-    routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
-    /* @ngInject */
-    function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
-        /* jshint validthis:true */
-        var config = {
-            docTitle: '',
-            resolveAlways: {}
-        };
-
-        // if (!(window.history && window.history.pushState)) {
-        //   window.location.hash = '/';
-        // }
-
-        $locationProvider.html5Mode(true);
-        $locationProvider.hashPrefix('!');
-
-        this.configure = function (cfg) {
-            angular.extend(config, cfg);
-        };
-
-        this.$get = RouterHelper;
-        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger', 'mailBox'];
-        /* @ngInject */
-        function RouterHelper($location, $rootScope, $state, $timeout, logger, mailBox) {
-            var handlingStateChangeError = false;
-            var hasOtherwise = false;
-            var stateCounts = {
-                errors: 0,
-                changes: 0
-            };
-
-            var service = {
-                configureStates: configureStates,
-                getStates: getStates,
-                stateCounts: stateCounts
-            };
-
-            init();
-
-            return service;
-
-            ///////////////
-
-            function configureStates(states, otherwisePath) {
-                states.forEach(function (state) {
-                    state.config.resolve =
-                        angular.extend(state.config.resolve || {}, config.resolveAlways);
-                    $stateProvider.state(state.state, state.config);
-                });
-                if (otherwisePath && !hasOtherwise) {
-                    hasOtherwise = true;
-                    $urlRouterProvider.otherwise(otherwisePath);
-                }
-            }
-
-            function handleRoutingErrors() {
-                // Route cancellation:
-                // On routing error, go to the dashboard.
-                // Provide an exit clause if it tries to do it twice.
-                $rootScope.$on('$stateChangeError',
-                    function (event, toState, toParams, fromState, fromParams, error) {
-                        if (handlingStateChangeError) {
-                            return;
-                        }
-                        stateCounts.errors++;
-                        handlingStateChangeError = true;
-                        var destination = (toState &&
-                            (toState.title || toState.name || toState.loadedTemplateUrl)) ||
-                            'unknown target';
-                        var msg = 'Error routing to ' + destination + '. ' +
-                            (error.data || '') + '. <br/>' + (error.statusText || '') +
-                            ': ' + (error.status || '');
-                        logger.warning(msg, [toState]);
-                        $location.path('/');
-                    }
-                );
-            }
-
-            function init() {
-                handleRoutingErrors();
-                updateDocTitle();
-            }
-
-            function getStates() {
-                return $state.get();
-            }
-
-            function updateDocTitle() {
-                $rootScope.$on('$stateChangeSuccess',
-                    function (event, toState, toParams, fromState, fromParams) {
-                        stateCounts.changes++;
-                        handlingStateChangeError = false;
-                        // var title = config.docTitle + ' ' + (toState.title || '');
-                        var title = 'Mail.cz';
-
-                        if (toState.name === 'mail.inbox') {
-                            var folderName = _.result(_.find(mailBox.getCacheList().items, {'name': toParams.mbox}), 'caption');
-                            title = folderName + ' - ' + title;
-                        }
-
-                        $rootScope.title = title;
-                        $rootScope.isOpenMenu = false;
-                    }
-                );
-            }
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('auth.passwordReset')
-        .controller('PasswordResetController', PasswordResetController);
-
-    PasswordResetController.$inject = ['$state', '$auth', 'authService'];
-    /* @ngInject */
-    function PasswordResetController($state, $auth, authService) {
+    function SignUpController($state, $auth, authService) {
         var vm = this;
 
         vm.userForm = {
             isLoading: false,
-            model: {},
+            model: {
+                phone: '420'
+            },
             validations: {
-                username: {
-                    'required': 'Введите email или логин'
-                }
+                phone: {}
             }
         };
 
-        vm.requestPasswordReset = requestPasswordReset;
+        vm.codeForm = {
+            model: {}
+        };
 
-        function requestPasswordReset(form) {
-            if (form.$invalid) return;
-            // console.log(vm.userForm);
-            vm.userForm.isLoading = true;
-            $auth.requestPasswordReset(vm.userForm.model)
+        vm.signUp = signUp;
+        vm.sendCode = sendCode;
+
+        function signUp(form) {
+            var data = angular.copy(vm.userForm.model);
+
+            if (vm.userForm.model.phone) {
+                data.phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
+            }
+
+            $auth.submitRegistration(data)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
-                    $state.go('passwordUpdate', {
-                        username: vm.userForm.model.username
-                    });
+                    $state.go('mail.inbox');
                 })
                 .catch(function (response) {
-                    // handle error response
                     vm.userForm.errors = response.data.data;
-                    console.log('error',vm.userForm.errors);
+                    console.log('error', response);
                 });
         }
 
-        // function sendCode() {
-        //     if (!vm.userForm.model.phone) return;
-        //
-        //     var phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
-        //
-        //     // console.log('vm.userForm.model.phone', phone);
-        //     authService.sendCode({}, {phone: phone})
-        //         .then(function (response) {
-        //             console.log('response', response);
-        //             vm.codeResult = response;
-        //         })
-        //         .catch(function (response) {
-        //             vm.userForm.errors = response.data;
-        //             console.log('error', response);
-        //         });
-        // }
+        function sendCode() {
+            var phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
+            // console.log('vm.userForm.model.phone', phone);
+            authService.sendCode({}, {phone: phone})
+                .then(function (response) {
+                    console.log('response', response);
+                    vm.codeResult = response.data;
+                })
+                .catch(function (response) {
+                    vm.userForm.errors = response.data;
+                    console.log('error', response);
+                });
+        }
+
     }
 })();
 
@@ -2075,7 +1914,7 @@
     'use strict';
 
     angular
-        .module('auth.passwordReset')
+        .module('auth.signUp')
         .run(appRun);
 
     appRun.$inject = ['routerHelper'];
@@ -2087,13 +1926,13 @@
     function getStates() {
         return [
             {
-                state: 'passwordReset',
+                state: 'signUp',
                 config: {
-                    url: '/password-reset',
-                    templateUrl: 'app/auth/password-reset/password-reset.html',
-                    controller: 'PasswordResetController',
+                    url: '/sign-up',
+                    templateUrl: 'app/auth/sign-up/sign-up.html',
+                    controller: 'SignUpController',
                     controllerAs: 'vm',
-                    title: 'Войти'
+                    title: 'Регистрация'
                 }
             }
         ];
@@ -2292,63 +2131,60 @@
     'use strict';
 
     angular
-        .module('auth.signUp')
-        .controller('SignUpController', SignUpController);
+        .module('auth.passwordReset')
+        .controller('PasswordResetController', PasswordResetController);
 
-    SignUpController.$inject = ['$state', '$auth', 'authService'];
+    PasswordResetController.$inject = ['$state', '$auth', 'authService'];
     /* @ngInject */
-    function SignUpController($state, $auth, authService) {
+    function PasswordResetController($state, $auth, authService) {
         var vm = this;
 
         vm.userForm = {
             isLoading: false,
-            model: {
-                phone: '420'
-            },
+            model: {},
             validations: {
-                phone: {}
+                username: {
+                    'required': 'Введите email или логин'
+                }
             }
         };
 
-        vm.codeForm = {
-            model: {}
-        };
+        vm.requestPasswordReset = requestPasswordReset;
 
-        vm.signUp = signUp;
-        vm.sendCode = sendCode;
-
-        function signUp(form) {
-            var data = angular.copy(vm.userForm.model);
-
-            if (vm.userForm.model.phone) {
-                data.phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
-            }
-
-            $auth.submitRegistration(data)
+        function requestPasswordReset(form) {
+            if (form.$invalid) return;
+            // console.log(vm.userForm);
+            vm.userForm.isLoading = true;
+            $auth.requestPasswordReset(vm.userForm.model)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
-                    $state.go('mail.inbox');
+                    $state.go('passwordUpdate', {
+                        username: vm.userForm.model.username
+                    });
                 })
                 .catch(function (response) {
+                    // handle error response
                     vm.userForm.errors = response.data.data;
-                    console.log('error', response);
+                    console.log('error',vm.userForm.errors);
                 });
         }
 
-        function sendCode() {
-            var phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
-            // console.log('vm.userForm.model.phone', phone);
-            authService.sendCode({}, {phone: phone})
-                .then(function (response) {
-                    console.log('response', response);
-                    vm.codeResult = response.data;
-                })
-                .catch(function (response) {
-                    vm.userForm.errors = response.data;
-                    console.log('error', response);
-                });
-        }
-
+        // function sendCode() {
+        //     if (!vm.userForm.model.phone) return;
+        //
+        //     var phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
+        //
+        //     // console.log('vm.userForm.model.phone', phone);
+        //     authService.sendCode({}, {phone: phone})
+        //         .then(function (response) {
+        //             console.log('response', response);
+        //             vm.codeResult = response;
+        //         })
+        //         .catch(function (response) {
+        //             vm.userForm.errors = response.data;
+        //             console.log('error', response);
+        //         });
+        // }
     }
 })();
 
@@ -2356,7 +2192,7 @@
     'use strict';
 
     angular
-        .module('auth.signUp')
+        .module('auth.passwordReset')
         .run(appRun);
 
     appRun.$inject = ['routerHelper'];
@@ -2368,16 +2204,180 @@
     function getStates() {
         return [
             {
-                state: 'signUp',
+                state: 'passwordReset',
                 config: {
-                    url: '/sign-up',
-                    templateUrl: 'app/auth/sign-up/sign-up.html',
-                    controller: 'SignUpController',
+                    url: '/password-reset',
+                    templateUrl: 'app/auth/password-reset/password-reset.html',
+                    controller: 'PasswordResetController',
                     controllerAs: 'vm',
-                    title: 'Регистрация'
+                    title: 'Войти'
                 }
             }
         ];
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('blocks.logger')
+        .factory('logger', logger);
+
+    logger.$inject = ['$log', 'toastr'];
+
+    /* @ngInject */
+    function logger($log, toastr) {
+        var service = {
+            showToasts: true,
+            error: error,
+            info: info,
+            success: success,
+            warning: warning,
+
+            // straight to console; bypass toastr
+            log: $log.log
+        };
+
+        return service;
+        /////////////////////
+
+        function error(message, data, title) {
+            toastr.error(message, title);
+            $log.error('Error: ' + message, data);
+        }
+
+        function info(message, data, title) {
+            toastr.info(message, title);
+            $log.info('Info: ' + message, data);
+        }
+
+        function success(message, data, title) {
+            toastr.success(message, title);
+            $log.info('Success: ' + message, data);
+        }
+
+        function warning(message, data, title) {
+            toastr.warning(message, title);
+            $log.warn('Warning: ' + message, data);
+        }
+    }
+}());
+
+/* Help configure the state-base ui.router */
+(function () {
+    'use strict';
+
+    angular
+        .module('blocks.router')
+        .provider('routerHelper', routerHelperProvider);
+
+    routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
+    /* @ngInject */
+    function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
+        /* jshint validthis:true */
+        var config = {
+            docTitle: '',
+            resolveAlways: {}
+        };
+
+        // if (!(window.history && window.history.pushState)) {
+        //   window.location.hash = '/';
+        // }
+
+        $locationProvider.html5Mode(true);
+        $locationProvider.hashPrefix('!');
+
+        this.configure = function (cfg) {
+            angular.extend(config, cfg);
+        };
+
+        this.$get = RouterHelper;
+        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger', 'mailBox'];
+        /* @ngInject */
+        function RouterHelper($location, $rootScope, $state, $timeout, logger, mailBox) {
+            var handlingStateChangeError = false;
+            var hasOtherwise = false;
+            var stateCounts = {
+                errors: 0,
+                changes: 0
+            };
+
+            var service = {
+                configureStates: configureStates,
+                getStates: getStates,
+                stateCounts: stateCounts
+            };
+
+            init();
+
+            return service;
+
+            ///////////////
+
+            function configureStates(states, otherwisePath) {
+                states.forEach(function (state) {
+                    state.config.resolve =
+                        angular.extend(state.config.resolve || {}, config.resolveAlways);
+                    $stateProvider.state(state.state, state.config);
+                });
+                if (otherwisePath && !hasOtherwise) {
+                    hasOtherwise = true;
+                    $urlRouterProvider.otherwise(otherwisePath);
+                }
+            }
+
+            function handleRoutingErrors() {
+                // Route cancellation:
+                // On routing error, go to the dashboard.
+                // Provide an exit clause if it tries to do it twice.
+                $rootScope.$on('$stateChangeError',
+                    function (event, toState, toParams, fromState, fromParams, error) {
+                        if (handlingStateChangeError) {
+                            return;
+                        }
+                        stateCounts.errors++;
+                        handlingStateChangeError = true;
+                        var destination = (toState &&
+                            (toState.title || toState.name || toState.loadedTemplateUrl)) ||
+                            'unknown target';
+                        var msg = 'Error routing to ' + destination + '. ' +
+                            (error.data || '') + '. <br/>' + (error.statusText || '') +
+                            ': ' + (error.status || '');
+                        logger.warning(msg, [toState]);
+                        $location.path('/');
+                    }
+                );
+            }
+
+            function init() {
+                handleRoutingErrors();
+                updateDocTitle();
+            }
+
+            function getStates() {
+                return $state.get();
+            }
+
+            function updateDocTitle() {
+                $rootScope.$on('$stateChangeSuccess',
+                    function (event, toState, toParams, fromState, fromParams) {
+                        stateCounts.changes++;
+                        handlingStateChangeError = false;
+                        // var title = config.docTitle + ' ' + (toState.title || '');
+                        var title = 'Mail.cz';
+
+                        if (toState.name === 'mail.inbox') {
+                            var folderName = _.result(_.find(mailBox.getCacheList().items, {'name': toParams.mbox}), 'caption');
+                            title = folderName + ' - ' + title;
+                        }
+
+                        $rootScope.title = title;
+                        $rootScope.isOpenMenu = false;
+                    }
+                );
+            }
+        }
     }
 })();
 
@@ -4716,6 +4716,189 @@
     'use strict';
 
     angular
+        .module('mail.inbox')
+        .controller('InboxController', InboxController);
+
+    InboxController.$inject = ['$rootScope', '$state', '$http', 'mail', 'mailBox', 'profile', 'messages'];
+    /* @ngInject */
+    function InboxController($rootScope, $state, $http, mail, mailBox, profile, messages) {
+        var vm = this;
+
+        vm.messages = {
+            params: {
+                'per-page': 10,
+                'len': 100
+            },
+            defaultParams: {
+                'per-page': 10,
+                'len': 100
+            },
+            checked: []
+        };
+
+        vm.folders = {};
+
+        $rootScope.$on('mail:sync', function () {
+            get();
+        });
+
+        $rootScope.$on('mail:inbox:messages:update', function (e, data) {
+            // console.log(data);
+            vm.messages = data;
+            // get();
+        });
+
+        $rootScope.$on('search:mailQuery', function (e, data) {
+            vm.messages.params = data.search;
+            vm.searchQuery = data.search;
+            vm.messages.isSearch = true;
+            get();
+        });
+
+        $rootScope.$on('search:mail', function (e, data) {
+            vm.messages.params = data.search;
+            vm.messages.params = _.assign(vm.messages.params, vm.searchQuery);
+            vm.messages.isSearch = true;
+            get();
+        });
+
+        $rootScope.$on('search:close', function (e, data) {
+            vm.messages.params = angular.copy(vm.messages.defaultParams);
+            vm.messages.params.mbox = $state.params.mbox;
+            vm.messages.isSearch = false;
+            get();
+        });
+
+        vm.openTagList = openTagList;
+        vm.paginate = paginate;
+
+        activate();
+
+        function activate() {
+            vm.$state = $state;
+
+            if ($state.params.filter) {
+                vm.messages.params.filter = $state.params.filter;
+            }
+
+            if ($state.params.mbox) {
+                vm.messages.params.mbox = $state.params.mbox;
+            }
+
+            if ($state.params.tag_id) {
+                vm.messages.params.tag_id = $state.params.tag_id;
+            }
+
+            getMailBox();
+
+            console.log('messages', messages.$promise);
+
+            messages.$promise.then(function (response) {
+                vm.messages.params.search = null;
+                vm.messages.checked = [];
+                vm.messages = _.assign(vm.messages, response.data);
+                _.forEach(vm.messages.items, function (message) {
+                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
+                });
+            });
+        }
+
+        function get() {
+            vm.messages.isLoading = true;
+            mail.get(vm.messages.params).then(function (response) {
+                vm.messages.isLoading = false;
+                vm.messages.checked = [];
+                vm.messages = _.assign(vm.messages, response.data);
+                _.forEach(vm.messages.items, function (message) {
+                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
+                });
+            });
+        }
+
+        function getMailBox() {
+            mailBox.get().then(function (response) {
+                vm.folders = _.assign(vm.folders, response.data);
+            });
+        }
+
+        function openTagList() {
+            vm.isOpenTagList = true;
+        }
+
+        function paginate() {
+            if (vm.messages._links.next && !vm.messages.isLoading) {
+                vm.messages.isLoading = true;
+                $http.get(vm.messages._links.next.href).then(function (response) {
+                    vm.messages.isLoading = false;
+                    vm.messages.items = vm.messages.items.concat(response.data.data.items);
+                    vm.messages._links = response.data.data._links;
+                    vm.messages._meta = response.data.data._meta;
+
+                    console.log('pag', vm.messages);
+                });
+            }
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('mail.inbox')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper'];
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
+
+    function getStates() {
+        return [
+            {
+                state: 'mail.inbox',
+                config: {
+                    url: '/inbox?mbox&filter&tag_id',
+                    templateUrl: 'app/mail/inbox/inbox.html',
+                    controller: 'InboxController',
+                    controllerAs: 'vm',
+                    title: 'Inbox',
+                    resolve: {
+                        messages: function (mail, $stateParams) {
+                            var messages = {
+                                params: {
+                                    'per-page': 10,
+                                    'len': 100
+                                },
+                                checked: []
+                            };
+
+                            if ($stateParams.filter) {
+                                messages.params.filter = $stateParams.filter;
+                            }
+
+                            if ($stateParams.mbox) {
+                                messages.params.mbox = $stateParams.mbox;
+                            }
+
+                            if ($stateParams.tag_id) {
+                                messages.params.tag_id = $stateParams.tag_id;
+                            }
+
+                            return mail.get(messages.params);
+                        }
+                    }
+                }
+            }
+        ];
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
         .module('mail.compose')
         .controller('ComposeController', ComposeController);
 
@@ -5280,189 +5463,6 @@
     'use strict';
 
     angular
-        .module('mail.inbox')
-        .controller('InboxController', InboxController);
-
-    InboxController.$inject = ['$rootScope', '$state', '$http', 'mail', 'mailBox', 'profile', 'messages'];
-    /* @ngInject */
-    function InboxController($rootScope, $state, $http, mail, mailBox, profile, messages) {
-        var vm = this;
-
-        vm.messages = {
-            params: {
-                'per-page': 10,
-                'len': 100
-            },
-            defaultParams: {
-                'per-page': 10,
-                'len': 100
-            },
-            checked: []
-        };
-
-        vm.folders = {};
-
-        $rootScope.$on('mail:sync', function () {
-            get();
-        });
-
-        $rootScope.$on('mail:inbox:messages:update', function (e, data) {
-            // console.log(data);
-            vm.messages = data;
-            // get();
-        });
-
-        $rootScope.$on('search:mailQuery', function (e, data) {
-            vm.messages.params = data.search;
-            vm.searchQuery = data.search;
-            vm.messages.isSearch = true;
-            get();
-        });
-
-        $rootScope.$on('search:mail', function (e, data) {
-            vm.messages.params = data.search;
-            vm.messages.params = _.assign(vm.messages.params, vm.searchQuery);
-            vm.messages.isSearch = true;
-            get();
-        });
-
-        $rootScope.$on('search:close', function (e, data) {
-            vm.messages.params = angular.copy(vm.messages.defaultParams);
-            vm.messages.params.mbox = $state.params.mbox;
-            vm.messages.isSearch = false;
-            get();
-        });
-
-        vm.openTagList = openTagList;
-        vm.paginate = paginate;
-
-        activate();
-
-        function activate() {
-            vm.$state = $state;
-
-            if ($state.params.filter) {
-                vm.messages.params.filter = $state.params.filter;
-            }
-
-            if ($state.params.mbox) {
-                vm.messages.params.mbox = $state.params.mbox;
-            }
-
-            if ($state.params.tag_id) {
-                vm.messages.params.tag_id = $state.params.tag_id;
-            }
-
-            getMailBox();
-
-            console.log('messages', messages.$promise);
-
-            messages.$promise.then(function (response) {
-                vm.messages.params.search = null;
-                vm.messages.checked = [];
-                vm.messages = _.assign(vm.messages, response.data);
-                _.forEach(vm.messages.items, function (message) {
-                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
-                });
-            });
-        }
-
-        function get() {
-            vm.messages.isLoading = true;
-            mail.get(vm.messages.params).then(function (response) {
-                vm.messages.isLoading = false;
-                vm.messages.checked = [];
-                vm.messages = _.assign(vm.messages, response.data);
-                _.forEach(vm.messages.items, function (message) {
-                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
-                });
-            });
-        }
-
-        function getMailBox() {
-            mailBox.get().then(function (response) {
-                vm.folders = _.assign(vm.folders, response.data);
-            });
-        }
-
-        function openTagList() {
-            vm.isOpenTagList = true;
-        }
-
-        function paginate() {
-            if (vm.messages._links.next && !vm.messages.isLoading) {
-                vm.messages.isLoading = true;
-                $http.get(vm.messages._links.next.href).then(function (response) {
-                    vm.messages.isLoading = false;
-                    vm.messages.items = vm.messages.items.concat(response.data.data.items);
-                    vm.messages._links = response.data.data._links;
-                    vm.messages._meta = response.data.data._meta;
-
-                    console.log('pag', vm.messages);
-                });
-            }
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('mail.inbox')
-        .run(appRun);
-
-    appRun.$inject = ['routerHelper'];
-    /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
-    }
-
-    function getStates() {
-        return [
-            {
-                state: 'mail.inbox',
-                config: {
-                    url: '/inbox?mbox&filter&tag_id',
-                    templateUrl: 'app/mail/inbox/inbox.html',
-                    controller: 'InboxController',
-                    controllerAs: 'vm',
-                    title: 'Inbox',
-                    resolve: {
-                        messages: function (mail, $stateParams) {
-                            var messages = {
-                                params: {
-                                    'per-page': 10,
-                                    'len': 100
-                                },
-                                checked: []
-                            };
-
-                            if ($stateParams.filter) {
-                                messages.params.filter = $stateParams.filter;
-                            }
-
-                            if ($stateParams.mbox) {
-                                messages.params.mbox = $stateParams.mbox;
-                            }
-
-                            if ($stateParams.tag_id) {
-                                messages.params.tag_id = $stateParams.tag_id;
-                            }
-
-                            return mail.get(messages.params);
-                        }
-                    }
-                }
-            }
-        ];
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
         .module('mail.message')
         .controller('MessageController', MessageController);
 
@@ -5856,8 +5856,8 @@
 angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/auth/view.html','<div class="auth-layout"><ui-view></ui-view></div>');
 $templateCache.put('app/mail/mail.html','<section class="layout"><div class="layout__header"><header folder="vm.folder"></header><div class="layout__menu" ng-class="{\'layout__menu--is-active-menu\': isOpenMenu}"><div class="layout__menu-content"><menu-main></menu-main></div><button class="layout__menu-closer btn--not-events btn--not-style" type="button" ng-click="vm.closeMenu()"></button></div></div><div class="layout__inner" layout-height><div class="layout__content"><ui-view class="height--min-inh height--all"></ui-view></div></div></section>');
 $templateCache.put('app/settings/settings.html','<section class="layout"><div class="layout__header"><header></header></div><div class="layout__inner" layout-height><div class="layout__menu"><menu-settings></menu-settings></div><div class="layout__content"><ui-view></ui-view></div></div></section>');
-$templateCache.put('app/auth/password-update/password-update.html','<div class="auth-layout"><div class="password-reset-layout__content"><div class="password-reset-layout__form"><div class="card"><div class="auth-form"><div class="main-title-text line-h--h-1">\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u0434\u043E\u0441\u0442\u0443\u043F\u0430</div><form class="form" name="userForm" ng-submit="vm.resetPassword(userForm)" novalidate><!-- Code--><div class="form__field-item mrg__bottom6"><div class="field-style"><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="text" name="code" ng-model="vm.userForm.model.code" placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434 \u0438\u0437 \u0441\u043C\u0441" required><validation-errors ng-if="userForm.$submitted" data="userForm.code" server="vm.userForm.errors" messages="vm.userForm.validations.code"></validation-errors></div></div></div><!-- \u041F\u0430\u0440\u043E\u043B\u044C--><div class="form__field-item mrg__bottom6"><div class="field-style"><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="password" name="newpassword" ng-model="vm.userForm.model.newpassword" placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u0432\u044B\u0439 \u043F\u0430\u0440\u043E\u043B\u044C" required><validation-errors ng-if="userForm.$submitted" data="userForm.newpassword" server="vm.userForm.errors" messages="vm.userForm.validations.newpassword"></validation-errors></div></div></div><!-- \u041F\u0430\u0440\u043E\u043B\u044C 2--><div class="form__field-item"><div class="field-style"><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="password" name="passwordConf" ng-model="vm.userForm.model.passwordConf" placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u0432\u044B\u0439 \u043F\u0430\u0440\u043E\u043B\u044C" required><validation-errors ng-if="userForm.$submitted" data="userForm.passwordConf" server="vm.userForm.errors" messages="vm.userForm.validations.passwordConf"></validation-errors></div></div></div><!-- \u043A\u043D\u043E\u043F\u043A\u0430 \u0414\u0430\u043B\u0435\u0435 --><div class="form__field-item mrg__top25"><div class="field-style"><button class="btn btn--size_l btn--red width--inh" type="submit">\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C</button></div></div></form></div></div></div><!-- \u0444\u0443\u0442\u0442\u0435\u0440 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438--><div class="footer footer__auth"><!-- \u041A\u043E\u043F\u0438\u0440\u0430\u0439\u0442--><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.cz\xBB Group a.s.</span></div><!-- \u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043C\u0435\u043D\u044E \u0441 \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u044F\u0437\u044B\u043A\u0430--><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><div class="choice-language"><a class="choice-language__link choice-language--active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a></div></div></div></div></div></div></div><div class="auth-layout__bg"></div></div>');
 $templateCache.put('app/auth/password-reset/password-reset.html','<div class="password-reset-layout"><div class="password-reset-layout__content"><div class="password-reset-layout__form password-reset-layout__form--wd388"><div class="card"><div class="auth-form"><div class="main-title-text line-h--h-1">\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u0434\u043E\u0441\u0442\u0443\u043F\u0430</div><form class="form" name="userForm" ng-submit="vm.requestPasswordReset(userForm)" novalidate><!-- \u0412\u0430\u0448 \u043C\u0430\u0439\u043B--><div class="form__field-item mrg__bottom10"><div class="field-style"><label class="field-style__title font--size13">\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043B\u043E\u0433\u0438\u043D, \u0434\u043B\u044F \u043A\u043E\u0442\u043E\u0440\u043E\u0433\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u043F\u0430\u0440\u043E\u043B\u044C</label><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="text" name="username" ng-model="vm.userForm.model.username" placeholder="\u041B\u043E\u0433\u0438\u043D \u0438\u043B\u0438 email" required><validation-errors data="userForm.username" server="vm.userForm.errors" messages="vm.userForm.validations.username"></validation-errors><!-- <div class="validation">\n                                         <div class="validation__message validation__message&#45;&#45;red">\n                                             \u042D\u0442\u043E \u0438\u043C\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F \u0443\u0436\u0435 \u0437\u0430\u043D\u044F\u0442\u043E. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435\n                                             \u0434\u0440\u0443\u0433\u043E\u0435\n                                         </div>\n                                     </div>--></div></div></div><!-- \u0421\u041C\u0421 \u0432\u0430\u043B\u0438\u0434\u0430\u0446\u0438\u044F --><!--<div class="form__field-item mrg__bottom10 mrg__top20 sms-bg">--><!--&lt;!&ndash; \u0414\u043E \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0438 \u0421\u041C\u0421&ndash;&gt;--><!--<div class="width&#45;&#45;inh">--><!--<div class="field-style flex&#45;&#45;inline mrg__top5">--><!--<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow width&#45;&#45;inh mrg__right5"--><!--type="text"--><!--name="phone"--><!--ng-model="vm.userForm.model.phone"--><!--placeholder="+420 xxx xxx xxx"--><!--ui-mask="+420 999-999-999"--><!--required>--><!--<button class="btn btn&#45;&#45;size_l btn&#45;&#45;normal width&#45;&#45;min126" type="button"--><!--ng-click="vm.sendCode()">\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434--><!--</button>--><!--</div>--><!--<validation-errors data="userForm.phone"--><!--server="vm.userForm.errors"--><!--messages="vm.userForm.validations.phone"></validation-errors>--><!--<span class="notific notific&#45;&#45;auth mrg__top5" ng-if="vm.codeResult">--><!--\u041D\u0430 \u043D\u043E\u043C\u0435\u0440 +420 xxx xxx xxx \u0431\u044B\u043B \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D \u043A\u043E\u0434 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 (\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E)--><!--<span class="color&#45;&#45;red">{{ vm.codeResult }}</span>--><!--</span>--><!--</div>--><!--&lt;!&ndash; \u041F\u043E\u0441\u043B\u0435 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0438 \u0421\u041C\u0421&ndash;&gt;--><!--&lt;!&ndash;<div class="width&#45;&#45;inh mrg__top5">&ndash;&gt;--><!--&lt;!&ndash;<div class="field-style flex&#45;&#45;inline align-items&#45;&#45;cn">&ndash;&gt;--><!--&lt;!&ndash;<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow width&#45;&#45;inh mrg__right5"&ndash;&gt;--><!--&lt;!&ndash;type="text"&ndash;&gt;--><!--&lt;!&ndash;name="code"&ndash;&gt;--><!--&lt;!&ndash;ng-model="vm.userForm.model.code"&ndash;&gt;--><!--&lt;!&ndash;placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434 \u0438\u0437 \u0441\u043C\u0441"&ndash;&gt;--><!--&lt;!&ndash;required>&ndash;&gt;--><!--&lt;!&ndash;&lt;!&ndash;<button class="btn btn&#45;&#45;size_l btn&#45;&#45;normal width&#45;&#45;min126" type="button">\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C</button>&ndash;&gt;&ndash;&gt;--><!--&lt;!&ndash;<span class="ok-validates width&#45;&#45;inh">\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D</span>&ndash;&gt;--><!--&lt;!&ndash;</div>&ndash;&gt;--><!--&lt;!&ndash;<validation-errors data="userForm.code"&ndash;&gt;--><!--&lt;!&ndash;server="vm.userForm.errors"&ndash;&gt;--><!--&lt;!&ndash;messages="vm.userForm.validations.code">&ndash;&gt;--><!--&lt;!&ndash;</validation-errors>&ndash;&gt;--><!--&lt;!&ndash;</div>&ndash;&gt;--><!--</div>--><!----><div class="form__field-item form__field-item--flex-start mrg__top25"><div class="field-style"><button class="btn btn--size_l btn--red" type="submit">\u0414\u0430\u043B\u0435\u0435</button></div></div></form></div></div></div><!-- \u0444\u0443\u0442\u0442\u0435\u0440 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438--><div class="footer footer__auth"><!-- \u041A\u043E\u043F\u0438\u0440\u0430\u0439\u0442--><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.cz\xBB Group a.s.</span></div><!-- \u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043C\u0435\u043D\u044E \u0441 \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u044F\u0437\u044B\u043A\u0430--><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><div class="choice-language"><a class="choice-language__link choice-language--active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a></div></div></div></div></div></div></div><div class="auth-layout__bg"></div></div>\u0430\u0448');
+$templateCache.put('app/auth/password-update/password-update.html','<div class="auth-layout"><div class="password-reset-layout__content"><div class="password-reset-layout__form"><div class="card"><div class="auth-form"><div class="main-title-text line-h--h-1">\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u0434\u043E\u0441\u0442\u0443\u043F\u0430</div><form class="form" name="userForm" ng-submit="vm.resetPassword(userForm)" novalidate><!-- Code--><div class="form__field-item mrg__bottom6"><div class="field-style"><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="text" name="code" ng-model="vm.userForm.model.code" placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434 \u0438\u0437 \u0441\u043C\u0441" required><validation-errors ng-if="userForm.$submitted" data="userForm.code" server="vm.userForm.errors" messages="vm.userForm.validations.code"></validation-errors></div></div></div><!-- \u041F\u0430\u0440\u043E\u043B\u044C--><div class="form__field-item mrg__bottom6"><div class="field-style"><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="password" name="newpassword" ng-model="vm.userForm.model.newpassword" placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u0432\u044B\u0439 \u043F\u0430\u0440\u043E\u043B\u044C" required><validation-errors ng-if="userForm.$submitted" data="userForm.newpassword" server="vm.userForm.errors" messages="vm.userForm.validations.newpassword"></validation-errors></div></div></div><!-- \u041F\u0430\u0440\u043E\u043B\u044C 2--><div class="form__field-item"><div class="field-style"><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="password" name="passwordConf" ng-model="vm.userForm.model.passwordConf" placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u0432\u044B\u0439 \u043F\u0430\u0440\u043E\u043B\u044C" required><validation-errors ng-if="userForm.$submitted" data="userForm.passwordConf" server="vm.userForm.errors" messages="vm.userForm.validations.passwordConf"></validation-errors></div></div></div><!-- \u043A\u043D\u043E\u043F\u043A\u0430 \u0414\u0430\u043B\u0435\u0435 --><div class="form__field-item mrg__top25"><div class="field-style"><button class="btn btn--size_l btn--red width--inh" type="submit">\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C</button></div></div></form></div></div></div><!-- \u0444\u0443\u0442\u0442\u0435\u0440 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438--><div class="footer footer__auth"><!-- \u041A\u043E\u043F\u0438\u0440\u0430\u0439\u0442--><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.cz\xBB Group a.s.</span></div><!-- \u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043C\u0435\u043D\u044E \u0441 \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u044F\u0437\u044B\u043A\u0430--><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><div class="choice-language"><a class="choice-language__link choice-language--active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a></div></div></div></div></div></div></div><div class="auth-layout__bg"></div></div>');
 $templateCache.put('app/auth/sign-in/sign-in.html','<div class="auth-layout"><div class="auth-layout__content"><div class="auth-layout__form"><div class="card"><div class="auth-form"><div class="auth-form__logo mrg__bottom16"><img class="img-responsive mrg__auto" src="/images/logo.png"><hr class="hr hr--auth mrg__top16"></div><form class="form" name="userForm" ng-submit="vm.login(userForm)" novalidate><!-- \u043B\u043E\u0433\u0438\u043D --><div class="form__field-item mrg__bottom10"><div class="field-style"><input class="input input--size_l input--up-shadow width--inh" type="text" ng-model="vm.userForm.model.username" required placeholder="\u041B\u043E\u0433\u0438\u043D"><validation-errors data="userForm.username" server="vm.userForm.errors" messages="vm.userForm.validations.username"></validation-errors></div></div><!-- \u043F\u0430\u0440\u043E\u043B\u044C --><div class="form__field-item mrg__bottom10"><div class="field-style"><input class="input input--size_l input--up-shadow width--inh" type="password" ng-model="vm.userForm.model.password" required placeholder="\u041F\u0430\u0440\u043E\u043B\u044C"></div><validation-errors data="userForm.password" server="vm.userForm.errors" messages="vm.userForm.validations.password"></validation-errors></div><!-- \u0432\u043E\u0439\u0442\u0438 --><div class="form__field-item mrg__bottom10"><div class="field-style"><button class="btn btn--size_l btn--yellow width--inh" type="submit">\u0412\u043E\u0439\u0442\u0438</button></div></div><div class="validation mrg__bottom10"><div class="validation__message validation__message--red">{{ vm.userForm.errors }}</div></div><!-- \u0437\u0430\u043F\u043E\u043C\u043D\u0438\u0442\u044C / \u0437\u0430\u0431\u044B\u043B\u0438--><div class="form__field-item mrg__bottom10 flex flex--just-s-a"><div class="field-style widtn--inh"><!--\u043D\u0430\u0448 \u0447\u0435\u043A\u0431\u043E\u043A\u0441 --><label class="checkbox-y__label checkbox-y" for="isChecked"><input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked" ng-model="isChecked"><div class="checkbox-y__body"><span class="checkbox-y__icon icon-mark"></span></div><span class="checkbox__text" role="presentation">\u0417\u0430\u043F\u043E\u043C\u043D\u0438\u0442\u044C \u043C\u0435\u043D\u044F</span></label></div><div class="field-style widtn--inh font--right"><a class="link link-aith" ui-sref="passwordReset">\u0417\u0430\u0431\u044B\u043B\u0438 \u043F\u0430\u0440\u043E\u043B\u044C?</a></div></div></form><hr class="hr hr--auth"><button class="btn btn--size_l btn--normal width--inh btn--s-gradient" ui-sref="signUp">\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F</button></div></div></div><!-- \u0444\u0443\u0442\u0442\u0435\u0440 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438--><div class="footer footer__auth"><!-- \u041A\u043E\u043F\u0438\u0440\u0430\u0439\u0442--><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.cz\xBB Group a.s.</span></div><!-- \u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043C\u0435\u043D\u044E \u0441 \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u044F\u0437\u044B\u043A\u0430--><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><div class="choice-language"><a class="choice-language__link choice-language--active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a></div></div></div></div></div></div></div><div class="auth-layout__bg"></div></div>');
 $templateCache.put('app/auth/sign-up/sign-up.html','<div class="auth-layout"><div class="auth-layout__content"><div class="auth-layout__form auth-layout__form--wd388"><div class="card"><div class="auth-form"><div class="auth-form__logo mrg__bottom16"><img class="img-responsive mrg__auto" src="/images/logo.png"><hr class="hr hr--auth mrg__top16"></div><form class="form" name="userForm" ng-submit="vm.signUp(userForm)" novalidate><!-- \u0438\u043C\u044F \u0438 \u0444\u0430\u043C\u0438\u043B\u0438\u044F --><div class="form__field-item form__field-item--mob-modif mrg__bottom8 flex--inline"><div class="field-style mrg__right5 mrg__bottom6"><input class="input input--size_l input--up-shadow width--inh" type="text" name="first_name" ng-model="vm.userForm.model.first_name" placeholder="\u0418\u043C\u044F" required><validation-errors data="userForm.first_name" server="vm.userForm.errors" messages="vm.userForm.validations.first_name"></validation-errors></div><div class="field-style mrg__bottom6"><input class="input input--size_l input--up-shadow width--inh" type="text" ng-model="vm.userForm.model.last_name" placeholder="\u0424\u0430\u043C\u0438\u043B\u0438\u044F" required><validation-errors data="userForm.last_name" server="vm.userForm.errors" messages="vm.userForm.validations.last_name"></validation-errors></div></div><!-- \u043B\u043E\u0433\u0438\u043D \u0432 \u0431\u0430\u0437\u0435 --><div class="form__field-item mrg__bottom10"><div class="field-style"><label class="field-style__title font--size13">\u041F\u0440\u0438\u0434\u0443\u043C\u0430\u0439\u0442\u0435 \u0438\u043C\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F</label><div class="field-style__group"><div class="width--inh position"><span class="input-plash input-plash--top13 font--size13">@mail.cz</span> <input class="input input--size_l input--up-shadow width--inh" type="text" name="username" ng-model="vm.userForm.model.username" placeholder="\u0418\u043C\u044F \u043F\u043E\u0447\u0442\u044B" required></div><validation-errors data="userForm.username" server="vm.userForm.errors" messages="vm.userForm.validations.username"></validation-errors><!-- <div class="validation">\n                                        <div class="validation__message validation__message&#45;&#45;red">\n                                            \u042D\u0442\u043E \u0438\u043C\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F \u0443\u0436\u0435 \u0437\u0430\u043D\u044F\u0442\u043E. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435\n                                            \u0434\u0440\u0443\u0433\u043E\u0435\n                                        </div>\n                                    </div>--></div><!--<div class="input-data-valide-test mrg__top10 mrg__bottom10 ">--><!--\u0421\u0432\u043E\u0431\u043E\u0434\u043D\u043E: <span class="input-data-valide-test__we-offer">abc779736</span>--><!--</div>--></div></div><!-- \u043F\u0430\u0440\u043E\u043B\u044C --><div class="form__field-item mrg__bottom6"><div class="field-style"><input class="input input--size_l input--up-shadow width--inh" type="password" name="password" ng-model="vm.userForm.model.password" placeholder="\u041F\u0430\u0440\u043E\u043B\u044C" required><validation-errors data="userForm.password" server="vm.userForm.errors" messages="vm.userForm.validations.password"></validation-errors></div></div><!-- \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u043F\u0430\u0440\u043E\u043B\u044F --><div class="form__field-item mrg__bottom10"><div class="field-style"><input class="input input--size_l input--up-shadow width--inh" type="password" name="passwordConf" ng-model="vm.userForm.model.passwordConf" placeholder="\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u043F\u0430\u0440\u043E\u043B\u044F" required><validation-errors data="userForm.passwordConf" server="vm.userForm.errors" messages="vm.userForm.validations.passwordConf"></validation-errors></div></div><!-- \u0421\u041C\u0421 \u0432\u0430\u043B\u0438\u0434\u0430\u0446\u0438\u044F --><!--\u0434\u043B\u044F \u041E\u0442\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u0438\u044F \u0431\u043B\u043E\u043A\u0430 \u043F\u043E\u0434\u043B\u043E\u0436\u043A\u043E\u0439 \u043F\u0440\u043E\u0441\u0442\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u044F\u0435\u043C \u044Esms-bg  --><div class="form__field-item mrg__bottom25 mrg__top30 flex flex--row-wrap"><div class="field-style flex--inline"><input class="input input--size_l input--up-shadow width--inh" type="text" name="phone" ng-model="vm.userForm.model.phone" ui-mask-placeholder ui-mask-placeholder-char="x" ui-mask="+999 999-999-999" ui-options="{allowInvalidValue: true, clearOnBlur: false}" required> <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button" ng-click="vm.sendCode()">\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434</button></div><div class="field-style width--inh"><validation-errors data="userForm.phone" server="vm.userForm.errors" messages="vm.userForm.validations.phone"></validation-errors><span class="notific notific--auth" ng-if="vm.codeResult">\u041D\u0430 \u043D\u043E\u043C\u0435\u0440 +420 xxx xxx xxx \u0431\u044B\u043B \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D \u043A\u043E\u0434 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438</span></div></div><!-- \u0421\u041C\u0421 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u043A\u043E\u0434\u0430 --><div class="form__field-item mrg__bottom20 mrg__top16 flex flex--row-wrap" ng-if="vm.codeResult.code"><div class="width-inh flex--inline align-items--cn"><div class="field-style mrg__right5 width--size177"><input class="input input--size_l input--up-shadow width--inh" type="text" name="code" ng-model="vm.userForm.model.code" placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434 \u0438\u0437 \u0441\u043C\u0441" required></div><div class="field-style width--aut"><!--<button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button">\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C--><!--</button>--> <span class="ok-validates width--inh">\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D</span></div></div><validation-errors data="userForm.code" server="vm.userForm.errors" messages="vm.userForm.validations.code"></validation-errors></div><!-- \u0421\u041C\u0421 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u043A\u043E\u0434\u0430 --><!--<div class="form__field-item mrg__bottom20 mrg__top16 flex flex&#45;&#45;row-wrap ">--><!--<div class="field-style flex&#45;&#45;inline align-items&#45;&#45;cn">--><!--<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow width&#45;&#45;inh mrg__right5"--><!--type="text"--><!--name="code"--><!--ng-model="vm.userForm.model.code"--><!--placeholder="\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434 \u0438\u0437 \u0441\u043C\u0441"--><!--required>--><!--<button class="btn btn&#45;&#45;size_l btn&#45;&#45;normal width&#45;&#45;inh btn&#45;&#45;s-gradient" type="button">\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C--><!--</button>--><!--&lt;!&ndash;<span class="ok-validates width&#45;&#45;inh">\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D</span>&ndash;&gt;--><!--</div>--><!--<div class="field-style width&#45;&#45;aut">--><!--<validation-errors  data="userForm.code"--><!--server="vm.userForm.errors"--><!--messages="vm.userForm.validations.code"></validation-errors>--><!--</div>--><!--</div>--><!-- \u0421\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u0435 --><div class="form__field-item mrg__bottom10"><div class="field-style widtn--inh"><!--\u043D\u0430\u0448 \u0447\u0435\u043A\u0431\u043E\u043A\u0441 --><label class="checkbox-y__label checkbox-y checkbox-y--chek-top" for="isChecked"><input class="checkbox-y__input" id="isChecked" type="checkbox" name="agree" ng-model="vm.userForm.model.agree"><div class="checkbox-y__body"><span class="checkbox-y__icon icon-mark"></span></div><span class="checkbox__text font--size12 color--silver" role="presentation">\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u044F \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044E \u0432\u044B \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u0435\u0442\u0435 \u043F\u0440\u0430\u0432\u0438\u043B\u0430 \u043E\u043F\u0438\u0441\u0430\u043D\u043D\u044B\u0435 \u0432 <a class="link link-aith" href="">\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u043C \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u0438</a></span></label><validation-errors data="userForm.agree" server="vm.userForm.errors" messages="vm.userForm.validations.agree"></validation-errors></div></div><!-- \u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u0441\u044F --><div class="form__field-item mrg__bottom10"><hr class="hr hr--auth"><div class="field-style"><button class="btn btn--size_l btn--yellow width--inh" type="submit">\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u0441\u044F</button></div></div></form><!--<hr class="hr hr&#45;&#45;auth ">--> <button class="btn btn--size_l btn--link-style" ui-sref="signIn">\u0412\u043E\u0439\u0442\u0438</button></div></div></div><!-- \u0444\u0443\u0442\u0442\u0435\u0440 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438--><div class="footer footer__auth"><!-- \u041A\u043E\u043F\u0438\u0440\u0430\u0439\u0442--><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.cz\xBB Group a.s.</span></div><!-- \u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043C\u0435\u043D\u044E \u0441 \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u044F\u0437\u044B\u043A\u0430--><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><div class="choice-language"><a class="choice-language__link choice-language--active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a><!----> <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a></div></div></div></div></div></div></div><div class="auth-layout__bg"></div></div>');
 $templateCache.put('app/components/attach-item/attach-item.html','<div class="attach-item"><a href="http://apimail.devogic.com/mail/{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&screen=true&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}" target="_blank"><div><div class="attach-item__image-block"><div class="attach-item__image" ng-if="vm.attach.mime === \'image/png\' || vm.attach.mime === \'image/jpeg\'" style="background-image: url(\'http://apimail.devogic.com/mail/{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}\')"></div><div class="attach-item__image" ng-if="vm.attach.mime !== \'image/png\' && vm.attach.mime !== \'image/jpeg\'" style="background-image: url(\'images/upload-file.png\')"></div></div><div class="attach-item__name" ng-if="vm.attach.mime !== \'image/png\' && vm.attach.mime !== \'image/jpeg\'"><span class="attach-item__file-name">{{ vm.attach.fileName }}</span></div><div class="attach-item__type"><span class="attach-item__type-name">{{ vm.attach.mime.split(\'/\')[1]; }}</span></div><div class="attach-item__size">{{ vm.attach.size / 1024 | number:2 }} kb</div><button class="attach-item__button btn--not-style btn--not-events"><span class="icon-download"></span></button></div></a></div>');
@@ -5866,16 +5866,16 @@ $templateCache.put('app/components/avatar-name/avatar-name.html','<img class="av
 $templateCache.put('app/components/compose-header/compose-header.html','<div class="inbox-header"><div class="inbox-header__row"><div class="inbox-header__item"><a class="inbox-header__link" href><span class="icon-redo inbox-header__icon inbox-header__icon--green"></span> <span class="inbox-header__name">\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C</span></a></div><!--        <div class="inbox-header__item pull-right">\n            <a class="inbox-header__link" href>\n                <span class="icon-redo inbox-header__icon inbox-header__icon&#45;&#45;green"></span>\n                <span class="inbox-header__name">\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C</span>\n            </a>\n        </div>--></div></div>');
 $templateCache.put('app/components/contact-to-add-select/contact-to-add-select.html','<tags-input class="tags-input" ng-model="vm.addresses" type="email" name="{{ vm.name }}" template="tag-template" template-scope="vm" display-property="first_name" key-property="id" replace-spaces-with-dashes="true" allow-dblclick-to-edit="true" ng-focus="isTagFocus = true" ng-blur="isTagFocus = false" placeholder="{{ vm.placeholder }}" autofocus="vm.isAutofocus"><auto-complete source="vm.findContacts($query, isTagFocus)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="5" template="autocomplete-template"></auto-complete></tags-input><script type="text/ng-template" id="tag-template"><div class="tag-contact font-sizer--bigger-15 tag-contact__autocomplete-item"\n         ng-dblclick="$event.stopPropagation();">\n        <div class="avatar avatar--size20 mrg__right7">\n            <avatar-name name="data.first_name" email="data.emails[0].value"></avatar-name>\n        </div>\n        <div class="tag-contact__name" ng-if="data.first_name">\n            {{ data.first_name }}\n            {{ data.last_name }}\n        </div>\n        <div class="tag-contact__email" ng-if="!data.first_name">\n            {{ data.emails[0].value }}\n        </div>\n        <a class="tag-remove btn btn--not-style icon-cancel"\n           href\n           ng-click="$removeTag()"></a>\n    </div></script><script type="text/ng-template" id="autocomplete-template"><div class="tag-contact">\n        <div class="tag-contact__avatar avatar avatar--size28 mrg__right16 avatar--bg-color">\n            <avatar-name name="data.first_name" email="data.emails[0].value"></avatar-name>\n        </div>\n\n        <div class="tag-contact__info">\n            <div class="tag-contact__name">\n                {{ data.first_name }}\n                {{ data.last_name }}\n            </div>\n            <div class="tag-contact__email"\n\n                 ng-if="data.emails[0].value">\n                {{ data.emails[0].value }}\n            </div>\n            <!--ng-class="{\'mrg__left10\': data.first_name}"-->\n\n        </div>\n\n        <div class="tag-contact__phone"\n             ng-class="{\'mrg__left10\': data.first_name || data.emails[0].value}"\n             ng-if="data.phone">\n            {{ data.phone }}\n        </div>\n    </div></script>');
 $templateCache.put('app/components/date-sort/date-sort.html','<div class="radiobutton main-switch-3 radiobutton--size_sm"><button class="search-filters__button-tab" type="button" ng-click="vm.selectDefault();">2017:</button> <button class="search-filters__button-tab search-filters__button-tab--is-choose" type="button" ng-click="vm.selectDate($index);" ng-repeat="month in vm.monthList">{{ month }}</button> <button class="search-filters__button-tab" type="button" ng-click="vm.selectDefault();">\u0412\u0441\u044F \u043F\u043E\u0447\u0442\u0430</button></div>');
-$templateCache.put('app/components/example/example.html','<div class="card exp-parcel-card"><div class="card__header exp-parcel-card__header"><div class="row"><div class="col-md-7 col-sm-7 col-xs-7"><div class="exp-parcel-card__name pointer"><span>\u041D\u043E\u0432\u044B\u0439 \u0430\u0434\u0440\u0435\u0441</span></div></div><div class="col-md-5 col-sm-5 col-xs-5"><a class="exp-parcel-card__button" href ng-click="vm.close()"><img class="svg svg--size16" src="/images/svg/products-warehouse/card/close.svg"></a></div></div></div><div class="card__body exp-parcel-card__body row"><form class="col-lg-12 col-md-12 col-sm-12 col-xs-12" name="addressForm" ng-submit="vm.add(addressForm)" novalidate><div class="row"><div class="col-md-6"><label class="form__label">\u041F\u0440\u0438\u0432\u044F\u0437\u0430\u0442\u044C \u043F\u043E\u043B\u0443\u0447\u0430\u0442\u0435\u043B\u044F:</label><recipient-select selected="vm.addressForm.recipient" model=""></recipient-select></div><div class="col-md-6 mobile-group--size10"><label class="form__label">\u0421\u0442\u0440\u0430\u043D\u0430:</label><country-select selected="vm.addressForm.country" name="country" params="{id: \'USA\'}" required="true" is-no-select="true" on-selected="vm.clearAfterCountry()"></country-select><tooltip-validation ng-if="addressForm.country.$invalid && (addressForm.$submitted || addressForm.country.$touched)" tooltip-placement="bottom" tooltip-validation-errors="addressForm.country.$error" tooltip-validation-messages="vm.address.validations.country"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0420\u0435\u0433\u0438\u043E\u043D:</label><region-select name="region" selected="vm.addressForm.region" country-id="vm.addressForm.country.id" required="true" disabled="vm.addressForm.country.id" on-selected="vm.clearAfterRegion()"></region-select><tooltip-validation ng-if="addressForm.region.$invalid && (addressForm.$submitted || addressForm.region.$touched) && addressForm.country.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.region.$error" tooltip-validation-messages="vm.address.validations.region"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0413\u043E\u0440\u043E\u0434:</label><city-select name="city" selected="vm.addressForm.city" region-id="vm.addressForm.region.id" disabled="vm.addressForm.region.id" required="true" on-selected="vm.clearAfterCity()"></city-select><tooltip-validation ng-if="addressForm.city.$invalid && (addressForm.$submitted || addressForm.city.$touched) && addressForm.region.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.city.$error" tooltip-validation-messages="vm.address.validations.city"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0418\u043D\u0434\u0435\u043A\u0441:</label><input class="form__input" type="text" name="postalCode" ng-model="vm.addressForm.postalCode" required><tooltip-validation ng-if="addressForm.postalCode.$invalid && (addressForm.$submitted || addressForm.postalCode.$touched) && addressForm.city.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.postalCode.$error" tooltip-validation-messages="vm.address.validations.postalCode"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0423\u043B\u0438\u0446\u0430:</label><input class="form__input" type="text" name="street" ng-model="vm.addressForm.street" required><tooltip-validation ng-if="addressForm.street.$invalid && (addressForm.$submitted || addressForm.street.$touched) && addressForm.postalCode.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.street.$error" tooltip-validation-messages="vm.address.validations.street"></tooltip-validation></div><div class="col-md-12 form__group--size10"><label class="form__label">\u0414\u043E\u043C, \u043A\u043E\u0440\u043F\u0443\u0441, \u043A\u0432\u0430\u0440\u0442\u0438\u0440\u0430:</label><div class="row-inputs clearfix"><div class="row-inputs__item w50"><input class="form__input" type="text" name="house" ng-model="vm.addressForm.house" required><tooltip-validation ng-if="addressForm.house.$invalid && (addressForm.$submitted || addressForm.house.$touched) && addressForm.street.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.house.$error" tooltip-validation-messages="vm.address.validations.house"></tooltip-validation></div><div class="row-inputs__item w25"><input class="form__input" type="text" name="building" ng-model="vm.addressForm.building"><tooltip-validation ng-if="addressForm.building.$invalid && (addressForm.$submitted || addressForm.building.$touched) && addressForm.house.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.building.$error" tooltip-validation-messages="vm.address.validations.building"></tooltip-validation></div><div class="row-inputs__item w25"><input class="form__input" type="text" name="apartment" ng-model="vm.addressForm.apartment"><tooltip-validation ng-if="addressForm.apartment.$invalid && (addressForm.$submitted || addressForm.apartment.$touched) && addressForm.building.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.apartment.$error" tooltip-validation-messages="vm.address.validations.apartment"></tooltip-validation></div></div></div></div><div class="col-md-12 form__buttons__group text-center"><button class="btn-round btn-round--grey" type="button" ng-click="vm.close()">\u041E\u0442\u043C\u0435\u043D\u0430</button> <button class="btn-round btn-round--blue" type="submit">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C</button></div></form></div></div>');
 $templateCache.put('app/components/folder-create/folder-create-popup.html','<div><div class="popup__close" ng-click="cancel()">\xD7</div><folder-create on-close="cancel()"></folder-create></div>');
 $templateCache.put('app/components/folder-create/folder-create.html','<div class="folder-create"><div class="tag-create__title">\u0421\u043E\u0437\u0434\u0430\u0451\u043C \u043F\u0430\u043F\u043A\u0443</div><div class="mrg__top15"><form novalidate><div class="folder-create__input mrg__top15"><div class="mrg__right10"><span class="font--size13">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435</span></div><div><input class="input input--size_s width--inh input--fc-sh-yellow" type="text" required> <a class="link link--dotted link--violet font--size13" href="">\u0412\u043B\u043E\u0436\u0438\u0442\u044C \u0432 \u0434\u0440\u0443\u0433\u0443\u044E \u043F\u0430\u043F\u043A\u0443</a></div></div><!--<div class="palette-list folder-create__palette mrg__top30">--><!--<div class="palette-list__item"--><!--style="background-color: {{ palette.color }}"--><!--ng-repeat="palette in vm.palette.items track by $index">--><!--<span class="palette-list__icon icon-mark" ng-if="palette.active"></span>--><!--</div>--><!--</div>--><div class="folder-create__btn mrg__top40"><button class="btn-y btn-y--border" type="submit">\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u043F\u0430\u043F\u043A\u0443</button> <button class="btn-y btn-y--border">\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C</button></div></form></div></div>');
+$templateCache.put('app/components/example/example.html','<div class="card exp-parcel-card"><div class="card__header exp-parcel-card__header"><div class="row"><div class="col-md-7 col-sm-7 col-xs-7"><div class="exp-parcel-card__name pointer"><span>\u041D\u043E\u0432\u044B\u0439 \u0430\u0434\u0440\u0435\u0441</span></div></div><div class="col-md-5 col-sm-5 col-xs-5"><a class="exp-parcel-card__button" href ng-click="vm.close()"><img class="svg svg--size16" src="/images/svg/products-warehouse/card/close.svg"></a></div></div></div><div class="card__body exp-parcel-card__body row"><form class="col-lg-12 col-md-12 col-sm-12 col-xs-12" name="addressForm" ng-submit="vm.add(addressForm)" novalidate><div class="row"><div class="col-md-6"><label class="form__label">\u041F\u0440\u0438\u0432\u044F\u0437\u0430\u0442\u044C \u043F\u043E\u043B\u0443\u0447\u0430\u0442\u0435\u043B\u044F:</label><recipient-select selected="vm.addressForm.recipient" model=""></recipient-select></div><div class="col-md-6 mobile-group--size10"><label class="form__label">\u0421\u0442\u0440\u0430\u043D\u0430:</label><country-select selected="vm.addressForm.country" name="country" params="{id: \'USA\'}" required="true" is-no-select="true" on-selected="vm.clearAfterCountry()"></country-select><tooltip-validation ng-if="addressForm.country.$invalid && (addressForm.$submitted || addressForm.country.$touched)" tooltip-placement="bottom" tooltip-validation-errors="addressForm.country.$error" tooltip-validation-messages="vm.address.validations.country"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0420\u0435\u0433\u0438\u043E\u043D:</label><region-select name="region" selected="vm.addressForm.region" country-id="vm.addressForm.country.id" required="true" disabled="vm.addressForm.country.id" on-selected="vm.clearAfterRegion()"></region-select><tooltip-validation ng-if="addressForm.region.$invalid && (addressForm.$submitted || addressForm.region.$touched) && addressForm.country.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.region.$error" tooltip-validation-messages="vm.address.validations.region"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0413\u043E\u0440\u043E\u0434:</label><city-select name="city" selected="vm.addressForm.city" region-id="vm.addressForm.region.id" disabled="vm.addressForm.region.id" required="true" on-selected="vm.clearAfterCity()"></city-select><tooltip-validation ng-if="addressForm.city.$invalid && (addressForm.$submitted || addressForm.city.$touched) && addressForm.region.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.city.$error" tooltip-validation-messages="vm.address.validations.city"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0418\u043D\u0434\u0435\u043A\u0441:</label><input class="form__input" type="text" name="postalCode" ng-model="vm.addressForm.postalCode" required><tooltip-validation ng-if="addressForm.postalCode.$invalid && (addressForm.$submitted || addressForm.postalCode.$touched) && addressForm.city.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.postalCode.$error" tooltip-validation-messages="vm.address.validations.postalCode"></tooltip-validation></div><div class="col-md-6 form__group--size10"><label class="form__label">\u0423\u043B\u0438\u0446\u0430:</label><input class="form__input" type="text" name="street" ng-model="vm.addressForm.street" required><tooltip-validation ng-if="addressForm.street.$invalid && (addressForm.$submitted || addressForm.street.$touched) && addressForm.postalCode.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.street.$error" tooltip-validation-messages="vm.address.validations.street"></tooltip-validation></div><div class="col-md-12 form__group--size10"><label class="form__label">\u0414\u043E\u043C, \u043A\u043E\u0440\u043F\u0443\u0441, \u043A\u0432\u0430\u0440\u0442\u0438\u0440\u0430:</label><div class="row-inputs clearfix"><div class="row-inputs__item w50"><input class="form__input" type="text" name="house" ng-model="vm.addressForm.house" required><tooltip-validation ng-if="addressForm.house.$invalid && (addressForm.$submitted || addressForm.house.$touched) && addressForm.street.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.house.$error" tooltip-validation-messages="vm.address.validations.house"></tooltip-validation></div><div class="row-inputs__item w25"><input class="form__input" type="text" name="building" ng-model="vm.addressForm.building"><tooltip-validation ng-if="addressForm.building.$invalid && (addressForm.$submitted || addressForm.building.$touched) && addressForm.house.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.building.$error" tooltip-validation-messages="vm.address.validations.building"></tooltip-validation></div><div class="row-inputs__item w25"><input class="form__input" type="text" name="apartment" ng-model="vm.addressForm.apartment"><tooltip-validation ng-if="addressForm.apartment.$invalid && (addressForm.$submitted || addressForm.apartment.$touched) && addressForm.building.$valid" tooltip-placement="bottom" tooltip-validation-errors="addressForm.apartment.$error" tooltip-validation-messages="vm.address.validations.apartment"></tooltip-validation></div></div></div></div><div class="col-md-12 form__buttons__group text-center"><button class="btn-round btn-round--grey" type="button" ng-click="vm.close()">\u041E\u0442\u043C\u0435\u043D\u0430</button> <button class="btn-round btn-round--blue" type="submit">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C</button></div></form></div></div>');
 $templateCache.put('app/components/folder-layout/folder-layout.html','<div class="folder-layout" ng-if="vm.isOpen"><div class="folder-layout__container"><div class="folder-layout__header"><div class=""><span class="icon-d-folder folder-layout__icon"></span> <span>\u041F\u0430\u043F\u043A\u0438</span></div><span class="font--size12" ng-click="vm.close()">\u0417\u0430\u043A\u0440\u044B\u0442\u044C</span><!--<hr class="hr hr&#45;&#45;folders hr&#45;&#45;bottom">\u044B--></div><div class="folder-layout__content scrollables"><hr class="hr hr--folders hr--top"><!-- \u0421\u0432\u043E\u0438 \u043F\u0430\u043F\u043A\u0438--><!-- \u041E\u0442\u0434\u0435\u043B\u0438\u0442\u0435\u043B\u044C--><div class="folder-layout__separate mrg__bottom10"><span class="font--size12">\u041C\u043E\u0438 \u043F\u0430\u043F\u043A\u0438</span><hr class="hr hr--folders hr--bottom"></div><!-- \u0421\u0430\u043C\u0438 \u0438\u0442\u0435\u043C\u044B--><div class="folder-layout__item" ng-repeat="folder in vm.folders.items" ng-click="vm.move(folder)" ng-if="folder.isSub"><span class="icon-folder-desk folder-layout__icon"></span> <span class="folder-layout__title">{{ folder.caption }}</span></div><!--            <div class="folder-layout__item">\n                            <span class="icon-folder folder-layout__icon"></span>\n                            <span class="folder-layout__title">\u041C\u043E\u044F \u043F\u0430\u043F\u043A\u0430 1</span>\n                        </div>\n\n                        <div class="folder-layout__item">\n                            <span class="icon-folder folder-layout__icon"></span>\n                            <span class="folder-layout__title">\u041C\u043E\u044F \u043F\u0430\u043F\u043A\u0430 2</span>\n                        </div>\n\n                        <div class="folder-layout__item">\n                            <span class="icon-folder folder-layout__icon"></span>\n                            <span class="folder-layout__title">\u041C\u043E\u044F \u043F\u0430\u043F\u043A\u0430 3</span>\n                        </div>--><!-- \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u044B\u0435 \u043F\u0430\u043F\u043A\u0438--><!-- \u041E\u0442\u0434\u0435\u043B\u0438\u0442\u0435\u043B\u044C--><div class="folder-layout__separate mrg__bottom10"><span class="font--size12">\u041E\u0441\u043D\u043E\u0432\u043D\u044B\u0435 \u043F\u0430\u043F\u043A\u0438</span><hr class="hr hr--folders hr--bottom"></div><div class="folder-layout__item" ng-repeat="folder in vm.folders.items" ng-click="vm.move(folder)" ng-if="!folder.isSub && folder.name !== vm.$state.params.mbox"><span class="{{ folder.icon }} folder-layout__icon"></span> <span class="folder-layout__title">{{ folder.caption }}</span></div></div><!--<div class="folder-layout__footer">--><!--<hr class="hr hr&#45;&#45;folders hr&#45;&#45;top">--><!--<span class="icon-settings folder-layout__icon"></span>--><!--<span class="folder-layout__title">\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u0430\u043F\u043A\u0430\u043C\u0438</span>--><!--</div>--></div></div>');
 $templateCache.put('app/components/inbox-footer/inbox-footer.html','<div class="inbox-footer"><div class="inbox-footer__content"><!-- \u041A\u043D\u043E\u043F\u043A\u0430 \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u0430 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0443 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u044F \u043F\u0438\u0441\u044C\u043C\u0430--><div class="inbox-footer__new-message" ng-if="!vm.messages.checked.length"><button class="btn btn--red btn--size_50 btn--radius_3 btn--padding-5 icon-write" ui-sref="mail.compose"></button></div><hr class="hr hr--inbox-footer"><!-- \u041D\u0438\u0436\u043D\u0435\u0435 \u043C\u0435\u043D\u044E \u043E\u043F\u0446\u0438\u0439 \u0434\u043B\u044F \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u044B\u0445 \u043F\u0438\u0441\u0435\u043C --><div class="inbox-footer__group-option" ng-if="vm.messages.checked.length" ng-class="{\'is-more-switch\': vm.isMoreSwitch}"><div class="inbox-footer__group-option-wrapper"><div class="inbox-footer__group-option-content"><!-- \u043F\u0435\u0440\u0432\u0438\u0447\u043D\u044B\u0435 \u043A\u043D\u043E\u043F\u043A\u0438--> <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font--size20 flex flex--column align-items--cn color--light-red padding" type="button" ng-if="vm.$state.params.mbox !== \'Trash\'" ng-click="vm.move({name: \'Trash\', caption: \'\u041A\u043E\u0440\u0437\u0438\u043D\u0430\'})"><span class="font--arial font--size14 mrg__top5">\u0423\u0434\u0430\u043B\u0438\u0442\u044C</span></button> <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font--size20 flex flex--column align-items--cn color--light-red padding" type="button" ng-if="vm.$state.params.mbox === \'Trash\'" ng-click="vm.destroy({name: \'Trash\'})"><span class="font--arial font--size14 mrg__top5">\u0423\u0434\u0430\u043B\u0438\u0442\u044C</span></button> <button class="inbox-footer__group-option-item btn btn--not-style icon-spam font--size20 flex flex--column align-items--cn color--yellow padding" type="button" ng-if="vm.$state.params.mbox !== \'Junk\'" ng-click="vm.move({name: \'Junk\', caption: \'\u0421\u043F\u0430\u043C\'})"><span class="font--arial font--size14 mrg__top5">\u042D\u0442\u043E \u0441\u043F\u0430\u043C</span></button> <button class="inbox-footer__group-option-item btn btn--not-style icon-spam font--size20 flex flex--column align-items--cn color--yellow padding" type="button" ng-if="vm.$state.params.mbox === \'Junk\'" ng-click="vm.move({name: \'Inbox\', caption: \'\u0412\u0445\u043E\u0434\u044F\u0449\u0438\u0435\'})"><span class="font--arial font--size14 mrg__top5">\u041D\u0435 \u0441\u043F\u0430\u043C</span></button> <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-unread font--size20 flex flex--column align-items--cn padding" type="button" ng-click="vm.triggerSeen()"><span class="font--arial font--size14 mrg__top5" ng-if="vm.isSeen">\u041D\u0435 \u043F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E</span> <span class="font--arial font--size14 mrg__top5" ng-if="!vm.isSeen">\u041F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E</span></button><!-- \u043F\u0435\u0440\u0435\u043A\u043B\u044E\u0447\u0430\u0442\u0435\u043B\u044C--> <button class="inbox-footer__group-option-item inbox-footer__group-option-item-switch btn btn--not-style icon-double-arrow-right font--size20 flex flex--column align-items--cn padding" type="button" ng-click="vm.isMoreSwitch = !vm.isMoreSwitch"><span class="font--arial font--size14 mrg__top5">\u0415\u0449\u0435</span></button><!-- \u0432\u0442\u043E\u0440\u0438\u0447\u043D\u044B\u0435 \u043A\u043D\u043E\u043F\u043A\u0438--> <button class="inbox-footer__group-option-item btn btn--not-style icon-folder font--size20 flex flex--column align-items--cn padding" type="button" ng-click="vm.openLayoutFolder()"><span class="font--arial font--size14 mrg__top5">\u0412 \u043F\u0430\u043F\u043A\u0443</span></button> <button class="inbox-footer__group-option-item btn btn--not-style icon-tag font--size20 flex flex--column align-items--cn padding" type="openTagListPopup" ng-click="vm.openTagListPopup()"><span class="font--arial font--size14 mrg__top5">\u041C\u0435\u0442\u043A\u0438</span></button> <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-archive font--size20 flex flex--column align-items--cn padding" type="button" ng-click="vm.move({name: \'Archive\', caption: \'\u0410\u0440\u0445\u0438\u0432\'})"><span class="font--arial font--size14 mrg__top5">\u0410\u0440\u0445\u0438\u0432</span></button></div></div></div></div></div>');
 $templateCache.put('app/components/inbox-header/inbox-header.html','<!--\n<div class="inbox-header">\n    <div class="inbox-header__row">\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" ui-sref="mail.compose">\n                <span class="icon-write inbox-header__icon inbox-header__icon--blue"></span>\n                <span class="inbox-header__name">\u041D\u0430\u043F\u0438\u0441\u0430\u0442\u044C</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-redo inbox-header__icon inbox-header__icon--green"></span>\n                <span class="inbox-header__name">\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-forward inbox-header__icon inbox-header__icon--blue"></span>\n                <span class="inbox-header__name">\u041F\u0435\u0440\u0435\u0441\u043B\u0430\u0442\u044C</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-bin inbox-header__icon inbox-header__icon--red"></span>\n                <span class="inbox-header__name">\u0423\u0434\u0430\u043B\u0438\u0442\u044C</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-spam inbox-header__icon inbox-header__icon--yellow"></span>\n                <span class="inbox-header__name">\u0421\u043F\u0430\u043C</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-unread inbox-header__icon inbox-header__icon--blue"></span>\n                <span class="inbox-header__name">\u041D\u0435 \u043F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href\n               uib-popover-template="\'app/components/tag-list/tag-list-popover.html\'"\n               popover-class="popover--tag-list"\n               popover-placement="bottom"\n               popover-animation="true"\n               popover-trigger="\'outsideClick\'">\n                <span class="icon-tag inbox-header__icon inbox-header__icon--blue"></span>\n                <div class="inbox-header__name">\n                    \u0422\u044D\u0433\n                    <span class="icon-arrow-down inbox-header__name-icon"></span>\n                </div>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href\n               uib-popover-template="\'app/components/folder-list/folder-list-popover.html\'"\n               popover-class="popover--folder-list"\n               popover-placement="bottom"\n               popover-animation="true"\n               popover-trigger="\'outsideClick\'">\n                <span class="icon-folder inbox-header__icon inbox-header__icon--blue"></span>\n                <div class="inbox-header__name">\n                    \u0412 \u043F\u0430\u043F\u043A\u0443\n                    <span class="icon-arrow-down inbox-header__name-icon"></span>\n                </div>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-archive inbox-header__icon inbox-header__icon--blue"></span>\n                <span class="inbox-header__name">\u0410\u0440\u0445\u0438\u0432\u0438\u0440\u043E\u0432\u0430\u0442\u044C</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-pin inbox-header__icon inbox-header__icon--blue"></span>\n                <span class="inbox-header__name">\u0417\u0430\u043A\u0440\u0435\u043F\u0438\u0442\u044C</span>\n            </a>\n        </div>\n        <div class="inbox-header__item">\n            <a class="inbox-header__link" href>\n                <span class="icon-more inbox-header__icon inbox-header__icon--blue"></span>\n                <span class="inbox-header__name">\u0415\u0449\u0435</span>\n            </a>\n        </div>\n    </div>\n</div>\n-->');
 $templateCache.put('app/components/inbox-message/inbox-message.html','<div class="inbox-message" ng-class="{\'inbox-message--importmant\': vm.message.important,\n                \'inbox-message--new\': !vm.message.seen,\n                \'inbox-message--checked\': vm.message.isChecked}" ng-mouseover="vm.message.hover = true" ng-mouseleave="vm.message.hover = false" ng-click="vm.goToUrl()" inbox-message-hover><div class="inbox-message__left"><label ng-click="$event.stopPropagation();"><div class="inbox-message__avatar"><div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__auto"><avatar-name name="vm.message.from" email="vm.message.fromAddress" ng-if="vm.$state.params.mbox !== \'Sent\' && vm.$state.params.mbox !== \'Drafts\'"></avatar-name><avatar-name name="vm.message.to[0].name" email="vm.message.to[0].address" ng-if="vm.$state.params.mbox === \'Sent\' || vm.$state.params.mbox === \'Drafts\'"></avatar-name><div class="inbox-message__check-message"></div><input type="checkbox" ng-model="vm.message.isChecked" style="display: none" data-checklist-model="vm.messages.checked" data-checklist-value="vm.message"></div></div></label><div class="inbox-message__round" ng-click="vm.setSeen(); $event.stopPropagation();"><div class="round round--border" ng-class="{\'round--yellow\': !vm.message.seen}"></div></div></div><div class="inbox-message__center"><div class="inbox-message__head"><div class="inbox-message__importance" ng-if="vm.message.important"><span class="important-tags important-tags--active"></span></div><div class="inbox-message__name">{{ vm.message.from }}</div><div class="inbox-message__data"><to-date date="vm.message.date.date" is-small="true"></to-date></div></div><div class="inbox-message__text"><div class="inbox-message__subject">{{ vm.message.Subject }}</div><div class="inbox-message__message"><div class="text-overflow" ng-bind-html="vm.message.body"></div></div></div><div class="inbox-message__labels"><div class="inbox-message__label letter-tags" ng-repeat="tag in vm.message.tags track by $index" style="background: {{ tag.bgcolor }}"><span class="letter-tags__name">{{ tag.tag_name }}</span><!--<span class="letter-tags__icon icon-label-message font&#45;&#45;size21" style="color: {{ tag.bgcolor }}"></span>--> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 36" id="ico_label-message" class="letter-tags__icon"><!--<use xlink:href="#ico_label-message" style="fill: {{ tag.bgcolor }}"></use>--><g><path class="" style="fill: {{ tag.bgcolor }}" d="M29.7532378,33.5724399 C28.7839322,34.9145554 26.6584255,36 25.0035095,36 L2.99649048,36 C1.3504982,36 0,34.6535323 0,32.9925801 L0,3.00741988 C0,1.34553934 1.34157448,0 2.99649048,0 L25.0035095,0 C26.6495018,0 28.7849513,1.08685567 29.7532378,2.42756009 L39.2467622,15.5724399 C40.2160678,16.9145554 40.2150487,19.0868557 39.2467622,20.4275601 L29.7532378,33.5724399 L29.7532378,33.5724399 Z M26,14 C28.209139,14 30,15.790861 30,18 C30,20.209139 28.209139,22 26,22 C23.790861,22 22,20.209139 22,18 C22,15.790861 23.790861,14 26,14 L26,14 Z"></path></g></svg></div></div></div><div class="inbox-message__right"><button class="inbox-message__right-btn btn btn--size_m btn--size_28 icon-more btn--not-style btn--not-events" type="button" ng-click="vm.openMessageMenu(); $event.stopPropagation();"></button></div></div>');
 $templateCache.put('app/components/inbox-message-list/inbox-message-list.html','<div class="inbox-message-list" ng-class="{\'inbox-message-list--indentation\': vm.messages.checked.length}"><inbox-message message="message" messages="vm.messages" ng-repeat="message in vm.messages.items"></inbox-message><div class="inbox-message-list__spinner"><spinner is-open="vm.messages.isLoading"></spinner></div></div>');
-$templateCache.put('app/components/search-mail/search-mail.html','<div><div class="search-result__header"><div class="radiobutton main-switch radiobutton--size_sm width--all"><input class="main-switch__input" type="radio" name="folder" ng-change="vm.search()" ng-value="\'ALL\'" ng-model="vm.folders.selected.name"> <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">\u0412\u0441\u044F \u043F\u043E\u0447\u0442\u0430</span> <input class="main-switch__input" type="radio" name="folder" ng-change="vm.search()" ng-value="\'INBOX\'" ng-model="vm.folders.selected.name"> <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">\u0412\u0445\u043E\u0434\u044F\u0449\u0438\u0435</span></div><button class="search-result__button-filter btn btn--not-style btn--size_sm btn--main-mobile-color font--size18 padding--right" type="button" ng-click="vm.isOpenFilters = !vm.isOpenFilters"><span class="icon-equalize"></span></button><hr class="hr hr--header hr--size-h1"></div><div class="search-filters" ng-if="vm.isOpenFilters"><div class="search-filters__item"><ui-select ng-model="vm.searchParts.selected" search-enabled="false" class="select-list select-list--size_m select-list--not-border-of-sides width--all" theme="select2" on-select="vm.search(); vm.isOpenFilters = false"><ui-select-match class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">{{ $select.selected.name }}</ui-select-match><ui-select-choices repeat="item in vm.searchParts.list track by $index"><div ng-bind-html="item.name"></div></ui-select-choices></ui-select></div><div class="search-filters__item"><ui-select ng-model="vm.folders.selected" class="select-list select-list--size_m select-list--not-border-of-sides width--all" search-enabled="false" theme="select2" on-select="vm.search(); vm.isOpenFilters = false"><ui-select-match class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">{{ $select.selected.caption }}</ui-select-match><ui-select-choices repeat="item in vm.folders.items track by $index"><div ng-class="{\'mrg__left10\': item.isSub}" ng-bind-html="item.caption"></div></ui-select-choices></ui-select></div><div class="search-filters__item"><ui-select ng-model="vm.tags.selected" search-enabled="false" class="select-list select-list--size_m select-list--not-border-of-sides width--all" theme="select2" on-select="vm.search(); vm.isOpenFilters = false"><ui-select-match class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">{{ $select.selected.tag_name }}</ui-select-match><ui-select-choices repeat="item in vm.tags.items track by $index">{{ item.tag_name }}</ui-select-choices></ui-select></div><div class="search-filters__item"><label class="checkbox-big__label checkbox-big checkbox-big--size15" for="isAttach"><input class="checkbox-big__input" id="isAttach" type="checkbox" name="isAttach" ng-model="vm.searchForm.isAttach" ng-change="vm.search(); vm.isOpenFilters = false" value="important"><div class="checkbox-big__body"></div><span class="checkbox-big__text" role="presentation">\u0421 \u0432\u043B\u043E\u0436\u0435\u043D\u0438\u044F\u043C\u0438</span></label></div><div class="search-filters__item"><date-sort from="vm.from" to="vm.to" class="search-filters__date-sort"></date-sort></div></div></div>');
 $templateCache.put('app/components/message-menu/message-menu.html','<div class="popup__head"><span class="popup__head__title">\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u0441 \u043F\u0438\u0441\u044C\u043C\u043E\u043C</span> <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s" type="button" ng-click="vm.close()"></button><hr class="hr hr--popup"></div><div class="popup__content scrollables"><div class="popup__item" ng-click="vm.goToAnswer()"><span class="icon-reply popup__icon"></span> <span class="popup__item__title">\u041E\u0442\u0432\u0435\u0442\u0438\u0442\u044C</span></div><!--<div class="popup__item" ng-click="vm.goToFwd()">--><!--<span class="icon-reply-all popup__icon"></span>--><!--<span class="popup__item__title">\u041E\u0442\u0432\u0435\u0442\u0438\u0442\u044C \u0432\u0441\u0435\u043C</span>--><!--</div>--><div class="popup__item" ng-click="vm.goToFwd()"><span class="icon-forward popup__icon"></span> <span class="popup__item__title">\u041F\u0435\u0440\u0435\u0441\u043B\u0430\u0442\u044C</span></div><div class="popup__item" ng-if="vm.$state.params.mbox !== \'Trash\'" ng-click="vm.move({name: \'Trash\', caption: \'\u041A\u043E\u0440\u0437\u0438\u043D\u0430\'})"><span class="icon-delete popup__icon color--light-red"></span> <span class="popup__item__title">\u0423\u0434\u0430\u043B\u0438\u0442\u044C</span></div><div class="popup__item" ng-if="vm.$state.params.mbox === \'Trash\'" ng-click="vm.destroy({name: \'Trash\'})"><span class="icon-delete popup__icon color--light-red"></span> <span class="popup__item__title">\u0423\u0434\u0430\u043B\u0438\u0442\u044C</span></div><div class="popup__item" ng-click="vm.triggerSeen()"><span class="icon-unread popup__icon"></span> <span class="popup__item__title" ng-if="!vm.message.seen">\u041F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E</span> <span class="popup__item__title" ng-if="vm.message.seen">\u041D\u0435 \u043F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E</span></div><div class="popup__item" ng-click="vm.openLayoutFolder()"><span class="icon-folder popup__icon"></span> <span class="popup__item__title">\u0412 \u043F\u0430\u043F\u043A\u0443</span></div><div class="popup__item" ng-click="vm.openTagListPopup()"><span class="icon-tag popup__icon"></span> <span class="popup__item__title">\u041C\u0435\u0442\u043A\u0438</span></div><div class="popup__item" ng-click="vm.move({name: \'Archive\', caption: \'\u0410\u0440\u0445\u0438\u0432\'})"><span class="icon-archive popup__icon"></span> <span class="popup__item__title">\u0412 \u0430\u0440\u0445\u0438\u0432</span></div><div class="popup__item" ng-if="vm.$state.params.mbox === \'Junk\'" ng-click="vm.move({name: \'INBOX\', caption: \'\u0412\u0445\u043E\u0434\u044F\u0449\u0438\u0435\'})"><span class="icon-spam popup__icon color--yellow"></span> <span class="popup__item__title">\u041D\u0435 \u0441\u043F\u0430\u043C</span></div><div class="popup__item" ng-if="vm.$state.params.mbox !== \'Junk\'" ng-click="vm.move({name: \'Junk\', caption: \'\u0421\u043F\u0430\u043C\'})"><span class="icon-spam popup__icon color--yellow"></span> <span class="popup__item__title">\u0421\u043F\u0430\u043C</span></div><!--    <div class="popup__item">\n            <span class="icon-pin popup__icon"></span>\n            <span class="popup__item__title">\u0417\u0430\u043A\u0440\u0435\u043F\u0438\u0442\u044C</span>\n        </div>--><div class="popup__item" ng-click="vm.setImportant()"><span class="icon-important-solid popup__icon color--semi-dark-red"></span> <span class="popup__item__title" ng-if="!vm.message.important">\u0412\u0430\u0436\u043D\u043E\u0435</span> <span class="popup__item__title" ng-if="vm.message.important">\u041D\u0435 \u0432\u0430\u0436\u043D\u043E\u0435</span></div></div>');
+$templateCache.put('app/components/search-mail/search-mail.html','<div><div class="search-result__header"><div class="radiobutton main-switch radiobutton--size_sm width--all"><input class="main-switch__input" type="radio" name="folder" ng-change="vm.search()" ng-value="\'ALL\'" ng-model="vm.folders.selected.name"> <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">\u0412\u0441\u044F \u043F\u043E\u0447\u0442\u0430</span> <input class="main-switch__input" type="radio" name="folder" ng-change="vm.search()" ng-value="\'INBOX\'" ng-model="vm.folders.selected.name"> <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">\u0412\u0445\u043E\u0434\u044F\u0449\u0438\u0435</span></div><button class="search-result__button-filter btn btn--not-style btn--size_sm btn--main-mobile-color font--size18 padding--right" type="button" ng-click="vm.isOpenFilters = !vm.isOpenFilters"><span class="icon-equalize"></span></button><hr class="hr hr--header hr--size-h1"></div><div class="search-filters" ng-if="vm.isOpenFilters"><div class="search-filters__item"><ui-select ng-model="vm.searchParts.selected" search-enabled="false" class="select-list select-list--size_m select-list--not-border-of-sides width--all" theme="select2" on-select="vm.search(); vm.isOpenFilters = false"><ui-select-match class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">{{ $select.selected.name }}</ui-select-match><ui-select-choices repeat="item in vm.searchParts.list track by $index"><div ng-bind-html="item.name"></div></ui-select-choices></ui-select></div><div class="search-filters__item"><ui-select ng-model="vm.folders.selected" class="select-list select-list--size_m select-list--not-border-of-sides width--all" search-enabled="false" theme="select2" on-select="vm.search(); vm.isOpenFilters = false"><ui-select-match class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">{{ $select.selected.caption }}</ui-select-match><ui-select-choices repeat="item in vm.folders.items track by $index"><div ng-class="{\'mrg__left10\': item.isSub}" ng-bind-html="item.caption"></div></ui-select-choices></ui-select></div><div class="search-filters__item"><ui-select ng-model="vm.tags.selected" search-enabled="false" class="select-list select-list--size_m select-list--not-border-of-sides width--all" theme="select2" on-select="vm.search(); vm.isOpenFilters = false"><ui-select-match class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">{{ $select.selected.tag_name }}</ui-select-match><ui-select-choices repeat="item in vm.tags.items track by $index">{{ item.tag_name }}</ui-select-choices></ui-select></div><div class="search-filters__item"><label class="checkbox-big__label checkbox-big checkbox-big--size15" for="isAttach"><input class="checkbox-big__input" id="isAttach" type="checkbox" name="isAttach" ng-model="vm.searchForm.isAttach" ng-change="vm.search(); vm.isOpenFilters = false" value="important"><div class="checkbox-big__body"></div><span class="checkbox-big__text" role="presentation">\u0421 \u0432\u043B\u043E\u0436\u0435\u043D\u0438\u044F\u043C\u0438</span></label></div><div class="search-filters__item"><date-sort from="vm.from" to="vm.to" class="search-filters__date-sort"></date-sort></div></div></div>');
 $templateCache.put('app/components/settings-menu/settings-menu.html','<div class="settings-menu"><div class="settings-menu__body"><a class="settings-menu__title" ui-sref="settings.main">\u0412\u0441\u0435 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438</a><div class="settings-menu__row"><div class="row row--size15 mrg__top20"><div class="col-xs-6"><span class="icon-folder-star color--yellow font--size18"></span> <a class="settings-menu__link" href="">\u041F\u0430\u043F\u043A\u0438</a></div><div class="col-xs-6"><span class="icon-rules color--green font--size18"></span> <a class="settings-menu__link" href="">\u041F\u0440\u0430\u0432\u0438\u043B\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0438</a></div></div><div class="row row--size15 mrg__top20"><div class="col-xs-6"><span class="icon-tag-star color--green font--size18"></span> <a class="settings-menu__link" href="">\u041F\u0440\u0430\u0432\u0438\u043B\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0438</a></div><div class="col-xs-6"><span class="icon-contacts color--green font--size18"></span> <a class="settings-menu__link" href="">\u041F\u0440\u0430\u0432\u0438\u043B\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0438</a></div></div></div></div></div>');
 $templateCache.put('app/components/spinner/spinner.html','<div class="spinner" ng-show="vm.isOpen"></div>');
 $templateCache.put('app/components/tag-create/tag-create-popup.html','<div><div class="popup__close" ng-click="cancel()">\xD7</div><tag-create></tag-create></div>');
