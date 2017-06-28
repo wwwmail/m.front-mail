@@ -2940,10 +2940,27 @@
 .tags-input .tags .input {
   min-width: 40px;
   max-width: 100%;
+  line-height: 1;
   white-space: pre-wrap;
   word-wrap: break-word;
   margin: 0 2px;
   padding-left: 0 !important;
+}
+.tags-input .tags .input ::-webkit-input-placeholder {
+  color: #999999;
+  font-size: 16px !important;
+}
+.tags-input .tags .input :-moz-placeholder {
+  color: #999999;
+  font-size: 16px !important;
+}
+.tags-input .tags .input ::-moz-placeholder {
+  color: #999999;
+  font-size: 16px !important;
+}
+.tags-input .tags .input :-ms-input-placeholder {
+  color: #999999;
+  font-size: 16px !important;
 }
 .tags-input .tags .tag-item {
   margin: 2px 5px 2px 0;

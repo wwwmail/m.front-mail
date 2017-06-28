@@ -41,11 +41,28 @@
       //height: 48px;
       //height: 100%;
 
+      line-height: 1;
+
       white-space: pre-wrap;
       word-wrap: break-word;
       margin: 0 2px;
 
       padding-left: 0 !important;
+
+      //&[placeholder] {
+      //  color: $input-hlaceholder-color;
+      //  font-size: 16px!important;
+      //}
+      //
+      //&::-webkit-input-placeholder {
+      //  color: $input-hlaceholder-color;
+      //  font-size: 16px!important;
+      //
+      //}
+      @include placeholder{
+        color: $input-hlaceholder-color;
+        font-size: 16px!important;
+      }
     }
 
     .tag-list {
