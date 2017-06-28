@@ -1,20 +1,35 @@
 .body-message {
   //margin: 5px 0;
+  position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+
+  height: 100%;
+
   &__content {
-    width: auto;
+    position: relative;
+
     //max-width: 100vw;
-    //height: 1200px;
+    //height: 1000px;
     min-width: 280px;
 
     //background: $massage-content-bg-color;
     margin:  16px 0;
 
-    overflow: scroll;
-    -webkit-overflow-scrolling: touch;
-    -webkit-transform: translateZ(0px);
+    overflow: auto;
     //overflow-x: hidden;
+    -webkit-overflow-scrolling:touch;
   }
+
+  //&__r{
+  //  min-width: inherit;
+  //  -webkit-box-sizing: content-box;
+  //  box-sizing: content-box;
+  //  /* display: table; */
+  //  -webkit-overflow-scrolling: touch;
+  //  overflow: scroll;
+  //  overflow-x: scroll;
+  //  block-size: initial;
+  //}
 }
 

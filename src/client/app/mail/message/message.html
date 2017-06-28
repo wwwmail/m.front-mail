@@ -1,5 +1,5 @@
 <div class="mail-message ">
-    <div class="mail-message__main-info">
+    <div class="mail-message__main-info ">
 
         <!-- Хедер сообщения -->
         <div class="mail-message__title wrapper">
@@ -129,9 +129,9 @@
             <div class="mail-message__body">
                 <div class="body-message">
                     <!--Само сообщение-->
-                    <div class="body-message__content"
-                         body-message-scroll
-                         ng-bind-html="vm.getTrustHtml(vm.message.model.body)"></div>
+                    <div class="body-message__content" ng-bind-html="vm.getTrustHtml(vm.message.model.body)">
+                        <!--<div class="body-message__r"></div>-->
+                    </div>
                 </div>
             </div>
         </div>
