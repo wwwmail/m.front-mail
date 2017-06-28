@@ -1283,26 +1283,6 @@
   }
 }
 
-.mail-message {
-  display: flex;
-  flex-direction: column;
-}
-.mail-message__main-info {
-  position: relative;
-  flex: 1 0 auto;
-  height: auto;
-}
-.mail-message__main-info:before {
-  content: "";
-  position: fixed;
-  top: auto;
-  right: 0;
-  left: 0;
-  bottom: 48px;
-  height: 15px;
-  z-index: -1;
-  background: #f6f5f3;
-}
 .mail-message__main-content {
   background: #fff;
 }
