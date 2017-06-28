@@ -18,7 +18,7 @@
 
         function link(scope, element, attrs) {
             $timeout(function () {
-                // console.log('el', $(element).height());
+                console.log('el', $(element).height());
                 $(element).css('height', $(element).height());
             }, 250);
         }
