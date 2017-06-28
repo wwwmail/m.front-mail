@@ -20,7 +20,7 @@
             $timeout(function () {
                 console.log('el', $(element).height());
                 $(element).css('height', $(element).height());
-            }, 250);
+            }, 50);
         }
     }
 
