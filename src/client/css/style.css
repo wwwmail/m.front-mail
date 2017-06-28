@@ -1284,13 +1284,12 @@
 }
 
 .mail-message {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  box-sizing: border-box;
-  height: 100%;
+  bottom: auto;
+  min-height: calc(100vh - 47px);
   display: flex;
   flex-direction: column;
 }
@@ -4728,16 +4727,17 @@
 }
 
 .body-message {
+  position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  height: 100%;
 }
 .body-message__content {
-  width: auto;
-  height: auto;
+  position: relative;
   min-width: 280px;
   margin: 16px 0;
   overflow: auto;
-  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .time-send {
