@@ -1290,12 +1290,14 @@
   right: 0;
   bottom: 0;
   box-sizing: border-box;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 .mail-message__main-info {
   position: relative;
   flex: 1 0 auto;
+  height: auto;
 }
 .mail-message__main-info:before {
   content: "";
@@ -4726,8 +4728,6 @@
 }
 
 .body-message__content {
-  width: auto;
-  height: auto;
   min-width: 280px;
   margin: 16px 0;
   overflow-y: scroll;
