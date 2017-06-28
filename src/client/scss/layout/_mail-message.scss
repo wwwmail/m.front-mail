@@ -10,35 +10,37 @@
   display: flex;
   flex-direction: column;
 
-  &__main-info {
-    //position: relative;
-    //flex: 1 0 auto;
-    //height: auto;
-    //
-    //&:before {
-    //  content: "";
-    //  position: fixed;
-    //  top: auto;
-    //  right: 0;
-    //  left: 0;
-    //  bottom: 48px;
-    //  height: 15px;
-    //  z-index: -1;
-    //  background: #f6f5f3;
-    //}
+
+  &__main-info{
+    position: relative;
+    flex: 1 0 auto;
+    height: auto;
+
+    &:before{
+      content: "";
+      position: fixed;
+      top: auto;
+      right: 0;
+      left: 0;
+      bottom: 48px;
+      height: 15px;
+      z-index: -1;
+      background: #f6f5f3;
+    }
   }
 
-  &__main-content {
+  &__main-content{
     background: #fff;
 
   }
 
-  &__reply {
+  &__reply{
     background: $white-color;
     flex: 0 0 auto;
   }
 
-  &__info {
+
+  &__info{
     position: relative;
     top: 48px;
     left: 0;
@@ -48,20 +50,20 @@
     height: 72px;
 
     background: #fff;
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0,0,0);
 
     display: flex;
     align-items: center;
   }
 
-  &__body {
+  &__body{
     position: relative;
     //flex: 1 0 auto;
     margin-bottom: 10px;
     z-index: 1;
   }
 
-  &__mail-attachments {
+  &__mail-attachments{
     position: relative;
     z-index: 1;
     padding: 10px 0 0;
@@ -85,7 +87,7 @@
     color: $mail-message-title-color;
     background-color: #f6f5f3;
 
-    &:after {
+    &:after{
       content: "";
 
       position: absolute;
@@ -96,7 +98,7 @@
       border-bottom: 1px solid $mail-message-title--border-color;
     }
   }
-  &__footer {
+  &__footer{
     display: flex;
     align-items: center;
 
@@ -104,18 +106,19 @@
   }
 
   @media only screen and (max-width: 562px) {
-    &__header-container, &__reply-container {
+    &__header-container, &__reply-container{
       //padding: 0 10px;
     }
   }
 
 }
 
-.wrapper {
+
+.wrapper{
   padding-left: 22px;
   padding-right: 22px;
 
-  &--is-margin {
+  &--is-margin{
     margin-right: -22px;
     margin-left: -22px;
   }
@@ -124,10 +127,12 @@
     padding-left: 10px;
     padding-right: 10px;
 
-    &--is-margin {
+    &--is-margin{
       margin-right: -10px;
       margin-left: -10px;
     }
   }
+
+
 
 }
