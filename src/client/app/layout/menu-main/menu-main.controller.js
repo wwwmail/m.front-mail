@@ -88,6 +88,7 @@
         vm.closeMenu = closeMenu;
         vm.setAuthProfile = setAuthProfile;
         vm.clearFolder = clearFolder;
+        vm.goToDesktopVersion = goToDesktopVersion;
 
         activate();
 
@@ -100,6 +101,12 @@
 
             // vm.user.profile.photo = CONFIG.MediaUrl + vm.user.profile.photo;
             // console.log('vm.user', vm.user);
+        }
+        
+        function goToDesktopVersion(target) {
+            alert(target);
+            window.location.href = target;
+            // document.location.reload(true);
         }
 
         function getMailBox() {
