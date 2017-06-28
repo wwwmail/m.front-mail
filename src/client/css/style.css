@@ -4737,6 +4737,7 @@
   min-width: 280px;
   margin: 16px 0;
   overflow: auto;
+  overflow-x: hidden;
 }
 
 .time-send {
