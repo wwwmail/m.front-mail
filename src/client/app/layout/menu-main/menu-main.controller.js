@@ -106,8 +106,7 @@
         function goToDesktopVersion(target) {
             // alert(target);
             window.location.href = target;
-
-            window.location.reload(true);
+            // window.location.reload(true);
         }
 
         function getMailBox() {
