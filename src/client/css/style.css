@@ -4733,6 +4733,7 @@
 }
 .body-message__content {
   width: auto;
+  height: 1200px;
   min-width: 280px;
   margin: 16px 0;
   overflow: scroll;
