@@ -17,10 +17,10 @@
                 state: 'home',
                 config: {
                     url: '/?version&token&page',
-                    templateUrl: 'app/marketing/home/home.html',
+                    // templateUrl: 'app/marketing/home/home.html',
                     controller: 'HomeController',
-                    controllerAs: 'vm',
-                    title: 'Главная страница'
+                    controllerAs: 'vm'
+                    // title: 'Главная страница'
                 }
             }
         ];

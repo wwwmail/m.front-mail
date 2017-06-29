@@ -7,14 +7,14 @@
                    ng-change="vm.search()"
                    ng-value="'ALL'"
                    ng-model="vm.folders.selected.name">
-            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">Вся почта</span>
+            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">{{ 'ALL_MAIL2' | translate }}</span>
             <input class="main-switch__input"
                    type="radio"
                    name="folder"
                    ng-change="vm.search()"
                    ng-value="'INBOX'"
                    ng-model="vm.folders.selected.name">
-            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">Входящие</span>
+            <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">{{ 'INBOX' | translate }}</span>
         </div>
         <button class="search-result__button-filter btn btn--not-style btn--size_sm btn--main-mobile-color font--size18 padding--right"
                 type="button"
@@ -84,14 +84,15 @@
                        value="important">
                 <div class="checkbox-big__body"></div>
                 <span class="checkbox-big__text" role="presentation">
-                С вложениями
+                {{ 'SEARCH_IS_ATTACH' | translate }}
             </span>
             </label>
         </div>
 
         <div class="search-filters__item">
             <date-sort from="vm.from"
-                       to="vm.to"  class="search-filters__date-sort"></date-sort>
+                       to="vm.to"
+                       class="search-filters__date-sort"></date-sort>
         </div>
     </div>
 </div>

@@ -9,11 +9,16 @@
     /* @ngInject */
     function HomeController($state) {
         var vm = this;
+
+        activate();
         
         function activate() {
-            if ($state.params.desktop) {
-                $state.go('signIn', {token: $state.params.token});
-            }
+            // if ($state.params.desktop) {
+            //     $state.go('signIn', {token: $state.params.token});
+            //     return;
+            // }
+
+            $state.go('mail.inbox');
         }
     }
 })();
