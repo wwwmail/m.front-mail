@@ -182,13 +182,17 @@
 
     <div class="menu-main-layout__footer-menu">
         <hr class="hr hr--main-menu">
-        <div class="mrg__left10 mrg__top10 mrg__bottom5">
-            <span class="link link--gray"
+        <div class="flex align-items--cn mrg__left10 mrg__top10 mrg__bottom5">
+            <div class="link link--gray"
                   ng-click="vm.goToDesktopVersion('http://m.mailcz.devogic.com/?version=desktop&page=mail.inbox')">
                 {{ 'FULL' | translate }} |
-            </span>
-            <span class="font--normal">{{ 'MOBILE' | translate }} v 1.0</span>
-            <choice-language></choice-language>
+            </div>
+            <div class="font--normal">
+                {{ 'MOBILE' | translate }} v 1.0
+            </div>
+            <div class="menu-main-layout__footer-lang">
+                <choice-language></choice-language>
+            </div>
         </div>
     </div>
     <div class="scrollables--y"></div>

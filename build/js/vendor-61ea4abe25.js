@@ -37579,6 +37579,4527 @@ tagsInput.run(["$templateCache", function($templateCache) {
 
 }());
 /*!
+ * angular-translate - v2.15.2 - 2017-06-22
+ * 
+ * Copyright (c) 2017 The angular-translate team, Pascal Precht; Licensed MIT
+ */
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    define([], function () {
+      return (factory());
+    });
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    factory();
+  }
+}(this, function () {
+
+/**
+ * @ngdoc overview
+ * @name pascalprecht.translate
+ *
+ * @description
+ * The main module which holds everything together.
+ */
+runTranslate.$inject = ['$translate'];
+$translate.$inject = ['$STORAGE_KEY', '$windowProvider', '$translateSanitizationProvider', 'pascalprechtTranslateOverrider'];
+$translateDefaultInterpolation.$inject = ['$interpolate', '$translateSanitization'];
+translateDirective.$inject = ['$translate', '$interpolate', '$compile', '$parse', '$rootScope'];
+translateAttrDirective.$inject = ['$translate', '$rootScope'];
+translateCloakDirective.$inject = ['$translate', '$rootScope'];
+translateFilterFactory.$inject = ['$parse', '$translate'];
+$translationCache.$inject = ['$cacheFactory'];
+angular.module('pascalprecht.translate', ['ng'])
+  .run(runTranslate);
+
+function runTranslate($translate) {
+
+  'use strict';
+
+  var key = $translate.storageKey(),
+    storage = $translate.storage();
+
+  var fallbackFromIncorrectStorageValue = function () {
+    var preferred = $translate.preferredLanguage();
+    if (angular.isString(preferred)) {
+      $translate.use(preferred);
+      // $translate.use() will also remember the language.
+      // So, we don't need to call storage.put() here.
+    } else {
+      storage.put(key, $translate.use());
+    }
+  };
+
+  fallbackFromIncorrectStorageValue.displayName = 'fallbackFromIncorrectStorageValue';
+
+  if (storage) {
+    if (!storage.get(key)) {
+      fallbackFromIncorrectStorageValue();
+    } else {
+      $translate.use(storage.get(key))['catch'](fallbackFromIncorrectStorageValue);
+    }
+  } else if (angular.isString($translate.preferredLanguage())) {
+    $translate.use($translate.preferredLanguage());
+  }
+}
+
+runTranslate.displayName = 'runTranslate';
+
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateSanitizationProvider
+ *
+ * @description
+ *
+ * Configurations for $translateSanitization
+ */
+angular.module('pascalprecht.translate').provider('$translateSanitization', $translateSanitizationProvider);
+
+function $translateSanitizationProvider () {
+
+  'use strict';
+
+  var $sanitize,
+      $sce,
+      currentStrategy = null, // TODO change to either 'sanitize', 'escape' or ['sanitize', 'escapeParameters'] in 3.0.
+      hasConfiguredStrategy = false,
+      hasShownNoStrategyConfiguredWarning = false,
+      strategies;
+
+  /**
+   * Definition of a sanitization strategy function
+   * @callback StrategyFunction
+   * @param {string|object} value - value to be sanitized (either a string or an interpolated value map)
+   * @param {string} mode - either 'text' for a string (translation) or 'params' for the interpolated params
+   * @return {string|object}
+   */
+
+  /**
+   * @ngdoc property
+   * @name strategies
+   * @propertyOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
+   * Following strategies are built-in:
+   * <dl>
+   *   <dt>sanitize</dt>
+   *   <dd>Sanitizes HTML in the translation text using $sanitize</dd>
+   *   <dt>escape</dt>
+   *   <dd>Escapes HTML in the translation</dd>
+   *   <dt>sanitizeParameters</dt>
+   *   <dd>Sanitizes HTML in the values of the interpolation parameters using $sanitize</dd>
+   *   <dt>escapeParameters</dt>
+   *   <dd>Escapes HTML in the values of the interpolation parameters</dd>
+   *   <dt>escaped</dt>
+   *   <dd>Support legacy strategy name 'escaped' for backwards compatibility (will be removed in 3.0)</dd>
+   * </dl>
+   *
+   */
+
+  strategies = {
+    sanitize: function (value, mode/*, context*/) {
+      if (mode === 'text') {
+        value = htmlSanitizeValue(value);
+      }
+      return value;
+    },
+    escape: function (value, mode/*, context*/) {
+      if (mode === 'text') {
+        value = htmlEscapeValue(value);
+      }
+      return value;
+    },
+    sanitizeParameters: function (value, mode/*, context*/) {
+      if (mode === 'params') {
+        value = mapInterpolationParameters(value, htmlSanitizeValue);
+      }
+      return value;
+    },
+    escapeParameters: function (value, mode/*, context*/) {
+      if (mode === 'params') {
+        value = mapInterpolationParameters(value, htmlEscapeValue);
+      }
+      return value;
+    },
+    sce: function (value, mode, context) {
+      if (mode === 'text') {
+        value = htmlTrustValue(value);
+      } else if (mode === 'params') {
+        if (context !== 'filter') {
+          // do html escape in filter context #1101
+          value = mapInterpolationParameters(value, htmlEscapeValue);
+        }
+      }
+      return value;
+    },
+    sceParameters: function (value, mode/*, context*/) {
+      if (mode === 'params') {
+        value = mapInterpolationParameters(value, htmlTrustValue);
+      }
+      return value;
+    }
+  };
+  // Support legacy strategy name 'escaped' for backwards compatibility.
+  // TODO should be removed in 3.0
+  strategies.escaped = strategies.escapeParameters;
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateSanitizationProvider#addStrategy
+   * @methodOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
+   * Adds a sanitization strategy to the list of known strategies.
+   *
+   * @param {string} strategyName - unique key for a strategy
+   * @param {StrategyFunction} strategyFunction - strategy function
+   * @returns {object} this
+   */
+  this.addStrategy = function (strategyName, strategyFunction) {
+    strategies[strategyName] = strategyFunction;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateSanitizationProvider#removeStrategy
+   * @methodOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
+   * Removes a sanitization strategy from the list of known strategies.
+   *
+   * @param {string} strategyName - unique key for a strategy
+   * @returns {object} this
+   */
+  this.removeStrategy = function (strategyName) {
+    delete strategies[strategyName];
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateSanitizationProvider#useStrategy
+   * @methodOf pascalprecht.translate.$translateSanitizationProvider
+   *
+   * @description
+   * Selects a sanitization strategy. When an array is provided the strategies will be executed in order.
+   *
+   * @param {string|StrategyFunction|array} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
+   * @returns {object} this
+   */
+  this.useStrategy = function (strategy) {
+    hasConfiguredStrategy = true;
+    currentStrategy = strategy;
+    return this;
+  };
+
+  /**
+   * @ngdoc object
+   * @name pascalprecht.translate.$translateSanitization
+   * @requires $injector
+   * @requires $log
+   *
+   * @description
+   * Sanitizes interpolation parameters and translated texts.
+   *
+   */
+  this.$get = ['$injector', '$log', function ($injector, $log) {
+
+    var cachedStrategyMap = {};
+
+    var applyStrategies = function (value, mode, context, selectedStrategies) {
+      angular.forEach(selectedStrategies, function (selectedStrategy) {
+        if (angular.isFunction(selectedStrategy)) {
+          value = selectedStrategy(value, mode, context);
+        } else if (angular.isFunction(strategies[selectedStrategy])) {
+          value = strategies[selectedStrategy](value, mode, context);
+        } else if (angular.isString(strategies[selectedStrategy])) {
+          if (!cachedStrategyMap[strategies[selectedStrategy]]) {
+            try {
+              cachedStrategyMap[strategies[selectedStrategy]] = $injector.get(strategies[selectedStrategy]);
+            } catch (e) {
+              cachedStrategyMap[strategies[selectedStrategy]] = function() {};
+              throw new Error('pascalprecht.translate.$translateSanitization: Unknown sanitization strategy: \'' + selectedStrategy + '\'');
+            }
+          }
+          value = cachedStrategyMap[strategies[selectedStrategy]](value, mode, context);
+        } else {
+          throw new Error('pascalprecht.translate.$translateSanitization: Unknown sanitization strategy: \'' + selectedStrategy + '\'');
+        }
+      });
+      return value;
+    };
+
+    // TODO: should be removed in 3.0
+    var showNoStrategyConfiguredWarning = function () {
+      if (!hasConfiguredStrategy && !hasShownNoStrategyConfiguredWarning) {
+        $log.warn('pascalprecht.translate.$translateSanitization: No sanitization strategy has been configured. This can have serious security implications. See http://angular-translate.github.io/docs/#/guide/19_security for details.');
+        hasShownNoStrategyConfiguredWarning = true;
+      }
+    };
+
+    if ($injector.has('$sanitize')) {
+      $sanitize = $injector.get('$sanitize');
+    }
+    if ($injector.has('$sce')) {
+      $sce = $injector.get('$sce');
+    }
+
+    return {
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateSanitization#useStrategy
+       * @methodOf pascalprecht.translate.$translateSanitization
+       *
+       * @description
+       * Selects a sanitization strategy. When an array is provided the strategies will be executed in order.
+       *
+       * @param {string|StrategyFunction|array} strategy The sanitization strategy / strategies which should be used. Either a name of an existing strategy, a custom strategy function, or an array consisting of multiple names and / or custom functions.
+       */
+      useStrategy: (function (self) {
+        return function (strategy) {
+          self.useStrategy(strategy);
+        };
+      })(this),
+
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateSanitization#sanitize
+       * @methodOf pascalprecht.translate.$translateSanitization
+       *
+       * @description
+       * Sanitizes a value.
+       *
+       * @param {string|object} value The value which should be sanitized.
+       * @param {string} mode The current sanitization mode, either 'params' or 'text'.
+       * @param {string|StrategyFunction|array} [strategy] Optional custom strategy which should be used instead of the currently selected strategy.
+       * @param {string} [context] The context of this call: filter, service. Default is service
+       * @returns {string|object} sanitized value
+       */
+      sanitize: function (value, mode, strategy, context) {
+        if (!currentStrategy) {
+          showNoStrategyConfiguredWarning();
+        }
+
+        if (!strategy && strategy !== null) {
+          strategy = currentStrategy;
+        }
+
+        if (!strategy) {
+          return value;
+        }
+
+        if (!context) {
+          context = 'service';
+        }
+
+        var selectedStrategies = angular.isArray(strategy) ? strategy : [strategy];
+        return applyStrategies(value, mode, context, selectedStrategies);
+      }
+    };
+  }];
+
+  var htmlEscapeValue = function (value) {
+    var element = angular.element('<div></div>');
+    element.text(value); // not chainable, see #1044
+    return element.html();
+  };
+
+  var htmlSanitizeValue = function (value) {
+    if (!$sanitize) {
+      throw new Error('pascalprecht.translate.$translateSanitization: Error cannot find $sanitize service. Either include the ngSanitize module (https://docs.angularjs.org/api/ngSanitize) or use a sanitization strategy which does not depend on $sanitize, such as \'escape\'.');
+    }
+    return $sanitize(value);
+  };
+
+  var htmlTrustValue = function (value) {
+    if (!$sce) {
+      throw new Error('pascalprecht.translate.$translateSanitization: Error cannot find $sce service.');
+    }
+    return $sce.trustAsHtml(value);
+  };
+
+  var mapInterpolationParameters = function (value, iteratee, stack) {
+    if (angular.isDate(value)) {
+      return value;
+    } else if (angular.isObject(value)) {
+      var result = angular.isArray(value) ? [] : {};
+
+      if (!stack) {
+        stack = [];
+      } else {
+        if (stack.indexOf(value) > -1) {
+          throw new Error('pascalprecht.translate.$translateSanitization: Error cannot interpolate parameter due recursive object');
+        }
+      }
+
+      stack.push(value);
+      angular.forEach(value, function (propertyValue, propertyKey) {
+
+        /* Skipping function properties. */
+        if (angular.isFunction(propertyValue)) {
+          return;
+        }
+
+        result[propertyKey] = mapInterpolationParameters(propertyValue, iteratee, stack);
+      });
+      stack.splice(-1, 1); // remove last
+
+      return result;
+    } else if (angular.isNumber(value)) {
+      return value;
+    } else if (value === true || value === false) {
+      return value;
+    } else if (!angular.isUndefined(value) && value !== null) {
+      return iteratee(value);
+    } else {
+      return value;
+    }
+  };
+}
+
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateProvider
+ * @description
+ *
+ * $translateProvider allows developers to register translation-tables, asynchronous loaders
+ * and similar to configure translation behavior directly inside of a module.
+ *
+ */
+angular.module('pascalprecht.translate')
+  .constant('pascalprechtTranslateOverrider', {})
+  .provider('$translate', $translate);
+
+function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvider, pascalprechtTranslateOverrider) {
+
+  'use strict';
+
+  var $translationTable = {},
+    $preferredLanguage,
+    $availableLanguageKeys = [],
+    $languageKeyAliases,
+    $fallbackLanguage,
+    $fallbackWasString,
+    $uses,
+    $nextLang,
+    $storageFactory,
+    $storageKey = $STORAGE_KEY,
+    $storagePrefix,
+    $missingTranslationHandlerFactory,
+    $interpolationFactory,
+    $interpolatorFactories = [],
+    $loaderFactory,
+    $cloakClassName = 'translate-cloak',
+    $loaderOptions,
+    $notFoundIndicatorLeft,
+    $notFoundIndicatorRight,
+    $postCompilingEnabled = false,
+    $forceAsyncReloadEnabled = false,
+    $nestedObjectDelimeter = '.',
+    $isReady = false,
+    $keepContent = false,
+    loaderCache,
+    directivePriority = 0,
+    statefulFilter = true,
+    postProcessFn,
+    uniformLanguageTagResolver = 'default',
+    languageTagResolver = {
+      'default' : function (tag) {
+        return (tag || '').split('-').join('_');
+      },
+      java : function (tag) {
+        var temp = (tag || '').split('-').join('_');
+        var parts = temp.split('_');
+        return parts.length > 1 ? (parts[0].toLowerCase() + '_' + parts[1].toUpperCase()) : temp;
+      },
+      bcp47 : function (tag) {
+        var temp = (tag || '').split('_').join('-');
+        var parts = temp.split('-');
+        return parts.length > 1 ? (parts[0].toLowerCase() + '-' + parts[1].toUpperCase()) : temp;
+      },
+      'iso639-1' : function (tag) {
+        var temp = (tag || '').split('_').join('-');
+        var parts = temp.split('-');
+        return parts[0].toLowerCase();
+      }
+    };
+
+  var version = '2.15.2';
+
+  // tries to determine the browsers language
+  var getFirstBrowserLanguage = function () {
+
+    // internal purpose only
+    if (angular.isFunction(pascalprechtTranslateOverrider.getLocale)) {
+      return pascalprechtTranslateOverrider.getLocale();
+    }
+
+    var nav = $windowProvider.$get().navigator,
+      browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
+      i,
+      language;
+
+    // support for HTML 5.1 "navigator.languages"
+    if (angular.isArray(nav.languages)) {
+      for (i = 0; i < nav.languages.length; i++) {
+        language = nav.languages[i];
+        if (language && language.length) {
+          return language;
+        }
+      }
+    }
+
+    // support for other well known properties in browsers
+    for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
+      language = nav[browserLanguagePropertyKeys[i]];
+      if (language && language.length) {
+        return language;
+      }
+    }
+
+    return null;
+  };
+  getFirstBrowserLanguage.displayName = 'angular-translate/service: getFirstBrowserLanguage';
+
+  // tries to determine the browsers locale
+  var getLocale = function () {
+    var locale = getFirstBrowserLanguage() || '';
+    if (languageTagResolver[uniformLanguageTagResolver]) {
+      locale = languageTagResolver[uniformLanguageTagResolver](locale);
+    }
+    return locale;
+  };
+  getLocale.displayName = 'angular-translate/service: getLocale';
+
+  /**
+   * @name indexOf
+   * @private
+   *
+   * @description
+   * indexOf polyfill. Kinda sorta.
+   *
+   * @param {array} array Array to search in.
+   * @param {string} searchElement Element to search for.
+   *
+   * @returns {int} Index of search element.
+   */
+  var indexOf = function (array, searchElement) {
+    for (var i = 0, len = array.length; i < len; i++) {
+      if (array[i] === searchElement) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  /**
+   * @name trim
+   * @private
+   *
+   * @description
+   * trim polyfill
+   *
+   * @returns {string} The string stripped of whitespace from both ends
+   */
+  var trim = function () {
+    return this.toString().replace(/^\s+|\s+$/g, '');
+  };
+
+  var negotiateLocale = function (preferred) {
+    if (!preferred) {
+      return;
+    }
+
+    var avail = [],
+      locale = angular.lowercase(preferred),
+      i = 0,
+      n = $availableLanguageKeys.length;
+
+    for (; i < n; i++) {
+      avail.push(angular.lowercase($availableLanguageKeys[i]));
+    }
+
+    // Check for an exact match in our list of available keys
+    if (indexOf(avail, locale) > -1) {
+      return preferred;
+    }
+
+    if ($languageKeyAliases) {
+      var alias;
+      for (var langKeyAlias in $languageKeyAliases) {
+        if ($languageKeyAliases.hasOwnProperty(langKeyAlias)) {
+          var hasWildcardKey = false;
+          var hasExactKey = Object.prototype.hasOwnProperty.call($languageKeyAliases, langKeyAlias) &&
+            angular.lowercase(langKeyAlias) === angular.lowercase(preferred);
+
+          if (langKeyAlias.slice(-1) === '*') {
+            hasWildcardKey = langKeyAlias.slice(0, -1) === preferred.slice(0, langKeyAlias.length - 1);
+          }
+          if (hasExactKey || hasWildcardKey) {
+            alias = $languageKeyAliases[langKeyAlias];
+            if (indexOf(avail, angular.lowercase(alias)) > -1) {
+              return alias;
+            }
+          }
+        }
+      }
+    }
+
+    // Check for a language code without region
+    var parts = preferred.split('_');
+
+    if (parts.length > 1 && indexOf(avail, angular.lowercase(parts[0])) > -1) {
+      return parts[0];
+    }
+
+    // If everything fails, return undefined.
+    return;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#translations
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Registers a new translation table for specific language key.
+   *
+   * To register a translation table for specific language, pass a defined language
+   * key as first parameter.
+   *
+   * <pre>
+   *  // register translation table for language: 'de_DE'
+   *  $translateProvider.translations('de_DE', {
+   *    'GREETING': 'Hallo Welt!'
+   *  });
+   *
+   *  // register another one
+   *  $translateProvider.translations('en_US', {
+   *    'GREETING': 'Hello world!'
+   *  });
+   * </pre>
+   *
+   * When registering multiple translation tables for for the same language key,
+   * the actual translation table gets extended. This allows you to define module
+   * specific translation which only get added, once a specific module is loaded in
+   * your app.
+   *
+   * Invoking this method with no arguments returns the translation table which was
+   * registered with no language key. Invoking it with a language key returns the
+   * related translation table.
+   *
+   * @param {string} langKey A language key.
+   * @param {object} translationTable A plain old JavaScript object that represents a translation table.
+   *
+   */
+  var translations = function (langKey, translationTable) {
+
+    if (!langKey && !translationTable) {
+      return $translationTable;
+    }
+
+    if (langKey && !translationTable) {
+      if (angular.isString(langKey)) {
+        return $translationTable[langKey];
+      }
+    } else {
+      if (!angular.isObject($translationTable[langKey])) {
+        $translationTable[langKey] = {};
+      }
+      angular.extend($translationTable[langKey], flatObject(translationTable));
+    }
+    return this;
+  };
+
+  this.translations = translations;
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#cloakClassName
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   *
+   * Let's you change the class name for `translate-cloak` directive.
+   * Default class name is `translate-cloak`.
+   *
+   * @param {string} name translate-cloak class name
+   */
+  this.cloakClassName = function (name) {
+    if (!name) {
+      return $cloakClassName;
+    }
+    $cloakClassName = name;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#nestedObjectDelimeter
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   *
+   * Let's you change the delimiter for namespaced translations.
+   * Default delimiter is `.`.
+   *
+   * @param {string} delimiter namespace separator
+   */
+  this.nestedObjectDelimeter = function (delimiter) {
+    if (!delimiter) {
+      return $nestedObjectDelimeter;
+    }
+    $nestedObjectDelimeter = delimiter;
+    return this;
+  };
+
+  /**
+   * @name flatObject
+   * @private
+   *
+   * @description
+   * Flats an object. This function is used to flatten given translation data with
+   * namespaces, so they are later accessible via dot notation.
+   */
+  var flatObject = function (data, path, result, prevKey) {
+    var key, keyWithPath, keyWithShortPath, val;
+
+    if (!path) {
+      path = [];
+    }
+    if (!result) {
+      result = {};
+    }
+    for (key in data) {
+      if (!Object.prototype.hasOwnProperty.call(data, key)) {
+        continue;
+      }
+      val = data[key];
+      if (angular.isObject(val)) {
+        flatObject(val, path.concat(key), result, key);
+      } else {
+        keyWithPath = path.length ? ('' + path.join($nestedObjectDelimeter) + $nestedObjectDelimeter + key) : key;
+        if (path.length && key === prevKey) {
+          // Create shortcut path (foo.bar == foo.bar.bar)
+          keyWithShortPath = '' + path.join($nestedObjectDelimeter);
+          // Link it to original path
+          result[keyWithShortPath] = '@:' + keyWithPath;
+        }
+        result[keyWithPath] = val;
+      }
+    }
+    return result;
+  };
+  flatObject.displayName = 'flatObject';
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#addInterpolation
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Adds interpolation services to angular-translate, so it can manage them.
+   *
+   * @param {object} factory Interpolation service factory
+   */
+  this.addInterpolation = function (factory) {
+    $interpolatorFactories.push(factory);
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useMessageFormatInterpolation
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use interpolation functionality of messageformat.js.
+   * This is useful when having high level pluralization and gender selection.
+   */
+  this.useMessageFormatInterpolation = function () {
+    return this.useInterpolation('$translateMessageFormatInterpolation');
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useInterpolation
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate which interpolation style to use as default, application-wide.
+   * Simply pass a factory/service name. The interpolation service has to implement
+   * the correct interface.
+   *
+   * @param {string} factory Interpolation service name.
+   */
+  this.useInterpolation = function (factory) {
+    $interpolationFactory = factory;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useSanitizeStrategy
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Simply sets a sanitation strategy type.
+   *
+   * @param {string} value Strategy type.
+   */
+  this.useSanitizeValueStrategy = function (value) {
+    $translateSanitizationProvider.useStrategy(value);
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#preferredLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells the module which of the registered translation tables to use for translation
+   * at initial startup by passing a language key. Similar to `$translateProvider#use`
+   * only that it says which language to **prefer**.
+   *
+   * @param {string} langKey A language key.
+   */
+  this.preferredLanguage = function (langKey) {
+    if (langKey) {
+      setupPreferredLanguage(langKey);
+      return this;
+    }
+    return $preferredLanguage;
+  };
+  var setupPreferredLanguage = function (langKey) {
+    if (langKey) {
+      $preferredLanguage = langKey;
+    }
+    return $preferredLanguage;
+  };
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#translationNotFoundIndicator
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Sets an indicator which is used when a translation isn't found. E.g. when
+   * setting the indicator as 'X' and one tries to translate a translation id
+   * called `NOT_FOUND`, this will result in `X NOT_FOUND X`.
+   *
+   * Internally this methods sets a left indicator and a right indicator using
+   * `$translateProvider.translationNotFoundIndicatorLeft()` and
+   * `$translateProvider.translationNotFoundIndicatorRight()`.
+   *
+   * **Note**: These methods automatically add a whitespace between the indicators
+   * and the translation id.
+   *
+   * @param {string} indicator An indicator, could be any string.
+   */
+  this.translationNotFoundIndicator = function (indicator) {
+    this.translationNotFoundIndicatorLeft(indicator);
+    this.translationNotFoundIndicatorRight(indicator);
+    return this;
+  };
+
+  /**
+   * ngdoc function
+   * @name pascalprecht.translate.$translateProvider#translationNotFoundIndicatorLeft
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Sets an indicator which is used when a translation isn't found left to the
+   * translation id.
+   *
+   * @param {string} indicator An indicator.
+   */
+  this.translationNotFoundIndicatorLeft = function (indicator) {
+    if (!indicator) {
+      return $notFoundIndicatorLeft;
+    }
+    $notFoundIndicatorLeft = indicator;
+    return this;
+  };
+
+  /**
+   * ngdoc function
+   * @name pascalprecht.translate.$translateProvider#translationNotFoundIndicatorLeft
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Sets an indicator which is used when a translation isn't found right to the
+   * translation id.
+   *
+   * @param {string} indicator An indicator.
+   */
+  this.translationNotFoundIndicatorRight = function (indicator) {
+    if (!indicator) {
+      return $notFoundIndicatorRight;
+    }
+    $notFoundIndicatorRight = indicator;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#fallbackLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells the module which of the registered translation tables to use when missing translations
+   * at initial startup by passing a language key. Similar to `$translateProvider#use`
+   * only that it says which language to **fallback**.
+   *
+   * @param {string||array} langKey A language key.
+   *
+   */
+  this.fallbackLanguage = function (langKey) {
+    fallbackStack(langKey);
+    return this;
+  };
+
+  var fallbackStack = function (langKey) {
+    if (langKey) {
+      if (angular.isString(langKey)) {
+        $fallbackWasString = true;
+        $fallbackLanguage = [langKey];
+      } else if (angular.isArray(langKey)) {
+        $fallbackWasString = false;
+        $fallbackLanguage = langKey;
+      }
+      if (angular.isString($preferredLanguage) && indexOf($fallbackLanguage, $preferredLanguage) < 0) {
+        $fallbackLanguage.push($preferredLanguage);
+      }
+
+      return this;
+    } else {
+      if ($fallbackWasString) {
+        return $fallbackLanguage[0];
+      } else {
+        return $fallbackLanguage;
+      }
+    }
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#use
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Set which translation table to use for translation by given language key. When
+   * trying to 'use' a language which isn't provided, it'll throw an error.
+   *
+   * You actually don't have to use this method since `$translateProvider#preferredLanguage`
+   * does the job too.
+   *
+   * @param {string} langKey A language key.
+   */
+  this.use = function (langKey) {
+    if (langKey) {
+      if (!$translationTable[langKey] && (!$loaderFactory)) {
+        // only throw an error, when not loading translation data asynchronously
+        throw new Error('$translateProvider couldn\'t find translationTable for langKey: \'' + langKey + '\'');
+      }
+      $uses = langKey;
+      return this;
+    }
+    return $uses;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#resolveClientLocale
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * This returns the current browser/client's language key. The result is processed with the configured uniform tag resolver.
+   *
+   * @returns {string} the current client/browser language key
+   */
+  this.resolveClientLocale = function () {
+    return getLocale();
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#storageKey
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells the module which key must represent the choosed language by a user in the storage.
+   *
+   * @param {string} key A key for the storage.
+   */
+  var storageKey = function (key) {
+    if (!key) {
+      if ($storagePrefix) {
+        return $storagePrefix + $storageKey;
+      }
+      return $storageKey;
+    }
+    $storageKey = key;
+    return this;
+  };
+
+  this.storageKey = storageKey;
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useUrlLoader
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use `$translateUrlLoader` extension service as loader.
+   *
+   * @param {string} url Url
+   * @param {Object=} options Optional configuration object
+   */
+  this.useUrlLoader = function (url, options) {
+    return this.useLoader('$translateUrlLoader', angular.extend({url : url}, options));
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useStaticFilesLoader
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use `$translateStaticFilesLoader` extension service as loader.
+   *
+   * @param {Object=} options Optional configuration object
+   */
+  this.useStaticFilesLoader = function (options) {
+    return this.useLoader('$translateStaticFilesLoader', options);
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useLoader
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use any other service as loader.
+   *
+   * @param {string} loaderFactory Factory name to use
+   * @param {Object=} options Optional configuration object
+   */
+  this.useLoader = function (loaderFactory, options) {
+    $loaderFactory = loaderFactory;
+    $loaderOptions = options || {};
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useLocalStorage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use `$translateLocalStorage` service as storage layer.
+   *
+   */
+  this.useLocalStorage = function () {
+    return this.useStorage('$translateLocalStorage');
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useCookieStorage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use `$translateCookieStorage` service as storage layer.
+   */
+  this.useCookieStorage = function () {
+    return this.useStorage('$translateCookieStorage');
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useStorage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use custom service as storage layer.
+   */
+  this.useStorage = function (storageFactory) {
+    $storageFactory = storageFactory;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#storagePrefix
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Sets prefix for storage key.
+   *
+   * @param {string} prefix Storage key prefix
+   */
+  this.storagePrefix = function (prefix) {
+    if (!prefix) {
+      return prefix;
+    }
+    $storagePrefix = prefix;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useMissingTranslationHandlerLog
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to use built-in log handler when trying to translate
+   * a translation Id which doesn't exist.
+   *
+   * This is actually a shortcut method for `useMissingTranslationHandler()`.
+   *
+   */
+  this.useMissingTranslationHandlerLog = function () {
+    return this.useMissingTranslationHandler('$translateMissingTranslationHandlerLog');
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useMissingTranslationHandler
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Expects a factory name which later gets instantiated with `$injector`.
+   * This method can be used to tell angular-translate to use a custom
+   * missingTranslationHandler. Just build a factory which returns a function
+   * and expects a translation id as argument.
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.useMissingTranslationHandler('customHandler');
+   *  });
+   *
+   *  app.factory('customHandler', function (dep1, dep2) {
+   *    return function (translationId) {
+   *      // something with translationId and dep1 and dep2
+   *    };
+   *  });
+   * </pre>
+   *
+   * @param {string} factory Factory name
+   */
+  this.useMissingTranslationHandler = function (factory) {
+    $missingTranslationHandlerFactory = factory;
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#usePostCompiling
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * If post compiling is enabled, all translated values will be processed
+   * again with AngularJS' $compile.
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.usePostCompiling(true);
+   *  });
+   * </pre>
+   *
+   * @param {string} factory Factory name
+   */
+  this.usePostCompiling = function (value) {
+    $postCompilingEnabled = !(!value);
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#forceAsyncReload
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * If force async reload is enabled, async loader will always be called
+   * even if $translationTable already contains the language key, adding
+   * possible new entries to the $translationTable.
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.forceAsyncReload(true);
+   *  });
+   * </pre>
+   *
+   * @param {boolean} value - valid values are true or false
+   */
+  this.forceAsyncReload = function (value) {
+    $forceAsyncReloadEnabled = !(!value);
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#uniformLanguageTag
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate which language tag should be used as a result when determining
+   * the current browser language.
+   *
+   * This setting must be set before invoking {@link pascalprecht.translate.$translateProvider#methods_determinePreferredLanguage determinePreferredLanguage()}.
+   *
+   * <pre>
+   * $translateProvider
+   *   .uniformLanguageTag('bcp47')
+   *   .determinePreferredLanguage()
+   * </pre>
+   *
+   * The resolver currently supports:
+   * * default
+   *     (traditionally: hyphens will be converted into underscores, i.e. en-US => en_US)
+   *     en-US => en_US
+   *     en_US => en_US
+   *     en-us => en_us
+   * * java
+   *     like default, but the second part will be always in uppercase
+   *     en-US => en_US
+   *     en_US => en_US
+   *     en-us => en_US
+   * * BCP 47 (RFC 4646 & 4647)
+   *     en-US => en-US
+   *     en_US => en-US
+   *     en-us => en-US
+   *
+   * See also:
+   * * http://en.wikipedia.org/wiki/IETF_language_tag
+   * * http://www.w3.org/International/core/langtags/
+   * * http://tools.ietf.org/html/bcp47
+   *
+   * @param {string|object} options - options (or standard)
+   * @param {string} options.standard - valid values are 'default', 'bcp47', 'java'
+   */
+  this.uniformLanguageTag = function (options) {
+
+    if (!options) {
+      options = {};
+    } else if (angular.isString(options)) {
+      options = {
+        standard : options
+      };
+    }
+
+    uniformLanguageTagResolver = options.standard;
+
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#determinePreferredLanguage
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Tells angular-translate to try to determine on its own which language key
+   * to set as preferred language. When `fn` is given, angular-translate uses it
+   * to determine a language key, otherwise it uses the built-in `getLocale()`
+   * method.
+   *
+   * The `getLocale()` returns a language key in the format `[lang]_[country]` or
+   * `[lang]` depending on what the browser provides.
+   *
+   * Use this method at your own risk, since not all browsers return a valid
+   * locale (see {@link pascalprecht.translate.$translateProvider#methods_uniformLanguageTag uniformLanguageTag()}).
+   *
+   * @param {Function=} fn Function to determine a browser's locale
+   */
+  this.determinePreferredLanguage = function (fn) {
+
+    var locale = (fn && angular.isFunction(fn)) ? fn() : getLocale();
+
+    if (!$availableLanguageKeys.length) {
+      $preferredLanguage = locale;
+    } else {
+      $preferredLanguage = negotiateLocale(locale) || locale;
+    }
+
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#registerAvailableLanguageKeys
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Registers a set of language keys the app will work with. Use this method in
+   * combination with
+   * {@link pascalprecht.translate.$translateProvider#determinePreferredLanguage determinePreferredLanguage}.
+   * When available languages keys are registered, angular-translate
+   * tries to find the best fitting language key depending on the browsers locale,
+   * considering your language key convention.
+   *
+   * @param {object} languageKeys Array of language keys the your app will use
+   * @param {object=} aliases Alias map.
+   */
+  this.registerAvailableLanguageKeys = function (languageKeys, aliases) {
+    if (languageKeys) {
+      $availableLanguageKeys = languageKeys;
+      if (aliases) {
+        $languageKeyAliases = aliases;
+      }
+      return this;
+    }
+    return $availableLanguageKeys;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#useLoaderCache
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Registers a cache for internal $http based loaders.
+   * {@link pascalprecht.translate.$translationCache $translationCache}.
+   * When false the cache will be disabled (default). When true or undefined
+   * the cache will be a default (see $cacheFactory). When an object it will
+   * be treat as a cache object itself: the usage is $http({cache: cache})
+   *
+   * @param {object} cache boolean, string or cache-object
+   */
+  this.useLoaderCache = function (cache) {
+    if (cache === false) {
+      // disable cache
+      loaderCache = undefined;
+    } else if (cache === true) {
+      // enable cache using AJS defaults
+      loaderCache = true;
+    } else if (typeof(cache) === 'undefined') {
+      // enable cache using default
+      loaderCache = '$translationCache';
+    } else if (cache) {
+      // enable cache using given one (see $cacheFactory)
+      loaderCache = cache;
+    }
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#directivePriority
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Sets the default priority of the translate directive. The standard value is `0`.
+   * Calling this function without an argument will return the current value.
+   *
+   * @param {number} priority for the translate-directive
+   */
+  this.directivePriority = function (priority) {
+    if (priority === undefined) {
+      // getter
+      return directivePriority;
+    } else {
+      // setter with chaining
+      directivePriority = priority;
+      return this;
+    }
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#statefulFilter
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * Since AngularJS 1.3, filters which are not stateless (depending at the scope)
+   * have to explicit define this behavior.
+   * Sets whether the translate filter should be stateful or stateless. The standard value is `true`
+   * meaning being stateful.
+   * Calling this function without an argument will return the current value.
+   *
+   * @param {boolean} state - defines the state of the filter
+   */
+  this.statefulFilter = function (state) {
+    if (state === undefined) {
+      // getter
+      return statefulFilter;
+    } else {
+      // setter with chaining
+      statefulFilter = state;
+      return this;
+    }
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#postProcess
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * The post processor will be intercept right after the translation result. It can modify the result.
+   *
+   * @param {object} fn Function or service name (string) to be called after the translation value has been set / resolved. The function itself will enrich every value being processed and then continue the normal resolver process
+   */
+  this.postProcess = function (fn) {
+    if (fn) {
+      postProcessFn = fn;
+    } else {
+      postProcessFn = undefined;
+    }
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateProvider#keepContent
+   * @methodOf pascalprecht.translate.$translateProvider
+   *
+   * @description
+   * If keepContent is set to true than translate directive will always use innerHTML
+   * as a default translation
+   *
+   * Example:
+   * <pre>
+   *  app.config(function ($translateProvider) {
+   *    $translateProvider.keepContent(true);
+   *  });
+   * </pre>
+   *
+   * @param {boolean} value - valid values are true or false
+   */
+  this.keepContent = function (value) {
+    $keepContent = !(!value);
+    return this;
+  };
+
+  /**
+   * @ngdoc object
+   * @name pascalprecht.translate.$translate
+   * @requires $interpolate
+   * @requires $log
+   * @requires $rootScope
+   * @requires $q
+   *
+   * @description
+   * The `$translate` service is the actual core of angular-translate. It expects a translation id
+   * and optional interpolate parameters to translate contents.
+   *
+   * <pre>
+   *  $translate('HEADLINE_TEXT').then(function (translation) {
+   *    $scope.translatedText = translation;
+   *  });
+   * </pre>
+   *
+   * @param {string|array} translationId A token which represents a translation id
+   *                                     This can be optionally an array of translation ids which
+   *                                     results that the function returns an object where each key
+   *                                     is the translation id and the value the translation.
+   * @param {object=} interpolateParams An object hash for dynamic values
+   * @param {string} interpolationId The id of the interpolation to use
+   * @param {string} defaultTranslationText the optional default translation text that is written as
+   *                                        as default text in case it is not found in any configured language
+   * @param {string} forceLanguage A language to be used instead of the current language
+   * @returns {object} promise
+   */
+  this.$get = ['$log', '$injector', '$rootScope', '$q', function ($log, $injector, $rootScope, $q) {
+
+    var Storage,
+      defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation'),
+      pendingLoader = false,
+      interpolatorHashMap = {},
+      langPromises = {},
+      fallbackIndex,
+      startFallbackIteration;
+
+    var $translate = function (translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage) {
+      if (!$uses && $preferredLanguage) {
+        $uses = $preferredLanguage;
+      }
+      var uses = (forceLanguage && forceLanguage !== $uses) ? // we don't want to re-negotiate $uses
+        (negotiateLocale(forceLanguage) || forceLanguage) : $uses;
+
+      // Check forceLanguage is present
+      if (forceLanguage) {
+        loadTranslationsIfMissing(forceLanguage);
+      }
+
+      // Duck detection: If the first argument is an array, a bunch of translations was requested.
+      // The result is an object.
+      if (angular.isArray(translationId)) {
+        // Inspired by Q.allSettled by Kris Kowal
+        // https://github.com/kriskowal/q/blob/b0fa72980717dc202ffc3cbf03b936e10ebbb9d7/q.js#L1553-1563
+        // This transforms all promises regardless resolved or rejected
+        var translateAll = function (translationIds) {
+          var results = {}; // storing the actual results
+          var promises = []; // promises to wait for
+          // Wraps the promise a) being always resolved and b) storing the link id->value
+          var translate = function (translationId) {
+            var deferred = $q.defer();
+            var regardless = function (value) {
+              results[translationId] = value;
+              deferred.resolve([translationId, value]);
+            };
+            // we don't care whether the promise was resolved or rejected; just store the values
+            $translate(translationId, interpolateParams, interpolationId, defaultTranslationText, forceLanguage).then(regardless, regardless);
+            return deferred.promise;
+          };
+          for (var i = 0, c = translationIds.length; i < c; i++) {
+            promises.push(translate(translationIds[i]));
+          }
+          // wait for all (including storing to results)
+          return $q.all(promises).then(function () {
+            // return the results
+            return results;
+          });
+        };
+        return translateAll(translationId);
+      }
+
+      var deferred = $q.defer();
+
+      // trim off any whitespace
+      if (translationId) {
+        translationId = trim.apply(translationId);
+      }
+
+      var promiseToWaitFor = (function () {
+        var promise = $preferredLanguage ?
+          langPromises[$preferredLanguage] :
+          langPromises[uses];
+
+        fallbackIndex = 0;
+
+        if ($storageFactory && !promise) {
+          // looks like there's no pending promise for $preferredLanguage or
+          // $uses. Maybe there's one pending for a language that comes from
+          // storage.
+          var langKey = Storage.get($storageKey);
+          promise = langPromises[langKey];
+
+          if ($fallbackLanguage && $fallbackLanguage.length) {
+            var index = indexOf($fallbackLanguage, langKey);
+            // maybe the language from storage is also defined as fallback language
+            // we increase the fallback language index to not search in that language
+            // as fallback, since it's probably the first used language
+            // in that case the index starts after the first element
+            fallbackIndex = (index === 0) ? 1 : 0;
+
+            // but we can make sure to ALWAYS fallback to preferred language at least
+            if (indexOf($fallbackLanguage, $preferredLanguage) < 0) {
+              $fallbackLanguage.push($preferredLanguage);
+            }
+          }
+        }
+        return promise;
+      }());
+
+      if (!promiseToWaitFor) {
+        // no promise to wait for? okay. Then there's no loader registered
+        // nor is a one pending for language that comes from storage.
+        // We can just translate.
+        determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText, uses).then(deferred.resolve, deferred.reject);
+      } else {
+        var promiseResolved = function () {
+          // $uses may have changed while waiting
+          if (!forceLanguage) {
+            uses = $uses;
+          }
+          determineTranslation(translationId, interpolateParams, interpolationId, defaultTranslationText, uses).then(deferred.resolve, deferred.reject);
+        };
+        promiseResolved.displayName = 'promiseResolved';
+
+        promiseToWaitFor['finally'](promiseResolved)['catch'](angular.noop); // we don't care about errors here, already handled
+      }
+      return deferred.promise;
+    };
+
+    /**
+     * @name applyNotFoundIndicators
+     * @private
+     *
+     * @description
+     * Applies not fount indicators to given translation id, if needed.
+     * This function gets only executed, if a translation id doesn't exist,
+     * which is why a translation id is expected as argument.
+     *
+     * @param {string} translationId Translation id.
+     * @returns {string} Same as given translation id but applied with not found
+     * indicators.
+     */
+    var applyNotFoundIndicators = function (translationId) {
+      // applying notFoundIndicators
+      if ($notFoundIndicatorLeft) {
+        translationId = [$notFoundIndicatorLeft, translationId].join(' ');
+      }
+      if ($notFoundIndicatorRight) {
+        translationId = [translationId, $notFoundIndicatorRight].join(' ');
+      }
+      return translationId;
+    };
+
+    /**
+     * @name useLanguage
+     * @private
+     *
+     * @description
+     * Makes actual use of a language by setting a given language key as used
+     * language and informs registered interpolators to also use the given
+     * key as locale.
+     *
+     * @param {string} key Locale key.
+     */
+    var useLanguage = function (key) {
+      $uses = key;
+
+      // make sure to store new language key before triggering success event
+      if ($storageFactory) {
+        Storage.put($translate.storageKey(), $uses);
+      }
+
+      $rootScope.$emit('$translateChangeSuccess', {language : key});
+
+      // inform default interpolator
+      defaultInterpolator.setLocale($uses);
+
+      var eachInterpolator = function (interpolator, id) {
+        interpolatorHashMap[id].setLocale($uses);
+      };
+      eachInterpolator.displayName = 'eachInterpolatorLocaleSetter';
+
+      // inform all others too!
+      angular.forEach(interpolatorHashMap, eachInterpolator);
+      $rootScope.$emit('$translateChangeEnd', {language : key});
+    };
+
+    /**
+     * @name loadAsync
+     * @private
+     *
+     * @description
+     * Kicks off registered async loader using `$injector` and applies existing
+     * loader options. When resolved, it updates translation tables accordingly
+     * or rejects with given language key.
+     *
+     * @param {string} key Language key.
+     * @return {Promise} A promise.
+     */
+    var loadAsync = function (key) {
+      if (!key) {
+        throw 'No language key specified for loading.';
+      }
+
+      var deferred = $q.defer();
+
+      $rootScope.$emit('$translateLoadingStart', {language : key});
+      pendingLoader = true;
+
+      var cache = loaderCache;
+      if (typeof(cache) === 'string') {
+        // getting on-demand instance of loader
+        cache = $injector.get(cache);
+      }
+
+      var loaderOptions = angular.extend({}, $loaderOptions, {
+        key : key,
+        $http : angular.extend({}, {
+          cache : cache
+        }, $loaderOptions.$http)
+      });
+
+      var onLoaderSuccess = function (data) {
+        var translationTable = {};
+        $rootScope.$emit('$translateLoadingSuccess', {language : key});
+
+        if (angular.isArray(data)) {
+          angular.forEach(data, function (table) {
+            angular.extend(translationTable, flatObject(table));
+          });
+        } else {
+          angular.extend(translationTable, flatObject(data));
+        }
+        pendingLoader = false;
+        deferred.resolve({
+          key : key,
+          table : translationTable
+        });
+        $rootScope.$emit('$translateLoadingEnd', {language : key});
+      };
+      onLoaderSuccess.displayName = 'onLoaderSuccess';
+
+      var onLoaderError = function (key) {
+        $rootScope.$emit('$translateLoadingError', {language : key});
+        deferred.reject(key);
+        $rootScope.$emit('$translateLoadingEnd', {language : key});
+      };
+      onLoaderError.displayName = 'onLoaderError';
+
+      $injector.get($loaderFactory)(loaderOptions)
+        .then(onLoaderSuccess, onLoaderError);
+
+      return deferred.promise;
+    };
+
+    if ($storageFactory) {
+      Storage = $injector.get($storageFactory);
+
+      if (!Storage.get || !Storage.put) {
+        throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or put() method!');
+      }
+    }
+
+    // if we have additional interpolations that were added via
+    // $translateProvider.addInterpolation(), we have to map'em
+    if ($interpolatorFactories.length) {
+      var eachInterpolationFactory = function (interpolatorFactory) {
+        var interpolator = $injector.get(interpolatorFactory);
+        // setting initial locale for each interpolation service
+        interpolator.setLocale($preferredLanguage || $uses);
+        // make'em recognizable through id
+        interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
+      };
+      eachInterpolationFactory.displayName = 'interpolationFactoryAdder';
+
+      angular.forEach($interpolatorFactories, eachInterpolationFactory);
+    }
+
+    /**
+     * @name getTranslationTable
+     * @private
+     *
+     * @description
+     * Returns a promise that resolves to the translation table
+     * or is rejected if an error occurred.
+     *
+     * @param langKey
+     * @returns {Q.promise}
+     */
+    var getTranslationTable = function (langKey) {
+      var deferred = $q.defer();
+      if (Object.prototype.hasOwnProperty.call($translationTable, langKey)) {
+        deferred.resolve($translationTable[langKey]);
+      } else if (langPromises[langKey]) {
+        var onResolve = function (data) {
+          translations(data.key, data.table);
+          deferred.resolve(data.table);
+        };
+        onResolve.displayName = 'translationTableResolver';
+        langPromises[langKey].then(onResolve, deferred.reject);
+      } else {
+        deferred.reject();
+      }
+      return deferred.promise;
+    };
+
+    /**
+     * @name getFallbackTranslation
+     * @private
+     *
+     * @description
+     * Returns a promise that will resolve to the translation
+     * or be rejected if no translation was found for the language.
+     * This function is currently only used for fallback language translation.
+     *
+     * @param langKey The language to translate to.
+     * @param translationId
+     * @param interpolateParams
+     * @param Interpolator
+     * @param sanitizeStrategy
+     * @returns {Q.promise}
+     */
+    var getFallbackTranslation = function (langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy) {
+      var deferred = $q.defer();
+
+      var onResolve = function (translationTable) {
+        if (Object.prototype.hasOwnProperty.call(translationTable, translationId) && translationTable[translationId] !== null) {
+          Interpolator.setLocale(langKey);
+          var translation = translationTable[translationId];
+          if (translation.substr(0, 2) === '@:') {
+            getFallbackTranslation(langKey, translation.substr(2), interpolateParams, Interpolator, sanitizeStrategy)
+              .then(deferred.resolve, deferred.reject);
+          } else {
+            var interpolatedValue = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'service', sanitizeStrategy, translationId);
+            interpolatedValue = applyPostProcessing(translationId, translationTable[translationId], interpolatedValue, interpolateParams, langKey);
+
+            deferred.resolve(interpolatedValue);
+
+          }
+          Interpolator.setLocale($uses);
+        } else {
+          deferred.reject();
+        }
+      };
+      onResolve.displayName = 'fallbackTranslationResolver';
+
+      getTranslationTable(langKey).then(onResolve, deferred.reject);
+
+      return deferred.promise;
+    };
+
+    /**
+     * @name getFallbackTranslationInstant
+     * @private
+     *
+     * @description
+     * Returns a translation
+     * This function is currently only used for fallback language translation.
+     *
+     * @param langKey The language to translate to.
+     * @param translationId
+     * @param interpolateParams
+     * @param Interpolator
+     * @param sanitizeStrategy sanitize strategy override
+     *
+     * @returns {string} translation
+     */
+    var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy) {
+      var result, translationTable = $translationTable[langKey];
+
+      if (translationTable && Object.prototype.hasOwnProperty.call(translationTable, translationId) && translationTable[translationId] !== null) {
+        Interpolator.setLocale(langKey);
+        result = Interpolator.interpolate(translationTable[translationId], interpolateParams, 'filter', sanitizeStrategy, translationId);
+        result = applyPostProcessing(translationId, translationTable[translationId], result, interpolateParams, langKey, sanitizeStrategy);
+        // workaround for TrustedValueHolderType
+        if (!angular.isString(result) && angular.isFunction(result.$$unwrapTrustedValue)) {
+          var result2 = result.$$unwrapTrustedValue();
+          if (result2.substr(0, 2) === '@:') {
+            return getFallbackTranslationInstant(langKey, result2.substr(2), interpolateParams, Interpolator, sanitizeStrategy);
+          }
+        } else if (result.substr(0, 2) === '@:') {
+          return getFallbackTranslationInstant(langKey, result.substr(2), interpolateParams, Interpolator, sanitizeStrategy);
+        }
+        Interpolator.setLocale($uses);
+      }
+
+      return result;
+    };
+
+
+    /**
+     * @name translateByHandler
+     * @private
+     *
+     * Translate by missing translation handler.
+     *
+     * @param translationId
+     * @param interpolateParams
+     * @param defaultTranslationText
+     * @param sanitizeStrategy sanitize strategy override
+     *
+     * @returns translation created by $missingTranslationHandler or translationId is $missingTranslationHandler is
+     * absent
+     */
+    var translateByHandler = function (translationId, interpolateParams, defaultTranslationText, sanitizeStrategy) {
+      // If we have a handler factory - we might also call it here to determine if it provides
+      // a default text for a translationid that can't be found anywhere in our tables
+      if ($missingTranslationHandlerFactory) {
+        return $injector.get($missingTranslationHandlerFactory)(translationId, $uses, interpolateParams, defaultTranslationText, sanitizeStrategy);
+      } else {
+        return translationId;
+      }
+    };
+
+    /**
+     * @name resolveForFallbackLanguage
+     * @private
+     *
+     * Recursive helper function for fallbackTranslation that will sequentially look
+     * for a translation in the fallbackLanguages starting with fallbackLanguageIndex.
+     *
+     * @param fallbackLanguageIndex
+     * @param translationId
+     * @param interpolateParams
+     * @param Interpolator
+     * @param defaultTranslationText
+     * @param sanitizeStrategy
+     * @returns {Q.promise} Promise that will resolve to the translation.
+     */
+    var resolveForFallbackLanguage = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator, defaultTranslationText, sanitizeStrategy) {
+      var deferred = $q.defer();
+
+      if (fallbackLanguageIndex < $fallbackLanguage.length) {
+        var langKey = $fallbackLanguage[fallbackLanguageIndex];
+        getFallbackTranslation(langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy).then(
+          function (data) {
+            deferred.resolve(data);
+          },
+          function () {
+            // Look in the next fallback language for a translation.
+            // It delays the resolving by passing another promise to resolve.
+            return resolveForFallbackLanguage(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator, defaultTranslationText, sanitizeStrategy).then(deferred.resolve, deferred.reject);
+          }
+        );
+      } else {
+        // No translation found in any fallback language
+        // if a default translation text is set in the directive, then return this as a result
+        if (defaultTranslationText) {
+          deferred.resolve(defaultTranslationText);
+        } else {
+          var missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, defaultTranslationText);
+
+          // if no default translation is set and an error handler is defined, send it to the handler
+          // and then return the result if it isn't undefined
+          if ($missingTranslationHandlerFactory && missingTranslationHandlerTranslation) {
+            deferred.resolve(missingTranslationHandlerTranslation);
+          } else {
+            deferred.reject(applyNotFoundIndicators(translationId));
+          }
+        }
+      }
+      return deferred.promise;
+    };
+
+    /**
+     * @name resolveForFallbackLanguageInstant
+     * @private
+     *
+     * Recursive helper function for fallbackTranslation that will sequentially look
+     * for a translation in the fallbackLanguages starting with fallbackLanguageIndex.
+     *
+     * @param fallbackLanguageIndex
+     * @param translationId
+     * @param interpolateParams
+     * @param Interpolator
+     * @param sanitizeStrategy
+     * @returns {string} translation
+     */
+    var resolveForFallbackLanguageInstant = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator, sanitizeStrategy) {
+      var result;
+
+      if (fallbackLanguageIndex < $fallbackLanguage.length) {
+        var langKey = $fallbackLanguage[fallbackLanguageIndex];
+        result = getFallbackTranslationInstant(langKey, translationId, interpolateParams, Interpolator, sanitizeStrategy);
+        if (!result && result !== '') {
+          result = resolveForFallbackLanguageInstant(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator);
+        }
+      }
+      return result;
+    };
+
+    /**
+     * Translates with the usage of the fallback languages.
+     *
+     * @param translationId
+     * @param interpolateParams
+     * @param Interpolator
+     * @param defaultTranslationText
+     * @param sanitizeStrategy
+     * @returns {Q.promise} Promise, that resolves to the translation.
+     */
+    var fallbackTranslation = function (translationId, interpolateParams, Interpolator, defaultTranslationText, sanitizeStrategy) {
+      // Start with the fallbackLanguage with index 0
+      return resolveForFallbackLanguage((startFallbackIteration > 0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator, defaultTranslationText, sanitizeStrategy);
+    };
+
+    /**
+     * Translates with the usage of the fallback languages.
+     *
+     * @param translationId
+     * @param interpolateParams
+     * @param Interpolator
+     * @param sanitizeStrategy
+     * @returns {String} translation
+     */
+    var fallbackTranslationInstant = function (translationId, interpolateParams, Interpolator, sanitizeStrategy) {
+      // Start with the fallbackLanguage with index 0
+      return resolveForFallbackLanguageInstant((startFallbackIteration > 0 ? startFallbackIteration : fallbackIndex), translationId, interpolateParams, Interpolator, sanitizeStrategy);
+    };
+
+    var determineTranslation = function (translationId, interpolateParams, interpolationId, defaultTranslationText, uses, sanitizeStrategy) {
+
+      var deferred = $q.defer();
+
+      var table = uses ? $translationTable[uses] : $translationTable,
+        Interpolator = (interpolationId) ? interpolatorHashMap[interpolationId] : defaultInterpolator;
+
+      // if the translation id exists, we can just interpolate it
+      if (table && Object.prototype.hasOwnProperty.call(table, translationId) && table[translationId] !== null) {
+        var translation = table[translationId];
+
+        // If using link, rerun $translate with linked translationId and return it
+        if (translation.substr(0, 2) === '@:') {
+
+          $translate(translation.substr(2), interpolateParams, interpolationId, defaultTranslationText, uses)
+            .then(deferred.resolve, deferred.reject);
+        } else {
+          //
+          var resolvedTranslation = Interpolator.interpolate(translation, interpolateParams, 'service', sanitizeStrategy, translationId);
+          resolvedTranslation = applyPostProcessing(translationId, translation, resolvedTranslation, interpolateParams, uses);
+          deferred.resolve(resolvedTranslation);
+        }
+      } else {
+        var missingTranslationHandlerTranslation;
+        // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
+        if ($missingTranslationHandlerFactory && !pendingLoader) {
+          missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, defaultTranslationText);
+        }
+
+        // since we couldn't translate the inital requested translation id,
+        // we try it now with one or more fallback languages, if fallback language(s) is
+        // configured.
+        if (uses && $fallbackLanguage && $fallbackLanguage.length) {
+          fallbackTranslation(translationId, interpolateParams, Interpolator, defaultTranslationText, sanitizeStrategy)
+            .then(function (translation) {
+              deferred.resolve(translation);
+            }, function (_translationId) {
+              deferred.reject(applyNotFoundIndicators(_translationId));
+            });
+        } else if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+          // looks like the requested translation id doesn't exists.
+          // Now, if there is a registered handler for missing translations and no
+          // asyncLoader is pending, we execute the handler
+          if (defaultTranslationText) {
+            deferred.resolve(defaultTranslationText);
+          } else {
+            deferred.resolve(missingTranslationHandlerTranslation);
+          }
+        } else {
+          if (defaultTranslationText) {
+            deferred.resolve(defaultTranslationText);
+          } else {
+            deferred.reject(applyNotFoundIndicators(translationId));
+          }
+        }
+      }
+      return deferred.promise;
+    };
+
+    var determineTranslationInstant = function (translationId, interpolateParams, interpolationId, uses, sanitizeStrategy) {
+
+      var result, table = uses ? $translationTable[uses] : $translationTable,
+        Interpolator = defaultInterpolator;
+
+      // if the interpolation id exists use custom interpolator
+      if (interpolatorHashMap && Object.prototype.hasOwnProperty.call(interpolatorHashMap, interpolationId)) {
+        Interpolator = interpolatorHashMap[interpolationId];
+      }
+
+      // if the translation id exists, we can just interpolate it
+      if (table && Object.prototype.hasOwnProperty.call(table, translationId) && table[translationId] !== null) {
+        var translation = table[translationId];
+
+        // If using link, rerun $translate with linked translationId and return it
+        if (translation.substr(0, 2) === '@:') {
+          result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId, uses, sanitizeStrategy);
+        } else {
+          result = Interpolator.interpolate(translation, interpolateParams, 'filter', sanitizeStrategy, translationId);
+          result = applyPostProcessing(translationId, translation, result, interpolateParams, uses, sanitizeStrategy);
+        }
+      } else {
+        var missingTranslationHandlerTranslation;
+        // for logging purposes only (as in $translateMissingTranslationHandlerLog), value is not returned to promise
+        if ($missingTranslationHandlerFactory && !pendingLoader) {
+          missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
+        }
+
+        // since we couldn't translate the inital requested translation id,
+        // we try it now with one or more fallback languages, if fallback language(s) is
+        // configured.
+        if (uses && $fallbackLanguage && $fallbackLanguage.length) {
+          fallbackIndex = 0;
+          result = fallbackTranslationInstant(translationId, interpolateParams, Interpolator, sanitizeStrategy);
+        } else if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+          // looks like the requested translation id doesn't exists.
+          // Now, if there is a registered handler for missing translations and no
+          // asyncLoader is pending, we execute the handler
+          result = missingTranslationHandlerTranslation;
+        } else {
+          result = applyNotFoundIndicators(translationId);
+        }
+      }
+
+      return result;
+    };
+
+    var clearNextLangAndPromise = function (key) {
+      if ($nextLang === key) {
+        $nextLang = undefined;
+      }
+      langPromises[key] = undefined;
+    };
+
+    var applyPostProcessing = function (translationId, translation, resolvedTranslation, interpolateParams, uses, sanitizeStrategy) {
+      var fn = postProcessFn;
+
+      if (fn) {
+
+        if (typeof(fn) === 'string') {
+          // getting on-demand instance
+          fn = $injector.get(fn);
+        }
+        if (fn) {
+          return fn(translationId, translation, resolvedTranslation, interpolateParams, uses, sanitizeStrategy);
+        }
+      }
+
+      return resolvedTranslation;
+    };
+
+    var loadTranslationsIfMissing = function (key) {
+      if (!$translationTable[key] && $loaderFactory && !langPromises[key]) {
+        langPromises[key] = loadAsync(key).then(function (translation) {
+          translations(translation.key, translation.table);
+          return translation;
+        });
+      }
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#preferredLanguage
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the language key for the preferred language.
+     *
+     * @param {string} langKey language String or Array to be used as preferredLanguage (changing at runtime)
+     *
+     * @return {string} preferred language key
+     */
+    $translate.preferredLanguage = function (langKey) {
+      if (langKey) {
+        setupPreferredLanguage(langKey);
+      }
+      return $preferredLanguage;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#cloakClassName
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the configured class name for `translate-cloak` directive.
+     *
+     * @return {string} cloakClassName
+     */
+    $translate.cloakClassName = function () {
+      return $cloakClassName;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#nestedObjectDelimeter
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the configured delimiter for nested namespaces.
+     *
+     * @return {string} nestedObjectDelimeter
+     */
+    $translate.nestedObjectDelimeter = function () {
+      return $nestedObjectDelimeter;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#fallbackLanguage
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the language key for the fallback languages or sets a new fallback stack.
+     *
+     * @param {string=} langKey language String or Array of fallback languages to be used (to change stack at runtime)
+     *
+     * @return {string||array} fallback language key
+     */
+    $translate.fallbackLanguage = function (langKey) {
+      if (langKey !== undefined && langKey !== null) {
+        fallbackStack(langKey);
+
+        // as we might have an async loader initiated and a new translation language might have been defined
+        // we need to add the promise to the stack also. So - iterate.
+        if ($loaderFactory) {
+          if ($fallbackLanguage && $fallbackLanguage.length) {
+            for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
+              if (!langPromises[$fallbackLanguage[i]]) {
+                langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+              }
+            }
+          }
+        }
+        $translate.use($translate.use());
+      }
+      if ($fallbackWasString) {
+        return $fallbackLanguage[0];
+      } else {
+        return $fallbackLanguage;
+      }
+
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#useFallbackLanguage
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Sets the first key of the fallback language stack to be used for translation.
+     * Therefore all languages in the fallback array BEFORE this key will be skipped!
+     *
+     * @param {string=} langKey Contains the langKey the iteration shall start with. Set to false if you want to
+     * get back to the whole stack
+     */
+    $translate.useFallbackLanguage = function (langKey) {
+      if (langKey !== undefined && langKey !== null) {
+        if (!langKey) {
+          startFallbackIteration = 0;
+        } else {
+          var langKeyPosition = indexOf($fallbackLanguage, langKey);
+          if (langKeyPosition > -1) {
+            startFallbackIteration = langKeyPosition;
+          }
+        }
+
+      }
+
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#proposedLanguage
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the language key of language that is currently loaded asynchronously.
+     *
+     * @return {string} language key
+     */
+    $translate.proposedLanguage = function () {
+      return $nextLang;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#storage
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns registered storage.
+     *
+     * @return {object} Storage
+     */
+    $translate.storage = function () {
+      return Storage;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#negotiateLocale
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns a language key based on available languages and language aliases. If a
+     * language key cannot be resolved, returns undefined.
+     *
+     * If no or a falsy key is given, returns undefined.
+     *
+     * @param {string} [key] Language key
+     * @return {string|undefined} Language key or undefined if no language key is found.
+     */
+    $translate.negotiateLocale = negotiateLocale;
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#use
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Tells angular-translate which language to use by given language key. This method is
+     * used to change language at runtime. It also takes care of storing the language
+     * key in a configured store to let your app remember the choosed language.
+     *
+     * When trying to 'use' a language which isn't available it tries to load it
+     * asynchronously with registered loaders.
+     *
+     * Returns promise object with loaded language file data or string of the currently used language.
+     *
+     * If no or a falsy key is given it returns the currently used language key.
+     * The returned string will be ```undefined``` if setting up $translate hasn't finished.
+     * @example
+     * $translate.use("en_US").then(function(data){
+       *   $scope.text = $translate("HELLO");
+       * });
+     *
+     * @param {string} [key] Language key
+     * @return {object|string} Promise with loaded language data or the language key if a falsy param was given.
+     */
+    $translate.use = function (key) {
+      if (!key) {
+        return $uses;
+      }
+
+      var deferred = $q.defer();
+      deferred.promise.then(null, angular.noop); // AJS "Possibly unhandled rejection"
+
+      $rootScope.$emit('$translateChangeStart', {language : key});
+
+      // Try to get the aliased language key
+      var aliasedKey = negotiateLocale(key);
+      // Ensure only registered language keys will be loaded
+      if ($availableLanguageKeys.length > 0 && !aliasedKey) {
+        return $q.reject(key);
+      }
+
+      if (aliasedKey) {
+        key = aliasedKey;
+      }
+
+      // if there isn't a translation table for the language we've requested,
+      // we load it asynchronously
+      $nextLang = key;
+      if (($forceAsyncReloadEnabled || !$translationTable[key]) && $loaderFactory && !langPromises[key]) {
+        langPromises[key] = loadAsync(key).then(function (translation) {
+          translations(translation.key, translation.table);
+          deferred.resolve(translation.key);
+          if ($nextLang === key) {
+            useLanguage(translation.key);
+          }
+          return translation;
+        }, function (key) {
+          $rootScope.$emit('$translateChangeError', {language : key});
+          deferred.reject(key);
+          $rootScope.$emit('$translateChangeEnd', {language : key});
+          return $q.reject(key);
+        });
+        langPromises[key]['finally'](function () {
+          clearNextLangAndPromise(key);
+        })['catch'](angular.noop); // we don't care about errors (clearing)
+      } else if (langPromises[key]) {
+        // we are already loading this asynchronously
+        // resolve our new deferred when the old langPromise is resolved
+        langPromises[key].then(function (translation) {
+          if ($nextLang === translation.key) {
+            useLanguage(translation.key);
+          }
+          deferred.resolve(translation.key);
+          return translation;
+        }, function (key) {
+          // find first available fallback language if that request has failed
+          if (!$uses && $fallbackLanguage && $fallbackLanguage.length > 0 && $fallbackLanguage[0] !== key) {
+            return $translate.use($fallbackLanguage[0]).then(deferred.resolve, deferred.reject);
+          } else {
+            return deferred.reject(key);
+          }
+        });
+      } else {
+        deferred.resolve(key);
+        useLanguage(key);
+      }
+
+      return deferred.promise;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#resolveClientLocale
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * This returns the current browser/client's language key. The result is processed with the configured uniform tag resolver.
+     *
+     * @returns {string} the current client/browser language key
+     */
+    $translate.resolveClientLocale = function () {
+      return getLocale();
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#storageKey
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the key for the storage.
+     *
+     * @return {string} storage key
+     */
+    $translate.storageKey = function () {
+      return storageKey();
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#isPostCompilingEnabled
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns whether post compiling is enabled or not
+     *
+     * @return {bool} storage key
+     */
+    $translate.isPostCompilingEnabled = function () {
+      return $postCompilingEnabled;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#isForceAsyncReloadEnabled
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns whether force async reload is enabled or not
+     *
+     * @return {boolean} forceAsyncReload value
+     */
+    $translate.isForceAsyncReloadEnabled = function () {
+      return $forceAsyncReloadEnabled;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#isKeepContent
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns whether keepContent or not
+     *
+     * @return {boolean} keepContent value
+     */
+    $translate.isKeepContent = function () {
+      return $keepContent;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#refresh
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Refreshes a translation table pointed by the given langKey. If langKey is not specified,
+     * the module will drop all existent translation tables and load new version of those which
+     * are currently in use.
+     *
+     * Refresh means that the module will drop target translation table and try to load it again.
+     *
+     * In case there are no loaders registered the refresh() method will throw an Error.
+     *
+     * If the module is able to refresh translation tables refresh() method will broadcast
+     * $translateRefreshStart and $translateRefreshEnd events.
+     *
+     * @example
+     * // this will drop all currently existent translation tables and reload those which are
+     * // currently in use
+     * $translate.refresh();
+     * // this will refresh a translation table for the en_US language
+     * $translate.refresh('en_US');
+     *
+     * @param {string} langKey A language key of the table, which has to be refreshed
+     *
+     * @return {promise} Promise, which will be resolved in case a translation tables refreshing
+     * process is finished successfully, and reject if not.
+     */
+    $translate.refresh = function (langKey) {
+      if (!$loaderFactory) {
+        throw new Error('Couldn\'t refresh translation table, no loader registered!');
+      }
+
+      $rootScope.$emit('$translateRefreshStart', {language : langKey});
+
+      var deferred = $q.defer(), updatedLanguages = {};
+
+      //private helper
+      function loadNewData(languageKey) {
+        var promise = loadAsync(languageKey);
+        //update the load promise cache for this language
+        langPromises[languageKey] = promise;
+        //register a data handler for the promise
+        promise.then(function (data) {
+            //clear the cache for this language
+            $translationTable[languageKey] = {};
+            //add the new data for this language
+            translations(languageKey, data.table);
+            //track that we updated this language
+            updatedLanguages[languageKey] = true;
+          },
+          //handle rejection to appease the $q validation
+          angular.noop);
+        return promise;
+      }
+
+      //set up post-processing
+      deferred.promise.then(
+        function () {
+          for (var key in $translationTable) {
+            if ($translationTable.hasOwnProperty(key)) {
+              //delete cache entries that were not updated
+              if (!(key in updatedLanguages)) {
+                delete $translationTable[key];
+              }
+            }
+          }
+          if ($uses) {
+            useLanguage($uses);
+          }
+        },
+        //handle rejection to appease the $q validation
+        angular.noop
+      )['finally'](
+        function () {
+          $rootScope.$emit('$translateRefreshEnd', {language : langKey});
+        }
+      );
+
+      if (!langKey) {
+        // if there's no language key specified we refresh ALL THE THINGS!
+        var languagesToReload = $fallbackLanguage && $fallbackLanguage.slice() || [];
+        if ($uses && languagesToReload.indexOf($uses) === -1) {
+          languagesToReload.push($uses);
+        }
+        $q.all(languagesToReload.map(loadNewData)).then(deferred.resolve, deferred.reject);
+
+      } else if ($translationTable[langKey]) {
+        //just refresh the specified language cache
+        loadNewData(langKey).then(deferred.resolve, deferred.reject);
+
+      } else {
+        deferred.reject();
+      }
+
+      return deferred.promise;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#instant
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns a translation instantly from the internal state of loaded translation. All rules
+     * regarding the current language, the preferred language of even fallback languages will be
+     * used except any promise handling. If a language was not found, an asynchronous loading
+     * will be invoked in the background.
+     *
+     * @param {string|array} translationId A token which represents a translation id
+     *                                     This can be optionally an array of translation ids which
+     *                                     results that the function's promise returns an object where
+     *                                     each key is the translation id and the value the translation.
+     * @param {object} interpolateParams Params
+     * @param {string} interpolationId The id of the interpolation to use
+     * @param {string} forceLanguage A language to be used instead of the current language
+     * @param {string} sanitizeStrategy force sanitize strategy for this call instead of using the configured one
+     *
+     * @return {string|object} translation
+     */
+    $translate.instant = function (translationId, interpolateParams, interpolationId, forceLanguage, sanitizeStrategy) {
+
+      // we don't want to re-negotiate $uses
+      var uses = (forceLanguage && forceLanguage !== $uses) ? // we don't want to re-negotiate $uses
+        (negotiateLocale(forceLanguage) || forceLanguage) : $uses;
+
+      // Detect undefined and null values to shorten the execution and prevent exceptions
+      if (translationId === null || angular.isUndefined(translationId)) {
+        return translationId;
+      }
+
+      // Check forceLanguage is present
+      if (forceLanguage) {
+        loadTranslationsIfMissing(forceLanguage);
+      }
+
+      // Duck detection: If the first argument is an array, a bunch of translations was requested.
+      // The result is an object.
+      if (angular.isArray(translationId)) {
+        var results = {};
+        for (var i = 0, c = translationId.length; i < c; i++) {
+          results[translationId[i]] = $translate.instant(translationId[i], interpolateParams, interpolationId, forceLanguage, sanitizeStrategy);
+        }
+        return results;
+      }
+
+      // We discarded unacceptable values. So we just need to verify if translationId is empty String
+      if (angular.isString(translationId) && translationId.length < 1) {
+        return translationId;
+      }
+
+      // trim off any whitespace
+      if (translationId) {
+        translationId = trim.apply(translationId);
+      }
+
+      var result, possibleLangKeys = [];
+      if ($preferredLanguage) {
+        possibleLangKeys.push($preferredLanguage);
+      }
+      if (uses) {
+        possibleLangKeys.push(uses);
+      }
+      if ($fallbackLanguage && $fallbackLanguage.length) {
+        possibleLangKeys = possibleLangKeys.concat($fallbackLanguage);
+      }
+      for (var j = 0, d = possibleLangKeys.length; j < d; j++) {
+        var possibleLangKey = possibleLangKeys[j];
+        if ($translationTable[possibleLangKey]) {
+          if (typeof $translationTable[possibleLangKey][translationId] !== 'undefined') {
+            result = determineTranslationInstant(translationId, interpolateParams, interpolationId, uses, sanitizeStrategy);
+          }
+        }
+        if (typeof result !== 'undefined') {
+          break;
+        }
+      }
+
+      if (!result && result !== '') {
+        if ($notFoundIndicatorLeft || $notFoundIndicatorRight) {
+          result = applyNotFoundIndicators(translationId);
+        } else {
+          // Return translation of default interpolator if not found anything.
+          result = defaultInterpolator.interpolate(translationId, interpolateParams, 'filter', sanitizeStrategy);
+
+          // looks like the requested translation id doesn't exists.
+          // Now, if there is a registered handler for missing translations and no
+          // asyncLoader is pending, we execute the handler
+          var missingTranslationHandlerTranslation;
+          if ($missingTranslationHandlerFactory && !pendingLoader) {
+            missingTranslationHandlerTranslation = translateByHandler(translationId, interpolateParams, sanitizeStrategy);
+          }
+
+          if ($missingTranslationHandlerFactory && !pendingLoader && missingTranslationHandlerTranslation) {
+            result = missingTranslationHandlerTranslation;
+          }
+        }
+      }
+
+      return result;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#versionInfo
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the current version information for the angular-translate library
+     *
+     * @return {string} angular-translate version
+     */
+    $translate.versionInfo = function () {
+      return version;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#loaderCache
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns the defined loaderCache.
+     *
+     * @return {boolean|string|object} current value of loaderCache
+     */
+    $translate.loaderCache = function () {
+      return loaderCache;
+    };
+
+    // internal purpose only
+    $translate.directivePriority = function () {
+      return directivePriority;
+    };
+
+    // internal purpose only
+    $translate.statefulFilter = function () {
+      return statefulFilter;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#isReady
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns whether the service is "ready" to translate (i.e. loading 1st language).
+     *
+     * See also {@link pascalprecht.translate.$translate#methods_onReady onReady()}.
+     *
+     * @return {boolean} current value of ready
+     */
+    $translate.isReady = function () {
+      return $isReady;
+    };
+
+    var $onReadyDeferred = $q.defer();
+    $onReadyDeferred.promise.then(function () {
+      $isReady = true;
+    });
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#onReady
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Calls the function provided or resolved the returned promise after the service is "ready" to translate (i.e. loading 1st language).
+     *
+     * See also {@link pascalprecht.translate.$translate#methods_isReady isReady()}.
+     *
+     * @param {Function=} fn Function to invoke when service is ready
+     * @return {object} Promise resolved when service is ready
+     */
+    $translate.onReady = function (fn) {
+      var deferred = $q.defer();
+      if (angular.isFunction(fn)) {
+        deferred.promise.then(fn);
+      }
+      if ($isReady) {
+        deferred.resolve();
+      } else {
+        $onReadyDeferred.promise.then(deferred.resolve);
+      }
+      return deferred.promise;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#getAvailableLanguageKeys
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * This function simply returns the registered language keys being defined before in the config phase
+     * With this, an application can use the array to provide a language selection dropdown or similar
+     * without any additional effort
+     *
+     * @returns {object} returns the list of possibly registered language keys and mapping or null if not defined
+     */
+    $translate.getAvailableLanguageKeys = function () {
+      if ($availableLanguageKeys.length > 0) {
+        return $availableLanguageKeys;
+      }
+      return null;
+    };
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translate#getTranslationTable
+     * @methodOf pascalprecht.translate.$translate
+     *
+     * @description
+     * Returns translation table by the given language key.
+     *
+     * Unless a language is provided it returns a translation table of the current one.
+     * Note: If translation dictionary is currently downloading or in progress
+     * it will return null.
+     *
+     * @param {string} langKey A token which represents a translation id
+     *
+     * @return {object} a copy of angular-translate $translationTable
+     */
+    $translate.getTranslationTable = function (langKey) {
+      langKey = langKey || $translate.use();
+      if (langKey && $translationTable[langKey]) {
+        return angular.copy($translationTable[langKey]);
+      }
+      return null;
+    };
+
+    // Whenever $translateReady is being fired, this will ensure the state of $isReady
+    var globalOnReadyListener = $rootScope.$on('$translateReady', function () {
+      $onReadyDeferred.resolve();
+      globalOnReadyListener(); // one time only
+      globalOnReadyListener = null;
+    });
+    var globalOnChangeListener = $rootScope.$on('$translateChangeEnd', function () {
+      $onReadyDeferred.resolve();
+      globalOnChangeListener(); // one time only
+      globalOnChangeListener = null;
+    });
+
+    if ($loaderFactory) {
+
+      // If at least one async loader is defined and there are no
+      // (default) translations available we should try to load them.
+      if (angular.equals($translationTable, {})) {
+        if ($translate.use()) {
+          $translate.use($translate.use());
+        }
+      }
+
+      // Also, if there are any fallback language registered, we start
+      // loading them asynchronously as soon as we can.
+      if ($fallbackLanguage && $fallbackLanguage.length) {
+        var processAsyncResult = function (translation) {
+          translations(translation.key, translation.table);
+          $rootScope.$emit('$translateChangeEnd', {language : translation.key});
+          return translation;
+        };
+        for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
+          var fallbackLanguageId = $fallbackLanguage[i];
+          if ($forceAsyncReloadEnabled || !$translationTable[fallbackLanguageId]) {
+            langPromises[fallbackLanguageId] = loadAsync(fallbackLanguageId).then(processAsyncResult);
+          }
+        }
+      }
+    } else {
+      $rootScope.$emit('$translateReady', {language : $translate.use()});
+    }
+
+    return $translate;
+  }];
+}
+
+$translate.displayName = 'displayName';
+
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateDefaultInterpolation
+ * @requires $interpolate
+ *
+ * @description
+ * Uses angular's `$interpolate` services to interpolate strings against some values.
+ *
+ * Be aware to configure a proper sanitization strategy.
+ *
+ * See also:
+ * * {@link pascalprecht.translate.$translateSanitization}
+ *
+ * @return {object} $translateDefaultInterpolation Interpolator service
+ */
+angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation', $translateDefaultInterpolation);
+
+function $translateDefaultInterpolation ($interpolate, $translateSanitization) {
+
+  'use strict';
+
+  var $translateInterpolator = {},
+      $locale,
+      $identifier = 'default';
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateDefaultInterpolation#setLocale
+   * @methodOf pascalprecht.translate.$translateDefaultInterpolation
+   *
+   * @description
+   * Sets current locale (this is currently not use in this interpolation).
+   *
+   * @param {string} locale Language key or locale.
+   */
+  $translateInterpolator.setLocale = function (locale) {
+    $locale = locale;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateDefaultInterpolation#getInterpolationIdentifier
+   * @methodOf pascalprecht.translate.$translateDefaultInterpolation
+   *
+   * @description
+   * Returns an identifier for this interpolation service.
+   *
+   * @returns {string} $identifier
+   */
+  $translateInterpolator.getInterpolationIdentifier = function () {
+    return $identifier;
+  };
+
+  /**
+   * @deprecated will be removed in 3.0
+   * @see {@link pascalprecht.translate.$translateSanitization}
+   */
+  $translateInterpolator.useSanitizeValueStrategy = function (value) {
+    $translateSanitization.useStrategy(value);
+    return this;
+  };
+
+  /**
+   * @ngdoc function
+   * @name pascalprecht.translate.$translateDefaultInterpolation#interpolate
+   * @methodOf pascalprecht.translate.$translateDefaultInterpolation
+   *
+   * @description
+   * Interpolates given value agains given interpolate params using angulars
+   * `$interpolate` service.
+   *
+   * Since AngularJS 1.5, `value` must not be a string but can be anything input.
+   *
+   * @param {string} value translation
+   * @param {object} interpolationParams interpolation params
+   * @param {string} context current context (filter, directive, service)
+   * @param {string} sanitizeStrategy sanitize strategy
+   * @param {string} translationId current translationId
+   *
+   * @returns {string} interpolated string
+   */
+  $translateInterpolator.interpolate = function (value, interpolationParams, context, sanitizeStrategy, translationId) { // jshint ignore:line
+    interpolationParams = interpolationParams || {};
+    interpolationParams = $translateSanitization.sanitize(interpolationParams, 'params', sanitizeStrategy, context);
+
+    var interpolatedText;
+    if (angular.isNumber(value)) {
+      // numbers are safe
+      interpolatedText = '' + value;
+    } else if (angular.isString(value)) {
+      // strings must be interpolated (that's the job here)
+      interpolatedText = $interpolate(value)(interpolationParams);
+      interpolatedText = $translateSanitization.sanitize(interpolatedText, 'text', sanitizeStrategy, context);
+    } else {
+      // neither a number or a string, cant interpolate => empty string
+      interpolatedText = '';
+    }
+
+    return interpolatedText;
+  };
+
+  return $translateInterpolator;
+}
+
+$translateDefaultInterpolation.displayName = '$translateDefaultInterpolation';
+
+angular.module('pascalprecht.translate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
+
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc directive
+ * @name pascalprecht.translate.directive:translate
+ * @requires $interpolate, 
+ * @requires $compile, 
+ * @requires $parse, 
+ * @requires $rootScope
+ * @restrict AE
+ *
+ * @description
+ * Translates given translation id either through attribute or DOM content.
+ * Internally it uses $translate service to translate the translation id. It possible to
+ * pass an optional `translate-values` object literal as string into translation id.
+ *
+ * @param {string=} translate Translation id which could be either string or interpolated string.
+ * @param {string=} translate-values Values to pass into translation id. Can be passed as object literal string or interpolated object.
+ * @param {string=} translate-attr-ATTR translate Translation id and put it into ATTR attribute.
+ * @param {string=} translate-default will be used unless translation was successful
+ * @param {boolean=} translate-compile (default true if present) defines locally activation of {@link pascalprecht.translate.$translateProvider#methods_usePostCompiling}
+ * @param {boolean=} translate-keep-content (default true if present) defines that in case a KEY could not be translated, that the existing content is left in the innerHTML}
+ *
+ * @example
+   <example module="ngView">
+    <file name="index.html">
+      <div ng-controller="TranslateCtrl">
+
+        <pre translate="TRANSLATION_ID"></pre>
+        <pre translate>TRANSLATION_ID</pre>
+        <pre translate translate-attr-title="TRANSLATION_ID"></pre>
+        <pre translate="{{translationId}}"></pre>
+        <pre translate>{{translationId}}</pre>
+        <pre translate="WITH_VALUES" translate-values="{value: 5}"></pre>
+        <pre translate translate-values="{value: 5}">WITH_VALUES</pre>
+        <pre translate="WITH_VALUES" translate-values="{{values}}"></pre>
+        <pre translate translate-values="{{values}}">WITH_VALUES</pre>
+        <pre translate translate-attr-title="WITH_VALUES" translate-values="{{values}}"></pre>
+        <pre translate="WITH_CAMEL_CASE_KEY" translate-value-camel-case-key="Hi"></pre>
+
+      </div>
+    </file>
+    <file name="script.js">
+      angular.module('ngView', ['pascalprecht.translate'])
+
+      .config(function ($translateProvider) {
+
+        $translateProvider.translations('en',{
+          'TRANSLATION_ID': 'Hello there!',
+          'WITH_VALUES': 'The following value is dynamic: {{value}}',
+          'WITH_CAMEL_CASE_KEY': 'The interpolation key is camel cased: {{camelCaseKey}}'
+        }).preferredLanguage('en');
+
+      });
+
+      angular.module('ngView').controller('TranslateCtrl', function ($scope) {
+        $scope.translationId = 'TRANSLATION_ID';
+
+        $scope.values = {
+          value: 78
+        };
+      });
+    </file>
+    <file name="scenario.js">
+      it('should translate', function () {
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+
+          element = $compile('<p translate="TRANSLATION_ID"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate="{{translationId}}"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate>TRANSLATION_ID</p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate>{{translationId}}</p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('Hello there!');
+
+          element = $compile('<p translate translate-attr-title="TRANSLATION_ID"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.attr('title')).toBe('Hello there!');
+
+          element = $compile('<p translate="WITH_CAMEL_CASE_KEY" translate-value-camel-case-key="Hello"></p>')($rootScope);
+          $rootScope.$digest();
+          expect(element.text()).toBe('The interpolation key is camel cased: Hello');
+        });
+      });
+    </file>
+   </example>
+ */
+.directive('translate', translateDirective);
+function translateDirective($translate, $interpolate, $compile, $parse, $rootScope) {
+
+  'use strict';
+
+  /**
+   * @name trim
+   * @private
+   *
+   * @description
+   * trim polyfill
+   *
+   * @returns {string} The string stripped of whitespace from both ends
+   */
+  var trim = function() {
+    return this.toString().replace(/^\s+|\s+$/g, '');
+  };
+
+  return {
+    restrict: 'AE',
+    scope: true,
+    priority: $translate.directivePriority(),
+    compile: function (tElement, tAttr) {
+
+      var translateValuesExist = (tAttr.translateValues) ?
+        tAttr.translateValues : undefined;
+
+      var translateInterpolation = (tAttr.translateInterpolation) ?
+        tAttr.translateInterpolation : undefined;
+
+      var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
+
+      var interpolateRegExp = '^(.*)(' + $interpolate.startSymbol() + '.*' + $interpolate.endSymbol() + ')(.*)',
+          watcherRegExp = '^(.*)' + $interpolate.startSymbol() + '(.*)' + $interpolate.endSymbol() + '(.*)';
+
+      return function linkFn(scope, iElement, iAttr) {
+
+        scope.interpolateParams = {};
+        scope.preText = '';
+        scope.postText = '';
+        scope.translateNamespace = getTranslateNamespace(scope);
+        var translationIds = {};
+
+        var initInterpolationParams = function (interpolateParams, iAttr, tAttr) {
+          // initial setup
+          if (iAttr.translateValues) {
+            angular.extend(interpolateParams, $parse(iAttr.translateValues)(scope.$parent));
+          }
+          // initially fetch all attributes if existing and fill the params
+          if (translateValueExist) {
+            for (var attr in tAttr) {
+              if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+                var attributeName = angular.lowercase(attr.substr(14, 1)) + attr.substr(15);
+                interpolateParams[attributeName] = tAttr[attr];
+              }
+            }
+          }
+        };
+
+        // Ensures any change of the attribute "translate" containing the id will
+        // be re-stored to the scope's "translationId".
+        // If the attribute has no content, the element's text value (white spaces trimmed off) will be used.
+        var observeElementTranslation = function (translationId) {
+
+          // Remove any old watcher
+          if (angular.isFunction(observeElementTranslation._unwatchOld)) {
+            observeElementTranslation._unwatchOld();
+            observeElementTranslation._unwatchOld = undefined;
+          }
+
+          if (angular.equals(translationId , '') || !angular.isDefined(translationId)) {
+            var iElementText = trim.apply(iElement.text());
+
+            // Resolve translation id by inner html if required
+            var interpolateMatches = iElementText.match(interpolateRegExp);
+            // Interpolate translation id if required
+            if (angular.isArray(interpolateMatches)) {
+              scope.preText = interpolateMatches[1];
+              scope.postText = interpolateMatches[3];
+              translationIds.translate = $interpolate(interpolateMatches[2])(scope.$parent);
+              var watcherMatches = iElementText.match(watcherRegExp);
+              if (angular.isArray(watcherMatches) && watcherMatches[2] && watcherMatches[2].length) {
+                observeElementTranslation._unwatchOld = scope.$watch(watcherMatches[2], function (newValue) {
+                  translationIds.translate = newValue;
+                  updateTranslations();
+                });
+              }
+            } else {
+              // do not assigne the translation id if it is empty.
+              translationIds.translate = !iElementText ? undefined : iElementText;
+            }
+          } else {
+            translationIds.translate = translationId;
+          }
+          updateTranslations();
+        };
+
+        var observeAttributeTranslation = function (translateAttr) {
+          iAttr.$observe(translateAttr, function (translationId) {
+            translationIds[translateAttr] = translationId;
+            updateTranslations();
+          });
+        };
+
+        // initial setup with values
+        initInterpolationParams(scope.interpolateParams, iAttr, tAttr);
+
+        var firstAttributeChangedEvent = true;
+        iAttr.$observe('translate', function (translationId) {
+          if (typeof translationId === 'undefined') {
+            // case of element "<translate>xyz</translate>"
+            observeElementTranslation('');
+          } else {
+            // case of regular attribute
+            if (translationId !== '' || !firstAttributeChangedEvent) {
+              translationIds.translate = translationId;
+              updateTranslations();
+            }
+          }
+          firstAttributeChangedEvent = false;
+        });
+
+        for (var translateAttr in iAttr) {
+          if (iAttr.hasOwnProperty(translateAttr) && translateAttr.substr(0, 13) === 'translateAttr' && translateAttr.length > 13) {
+            observeAttributeTranslation(translateAttr);
+          }
+        }
+
+        iAttr.$observe('translateDefault', function (value) {
+          scope.defaultText = value;
+          updateTranslations();
+        });
+
+        if (translateValuesExist) {
+          iAttr.$observe('translateValues', function (interpolateParams) {
+            if (interpolateParams) {
+              scope.$parent.$watch(function () {
+                angular.extend(scope.interpolateParams, $parse(interpolateParams)(scope.$parent));
+              });
+            }
+          });
+        }
+
+        if (translateValueExist) {
+          var observeValueAttribute = function (attrName) {
+            iAttr.$observe(attrName, function (value) {
+              var attributeName = angular.lowercase(attrName.substr(14, 1)) + attrName.substr(15);
+              scope.interpolateParams[attributeName] = value;
+            });
+          };
+          for (var attr in iAttr) {
+            if (Object.prototype.hasOwnProperty.call(iAttr, attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+              observeValueAttribute(attr);
+            }
+          }
+        }
+
+        // Master update function
+        var updateTranslations = function () {
+          for (var key in translationIds) {
+            if (translationIds.hasOwnProperty(key) && translationIds[key] !== undefined) {
+              updateTranslation(key, translationIds[key], scope, scope.interpolateParams, scope.defaultText, scope.translateNamespace);
+            }
+          }
+        };
+
+        // Put translation processing function outside loop
+        var updateTranslation = function(translateAttr, translationId, scope, interpolateParams, defaultTranslationText, translateNamespace) {
+          if (translationId) {
+            // if translation id starts with '.' and translateNamespace given, prepend namespace
+            if (translateNamespace && translationId.charAt(0) === '.') {
+              translationId = translateNamespace + translationId;
+            }
+
+            $translate(translationId, interpolateParams, translateInterpolation, defaultTranslationText, scope.translateLanguage)
+              .then(function (translation) {
+                applyTranslation(translation, scope, true, translateAttr);
+              }, function (translationId) {
+                applyTranslation(translationId, scope, false, translateAttr);
+              });
+          } else {
+            // as an empty string cannot be translated, we can solve this using successful=false
+            applyTranslation(translationId, scope, false, translateAttr);
+          }
+        };
+
+        var applyTranslation = function (value, scope, successful, translateAttr) {
+          if (!successful) {
+            if (typeof scope.defaultText !== 'undefined') {
+              value = scope.defaultText;
+            }
+          }
+          if (translateAttr === 'translate') {
+            // default translate into innerHTML
+            if (successful || (!successful && !$translate.isKeepContent() && typeof iAttr.translateKeepContent === 'undefined')) {
+              iElement.empty().append(scope.preText + value + scope.postText);
+            }
+            var globallyEnabled = $translate.isPostCompilingEnabled();
+            var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
+            var locallyEnabled = locallyDefined && tAttr.translateCompile !== 'false';
+            if ((globallyEnabled && !locallyDefined) || locallyEnabled) {
+              $compile(iElement.contents())(scope);
+            }
+          } else {
+            // translate attribute
+            var attributeName = iAttr.$attr[translateAttr];
+            if (attributeName.substr(0, 5) === 'data-') {
+              // ensure html5 data prefix is stripped
+              attributeName = attributeName.substr(5);
+            }
+            attributeName = attributeName.substr(15);
+            iElement.attr(attributeName, value);
+          }
+        };
+
+        if (translateValuesExist || translateValueExist || iAttr.translateDefault) {
+          scope.$watch('interpolateParams', updateTranslations, true);
+        }
+
+        // Replaced watcher on translateLanguage with event listener
+        scope.$on('translateLanguageChanged', updateTranslations);
+
+        // Ensures the text will be refreshed after the current language was changed
+        // w/ $translate.use(...)
+        var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslations);
+
+        // ensure translation will be looked up at least one
+        if (iElement.text().length) {
+          if (iAttr.translate) {
+            observeElementTranslation(iAttr.translate);
+          } else {
+            observeElementTranslation('');
+          }
+        } else if (iAttr.translate) {
+          // ensure attribute will be not skipped
+          observeElementTranslation(iAttr.translate);
+        }
+        updateTranslations();
+        scope.$on('$destroy', unbind);
+      };
+    }
+  };
+}
+
+/**
+ * Returns the scope's namespace.
+ * @private
+ * @param scope
+ * @returns {string}
+ */
+function getTranslateNamespace(scope) {
+  'use strict';
+  if (scope.translateNamespace) {
+    return scope.translateNamespace;
+  }
+  if (scope.$parent) {
+    return getTranslateNamespace(scope.$parent);
+  }
+}
+
+translateDirective.displayName = 'translateDirective';
+
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc directive
+ * @name pascalprecht.translate.directive:translate-attr
+ * @restrict A
+ *
+ * @description
+ * Translates attributes like translate-attr-ATTR, but with an object like ng-class.
+ * Internally it uses `translate` service to translate translation id. It possible to
+ * pass an optional `translate-values` object literal as string into translation id.
+ *
+ * @param {string=} translate-attr Object literal mapping attributes to translation ids.
+ * @param {string=} translate-values Values to pass into the translation ids. Can be passed as object literal string.
+ *
+ * @example
+   <example module="ngView">
+    <file name="index.html">
+      <div ng-controller="TranslateCtrl">
+
+        <input translate-attr="{ placeholder: translationId, title: 'WITH_VALUES' }" translate-values="{value: 5}" />
+
+      </div>
+    </file>
+    <file name="script.js">
+      angular.module('ngView', ['pascalprecht.translate'])
+
+      .config(function ($translateProvider) {
+
+        $translateProvider.translations('en',{
+          'TRANSLATION_ID': 'Hello there!',
+          'WITH_VALUES': 'The following value is dynamic: {{value}}',
+        }).preferredLanguage('en');
+
+      });
+
+      angular.module('ngView').controller('TranslateCtrl', function ($scope) {
+        $scope.translationId = 'TRANSLATION_ID';
+
+        $scope.values = {
+          value: 78
+        };
+      });
+    </file>
+    <file name="scenario.js">
+      it('should translate', function () {
+        inject(function ($rootScope, $compile) {
+          $rootScope.translationId = 'TRANSLATION_ID';
+
+          element = $compile('<input translate-attr="{ placeholder: translationId, title: 'WITH_VALUES' }" translate-values="{ value: 5 }" />')($rootScope);
+          $rootScope.$digest();
+          expect(element.attr('placeholder)).toBe('Hello there!');
+          expect(element.attr('title)).toBe('The following value is dynamic: 5');
+        });
+      });
+    </file>
+   </example>
+ */
+.directive('translateAttr', translateAttrDirective);
+function translateAttrDirective($translate, $rootScope) {
+
+  'use strict';
+
+  return {
+    restrict: 'A',
+    priority: $translate.directivePriority(),
+    link: function linkFn(scope, element, attr) {
+
+      var translateAttr,
+          translateValues,
+          previousAttributes = {};
+
+      // Main update translations function
+      var updateTranslations = function () {
+        angular.forEach(translateAttr, function (translationId, attributeName) {
+          if (!translationId) {
+            return;
+          }
+          previousAttributes[attributeName] = true;
+
+          // if translation id starts with '.' and translateNamespace given, prepend namespace
+          if (scope.translateNamespace && translationId.charAt(0) === '.') {
+            translationId = scope.translateNamespace + translationId;
+          }
+          $translate(translationId, translateValues, attr.translateInterpolation, undefined, scope.translateLanguage)
+            .then(function (translation) {
+              element.attr(attributeName, translation);
+            }, function (translationId) {
+              element.attr(attributeName, translationId);
+            });
+        });
+
+        // Removing unused attributes that were previously used
+        angular.forEach(previousAttributes, function (flag, attributeName) {
+          if (!translateAttr[attributeName]) {
+            element.removeAttr(attributeName);
+            delete previousAttributes[attributeName];
+          }
+        });
+      };
+
+      // Watch for attribute changes
+      watchAttribute(
+        scope,
+        attr.translateAttr,
+        function (newValue) { translateAttr = newValue; },
+        updateTranslations
+      );
+      // Watch for value changes
+      watchAttribute(
+        scope,
+        attr.translateValues,
+        function (newValue) { translateValues = newValue; },
+        updateTranslations
+      );
+
+      if (attr.translateValues) {
+        scope.$watch(attr.translateValues, updateTranslations, true);
+      }
+
+      // Replaced watcher on translateLanguage with event listener
+      scope.$on('translateLanguageChanged', updateTranslations);
+
+      // Ensures the text will be refreshed after the current language was changed
+      // w/ $translate.use(...)
+      var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslations);
+
+      updateTranslations();
+      scope.$on('$destroy', unbind);
+    }
+  };
+}
+
+function watchAttribute(scope, attribute, valueCallback, changeCallback) {
+  'use strict';
+  if (!attribute) {
+    return;
+  }
+  if (attribute.substr(0, 2) === '::') {
+    attribute = attribute.substr(2);
+  } else {
+    scope.$watch(attribute, function(newValue) {
+      valueCallback(newValue);
+      changeCallback();
+    }, true);
+  }
+  valueCallback(scope.$eval(attribute));
+}
+
+translateAttrDirective.displayName = 'translateAttrDirective';
+
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc directive
+ * @name pascalprecht.translate.directive:translateCloak
+ * @requires $translate
+ * @restrict A
+ *
+ * $description
+ * Adds a `translate-cloak` class name to the given element where this directive
+ * is applied initially and removes it, once a loader has finished loading.
+ *
+ * This directive can be used to prevent initial flickering when loading translation
+ * data asynchronously.
+ *
+ * The class name is defined in
+ * {@link pascalprecht.translate.$translateProvider#cloakClassName $translate.cloakClassName()}.
+ *
+ * @param {string=} translate-cloak If a translationId is provided, it will be used for showing
+ *                                  or hiding the cloak. Basically it relies on the translation
+ *                                  resolve.
+ */
+.directive('translateCloak', translateCloakDirective);
+
+function translateCloakDirective($translate, $rootScope) {
+
+  'use strict';
+
+  return {
+    compile : function (tElement) {
+      var applyCloak = function (element) {
+          element.addClass($translate.cloakClassName());
+        },
+        removeCloak = function (element) {
+          element.removeClass($translate.cloakClassName());
+        };
+      applyCloak(tElement);
+
+      return function linkFn(scope, iElement, iAttr) {
+        //Create bound functions that incorporate the active DOM element.
+        var iRemoveCloak = removeCloak.bind(this, iElement), iApplyCloak = applyCloak.bind(this, iElement);
+        if (iAttr.translateCloak && iAttr.translateCloak.length) {
+          // Register a watcher for the defined translation allowing a fine tuned cloak
+          iAttr.$observe('translateCloak', function (translationId) {
+            $translate(translationId).then(iRemoveCloak, iApplyCloak);
+          });
+          $rootScope.$on('$translateChangeSuccess', function () {
+            $translate(iAttr.translateCloak).then(iRemoveCloak, iApplyCloak);
+          });
+        } else {
+          $translate.onReady(iRemoveCloak);
+        }
+      };
+    }
+  };
+}
+
+translateCloakDirective.displayName = 'translateCloakDirective';
+
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc directive
+ * @name pascalprecht.translate.directive:translateNamespace
+ * @restrict A
+ *
+ * @description
+ * Translates given translation id either through attribute or DOM content.
+ * Internally it uses `translate` filter to translate translation id. It possible to
+ * pass an optional `translate-values` object literal as string into translation id.
+ *
+ * @param {string=} translate namespace name which could be either string or interpolated string.
+ *
+ * @example
+   <example module="ngView">
+    <file name="index.html">
+      <div translate-namespace="CONTENT">
+
+        <div>
+            <h1 translate>.HEADERS.TITLE</h1>
+            <h1 translate>.HEADERS.WELCOME</h1>
+        </div>
+
+        <div translate-namespace=".HEADERS">
+            <h1 translate>.TITLE</h1>
+            <h1 translate>.WELCOME</h1>
+        </div>
+
+      </div>
+    </file>
+    <file name="script.js">
+      angular.module('ngView', ['pascalprecht.translate'])
+
+      .config(function ($translateProvider) {
+
+        $translateProvider.translations('en',{
+          'TRANSLATION_ID': 'Hello there!',
+          'CONTENT': {
+            'HEADERS': {
+                TITLE: 'Title'
+            }
+          },
+          'CONTENT.HEADERS.WELCOME': 'Welcome'
+        }).preferredLanguage('en');
+
+      });
+
+    </file>
+   </example>
+ */
+.directive('translateNamespace', translateNamespaceDirective);
+
+function translateNamespaceDirective() {
+
+  'use strict';
+
+  return {
+    restrict: 'A',
+    scope: true,
+    compile: function () {
+      return {
+        pre: function (scope, iElement, iAttrs) {
+          scope.translateNamespace = getTranslateNamespace(scope);
+
+          if (scope.translateNamespace && iAttrs.translateNamespace.charAt(0) === '.') {
+            scope.translateNamespace += iAttrs.translateNamespace;
+          } else {
+            scope.translateNamespace = iAttrs.translateNamespace;
+          }
+        }
+      };
+    }
+  };
+}
+
+/**
+ * Returns the scope's namespace.
+ * @private
+ * @param scope
+ * @returns {string}
+ */
+function getTranslateNamespace(scope) {
+  'use strict';
+  if (scope.translateNamespace) {
+    return scope.translateNamespace;
+  }
+  if (scope.$parent) {
+    return getTranslateNamespace(scope.$parent);
+  }
+}
+
+translateNamespaceDirective.displayName = 'translateNamespaceDirective';
+
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc directive
+ * @name pascalprecht.translate.directive:translateLanguage
+ * @restrict A
+ *
+ * @description
+ * Forces the language to the directives in the underlying scope.
+ *
+ * @param {string=} translate language that will be negotiated.
+ *
+ * @example
+   <example module="ngView">
+    <file name="index.html">
+      <div>
+
+        <div>
+            <h1 translate>HELLO</h1>
+        </div>
+
+        <div translate-language="de">
+            <h1 translate>HELLO</h1>
+        </div>
+
+      </div>
+    </file>
+    <file name="script.js">
+      angular.module('ngView', ['pascalprecht.translate'])
+
+      .config(function ($translateProvider) {
+
+        $translateProvider
+          .translations('en',{
+            'HELLO': 'Hello world!'
+          })
+          .translations('de',{
+            'HELLO': 'Hallo Welt!'
+          })
+          .preferredLanguage('en');
+
+      });
+
+    </file>
+   </example>
+ */
+.directive('translateLanguage', translateLanguageDirective);
+
+function translateLanguageDirective() {
+
+  'use strict';
+
+  return {
+    restrict: 'A',
+    scope: true,
+    compile: function () {
+      return function linkFn(scope, iElement, iAttrs) {
+
+        iAttrs.$observe('translateLanguage', function (newTranslateLanguage) {
+          scope.translateLanguage = newTranslateLanguage;
+        });
+
+        scope.$watch('translateLanguage', function(){
+          scope.$broadcast('translateLanguageChanged');
+        });
+      };
+    }
+  };
+}
+
+translateLanguageDirective.displayName = 'translateLanguageDirective';
+
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc filter
+ * @name pascalprecht.translate.filter:translate
+ * @requires $parse
+ * @requires pascalprecht.translate.$translate
+ * @function
+ *
+ * @description
+ * Uses `$translate` service to translate contents. Accepts interpolate parameters
+ * to pass dynamized values though translation.
+ *
+ * @param {string} translationId A translation id to be translated.
+ * @param {*=} interpolateParams Optional object literal (as hash or string) to pass values into translation.
+ *
+ * @returns {string} Translated text.
+ *
+ * @example
+   <example module="ngView">
+    <file name="index.html">
+      <div ng-controller="TranslateCtrl">
+
+        <pre>{{ 'TRANSLATION_ID' | translate }}</pre>
+        <pre>{{ translationId | translate }}</pre>
+        <pre>{{ 'WITH_VALUES' | translate:'{value: 5}' }}</pre>
+        <pre>{{ 'WITH_VALUES' | translate:values }}</pre>
+
+      </div>
+    </file>
+    <file name="script.js">
+      angular.module('ngView', ['pascalprecht.translate'])
+
+      .config(function ($translateProvider) {
+
+        $translateProvider.translations('en', {
+          'TRANSLATION_ID': 'Hello there!',
+          'WITH_VALUES': 'The following value is dynamic: {{value}}'
+        });
+        $translateProvider.preferredLanguage('en');
+
+      });
+
+      angular.module('ngView').controller('TranslateCtrl', function ($scope) {
+        $scope.translationId = 'TRANSLATION_ID';
+
+        $scope.values = {
+          value: 78
+        };
+      });
+    </file>
+   </example>
+ */
+.filter('translate', translateFilterFactory);
+
+function translateFilterFactory($parse, $translate) {
+
+  'use strict';
+
+  var translateFilter = function (translationId, interpolateParams, interpolation, forceLanguage) {
+    if (!angular.isObject(interpolateParams)) {
+      var ctx = this || {
+        '__SCOPE_IS_NOT_AVAILABLE': 'More info at https://github.com/angular/angular.js/commit/8863b9d04c722b278fa93c5d66ad1e578ad6eb1f'
+        };
+      interpolateParams = $parse(interpolateParams)(ctx);
+    }
+
+    return $translate.instant(translationId, interpolateParams, interpolation, forceLanguage);
+  };
+
+  if ($translate.statefulFilter()) {
+    translateFilter.$stateful = true;
+  }
+
+  return translateFilter;
+}
+
+translateFilterFactory.displayName = 'translateFilterFactory';
+
+angular.module('pascalprecht.translate')
+
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translationCache
+ * @requires $cacheFactory
+ *
+ * @description
+ * The first time a translation table is used, it is loaded in the translation cache for quick retrieval. You
+ * can load translation tables directly into the cache by consuming the
+ * `$translationCache` service directly.
+ *
+ * @return {object} $cacheFactory object.
+ */
+  .factory('$translationCache', $translationCache);
+
+function $translationCache($cacheFactory) {
+
+  'use strict';
+
+  return $cacheFactory('translations');
+}
+
+$translationCache.displayName = '$translationCache';
+return 'pascalprecht.translate';
+
+}));
+
+/*!
+ * angular-translate - v2.15.2 - 2017-06-22
+ * 
+ * Copyright (c) 2017 The angular-translate team, Pascal Precht; Licensed MIT
+ */
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    define([], function () {
+      return (factory());
+    });
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    factory();
+  }
+}(this, function () {
+
+$translateStaticFilesLoader.$inject = ['$q', '$http'];
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateStaticFilesLoader
+ * @requires $q
+ * @requires $http
+ *
+ * @description
+ * Creates a loading function for a typical static file url pattern:
+ * "lang-en_US.json", "lang-de_DE.json", etc. Using this builder,
+ * the response of these urls must be an object of key-value pairs.
+ *
+ * @param {object} options Options object, which gets prefix, suffix, key, and fileMap
+ */
+.factory('$translateStaticFilesLoader', $translateStaticFilesLoader);
+
+function $translateStaticFilesLoader($q, $http) {
+
+  'use strict';
+
+  return function (options) {
+
+    if (!options || (!angular.isArray(options.files) && (!angular.isString(options.prefix) || !angular.isString(options.suffix)))) {
+      throw new Error('Couldn\'t load static files, no files and prefix or suffix specified!');
+    }
+
+    if (!options.files) {
+      options.files = [{
+        prefix: options.prefix,
+        suffix: options.suffix
+      }];
+    }
+
+    var load = function (file) {
+      if (!file || (!angular.isString(file.prefix) || !angular.isString(file.suffix))) {
+        throw new Error('Couldn\'t load static file, no prefix or suffix specified!');
+      }
+
+      var fileUrl = [
+        file.prefix,
+        options.key,
+        file.suffix
+      ].join('');
+
+      if (angular.isObject(options.fileMap) && options.fileMap[fileUrl]) {
+        fileUrl = options.fileMap[fileUrl];
+      }
+
+      return $http(angular.extend({
+        url: fileUrl,
+        method: 'GET'
+      }, options.$http))
+        .then(function(result) {
+          return result.data;
+        }, function () {
+          return $q.reject(options.key);
+        });
+    };
+
+    var promises = [],
+        length = options.files.length;
+
+    for (var i = 0; i < length; i++) {
+      promises.push(load({
+        prefix: options.files[i].prefix,
+        key: options.key,
+        suffix: options.files[i].suffix
+      }));
+    }
+
+    return $q.all(promises)
+      .then(function (data) {
+        var length = data.length,
+            mergedData = {};
+
+        for (var i = 0; i < length; i++) {
+          for (var key in data[i]) {
+            mergedData[key] = data[i][key];
+          }
+        }
+
+        return mergedData;
+      });
+  };
+}
+
+$translateStaticFilesLoader.displayName = '$translateStaticFilesLoader';
+return 'pascalprecht.translate';
+
+}));
+
+/**
+ * @license AngularJS v1.5.3
+ * (c) 2010-2016 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {'use strict';
+
+/**
+ * @ngdoc module
+ * @name ngCookies
+ * @description
+ *
+ * # ngCookies
+ *
+ * The `ngCookies` module provides a convenient wrapper for reading and writing browser cookies.
+ *
+ *
+ * <div doc-module-components="ngCookies"></div>
+ *
+ * See {@link ngCookies.$cookies `$cookies`} for usage.
+ */
+
+
+angular.module('ngCookies', ['ng']).
+  /**
+   * @ngdoc provider
+   * @name $cookiesProvider
+   * @description
+   * Use `$cookiesProvider` to change the default behavior of the {@link ngCookies.$cookies $cookies} service.
+   * */
+   provider('$cookies', [function $CookiesProvider() {
+    /**
+     * @ngdoc property
+     * @name $cookiesProvider#defaults
+     * @description
+     *
+     * Object containing default options to pass when setting cookies.
+     *
+     * The object may have following properties:
+     *
+     * - **path** - `{string}` - The cookie will be available only for this path and its
+     *   sub-paths. By default, this is the URL that appears in your `<base>` tag.
+     * - **domain** - `{string}` - The cookie will be available only for this domain and
+     *   its sub-domains. For security reasons the user agent will not accept the cookie
+     *   if the current domain is not a sub-domain of this domain or equal to it.
+     * - **expires** - `{string|Date}` - String of the form "Wdy, DD Mon YYYY HH:MM:SS GMT"
+     *   or a Date object indicating the exact date/time this cookie will expire.
+     * - **secure** - `{boolean}` - If `true`, then the cookie will only be available through a
+     *   secured connection.
+     *
+     * Note: By default, the address that appears in your `<base>` tag will be used as the path.
+     * This is important so that cookies will be visible for all routes when html5mode is enabled.
+     *
+     **/
+    var defaults = this.defaults = {};
+
+    function calcOptions(options) {
+      return options ? angular.extend({}, defaults, options) : defaults;
+    }
+
+    /**
+     * @ngdoc service
+     * @name $cookies
+     *
+     * @description
+     * Provides read/write access to browser's cookies.
+     *
+     * <div class="alert alert-info">
+     * Up until Angular 1.3, `$cookies` exposed properties that represented the
+     * current browser cookie values. In version 1.4, this behavior has changed, and
+     * `$cookies` now provides a standard api of getters, setters etc.
+     * </div>
+     *
+     * Requires the {@link ngCookies `ngCookies`} module to be installed.
+     *
+     * @example
+     *
+     * ```js
+     * angular.module('cookiesExample', ['ngCookies'])
+     *   .controller('ExampleController', ['$cookies', function($cookies) {
+     *     // Retrieving a cookie
+     *     var favoriteCookie = $cookies.get('myFavorite');
+     *     // Setting a cookie
+     *     $cookies.put('myFavorite', 'oatmeal');
+     *   }]);
+     * ```
+     */
+    this.$get = ['$$cookieReader', '$$cookieWriter', function($$cookieReader, $$cookieWriter) {
+      return {
+        /**
+         * @ngdoc method
+         * @name $cookies#get
+         *
+         * @description
+         * Returns the value of given cookie key
+         *
+         * @param {string} key Id to use for lookup.
+         * @returns {string} Raw cookie value.
+         */
+        get: function(key) {
+          return $$cookieReader()[key];
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#getObject
+         *
+         * @description
+         * Returns the deserialized value of given cookie key
+         *
+         * @param {string} key Id to use for lookup.
+         * @returns {Object} Deserialized cookie value.
+         */
+        getObject: function(key) {
+          var value = this.get(key);
+          return value ? angular.fromJson(value) : value;
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#getAll
+         *
+         * @description
+         * Returns a key value object with all the cookies
+         *
+         * @returns {Object} All cookies
+         */
+        getAll: function() {
+          return $$cookieReader();
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#put
+         *
+         * @description
+         * Sets a value for given cookie key
+         *
+         * @param {string} key Id for the `value`.
+         * @param {string} value Raw value to be stored.
+         * @param {Object=} options Options object.
+         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
+         */
+        put: function(key, value, options) {
+          $$cookieWriter(key, value, calcOptions(options));
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#putObject
+         *
+         * @description
+         * Serializes and sets a value for given cookie key
+         *
+         * @param {string} key Id for the `value`.
+         * @param {Object} value Value to be stored.
+         * @param {Object=} options Options object.
+         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
+         */
+        putObject: function(key, value, options) {
+          this.put(key, angular.toJson(value), options);
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#remove
+         *
+         * @description
+         * Remove given cookie
+         *
+         * @param {string} key Id of the key-value pair to delete.
+         * @param {Object=} options Options object.
+         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
+         */
+        remove: function(key, options) {
+          $$cookieWriter(key, undefined, calcOptions(options));
+        }
+      };
+    }];
+  }]);
+
+angular.module('ngCookies').
+/**
+ * @ngdoc service
+ * @name $cookieStore
+ * @deprecated
+ * @requires $cookies
+ *
+ * @description
+ * Provides a key-value (string-object) storage, that is backed by session cookies.
+ * Objects put or retrieved from this storage are automatically serialized or
+ * deserialized by angular's toJson/fromJson.
+ *
+ * Requires the {@link ngCookies `ngCookies`} module to be installed.
+ *
+ * <div class="alert alert-danger">
+ * **Note:** The $cookieStore service is **deprecated**.
+ * Please use the {@link ngCookies.$cookies `$cookies`} service instead.
+ * </div>
+ *
+ * @example
+ *
+ * ```js
+ * angular.module('cookieStoreExample', ['ngCookies'])
+ *   .controller('ExampleController', ['$cookieStore', function($cookieStore) {
+ *     // Put cookie
+ *     $cookieStore.put('myFavorite','oatmeal');
+ *     // Get cookie
+ *     var favoriteCookie = $cookieStore.get('myFavorite');
+ *     // Removing a cookie
+ *     $cookieStore.remove('myFavorite');
+ *   }]);
+ * ```
+ */
+ factory('$cookieStore', ['$cookies', function($cookies) {
+
+    return {
+      /**
+       * @ngdoc method
+       * @name $cookieStore#get
+       *
+       * @description
+       * Returns the value of given cookie key
+       *
+       * @param {string} key Id to use for lookup.
+       * @returns {Object} Deserialized cookie value, undefined if the cookie does not exist.
+       */
+      get: function(key) {
+        return $cookies.getObject(key);
+      },
+
+      /**
+       * @ngdoc method
+       * @name $cookieStore#put
+       *
+       * @description
+       * Sets a value for given cookie key
+       *
+       * @param {string} key Id for the `value`.
+       * @param {Object} value Value to be stored.
+       */
+      put: function(key, value) {
+        $cookies.putObject(key, value);
+      },
+
+      /**
+       * @ngdoc method
+       * @name $cookieStore#remove
+       *
+       * @description
+       * Remove given cookie
+       *
+       * @param {string} key Id of the key-value pair to delete.
+       */
+      remove: function(key) {
+        $cookies.remove(key);
+      }
+    };
+
+  }]);
+
+/**
+ * @name $$cookieWriter
+ * @requires $document
+ *
+ * @description
+ * This is a private service for writing cookies
+ *
+ * @param {string} name Cookie name
+ * @param {string=} value Cookie value (if undefined, cookie will be deleted)
+ * @param {Object=} options Object with options that need to be stored for the cookie.
+ */
+function $$CookieWriter($document, $log, $browser) {
+  var cookiePath = $browser.baseHref();
+  var rawDocument = $document[0];
+
+  function buildCookieString(name, value, options) {
+    var path, expires;
+    options = options || {};
+    expires = options.expires;
+    path = angular.isDefined(options.path) ? options.path : cookiePath;
+    if (angular.isUndefined(value)) {
+      expires = 'Thu, 01 Jan 1970 00:00:00 GMT';
+      value = '';
+    }
+    if (angular.isString(expires)) {
+      expires = new Date(expires);
+    }
+
+    var str = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+    str += path ? ';path=' + path : '';
+    str += options.domain ? ';domain=' + options.domain : '';
+    str += expires ? ';expires=' + expires.toUTCString() : '';
+    str += options.secure ? ';secure' : '';
+
+    // per http://www.ietf.org/rfc/rfc2109.txt browser must allow at minimum:
+    // - 300 cookies
+    // - 20 cookies per unique domain
+    // - 4096 bytes per cookie
+    var cookieLength = str.length + 1;
+    if (cookieLength > 4096) {
+      $log.warn("Cookie '" + name +
+        "' possibly not set or overflowed because it was too large (" +
+        cookieLength + " > 4096 bytes)!");
+    }
+
+    return str;
+  }
+
+  return function(name, value, options) {
+    rawDocument.cookie = buildCookieString(name, value, options);
+  };
+}
+
+$$CookieWriter.$inject = ['$document', '$log', '$browser'];
+
+angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterProvider() {
+  this.$get = $$CookieWriter;
+});
+
+
+})(window, window.angular);
+
+/*!
+ * angular-translate - v2.15.2 - 2017-06-22
+ * 
+ * Copyright (c) 2017 The angular-translate team, Pascal Precht; Licensed MIT
+ */
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    define([], function () {
+      return (factory());
+    });
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    factory();
+  }
+}(this, function () {
+
+$translateUrlLoader.$inject = ['$q', '$http'];
+angular.module('pascalprecht.translate')
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateUrlLoader
+ * @requires $q
+ * @requires $http
+ *
+ * @description
+ * Creates a loading function for a typical dynamic url pattern:
+ * "locale.php?lang=en_US", "locale.php?lang=de_DE", "locale.php?language=nl_NL" etc.
+ * Prefixing the specified url, the current requested, language id will be applied
+ * with "?{queryParameter}={key}".
+ * Using this service, the response of these urls must be an object of
+ * key-value pairs.
+ *
+ * @param {object} options Options object, which gets the url, key and
+ * optional queryParameter ('lang' is used by default).
+ */
+.factory('$translateUrlLoader', $translateUrlLoader);
+
+function $translateUrlLoader($q, $http) {
+
+  'use strict';
+
+  return function (options) {
+
+    if (!options || !options.url) {
+      throw new Error('Couldn\'t use urlLoader since no url is given!');
+    }
+
+    var requestParams = {};
+
+    requestParams[options.queryParameter || 'lang'] = options.key;
+
+    return $http(angular.extend({
+      url: options.url,
+      params: requestParams,
+      method: 'GET'
+    }, options.$http))
+      .then(function(result) {
+        return result.data;
+      }, function () {
+        return $q.reject(options.key);
+      });
+  };
+}
+
+$translateUrlLoader.displayName = '$translateUrlLoader';
+return 'pascalprecht.translate';
+
+}));
+
+/* Detect-zoom
+ * -----------
+ * Cross Browser Zoom and Pixel Ratio Detector
+ * Version 1.0.4 | Apr 1 2013
+ * dual-licensed under the WTFPL and MIT license
+ * Maintained by https://github/tombigel
+ * Original developer https://github.com/yonran
+ */
+
+//AMD and CommonJS initialization copied from https://github.com/zohararad/audio5js
+(function (root, ns, factory) {
+    "use strict";
+
+    if (typeof (module) !== 'undefined' && module.exports) { // CommonJS
+        module.exports = factory(ns, root);
+    } else if (typeof (define) === 'function' && define.amd) { // AMD
+        define(function () {
+            return factory(ns, root);
+        });
+    } else {
+        root[ns] = factory(ns, root);
+    }
+
+}(window, 'detectZoom', function () {
+
+    /**
+     * Use devicePixelRatio if supported by the browser
+     * @return {Number}
+     * @private
+     */
+    var devicePixelRatio = function () {
+        return window.devicePixelRatio || 1;
+    };
+
+    /**
+     * Fallback function to set default values
+     * @return {Object}
+     * @private
+     */
+    var fallback = function () {
+        return {
+            zoom: 1,
+            devicePxPerCssPx: 1
+        };
+    };
+    /**
+     * IE 8 and 9: no trick needed!
+     * TODO: Test on IE10 and Windows 8 RT
+     * @return {Object}
+     * @private
+     **/
+    var ie8 = function () {
+        var zoom = Math.round((screen.deviceXDPI / screen.logicalXDPI) * 100) / 100;
+        return {
+            zoom: zoom,
+            devicePxPerCssPx: zoom * devicePixelRatio()
+        };
+    };
+
+    /**
+     * For IE10 we need to change our technique again...
+     * thanks https://github.com/stefanvanburen
+     * @return {Object}
+     * @private
+     */
+    var ie10 = function () {
+        var zoom = Math.round((document.documentElement.offsetHeight / window.innerHeight) * 100) / 100;
+        return {
+            zoom: zoom,
+            devicePxPerCssPx: zoom * devicePixelRatio()
+        };
+    };
+
+    /**
+     * Mobile WebKit
+     * the trick: window.innerWIdth is in CSS pixels, while
+     * screen.width and screen.height are in system pixels.
+     * And there are no scrollbars to mess up the measurement.
+     * @return {Object}
+     * @private
+     */
+    var webkitMobile = function () {
+        var deviceWidth = (Math.abs(window.orientation) == 90) ? screen.height : screen.width;
+        var zoom = deviceWidth / window.innerWidth;
+        return {
+            zoom: zoom,
+            devicePxPerCssPx: zoom * devicePixelRatio()
+        };
+    };
+
+    /**
+     * Desktop Webkit
+     * the trick: an element's clientHeight is in CSS pixels, while you can
+     * set its line-height in system pixels using font-size and
+     * -webkit-text-size-adjust:none.
+     * device-pixel-ratio: http://www.webkit.org/blog/55/high-dpi-web-sites/
+     *
+     * Previous trick (used before http://trac.webkit.org/changeset/100847):
+     * documentElement.scrollWidth is in CSS pixels, while
+     * document.width was in system pixels. Note that this is the
+     * layout width of the document, which is slightly different from viewport
+     * because document width does not include scrollbars and might be wider
+     * due to big elements.
+     * @return {Object}
+     * @private
+     */
+    var webkit = function () {
+        var important = function (str) {
+            return str.replace(/;/g, " !important;");
+        };
+
+        var div = document.createElement('div');
+        div.innerHTML = "1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0";
+        div.setAttribute('style', important('font: 100px/1em sans-serif; -webkit-text-size-adjust: none; text-size-adjust: none; height: auto; width: 1em; padding: 0; overflow: visible;'));
+
+        // The container exists so that the div will be laid out in its own flow
+        // while not impacting the layout, viewport size, or display of the
+        // webpage as a whole.
+        // Add !important and relevant CSS rule resets
+        // so that other rules cannot affect the results.
+        var container = document.createElement('div');
+        container.setAttribute('style', important('width:0; height:0; overflow:hidden; visibility:hidden; position: absolute;'));
+        container.appendChild(div);
+
+        document.body.appendChild(container);
+        var zoom = 1000 / div.clientHeight;
+        zoom = Math.round(zoom * 100) / 100;
+        document.body.removeChild(container);
+
+        return{
+            zoom: zoom,
+            devicePxPerCssPx: zoom * devicePixelRatio()
+        };
+    };
+
+    /**
+     * no real trick; device-pixel-ratio is the ratio of device dpi / css dpi.
+     * (Note that this is a different interpretation than Webkit's device
+     * pixel ratio, which is the ratio device dpi / system dpi).
+     *
+     * Also, for Mozilla, there is no difference between the zoom factor and the device ratio.
+     *
+     * @return {Object}
+     * @private
+     */
+    var firefox4 = function () {
+        var zoom = mediaQueryBinarySearch('min--moz-device-pixel-ratio', '', 0, 10, 20, 0.0001);
+        zoom = Math.round(zoom * 100) / 100;
+        return {
+            zoom: zoom,
+            devicePxPerCssPx: zoom
+        };
+    };
+
+    /**
+     * Firefox 18.x
+     * Mozilla added support for devicePixelRatio to Firefox 18,
+     * but it is affected by the zoom level, so, like in older
+     * Firefox we can't tell if we are in zoom mode or in a device
+     * with a different pixel ratio
+     * @return {Object}
+     * @private
+     */
+    var firefox18 = function () {
+        return {
+            zoom: firefox4().zoom,
+            devicePxPerCssPx: devicePixelRatio()
+        };
+    };
+
+    /**
+     * works starting Opera 11.11
+     * the trick: outerWidth is the viewport width including scrollbars in
+     * system px, while innerWidth is the viewport width including scrollbars
+     * in CSS px
+     * @return {Object}
+     * @private
+     */
+    var opera11 = function () {
+        var zoom = window.top.outerWidth / window.top.innerWidth;
+        zoom = Math.round(zoom * 100) / 100;
+        return {
+            zoom: zoom,
+            devicePxPerCssPx: zoom * devicePixelRatio()
+        };
+    };
+
+    /**
+     * Use a binary search through media queries to find zoom level in Firefox
+     * @param property
+     * @param unit
+     * @param a
+     * @param b
+     * @param maxIter
+     * @param epsilon
+     * @return {Number}
+     */
+    var mediaQueryBinarySearch = function (property, unit, a, b, maxIter, epsilon) {
+        var matchMedia;
+        var head, style, div;
+        if (window.matchMedia) {
+            matchMedia = window.matchMedia;
+        } else {
+            head = document.getElementsByTagName('head')[0];
+            style = document.createElement('style');
+            head.appendChild(style);
+
+            div = document.createElement('div');
+            div.className = 'mediaQueryBinarySearch';
+            div.style.display = 'none';
+            document.body.appendChild(div);
+
+            matchMedia = function (query) {
+                style.sheet.insertRule('@media ' + query + '{.mediaQueryBinarySearch ' + '{text-decoration: underline} }', 0);
+                var matched = getComputedStyle(div, null).textDecoration == 'underline';
+                style.sheet.deleteRule(0);
+                return {matches: matched};
+            };
+        }
+        var ratio = binarySearch(a, b, maxIter);
+        if (div) {
+            head.removeChild(style);
+            document.body.removeChild(div);
+        }
+        return ratio;
+
+        function binarySearch(a, b, maxIter) {
+            var mid = (a + b) / 2;
+            if (maxIter <= 0 || b - a < epsilon) {
+                return mid;
+            }
+            var query = "(" + property + ":" + mid + unit + ")";
+            if (matchMedia(query).matches) {
+                return binarySearch(mid, b, maxIter - 1);
+            } else {
+                return binarySearch(a, mid, maxIter - 1);
+            }
+        }
+    };
+
+    /**
+     * Generate detection function
+     * @private
+     */
+    var detectFunction = (function () {
+        var func = fallback;
+        //IE8+
+        if (!isNaN(screen.logicalXDPI) && !isNaN(screen.systemXDPI)) {
+            func = ie8;
+        }
+        // IE10+ / Touch
+        else if (window.navigator.msMaxTouchPoints) {
+            func = ie10;
+        }
+        //Mobile Webkit
+        else if ('orientation' in window && typeof document.body.style.webkitMarquee === 'string') {
+            func = webkitMobile;
+        }
+        //WebKit
+        else if (typeof document.body.style.webkitMarquee === 'string') {
+            func = webkit;
+        }
+        //Opera
+        else if (navigator.userAgent.indexOf('Opera') >= 0) {
+            func = opera11;
+        }
+        //Last one is Firefox
+        //FF 18.x
+        else if (window.devicePixelRatio) {
+            func = firefox18;
+        }
+        //FF 4.0 - 17.x
+        else if (firefox4().zoom > 0.001) {
+            func = firefox4;
+        }
+
+        return func;
+    }());
+
+
+    return ({
+
+        /**
+         * Ratios.zoom shorthand
+         * @return {Number} Zoom level
+         */
+        zoom: function () {
+            return detectFunction().zoom;
+        },
+
+        /**
+         * Ratios.devicePxPerCssPx shorthand
+         * @return {Number} devicePxPerCssPx level
+         */
+        device: function () {
+            return detectFunction().devicePxPerCssPx;
+        }
+    });
+}));
+
+/*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
  * Licensed under the MIT license
@@ -38463,10 +42984,11 @@ window.isEmpty = function(obj) {
   return true;
 };
 
-/*! Summernote v0.8.3 | (c) 2013-2015 Alan Hong and other contributors | MIT license */
-!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof module&&module.exports?module.exports=a(require("jquery")):a(window.jQuery)}(function($){"use strict";var func=function(){var a=function(a){return function(b){return a===b}},b=function(a,b){return a===b},c=function(a){return function(b,c){return b[a]===c[a]}},d=function(){return!0},e=function(){return!1},f=function(a){return function(){return!a.apply(a,arguments)}},g=function(a,b){return function(c){return a(c)&&b(c)}},h=0;return{eq:a,eq2:b,peq2:c,ok:d,fail:e,self:function(a){return a},not:f,and:g,invoke:function(a,b){return function(){return a[b].apply(a,arguments)}},uniqueId:function(a){var b=++h+"";return a?a+b:b},rect2bnd:function(a){var b=$(document);return{top:a.top+b.scrollTop(),left:a.left+b.scrollLeft(),width:a.right-a.left,height:a.bottom-a.top}},invertObject:function(a){var b={};for(var c in a)a.hasOwnProperty(c)&&(b[a[c]]=c);return b},namespaceToCamel:function(a,b){return(b=b||"")+a.split(".").map(function(a){return a.substring(0,1).toUpperCase()+a.substring(1)}).join("")},debounce:function(a,b,c){var d;return function(){var e=this,f=arguments,g=function(){d=null,c||a.apply(e,f)},h=c&&!d;clearTimeout(d),d=setTimeout(g,b),h&&a.apply(e,f)}}}}(),list=function(){var a=function(a){return a[0]},b=function(a){return a[a.length-1]},c=function(a){return a.slice(0,a.length-1)},d=function(a){return a.slice(1)},e=function(a,b){for(var c=0,d=a.length;c<d;c++){var e=a[c];if(b(e))return e}},f=function(a,b){for(var c=0,d=a.length;c<d;c++)if(!b(a[c]))return!1;return!0},g=function(a,b){return $.inArray(b,a)},h=function(a,b){return g(a,b)!==-1},i=function(a,b){return b=b||func.self,a.reduce(function(a,c){return a+b(c)},0)},j=function(a){for(var b=[],c=-1,d=a.length;++c<d;)b[c]=a[c];return b},k=function(a){return!a||!a.length},l=function(c,e){return c.length?d(c).reduce(function(a,c){var d=b(a);return e(b(d),c)?d[d.length]=c:a[a.length]=[c],a},[[a(c)]]):[]},m=function(a){for(var b=[],c=0,d=a.length;c<d;c++)a[c]&&b.push(a[c]);return b},n=function(a){for(var b=[],c=0,d=a.length;c<d;c++)h(b,a[c])||b.push(a[c]);return b},o=function(a,b){var c=g(a,b);return c===-1?null:a[c+1]};return{head:a,last:b,initial:c,tail:d,prev:function(a,b){var c=g(a,b);return c===-1?null:a[c-1]},next:o,find:e,contains:h,all:f,sum:i,from:j,isEmpty:k,clusterBy:l,compact:m,unique:n}}(),isSupportAmd="function"==typeof define&&define.amd,isFontInstalled=function(a){var b="Comic Sans MS"===a?"Courier New":"Comic Sans MS",c=$("<div>").css({position:"absolute",left:"-9999px",top:"-9999px",fontSize:"200px"}).text("mmmmmmmmmwwwwwww").appendTo(document.body),d=c.css("fontFamily",b).width(),e=c.css("fontFamily",a+","+b).width();return c.remove(),d!==e},userAgent=navigator.userAgent,isMSIE=/MSIE|Trident/i.test(userAgent),browserVersion;if(isMSIE){var matches=/MSIE (\d+[.]\d+)/.exec(userAgent);matches&&(browserVersion=parseFloat(matches[1])),matches=/Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(userAgent),matches&&(browserVersion=parseFloat(matches[1]))}var isEdge=/Edge\/\d+/.test(userAgent),hasCodeMirror=!!window.CodeMirror;if(!hasCodeMirror&&isSupportAmd&&"undefined"!=typeof require)if(void 0!==require.resolve)try{require.resolve("codemirror"),hasCodeMirror=!0}catch(a){}else void 0!==eval("require").specified&&(hasCodeMirror=eval("require").specified("codemirror"));var agent={isMac:navigator.appVersion.indexOf("Mac")>-1,isMSIE:isMSIE,isEdge:isEdge,isFF:!isEdge&&/firefox/i.test(userAgent),isPhantom:/PhantomJS/i.test(userAgent),isWebkit:!isEdge&&/webkit/i.test(userAgent),isChrome:!isEdge&&/chrome/i.test(userAgent),isSafari:!isEdge&&/safari/i.test(userAgent),browserVersion:browserVersion,jqueryVersion:parseFloat($.fn.jquery),isSupportAmd:isSupportAmd,hasCodeMirror:hasCodeMirror,isFontInstalled:isFontInstalled,isW3CRangeSupport:!!document.createRange},NBSP_CHAR=String.fromCharCode(160),ZERO_WIDTH_NBSP_CHAR="\ufeff",dom=function(){var a=function(a){return a&&$(a).hasClass("note-editable")},b=function(a){return a&&$(a).hasClass("note-control-sizing")},c=function(a){return a=a.toUpperCase(),function(b){return b&&b.nodeName.toUpperCase()===a}},d=function(a){return a&&3===a.nodeType},e=function(a){return a&&1===a.nodeType},f=function(a){return a&&/^BR|^IMG|^HR|^IFRAME|^BUTTON/.test(a.nodeName.toUpperCase())},g=function(b){return!a(b)&&(b&&/^DIV|^P|^LI|^H[1-7]/.test(b.nodeName.toUpperCase()))},h=function(a){return a&&/^H[1-7]/.test(a.nodeName.toUpperCase())},i=c("PRE"),j=c("LI"),k=function(a){return g(a)&&!j(a)},l=c("TABLE"),m=c("DATA"),n=function(a){return!(s(a)||o(a)||p(a)||g(a)||l(a)||r(a)||m(a))},o=function(a){return a&&/^UL|^OL/.test(a.nodeName.toUpperCase())},p=c("HR"),q=function(a){return a&&/^TD|^TH/.test(a.nodeName.toUpperCase())},r=c("BLOCKQUOTE"),s=function(b){return q(b)||r(b)||a(b)},t=c("A"),u=function(a){return n(a)&&!!D(a,g)},v=function(a){return n(a)&&!D(a,g)},w=c("BODY"),x=function(a,b){return a.nextSibling===b||a.previousSibling===b},y=function(a,b){b=b||func.ok;var c=[];return a.previousSibling&&b(a.previousSibling)&&c.push(a.previousSibling),c.push(a),a.nextSibling&&b(a.nextSibling)&&c.push(a.nextSibling),c},z=agent.isMSIE&&agent.browserVersion<11?"&nbsp;":"<br>",A=function(a){return d(a)?a.nodeValue.length:a?a.childNodes.length:0},B=function(a){var b=A(a);return 0===b||(!d(a)&&1===b&&a.innerHTML===z||!(!list.all(a.childNodes,d)||""!==a.innerHTML))},C=function(a){f(a)||A(a)||(a.innerHTML=z)},D=function(b,c){for(;b;){if(c(b))return b;if(a(b))break;b=b.parentNode}return null},E=function(b,c){for(b=b.parentNode;b&&1===A(b);){if(c(b))return b;if(a(b))break;b=b.parentNode}return null},F=function(b,c){c=c||func.fail;var d=[];return D(b,function(b){return a(b)||d.push(b),c(b)}),d},G=function(a,b){var c=F(a);return list.last(c.filter(b))},H=function(a,b){for(var c=F(a),d=b;d;d=d.parentNode)if($.inArray(d,c)>-1)return d;return null},I=function(a,b){b=b||func.fail;for(var c=[];a&&!b(a);)c.push(a),a=a.previousSibling;return c},J=function(a,b){b=b||func.fail;for(var c=[];a&&!b(a);)c.push(a),a=a.nextSibling;return c},K=function(a,b){var c=[];return b=b||func.ok,function d(e){a!==e&&b(e)&&c.push(e);for(var f=0,g=e.childNodes.length;f<g;f++)d(e.childNodes[f])}(a),c},L=function(a,b){var c=a.parentNode,d=$("<"+b+">")[0];return c.insertBefore(d,a),d.appendChild(a),d},M=function(a,b){var c=b.nextSibling,d=b.parentNode;return c?d.insertBefore(a,c):d.appendChild(a),a},N=function(a,b){return $.each(b,function(b,c){a.appendChild(c)}),a},O=function(a){return 0===a.offset},P=function(a){return a.offset===A(a.node)},Q=function(a){return O(a)||P(a)},R=function(a,b){for(;a&&a!==b;){if(0!==V(a))return!1;a=a.parentNode}return!0},S=function(a,b){if(!b)return!1;for(;a&&a!==b;){if(V(a)!==A(a.parentNode)-1)return!1;a=a.parentNode}return!0},T=function(a,b){return O(a)&&R(a.node,b)},U=function(a,b){return P(a)&&S(a.node,b)},V=function(a){for(var b=0;a=a.previousSibling;)b+=1;return b},W=function(a){return!!(a&&a.childNodes&&a.childNodes.length)},X=function(b,c){var d,e;if(0===b.offset){if(a(b.node))return null;d=b.node.parentNode,e=V(b.node)}else W(b.node)?(d=b.node.childNodes[b.offset-1],e=A(d)):(d=b.node,e=c?0:b.offset-1);return{node:d,offset:e}},Y=function(b,c){var d,e;if(A(b.node)===b.offset){if(a(b.node))return null;d=b.node.parentNode,e=V(b.node)+1}else W(b.node)?(d=b.node.childNodes[b.offset],e=0):(d=b.node,e=c?A(b.node):b.offset+1);return{node:d,offset:e}},Z=function(a,b){return a.node===b.node&&a.offset===b.offset},_=function(a){if(d(a.node)||!W(a.node)||B(a.node))return!0;var b=a.node.childNodes[a.offset-1],c=a.node.childNodes[a.offset];return!(b&&!f(b)||c&&!f(c))},aa=function(a,b){for(;a;){if(b(a))return a;a=X(a)}return null},ba=function(a,b){for(;a;){if(b(a))return a;a=Y(a)}return null},ca=function(a){if(!d(a.node))return!1;var b=a.node.nodeValue.charAt(a.offset-1);return b&&" "!==b&&b!==NBSP_CHAR},da=function(a,b,c,d){for(var e=a;e&&(c(e),!Z(e,b));){e=Y(e,d&&a.node!==e.node&&b.node!==e.node)}},ea=function(a,b){return F(b,func.eq(a)).map(V).reverse()},fa=function(a,b){for(var c=a,d=0,e=b.length;d<e;d++)c=c.childNodes.length<=b[d]?c.childNodes[c.childNodes.length-1]:c.childNodes[b[d]];return c},ga=function(a,b){var c=b&&b.isSkipPaddingBlankHTML,e=b&&b.isNotSplitEdgePoint;if(Q(a)&&(d(a.node)||e)){if(O(a))return a.node;if(P(a))return a.node.nextSibling}if(d(a.node))return a.node.splitText(a.offset);var f=a.node.childNodes[a.offset],g=M(a.node.cloneNode(!1),a.node);return N(g,J(f)),c||(C(a.node),C(g)),g},ha=function(a,b,c){var d=F(b.node,func.eq(a));return d.length?1===d.length?ga(b,c):d.reduce(function(a,d){return a===b.node&&(a=ga(b,c)),ga({node:d,offset:a?dom.position(a):A(d)},c)}):null},ia=function(a,b){var c,d,e=b?g:s,f=F(a.node,e),h=list.last(f)||a.node;e(h)?(c=f[f.length-2],d=h):(c=h,d=c.parentNode);var i=c&&ha(c,a,{isSkipPaddingBlankHTML:b,isNotSplitEdgePoint:b});return i||d!==a.node||(i=a.node.childNodes[a.offset]),{rightNode:i,container:d}},ja=function(a){return document.createElement(a)},ka=function(a){return document.createTextNode(a)},la=function(a,b){if(a&&a.parentNode){if(a.removeNode)return a.removeNode(b);var c=a.parentNode;if(!b){var d,e,f=[];for(d=0,e=a.childNodes.length;d<e;d++)f.push(a.childNodes[d]);for(d=0,e=f.length;d<e;d++)c.insertBefore(f[d],a)}c.removeChild(a)}},ma=function(b,c){for(;b&&(!a(b)&&c(b));){var d=b.parentNode;la(b),b=d}},na=function(a,b){if(a.nodeName.toUpperCase()===b.toUpperCase())return a;var c=ja(b);return a.style.cssText&&(c.style.cssText=a.style.cssText),N(c,list.from(a.childNodes)),M(c,a),la(a),c},oa=c("TEXTAREA"),pa=function(a,b){var c=oa(a[0])?a.val():a.html();return b?c.replace(/[\n\r]/g,""):c},qa=function(a,b){var c=pa(a);if(b){c=c.replace(/<(\/?)(\b(?!!)[^>\s]*)(.*?)(\s*\/?>)/g,function(a,b,c){c=c.toUpperCase();var d=/^DIV|^TD|^TH|^P|^LI|^H[1-7]/.test(c)&&!!b,e=/^BLOCKQUOTE|^TABLE|^TBODY|^TR|^HR|^UL|^OL/.test(c);return a+(d||e?"\n":"")}),c=$.trim(c)}return c},ra=function(a){var b=$(a),c=b.offset(),d=b.outerHeight(!0);return{left:c.left,top:c.top+d}},sa=function(a,b){Object.keys(b).forEach(function(c){a.on(c,b[c])})},ta=function(a,b){Object.keys(b).forEach(function(c){a.off(c,b[c])})};return{NBSP_CHAR:NBSP_CHAR,ZERO_WIDTH_NBSP_CHAR:"\ufeff",blank:z,emptyPara:"<p>"+z+"</p>",makePredByNodeName:c,isEditable:a,isControlSizing:b,isText:d,isElement:e,isVoid:f,isPara:g,isPurePara:k,isHeading:h,isInline:n,isBlock:func.not(n),isBodyInline:v,isBody:w,isParaInline:u,isPre:i,isList:o,isTable:l,isData:m,isCell:q,isBlockquote:r,isBodyContainer:s,isAnchor:t,isDiv:c("DIV"),isLi:j,isBR:c("BR"),isSpan:c("SPAN"),isB:c("B"),isU:c("U"),isS:c("S"),isI:c("I"),isImg:c("IMG"),isTextarea:oa,isEmpty:B,isEmptyAnchor:func.and(t,B),isClosestSibling:x,withClosestSiblings:y,nodeLength:A,isLeftEdgePoint:O,isRightEdgePoint:P,isEdgePoint:Q,isLeftEdgeOf:R,isRightEdgeOf:S,isLeftEdgePointOf:T,isRightEdgePointOf:U,prevPoint:X,nextPoint:Y,isSamePoint:Z,isVisiblePoint:_,prevPointUntil:aa,nextPointUntil:ba,isCharPoint:ca,walkPoint:da,ancestor:D,singleChildAncestor:E,listAncestor:F,lastAncestor:G,listNext:J,listPrev:I,listDescendant:K,commonAncestor:H,wrap:L,insertAfter:M,appendChildNodes:N,position:V,hasChildren:W,makeOffsetPath:ea,fromOffsetPath:fa,splitTree:ha,splitPoint:ia,create:ja,createText:ka,remove:la,removeWhile:ma,replace:na,html:qa,value:pa,posFromPlaceholder:ra,attachEvents:sa,detachEvents:ta}}(),Context=function(a,b){var c=this,d=$.summernote.ui;return this.memos={},this.modules={},this.layoutInfo={},this.options=b,this.initialize=function(){return this.layoutInfo=d.createLayout(a,b),this._initialize(),a.hide(),this},this.destroy=function(){this._destroy(),a.removeData("summernote"),d.removeLayout(a,this.layoutInfo)},this.reset=function(){var a=c.isDisabled();this.code(dom.emptyPara),this._destroy(),this._initialize(),a&&c.disable()},this._initialize=function(){var a=$.extend({},this.options.buttons);Object.keys(a).forEach(function(b){c.memo("button."+b,a[b])});var b=$.extend({},this.options.modules,$.summernote.plugins||{});Object.keys(b).forEach(function(a){c.module(a,b[a],!0)}),Object.keys(this.modules).forEach(function(a){c.initializeModule(a)})},this._destroy=function(){Object.keys(this.modules).reverse().forEach(function(a){c.removeModule(a)}),Object.keys(this.memos).forEach(function(a){c.removeMemo(a)}),this.triggerEvent("destroy",this)},this.code=function(b){var c=this.invoke("codeview.isActivated");if(void 0===b)return this.invoke("codeview.sync"),c?this.layoutInfo.codable.val():this.layoutInfo.editable.html();c?this.layoutInfo.codable.val(b):this.layoutInfo.editable.html(b),a.val(b),this.triggerEvent("change",b)},this.isDisabled=function(){return"false"===this.layoutInfo.editable.attr("contenteditable")},this.enable=function(){this.layoutInfo.editable.attr("contenteditable",!0),this.invoke("toolbar.activate",!0)},this.disable=function(){this.invoke("codeview.isActivated")&&this.invoke("codeview.deactivate"),this.layoutInfo.editable.attr("contenteditable",!1),this.invoke("toolbar.deactivate",!0)},this.triggerEvent=function(){var b=list.head(arguments),c=list.tail(list.from(arguments)),d=this.options.callbacks[func.namespaceToCamel(b,"on")];d&&d.apply(a[0],c),a.trigger("summernote."+b,c)},this.initializeModule=function(b){var c=this.modules[b];c.shouldInitialize=c.shouldInitialize||func.ok,c.shouldInitialize()&&(c.initialize&&c.initialize(),c.events&&dom.attachEvents(a,c.events))},this.module=function(a,b,c){if(1===arguments.length)return this.modules[a];this.modules[a]=new b(this),c||this.initializeModule(a)},this.removeModule=function(b){var c=this.modules[b];c.shouldInitialize()&&(c.events&&dom.detachEvents(a,c.events),c.destroy&&c.destroy()),delete this.modules[b]},this.memo=function(a,b){if(1===arguments.length)return this.memos[a];this.memos[a]=b},this.removeMemo=function(a){this.memos[a]&&this.memos[a].destroy&&this.memos[a].destroy(),delete this.memos[a]},this.createInvokeHandler=function(a,b){return function(d){d.preventDefault(),c.invoke(a,b||$(d.target).closest("[data-value]").data("value"))}},this.invoke=function(){var a=list.head(arguments),b=list.tail(list.from(arguments)),c=a.split("."),d=c.length>1,e=d&&list.head(c),f=d?list.last(c):list.head(c),g=this.modules[e||"editor"];return!e&&this[f]?this[f].apply(this,b):g&&g[f]&&g.shouldInitialize()?g[f].apply(g,b):void 0},this.initialize()};$.fn.extend({summernote:function(){var a=$.type(list.head(arguments)),b="string"===a,c="object"===a,d=c?list.head(arguments):{};d=$.extend({},$.summernote.options,d),d.langInfo=$.extend(!0,{},$.summernote.lang["en-US"],$.summernote.lang[d.lang]),d.icons=$.extend(!0,{},$.summernote.options.icons,d.icons),this.each(function(a,b){var c=$(b);if(!c.data("summernote")){var e=new Context(c,d);c.data("summernote",e),c.data("summernote").triggerEvent("init",e.layoutInfo)}});var e=this.first();if(e.length){var f=e.data("summernote");if(b)return f.invoke.apply(f,list.from(arguments));d.focus&&f.invoke("editor.focus")}return this}});var Renderer=function(a,b,c,d){this.render=function(e){var f=$(a);if(c&&c.contents&&f.html(c.contents),c&&c.className&&f.addClass(c.className),c&&c.data&&$.each(c.data,function(a,b){f.attr("data-"+a,b)}),c&&c.click&&f.on("click",c.click),b){var g=f.find(".note-children-container");b.forEach(function(a){a.render(g.length?g:f)})}return d&&d(f,c),c&&c.callback&&c.callback(f),e&&e.append(f),f}},renderer={create:function(a,b){return function(){var c=$.isArray(arguments[0])?arguments[0]:[],d="object"==typeof arguments[1]?arguments[1]:arguments[0];return d&&d.children&&(c=d.children),new Renderer(a,c,d,b)}}},editor=renderer.create('<div class="note-editor note-frame panel panel-default"/>'),toolbar=renderer.create('<div class="note-toolbar panel-heading"/>'),editingArea=renderer.create('<div class="note-editing-area"/>'),codable=renderer.create('<textarea class="note-codable"/>'),editable=renderer.create('<div class="note-editable panel-body" contentEditable="true"/>'),statusbar=renderer.create(['<div class="note-statusbar">','  <div class="note-resizebar">','    <div class="note-icon-bar"/>','    <div class="note-icon-bar"/>','    <div class="note-icon-bar"/>',"  </div>","</div>"].join("")),airEditor=renderer.create('<div class="note-editor"/>'),airEditable=renderer.create('<div class="note-editable" contentEditable="true"/>'),buttonGroup=renderer.create('<div class="note-btn-group btn-group">'),button=renderer.create('<button type="button" class="note-btn btn btn-default btn-sm" tabindex="-1">',function(a,b){b&&b.tooltip&&a.attr({title:b.tooltip}).tooltip({container:"body",trigger:"hover",placement:"bottom"})}),dropdown=renderer.create('<div class="dropdown-menu">',function(a,b){var c=$.isArray(b.items)?b.items.map(function(a){return'<li><a href="#" data-value="'+("string"==typeof a?a:a.value||"")+'">'+(b.template?b.template(a):a)+"</a></li>"}).join(""):b.items;a.html(c)}),dropdownCheck=renderer.create('<div class="dropdown-menu note-check">',function(a,b){var c=$.isArray(b.items)?b.items.map(function(a){var c="string"==typeof a?a:a.value||"",d=b.template?b.template(a):a;return'<li><a href="#" data-value="'+c+'">'+icon(b.checkClassName)+" "+d+"</a></li>"}).join(""):b.items;a.html(c)}),palette=renderer.create('<div class="note-color-palette"/>',function(a,b){for(var c=[],d=0,e=b.colors.length;d<e;d++){for(var f=b.eventName,g=b.colors[d],h=[],i=0,j=g.length;i<j;i++){var k=g[i];h.push(['<button type="button" class="note-color-btn"','style="background-color:',k,'" ','data-event="',f,'" ','data-value="',k,'" ','title="',k,'" ','data-toggle="button" tabindex="-1"></button>'].join(""))}c.push('<div class="note-color-row">'+h.join("")+"</div>")}a.html(c.join("")),a.find(".note-color-btn").tooltip({container:"body",trigger:"hover",placement:"bottom"})}),dialog=renderer.create('<div class="modal" aria-hidden="false" tabindex="-1"/>',function(a,b){b.fade&&a.addClass("fade"),a.html(['<div class="modal-dialog">','  <div class="modal-content">',b.title?'    <div class="modal-header">      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>      <h4 class="modal-title">'+b.title+"</h4>    </div>":"",'    <div class="modal-body">'+b.body+"</div>",b.footer?'    <div class="modal-footer">'+b.footer+"</div>":"","  </div>","</div>"].join(""))}),popover=renderer.create(['<div class="note-popover popover in">','  <div class="arrow"/>','  <div class="popover-content note-children-container"/>',"</div>"].join(""),function(a,b){var c=void 0!==b.direction?b.direction:"bottom";a.addClass(c),b.hideArrow&&a.find(".arrow").hide()}),icon=function(a,b){return"<"+(b=b||"i")+' class="'+a+'"/>'},ui={editor:editor,toolbar:toolbar,editingArea:editingArea,codable:codable,editable:editable,statusbar:statusbar,airEditor:airEditor,airEditable:airEditable,buttonGroup:buttonGroup,button:button,dropdown:dropdown,dropdownCheck:dropdownCheck,palette:palette,dialog:dialog,popover:popover,icon:icon,toggleBtn:function(a,b){a.toggleClass("disabled",!b),a.attr("disabled",!b)},toggleBtnActive:function(a,b){a.toggleClass("active",b)},onDialogShown:function(a,b){a.one("shown.bs.modal",b)},onDialogHidden:function(a,b){a.one("hidden.bs.modal",b)},showDialog:function(a){a.modal("show")},hideDialog:function(a){a.modal("hide")},createLayout:function(a,b){var c=(b.airMode?ui.airEditor([ui.editingArea([ui.airEditable()])]):ui.editor([ui.toolbar(),ui.editingArea([ui.codable(),ui.editable()]),ui.statusbar()])).render();return c.insertAfter(a),{note:a,editor:c,toolbar:c.find(".note-toolbar"),editingArea:c.find(".note-editing-area"),editable:c.find(".note-editable"),codable:c.find(".note-codable"),statusbar:c.find(".note-statusbar")}},removeLayout:function(a,b){a.html(b.editable.html()),b.editor.remove(),a.show()}};$.summernote=$.summernote||{lang:{}},$.extend($.summernote.lang,{"en-US":{font:{bold:"Bold",italic:"Italic",underline:"Underline",clear:"Remove Font Style",height:"Line Height",name:"Font Family",strikethrough:"Strikethrough",subscript:"Subscript",superscript:"Superscript",size:"Font Size"},image:{image:"Picture",insert:"Insert Image",resizeFull:"Resize Full",resizeHalf:"Resize Half",resizeQuarter:"Resize Quarter",floatLeft:"Float Left",floatRight:"Float Right",floatNone:"Float None",shapeRounded:"Shape: Rounded",shapeCircle:"Shape: Circle",shapeThumbnail:"Shape: Thumbnail",shapeNone:"Shape: None",dragImageHere:"Drag image or text here",dropImage:"Drop image or Text",selectFromFiles:"Select from files",maximumFileSize:"Maximum file size",maximumFileSizeError:"Maximum file size exceeded.",url:"Image URL",remove:"Remove Image"},video:{video:"Video",videoLink:"Video Link",insert:"Insert Video",url:"Video URL?",providers:"(YouTube, Vimeo, Vine, Instagram, DailyMotion or Youku)"},link:{link:"Link",insert:"Insert Link",unlink:"Unlink",edit:"Edit",textToDisplay:"Text to display",url:"To what URL should this link go?",openInNewWindow:"Open in new window"},table:{table:"Table"},hr:{insert:"Insert Horizontal Rule"},style:{style:"Style",p:"Normal",blockquote:"Quote",pre:"Code",h1:"Header 1",h2:"Header 2",h3:"Header 3",h4:"Header 4",h5:"Header 5",h6:"Header 6"},lists:{unordered:"Unordered list",ordered:"Ordered list"},options:{help:"Help",fullscreen:"Full Screen",codeview:"Code View"},paragraph:{paragraph:"Paragraph",outdent:"Outdent",indent:"Indent",left:"Align left",center:"Align center",right:"Align right",justify:"Justify full"},color:{recent:"Recent Color",more:"More Color",background:"Background Color",foreground:"Foreground Color",transparent:"Transparent",setTransparent:"Set transparent",reset:"Reset",resetToDefault:"Reset to default"},shortcut:{shortcuts:"Keyboard shortcuts",close:"Close",textFormatting:"Text formatting",action:"Action",paragraphFormatting:"Paragraph formatting",documentStyle:"Document Style",extraKeys:"Extra keys"},help:{insertParagraph:"Insert Paragraph",undo:"Undoes the last command",redo:"Redoes the last command",tab:"Tab",untab:"Untab",bold:"Set a bold style",italic:"Set a italic style",underline:"Set a underline style",strikethrough:"Set a strikethrough style",removeFormat:"Clean a style",justifyLeft:"Set left align",justifyCenter:"Set center align",justifyRight:"Set right align",justifyFull:"Set full align",insertUnorderedList:"Toggle unordered list",insertOrderedList:"Toggle ordered list",outdent:"Outdent on current paragraph",indent:"Indent on current paragraph",formatPara:"Change current block's format as a paragraph(P tag)",formatH1:"Change current block's format as H1",formatH2:"Change current block's format as H2",formatH3:"Change current block's format as H3",formatH4:"Change current block's format as H4",formatH5:"Change current block's format as H5",formatH6:"Change current block's format as H6",insertHorizontalRule:"Insert horizontal rule","linkDialog.show":"Show Link Dialog"},history:{undo:"Undo",redo:"Redo"},specialChar:{specialChar:"SPECIAL CHARACTERS",select:"Select Special characters"}}});var key=function(){var a={BACKSPACE:8,TAB:9,ENTER:13,SPACE:32,LEFT:37,UP:38,RIGHT:39,DOWN:40,NUM0:48,NUM1:49,NUM2:50,NUM3:51,NUM4:52,NUM5:53,NUM6:54,NUM7:55,NUM8:56,B:66,E:69,I:73,J:74,K:75,L:76,R:82,S:83,U:85,V:86,Y:89,Z:90,SLASH:191,LEFTBRACKET:219,BACKSLASH:220,RIGHTBRACKET:221};return{isEdit:function(b){return list.contains([a.BACKSPACE,a.TAB,a.ENTER,a.SPACE],b)},isMove:function(b){return list.contains([a.LEFT,a.UP,a.RIGHT,a.DOWN],b)},nameFromCode:func.invertObject(a),code:a}}(),range=function(){var a=function(a,b){var c,d,e=a.parentElement(),f=document.body.createTextRange(),g=list.from(e.childNodes);for(c=0;c<g.length;c++)if(!dom.isText(g[c])){if(f.moveToElementText(g[c]),f.compareEndPoints("StartToStart",a)>=0)break;d=g[c]}if(0!==c&&dom.isText(g[c-1])){var h=document.body.createTextRange(),i=null;h.moveToElementText(d||e),h.collapse(!d),i=d?d.nextSibling:e.firstChild;var j=a.duplicate();j.setEndPoint("StartToStart",h);for(var k=j.text.replace(/[\r\n]/g,"").length;k>i.nodeValue.length&&i.nextSibling;)k-=i.nodeValue.length,i=i.nextSibling;i.nodeValue;b&&i.nextSibling&&dom.isText(i.nextSibling)&&k===i.nodeValue.length&&(k-=i.nodeValue.length,i=i.nextSibling),e=i,c=k}return{cont:e,offset:c}},b=function(a){var b=function(a,c){var d,e;if(dom.isText(a)){var f=dom.listPrev(a,func.not(dom.isText)),g=list.last(f).previousSibling;d=g||a.parentNode,c+=list.sum(list.tail(f),dom.nodeLength),e=!g}else{if(d=a.childNodes[c]||a,dom.isText(d))return b(d,0);c=0,e=!1}return{node:d,collapseToStart:e,offset:c}},c=document.body.createTextRange(),d=b(a.node,a.offset);return c.moveToElementText(d.node),c.collapse(d.collapseToStart),c.moveStart("character",d.offset),c},c=function(a,d,e,f){this.sc=a,this.so=d,this.ec=e,this.eo=f;var g=function(){if(agent.isW3CRangeSupport){var c=document.createRange();return c.setStart(a,d),c.setEnd(e,f),c}var g=b({node:a,offset:d});return g.setEndPoint("EndToEnd",b({node:e,offset:f})),g};this.getPoints=function(){return{sc:a,so:d,ec:e,eo:f}},this.getStartPoint=function(){return{node:a,offset:d}},this.getEndPoint=function(){return{node:e,offset:f}},this.select=function(){var a=g();if(agent.isW3CRangeSupport){var b=document.getSelection();b.rangeCount>0&&b.removeAllRanges(),b.addRange(a)}else a.select();return this},this.scrollIntoView=function(a){var b=$(a).height();return a.scrollTop+b<this.sc.offsetTop&&(a.scrollTop+=Math.abs(a.scrollTop+b-this.sc.offsetTop)),this},this.normalize=function(){var a=function(a,b){if(dom.isVisiblePoint(a)&&!dom.isEdgePoint(a)||dom.isVisiblePoint(a)&&dom.isRightEdgePoint(a)&&!b||dom.isVisiblePoint(a)&&dom.isLeftEdgePoint(a)&&b||dom.isVisiblePoint(a)&&dom.isBlock(a.node)&&dom.isEmpty(a.node))return a;var c=dom.ancestor(a.node,dom.isBlock);if((dom.isLeftEdgePointOf(a,c)||dom.isVoid(dom.prevPoint(a).node))&&!b||(dom.isRightEdgePointOf(a,c)||dom.isVoid(dom.nextPoint(a).node))&&b){if(dom.isVisiblePoint(a))return a;b=!b}return(b?dom.nextPointUntil(dom.nextPoint(a),dom.isVisiblePoint):dom.prevPointUntil(dom.prevPoint(a),dom.isVisiblePoint))||a},b=a(this.getEndPoint(),!1),d=this.isCollapsed()?b:a(this.getStartPoint(),!0);return new c(d.node,d.offset,b.node,b.offset)},this.nodes=function(a,b){a=a||func.ok;var c=b&&b.includeAncestor,d=b&&b.fullyContains,e=this.getStartPoint(),f=this.getEndPoint(),g=[],h=[];return dom.walkPoint(e,f,function(b){if(!dom.isEditable(b.node)){var e;d?(dom.isLeftEdgePoint(b)&&h.push(b.node),dom.isRightEdgePoint(b)&&list.contains(h,b.node)&&(e=b.node)):e=c?dom.ancestor(b.node,a):b.node,e&&a(e)&&g.push(e)}},!0),list.unique(g)},this.commonAncestor=function(){return dom.commonAncestor(a,e)},this.expand=function(b){var g=dom.ancestor(a,b),h=dom.ancestor(e,b);if(!g&&!h)return new c(a,d,e,f);var i=this.getPoints();return g&&(i.sc=g,i.so=0),h&&(i.ec=h,i.eo=dom.nodeLength(h)),new c(i.sc,i.so,i.ec,i.eo)},this.collapse=function(b){return b?new c(a,d,a,d):new c(e,f,e,f)},this.splitText=function(){var b=a===e,g=this.getPoints();return dom.isText(e)&&!dom.isEdgePoint(this.getEndPoint())&&e.splitText(f),dom.isText(a)&&!dom.isEdgePoint(this.getStartPoint())&&(g.sc=a.splitText(d),g.so=0,b&&(g.ec=g.sc,g.eo=f-d)),new c(g.sc,g.so,g.ec,g.eo)},this.deleteContents=function(){if(this.isCollapsed())return this;var a=this.splitText(),b=a.nodes(null,{fullyContains:!0}),d=dom.prevPointUntil(a.getStartPoint(),function(a){return!list.contains(b,a.node)}),e=[];return $.each(b,function(a,b){var c=b.parentNode;d.node!==c&&1===dom.nodeLength(c)&&e.push(c),dom.remove(b,!1)}),$.each(e,function(a,b){dom.remove(b,!1)}),new c(d.node,d.offset,d.node,d.offset).normalize()};var h=function(b){return function(){var c=dom.ancestor(a,b);return!!c&&c===dom.ancestor(e,b)}};this.isOnEditable=h(dom.isEditable),this.isOnList=h(dom.isList),this.isOnAnchor=h(dom.isAnchor),this.isOnCell=h(dom.isCell),this.isOnData=h(dom.isData),this.isLeftEdgeOf=function(a){if(!dom.isLeftEdgePoint(this.getStartPoint()))return!1;var b=dom.ancestor(this.sc,a);return b&&dom.isLeftEdgeOf(this.sc,b)},this.isCollapsed=function(){return a===e&&d===f},this.wrapBodyInlineWithPara=function(){if(dom.isBodyContainer(a)&&dom.isEmpty(a))return a.innerHTML=dom.emptyPara,new c(a.firstChild,0,a.firstChild,0);var b=this.normalize();if(dom.isParaInline(a)||dom.isPara(a))return b;var d;if(dom.isInline(b.sc)){var e=dom.listAncestor(b.sc,func.not(dom.isInline));d=list.last(e),dom.isInline(d)||(d=e[e.length-2]||b.sc.childNodes[b.so])}else d=b.sc.childNodes[b.so>0?b.so-1:0];var f=dom.listPrev(d,dom.isParaInline).reverse();if(f=f.concat(dom.listNext(d.nextSibling,dom.isParaInline)),f.length){var g=dom.wrap(list.head(f),"p");dom.appendChildNodes(g,list.tail(f))}return this.normalize()},this.insertNode=function(a){var b=this.wrapBodyInlineWithPara().deleteContents(),c=dom.splitPoint(b.getStartPoint(),dom.isInline(a));return c.rightNode?c.rightNode.parentNode.insertBefore(a,c.rightNode):c.container.appendChild(a),a},this.pasteHTML=function(a){var b=$("<div></div>").html(a)[0],c=list.from(b.childNodes),d=this.wrapBodyInlineWithPara().deleteContents();return c.reverse().map(function(a){return d.insertNode(a)}).reverse()},this.toString=function(){var a=g();return agent.isW3CRangeSupport?a.toString():a.text},this.getWordRange=function(a){var b=this.getEndPoint();if(!dom.isCharPoint(b))return this;var d=dom.prevPointUntil(b,function(a){return!dom.isCharPoint(a)});return a&&(b=dom.nextPointUntil(b,function(a){return!dom.isCharPoint(a)})),new c(d.node,d.offset,b.node,b.offset)},this.bookmark=function(b){return{s:{path:dom.makeOffsetPath(b,a),offset:d},e:{path:dom.makeOffsetPath(b,e),offset:f}}},this.paraBookmark=function(b){return{s:{path:list.tail(dom.makeOffsetPath(list.head(b),a)),offset:d},e:{path:list.tail(dom.makeOffsetPath(list.last(b),e)),offset:f}}},this.getClientRects=function(){return g().getClientRects()}};return{create:function(a,b,d,e){if(4===arguments.length)return new c(a,b,d,e);if(2===arguments.length)return d=a,e=b,new c(a,b,d,e);var f=this.createFromSelection();return f||1!==arguments.length?f:(f=this.createFromNode(arguments[0]),f.collapse(dom.emptyPara===arguments[0].innerHTML))},createFromSelection:function(){var b,d,e,f;if(agent.isW3CRangeSupport){var g=document.getSelection();if(!g||0===g.rangeCount)return null;if(dom.isBody(g.anchorNode))return null;var h=g.getRangeAt(0);b=h.startContainer,d=h.startOffset,e=h.endContainer,f=h.endOffset}else{var i=document.selection.createRange(),j=i.duplicate();j.collapse(!1);var k=i;k.collapse(!0);var l=a(k,!0),m=a(j,!1);dom.isText(l.node)&&dom.isLeftEdgePoint(l)&&dom.isTextNode(m.node)&&dom.isRightEdgePoint(m)&&m.node.nextSibling===l.node&&(l=m),b=l.cont,d=l.offset,e=m.cont,f=m.offset}return new c(b,d,e,f)},createFromNode:function(a){var b=a,c=0,d=a,e=dom.nodeLength(d);return dom.isVoid(b)&&(c=dom.listPrev(b).length-1,b=b.parentNode),dom.isBR(d)?(e=dom.listPrev(d).length-1,d=d.parentNode):dom.isVoid(d)&&(e=dom.listPrev(d).length,d=d.parentNode),this.create(b,c,d,e)},createFromNodeBefore:function(a){return this.createFromNode(a).collapse(!0)},createFromNodeAfter:function(a){return this.createFromNode(a).collapse()},createFromBookmark:function(a,b){return new c(dom.fromOffsetPath(a,b.s.path),b.s.offset,dom.fromOffsetPath(a,b.e.path),b.e.offset)},createFromParaBookmark:function(a,b){var d=a.s.offset,e=a.e.offset;return new c(dom.fromOffsetPath(list.head(b),a.s.path),d,dom.fromOffsetPath(list.last(b),a.e.path),e)}}}(),async=function(){return{readFileAsDataURL:function(a){return $.Deferred(function(b){$.extend(new FileReader,{onload:function(a){var c=a.target.result;b.resolve(c)},onerror:function(){b.reject(this)}}).readAsDataURL(a)}).promise()},createImage:function(a){return $.Deferred(function(b){var c=$("<img>");c.one("load",function(){c.off("error abort"),b.resolve(c)}).one("error abort",function(){c.off("load").detach(),b.reject(c)}).css({display:"none"}).appendTo(document.body).attr("src",a)}).promise()}}}(),History=function(a){var b=[],c=-1,d=a[0],e=function(){var b=range.create(d),c={s:{path:[],offset:0},e:{path:[],offset:0}};return{contents:a.html(),
-bookmark:b?b.bookmark(d):c}},f=function(b){null!==b.contents&&a.html(b.contents),null!==b.bookmark&&range.createFromBookmark(d,b.bookmark).select()};this.rewind=function(){a.html()!==b[c].contents&&this.recordUndo(),c=0,f(b[c])},this.reset=function(){b=[],c=-1,a.html(""),this.recordUndo()},this.undo=function(){a.html()!==b[c].contents&&this.recordUndo(),0<c&&(c--,f(b[c]))},this.redo=function(){b.length-1>c&&(c++,f(b[c]))},this.recordUndo=function(){c++,b.length>c&&(b=b.slice(0,c)),b.push(e())}},Style=function(){var a=function(a,b){if(agent.jqueryVersion<1.9){var c={};return $.each(b,function(b,d){c[d]=a.css(d)}),c}return a.css.call(a,b)};this.fromNode=function(b){var c=["font-family","font-size","text-align","list-style-type","line-height"],d=a(b,c)||{};return d["font-size"]=parseInt(d["font-size"],10),d},this.stylePara=function(a,b){$.each(a.nodes(dom.isPara,{includeAncestor:!0}),function(a,c){$(c).css(b)})},this.styleNodes=function(a,b){a=a.splitText();var c=b&&b.nodeName||"SPAN",d=!(!b||!b.expandClosestSibling),e=!(!b||!b.onlyPartialContains);if(a.isCollapsed())return[a.insertNode(dom.create(c))];var f=dom.makePredByNodeName(c),g=a.nodes(dom.isText,{fullyContains:!0}).map(function(a){return dom.singleChildAncestor(a,f)||dom.wrap(a,c)});if(d){if(e){var h=a.nodes();f=func.and(f,function(a){return list.contains(h,a)})}return g.map(function(a){var b=dom.withClosestSiblings(a,f),c=list.head(b),d=list.tail(b);return $.each(d,function(a,b){dom.appendChildNodes(c,b.childNodes),dom.remove(b)}),list.head(b)})}return g},this.current=function(a){var b=$(dom.isElement(a.sc)?a.sc:a.sc.parentNode),c=this.fromNode(b);try{c=$.extend(c,{"font-bold":document.queryCommandState("bold")?"bold":"normal","font-italic":document.queryCommandState("italic")?"italic":"normal","font-underline":document.queryCommandState("underline")?"underline":"normal","font-subscript":document.queryCommandState("subscript")?"subscript":"normal","font-superscript":document.queryCommandState("superscript")?"superscript":"normal","font-strikethrough":document.queryCommandState("strikethrough")?"strikethrough":"normal"})}catch(a){}if(a.isOnList()){var d=["circle","disc","disc-leading-zero","square"],e=$.inArray(c["list-style-type"],d)>-1;c["list-style"]=e?"unordered":"ordered"}else c["list-style"]="none";var f=dom.ancestor(a.sc,dom.isPara);if(f&&f.style["line-height"])c["line-height"]=f.style.lineHeight;else{var g=parseInt(c["line-height"],10)/parseInt(c["font-size"],10);c["line-height"]=g.toFixed(1)}return c.anchor=a.isOnAnchor()&&dom.ancestor(a.sc,dom.isAnchor),c.ancestors=dom.listAncestor(a.sc,dom.isEditable),c.range=a,c}},Bullet=function(){var a=this;this.insertOrderedList=function(a){this.toggleList("OL",a)},this.insertUnorderedList=function(a){this.toggleList("UL",a)},this.indent=function(a){var b=this,c=range.create(a).wrapBodyInlineWithPara(),d=c.nodes(dom.isPara,{includeAncestor:!0}),e=list.clusterBy(d,func.peq2("parentNode"));$.each(e,function(a,c){var d=list.head(c);dom.isLi(d)?b.wrapList(c,d.parentNode.nodeName):$.each(c,function(a,b){$(b).css("marginLeft",function(a,b){return(parseInt(b,10)||0)+25})})}),c.select()},this.outdent=function(a){var b=this,c=range.create(a).wrapBodyInlineWithPara(),d=c.nodes(dom.isPara,{includeAncestor:!0}),e=list.clusterBy(d,func.peq2("parentNode"));$.each(e,function(a,c){var d=list.head(c);dom.isLi(d)?b.releaseList([c]):$.each(c,function(a,b){$(b).css("marginLeft",function(a,b){return b=parseInt(b,10)||0,b>25?b-25:""})})}),c.select()},this.toggleList=function(b,c){var d=range.create(c).wrapBodyInlineWithPara(),e=d.nodes(dom.isPara,{includeAncestor:!0}),f=d.paraBookmark(e),g=list.clusterBy(e,func.peq2("parentNode"));if(list.find(e,dom.isPurePara)){var h=[];$.each(g,function(c,d){h=h.concat(a.wrapList(d,b))}),e=h}else{var i=d.nodes(dom.isList,{includeAncestor:!0}).filter(function(a){return!$.nodeName(a,b)});i.length?$.each(i,function(a,c){dom.replace(c,b)}):e=this.releaseList(g,!0)}range.createFromParaBookmark(f,e).select()},this.wrapList=function(a,b){var c=list.head(a),d=list.last(a),e=dom.isList(c.previousSibling)&&c.previousSibling,f=dom.isList(d.nextSibling)&&d.nextSibling,g=e||dom.insertAfter(dom.create(b||"UL"),d);return a=a.map(function(a){return dom.isPurePara(a)?dom.replace(a,"LI"):a}),dom.appendChildNodes(g,a),f&&(dom.appendChildNodes(g,list.from(f.childNodes)),dom.remove(f)),a},this.releaseList=function(a,b){var c=[];return $.each(a,function(a,d){var e=list.head(d),f=list.last(d),g=b?dom.lastAncestor(e,dom.isList):e.parentNode,h=g.childNodes.length>1?dom.splitTree(g,{node:f.parentNode,offset:dom.position(f)+1},{isSkipPaddingBlankHTML:!0}):null,i=dom.splitTree(g,{node:e.parentNode,offset:dom.position(e)},{isSkipPaddingBlankHTML:!0});d=b?dom.listDescendant(i,dom.isLi):list.from(i.childNodes).filter(dom.isLi),!b&&dom.isList(g.parentNode)||(d=d.map(function(a){return dom.replace(a,"P")})),$.each(list.from(d).reverse(),function(a,b){dom.insertAfter(b,g)});var j=list.compact([g,i,h]);$.each(j,function(a,b){var c=[b].concat(dom.listDescendant(b,dom.isList));$.each(c.reverse(),function(a,b){dom.nodeLength(b)||dom.remove(b,!0)})}),c=c.concat(d)}),c}},Typing=function(){var a=new Bullet;this.insertTab=function(a,b){var c=dom.createText(new Array(b+1).join(dom.NBSP_CHAR));a=a.deleteContents(),a.insertNode(c,!0),a=range.create(c,b),a.select()},this.insertParagraph=function(b){var c=range.create(b);c=c.deleteContents(),c=c.wrapBodyInlineWithPara();var d,e=dom.ancestor(c.sc,dom.isPara);if(e){if(dom.isEmpty(e)&&dom.isLi(e))return void a.toggleList(e.parentNode.nodeName);if(dom.isEmpty(e)&&dom.isPara(e)&&dom.isBlockquote(e.parentNode))dom.insertAfter(e,e.parentNode),d=e;else{d=dom.splitTree(e,c.getStartPoint());var f=dom.listDescendant(e,dom.isEmptyAnchor);f=f.concat(dom.listDescendant(d,dom.isEmptyAnchor)),$.each(f,function(a,b){dom.remove(b)}),(dom.isHeading(d)||dom.isPre(d))&&dom.isEmpty(d)&&(d=dom.replace(d,"p"))}}else{var g=c.sc.childNodes[c.so];d=$(dom.emptyPara)[0],g?c.sc.insertBefore(d,g):c.sc.appendChild(d)}range.create(d,0).normalize().select().scrollIntoView(b)}},Table=function(){this.tab=function(a,b){var c=dom.ancestor(a.commonAncestor(),dom.isCell),d=dom.ancestor(c,dom.isTable),e=dom.listDescendant(d,dom.isCell),f=list[b?"prev":"next"](e,c);f&&range.create(f,0).select()},this.createTable=function(a,b,c){for(var d,e=[],f=0;f<a;f++)e.push("<td>"+dom.blank+"</td>");d=e.join("");for(var g,h=[],i=0;i<b;i++)h.push("<tr>"+d+"</tr>");g=h.join("");var j=$("<table>"+g+"</table>");return c&&c.tableClassName&&j.addClass(c.tableClassName),j[0]}},KEY_BOGUS="bogus",Editor=function(a){var b=this,c=a.layoutInfo.note,d=a.layoutInfo.editor,e=a.layoutInfo.editable,f=a.options,g=f.langInfo,h=e[0],i=null,j=new Style,k=new Table,l=new Typing,m=new Bullet,n=new History(e);this.initialize=function(){e.on("keydown",function(c){c.keyCode===key.code.ENTER&&a.triggerEvent("enter",c),a.triggerEvent("keydown",c),c.isDefaultPrevented()||(f.shortcuts?b.handleKeyMap(c):b.preventDefaultEditableShortCuts(c))}).on("keyup",function(b){a.triggerEvent("keyup",b)}).on("focus",function(b){a.triggerEvent("focus",b)}).on("blur",function(b){a.triggerEvent("blur",b)}).on("mousedown",function(b){a.triggerEvent("mousedown",b)}).on("mouseup",function(b){a.triggerEvent("mouseup",b)}).on("scroll",function(b){a.triggerEvent("scroll",b)}).on("paste",function(b){a.triggerEvent("paste",b)}),e.html(dom.html(c)||dom.emptyPara);var g=agent.isMSIE?"DOMCharacterDataModified DOMSubtreeModified DOMNodeInserted":"input";e.on(g,func.debounce(function(){a.triggerEvent("change",e.html())},250)),d.on("focusin",function(b){a.triggerEvent("focusin",b)}).on("focusout",function(b){a.triggerEvent("focusout",b)}),f.airMode||(f.width&&d.outerWidth(f.width),f.height&&e.outerHeight(f.height),f.maxHeight&&e.css("max-height",f.maxHeight),f.minHeight&&e.css("min-height",f.minHeight)),n.recordUndo()},this.destroy=function(){e.off()},this.handleKeyMap=function(b){var c=f.keyMap[agent.isMac?"mac":"pc"],d=[];b.metaKey&&d.push("CMD"),b.ctrlKey&&!b.altKey&&d.push("CTRL"),b.shiftKey&&d.push("SHIFT");var e=key.nameFromCode[b.keyCode];e&&d.push(e);var g=c[d.join("+")];g?(b.preventDefault(),a.invoke(g)):key.isEdit(b.keyCode)&&this.afterCommand()},this.preventDefaultEditableShortCuts=function(a){(a.ctrlKey||a.metaKey)&&list.contains([66,73,85],a.keyCode)&&a.preventDefault()},this.createRange=function(){return this.focus(),range.create(h)},this.saveRange=function(a){i=this.createRange(),a&&i.collapse().select()},this.restoreRange=function(){i&&(i.select(),this.focus())},this.saveTarget=function(a){e.data("target",a)},this.clearTarget=function(){e.removeData("target")},this.restoreTarget=function(){return e.data("target")},this.currentStyle=function(){var a=range.create();return a&&(a=a.normalize()),a?j.current(a):j.fromNode(e)},this.styleFromNode=function(a){return j.fromNode(a)},this.undo=function(){a.triggerEvent("before.command",e.html()),n.undo(),a.triggerEvent("change",e.html())},a.memo("help.undo",g.help.undo),this.redo=function(){a.triggerEvent("before.command",e.html()),n.redo(),a.triggerEvent("change",e.html())},a.memo("help.redo",g.help.redo);for(var o=this.beforeCommand=function(){a.triggerEvent("before.command",e.html()),b.focus()},p=this.afterCommand=function(b){n.recordUndo(),b||a.triggerEvent("change",e.html())},q=["bold","italic","underline","strikethrough","superscript","subscript","justifyLeft","justifyCenter","justifyRight","justifyFull","formatBlock","removeFormat","backColor","foreColor","fontName"],r=0,s=q.length;r<s;r++)this[q[r]]=function(a){return function(b){o(),document.execCommand(a,!1,b),p(!0)}}(q[r]),a.memo("help."+q[r],g.help[q[r]]);this.tab=function(){var a=this.createRange();a.isCollapsed()&&a.isOnCell()?k.tab(a):(o(),l.insertTab(a,f.tabSize),p())},a.memo("help.tab",g.help.tab),this.untab=function(){var a=this.createRange();a.isCollapsed()&&a.isOnCell()&&k.tab(a,!0)},a.memo("help.untab",g.help.untab),this.wrapCommand=function(a){return function(){o(),a.apply(b,arguments),p()}},this.insertParagraph=this.wrapCommand(function(){l.insertParagraph(h)}),a.memo("help.insertParagraph",g.help.insertParagraph),this.insertOrderedList=this.wrapCommand(function(){m.insertOrderedList(h)}),a.memo("help.insertOrderedList",g.help.insertOrderedList),this.insertUnorderedList=this.wrapCommand(function(){m.insertUnorderedList(h)}),a.memo("help.insertUnorderedList",g.help.insertUnorderedList),this.indent=this.wrapCommand(function(){m.indent(h)}),a.memo("help.indent",g.help.indent),this.outdent=this.wrapCommand(function(){m.outdent(h)}),a.memo("help.outdent",g.help.outdent),this.insertImage=function(b,c){return async.createImage(b,c).then(function(a){o(),"function"==typeof c?c(a):("string"==typeof c&&a.attr("data-filename",c),a.css("width",Math.min(e.width(),a.width()))),a.show(),range.create(h).insertNode(a[0]),range.createFromNodeAfter(a[0]).select(),p()}).fail(function(b){a.triggerEvent("image.upload.error",b)})},this.insertImages=function(c){$.each(c,function(c,d){var e=d.name;f.maximumImageFileSize&&f.maximumImageFileSize<d.size?a.triggerEvent("image.upload.error",g.image.maximumFileSizeError):async.readFileAsDataURL(d).then(function(a){return b.insertImage(a,e)}).fail(function(){a.triggerEvent("image.upload.error")})})},this.insertImagesOrCallback=function(b){f.callbacks.onImageUpload?a.triggerEvent("image.upload",b):this.insertImages(b)},this.insertNode=this.wrapCommand(function(a){this.createRange().insertNode(a),range.createFromNodeAfter(a).select()}),this.insertText=this.wrapCommand(function(a){var b=this.createRange(),c=b.insertNode(dom.createText(a));range.create(c,dom.nodeLength(c)).select()}),this.getSelectedText=function(){var a=this.createRange();return a.isOnAnchor()&&(a=range.createFromNode(dom.ancestor(a.sc,dom.isAnchor))),a.toString()},this.pasteHTML=this.wrapCommand(function(a){var b=this.createRange().pasteHTML(a);range.createFromNodeAfter(list.last(b)).select()}),this.formatBlock=this.wrapCommand(function(a){a=agent.isMSIE?"<"+a+">":a,document.execCommand("FormatBlock",!1,a)}),this.formatPara=function(){this.formatBlock("P")},a.memo("help.formatPara",g.help.formatPara);for(var r=1;r<=6;r++)this["formatH"+r]=function(a){return function(){this.formatBlock("H"+a)}}(r),a.memo("help.formatH"+r,g.help["formatH"+r]);this.fontSize=function(a){var b=this.createRange();if(b&&b.isCollapsed()){var c=j.styleNodes(b),d=list.head(c);$(c).css({"font-size":a+"px"}),d&&!dom.nodeLength(d)&&(d.innerHTML=dom.ZERO_WIDTH_NBSP_CHAR,range.createFromNodeAfter(d.firstChild).select(),e.data("bogus",d))}else o(),$(j.styleNodes(b)).css({"font-size":a+"px"}),p()},this.insertHorizontalRule=this.wrapCommand(function(){var a=this.createRange().insertNode(dom.create("HR"));a.nextSibling&&range.create(a.nextSibling,0).normalize().select()}),a.memo("help.insertHorizontalRule",g.help.insertHorizontalRule),this.removeBogus=function(){var a=e.data("bogus");if(a){var b=list.find(list.from(a.childNodes),dom.isText),c=b.nodeValue.indexOf(dom.ZERO_WIDTH_NBSP_CHAR);c!==-1&&b.deleteData(c,1),dom.isEmpty(a)&&dom.remove(a),e.removeData("bogus")}},this.lineHeight=this.wrapCommand(function(a){j.stylePara(this.createRange(),{lineHeight:a})}),this.unlink=function(){var a=this.createRange();if(a.isOnAnchor()){var b=dom.ancestor(a.sc,dom.isAnchor);a=range.createFromNode(b),a.select(),o(),document.execCommand("unlink"),p()}},this.createLink=this.wrapCommand(function(a){var b=a.url,c=a.text,d=a.isNewWindow,e=a.range||this.createRange(),g=e.toString()!==c;"string"==typeof b&&(b=b.trim()),b=f.onCreateLink?f.onCreateLink(b):/^[A-Za-z][A-Za-z0-9+-.]*\:[\/\/]?/.test(b)?b:"http://"+b;var h=[];if(g){e=e.deleteContents();var i=e.insertNode($("<A>"+c+"</A>")[0]);h.push(i)}else h=j.styleNodes(e,{nodeName:"A",expandClosestSibling:!0,onlyPartialContains:!0});$.each(h,function(a,c){$(c).attr("href",b),d?$(c).attr("target","_blank"):$(c).removeAttr("target")});var k=range.createFromNodeBefore(list.head(h)),l=k.getStartPoint(),m=range.createFromNodeAfter(list.last(h)),n=m.getEndPoint();range.create(l.node,l.offset,n.node,n.offset).select()}),this.getLinkInfo=function(){var a=this.createRange().expand(dom.isAnchor),b=$(list.head(a.nodes(dom.isAnchor)));return{range:a,text:a.toString(),isNewWindow:!!b.length&&"_blank"===b.attr("target"),url:b.length?b.attr("href"):""}},this.color=this.wrapCommand(function(a){var b=a.foreColor,c=a.backColor;b&&document.execCommand("foreColor",!1,b),c&&document.execCommand("backColor",!1,c)}),this.insertTable=this.wrapCommand(function(a){var b=a.split("x");this.createRange().deleteContents().insertNode(k.createTable(b[0],b[1],f))}),this.floatMe=this.wrapCommand(function(a){$(this.restoreTarget()).css("float",a)}),this.resize=this.wrapCommand(function(a){$(this.restoreTarget()).css({width:100*a+"%",height:""})}),this.resizeTo=function(a,b,c){var d;if(c){var e=a.y/a.x,f=b.data("ratio");d={width:f>e?a.x:a.y/f,height:f>e?a.x*f:a.y}}else d={width:a.x,height:a.y};b.css(d)},this.removeMedia=this.wrapCommand(function(){var b=$(this.restoreTarget()).detach();a.triggerEvent("media.delete",b,e)}),this.hasFocus=function(){return e.is(":focus")},this.focus=function(){this.hasFocus()||e.focus()},this.isEmpty=function(){return dom.isEmpty(e[0])||dom.emptyPara===e.html()},this.empty=function(){a.invoke("code",dom.emptyPara)}},Clipboard=function(a){var b=this,c=a.layoutInfo.editable;this.events={"summernote.keydown":function(c,d){b.needKeydownHook()&&(d.ctrlKey||d.metaKey)&&d.keyCode===key.code.V&&(a.invoke("editor.saveRange"),b.$paste.focus(),setTimeout(function(){b.pasteByHook()},0))}},this.needKeydownHook=function(){return agent.isMSIE&&agent.browserVersion>10||agent.isFF},this.initialize=function(){this.needKeydownHook()?(this.$paste=$('<div tabindex="-1" />').attr("contenteditable",!0).css({position:"absolute",left:-1e5,opacity:0}),c.before(this.$paste),this.$paste.on("paste",function(b){a.triggerEvent("paste",b)})):c.on("paste",this.pasteByEvent)},this.destroy=function(){this.needKeydownHook()&&(this.$paste.remove(),this.$paste=null)},this.pasteByHook=function(){var b=this.$paste[0].firstChild;if(dom.isImg(b)){for(var c=b.src,d=atob(c.split(",")[1]),e=new Uint8Array(d.length),f=0;f<d.length;f++)e[f]=d.charCodeAt(f);var g=new Blob([e],{type:"image/png"});g.name="clipboard.png",a.invoke("editor.restoreRange"),a.invoke("editor.focus"),a.invoke("editor.insertImagesOrCallback",[g])}else{var h=$("<div />").html(this.$paste.html()).html();a.invoke("editor.restoreRange"),a.invoke("editor.focus"),h&&a.invoke("editor.pasteHTML",h)}this.$paste.empty()},this.pasteByEvent=function(b){var c=b.originalEvent.clipboardData;if(c&&c.items&&c.items.length){var d=list.head(c.items);"file"===d.kind&&d.type.indexOf("image/")!==-1&&a.invoke("editor.insertImagesOrCallback",[d.getAsFile()]),a.invoke("editor.afterCommand")}}},Dropzone=function(a){var b=$(document),c=a.layoutInfo.editor,d=a.layoutInfo.editable,e=a.options,f=e.langInfo,g={},h=$(['<div class="note-dropzone">','  <div class="note-dropzone-message"/>',"</div>"].join("")).prependTo(c),i=function(){Object.keys(g).forEach(function(a){b.off(a.substr(2).toLowerCase(),g[a])}),g={}};this.initialize=function(){e.disableDragAndDrop?(g.onDrop=function(a){a.preventDefault()},b.on("drop",g.onDrop)):this.attachDragAndDropEvent()},this.attachDragAndDropEvent=function(){var e=$(),i=h.find(".note-dropzone-message");g.onDragenter=function(b){var d=a.invoke("codeview.isActivated"),g=c.width()>0&&c.height()>0;d||e.length||!g||(c.addClass("dragover"),h.width(c.width()),h.height(c.height()),i.text(f.image.dragImageHere)),e=e.add(b.target)},g.onDragleave=function(a){e=e.not(a.target),e.length||c.removeClass("dragover")},g.onDrop=function(){e=$(),c.removeClass("dragover")},b.on("dragenter",g.onDragenter).on("dragleave",g.onDragleave).on("drop",g.onDrop),h.on("dragenter",function(){h.addClass("hover"),i.text(f.image.dropImage)}).on("dragleave",function(){h.removeClass("hover"),i.text(f.image.dragImageHere)}),h.on("drop",function(b){var c=b.originalEvent.dataTransfer;c&&c.files&&c.files.length?(b.preventDefault(),d.focus(),a.invoke("editor.insertImagesOrCallback",c.files)):$.each(c.types,function(b,d){var e=c.getData(d);d.toLowerCase().indexOf("text")>-1?a.invoke("editor.pasteHTML",e):$(e).each(function(){a.invoke("editor.insertNode",this)})})}).on("dragover",!1)},this.destroy=function(){i()}},CodeMirror;agent.hasCodeMirror&&(agent.isSupportAmd?require(["codemirror"],function(a){CodeMirror=a}):CodeMirror=window.CodeMirror);var Codeview=function(a){var b=a.layoutInfo.editor,c=a.layoutInfo.editable,d=a.layoutInfo.codable,e=a.options;this.sync=function(){this.isActivated()&&agent.hasCodeMirror&&d.data("cmEditor").save()},this.isActivated=function(){return b.hasClass("codeview")},this.toggle=function(){this.isActivated()?this.deactivate():this.activate(),a.triggerEvent("codeview.toggled")},this.activate=function(){if(d.val(dom.html(c,e.prettifyHtml)),d.height(c.height()),a.invoke("toolbar.updateCodeview",!0),b.addClass("codeview"),d.focus(),agent.hasCodeMirror){var f=CodeMirror.fromTextArea(d[0],e.codemirror);if(e.codemirror.tern){var g=new CodeMirror.TernServer(e.codemirror.tern);f.ternServer=g,f.on("cursorActivity",function(a){g.updateArgHints(a)})}f.setSize(null,c.outerHeight()),d.data("cmEditor",f)}},this.deactivate=function(){if(agent.hasCodeMirror){var f=d.data("cmEditor");d.val(f.getValue()),f.toTextArea()}var g=dom.value(d,e.prettifyHtml)||dom.emptyPara,h=c.html()!==g;c.html(g),c.height(e.height?d.height():"auto"),b.removeClass("codeview"),h&&a.triggerEvent("change",c.html(),c),c.focus(),a.invoke("toolbar.updateCodeview",!1)},this.destroy=function(){this.isActivated()&&this.deactivate()}},EDITABLE_PADDING=24,Statusbar=function(a){var b=$(document),c=a.layoutInfo.statusbar,d=a.layoutInfo.editable,e=a.options;this.initialize=function(){if(e.airMode||e.disableResizeEditor)return void this.destroy();c.on("mousedown",function(a){a.preventDefault(),a.stopPropagation();var c=d.offset().top-b.scrollTop();b.on("mousemove",function(a){var b=a.clientY-(c+24);b=e.minheight>0?Math.max(b,e.minheight):b,b=e.maxHeight>0?Math.min(b,e.maxHeight):b,d.height(b)}).one("mouseup",function(){b.off("mousemove")})})},this.destroy=function(){c.off(),c.remove()}},Fullscreen=function(a){var b=a.layoutInfo.editor,c=a.layoutInfo.toolbar,d=a.layoutInfo.editable,e=a.layoutInfo.codable,f=$(window),g=$("html, body");this.toggle=function(){var h=function(a){d.css("height",a.h),e.css("height",a.h),e.data("cmeditor")&&e.data("cmeditor").setsize(null,a.h)};b.toggleClass("fullscreen"),this.isFullscreen()?(d.data("orgHeight",d.css("height")),f.on("resize",function(){h({h:f.height()-c.outerHeight()})}).trigger("resize"),g.css("overflow","hidden")):(f.off("resize"),h({h:d.data("orgHeight")}),g.css("overflow","visible")),a.invoke("toolbar.updateFullscreen",this.isFullscreen())},this.isFullscreen=function(){return b.hasClass("fullscreen")}},Handle=function(a){var b=this,c=$(document),d=a.layoutInfo.editingArea,e=a.options;this.events={"summernote.mousedown":function(a,c){b.update(c.target)&&c.preventDefault()},"summernote.keyup summernote.scroll summernote.change summernote.dialog.shown":function(){b.update()}},this.initialize=function(){this.$handle=$(['<div class="note-handle">','<div class="note-control-selection">','<div class="note-control-selection-bg"></div>','<div class="note-control-holder note-control-nw"></div>','<div class="note-control-holder note-control-ne"></div>','<div class="note-control-holder note-control-sw"></div>','<div class="',e.disableResizeImage?"note-control-holder":"note-control-sizing",' note-control-se"></div>',e.disableResizeImage?"":'<div class="note-control-selection-info"></div>',"</div>","</div>"].join("")).prependTo(d),this.$handle.on("mousedown",function(d){if(dom.isControlSizing(d.target)){d.preventDefault(),d.stopPropagation();var e=b.$handle.find(".note-control-selection").data("target"),f=e.offset(),g=c.scrollTop();c.on("mousemove",function(c){a.invoke("editor.resizeTo",{x:c.clientX-f.left,y:c.clientY-(f.top-g)},e,!c.shiftKey),b.update(e[0])}).one("mouseup",function(b){b.preventDefault(),c.off("mousemove"),a.invoke("editor.afterCommand")}),e.data("ratio")||e.data("ratio",e.height()/e.width())}})},this.destroy=function(){this.$handle.remove()},this.update=function(b){var c=dom.isImg(b),d=this.$handle.find(".note-control-selection");if(a.invoke("imagePopover.update",b),c){var e=$(b),f=e.position(),g={w:e.outerWidth(!0),h:e.outerHeight(!0)};d.css({display:"block",left:f.left,top:f.top,width:g.w,height:g.h}).data("target",e);var h=g.w+"x"+g.h;d.find(".note-control-selection-info").text(h),a.invoke("editor.saveTarget",b)}else this.hide();return c},this.hide=function(){a.invoke("editor.clearTarget"),this.$handle.children().hide()}},AutoLink=function(a){var b=this;this.events={"summernote.keyup":function(a,c){c.isDefaultPrevented()||b.handleKeyup(c)},"summernote.keydown":function(a,c){b.handleKeydown(c)}},this.initialize=function(){this.lastWordRange=null},this.destroy=function(){this.lastWordRange=null},this.replace=function(){if(this.lastWordRange){var b=this.lastWordRange.toString(),c=b.match(/^([A-Za-z][A-Za-z0-9+-.]*\:[\/\/]?|mailto:[A-Z0-9._%+-]+@)?(www\.)?(.+)$/i);if(c&&(c[1]||c[2])){var d=c[1]?b:"http://"+b,e=$("<a />").html(b).attr("href",d)[0];this.lastWordRange.insertNode(e),this.lastWordRange=null,a.invoke("editor.focus")}}},this.handleKeydown=function(b){if(list.contains([key.code.ENTER,key.code.SPACE],b.keyCode)){var c=a.invoke("editor.createRange").getWordRange();this.lastWordRange=c}},this.handleKeyup=function(a){list.contains([key.code.ENTER,key.code.SPACE],a.keyCode)&&this.replace()}},AutoSync=function(a){var b=a.layoutInfo.note;this.events={"summernote.change":function(){b.val(a.invoke("code"))}},this.shouldInitialize=function(){return dom.isTextarea(b[0])}},Placeholder=function(a){var b=this,c=a.layoutInfo.editingArea,d=a.options;this.events={"summernote.init summernote.change":function(){b.update()},"summernote.codeview.toggled":function(){b.update()}},this.shouldInitialize=function(){return!!d.placeholder},this.initialize=function(){this.$placeholder=$('<div class="note-placeholder">'),this.$placeholder.on("click",function(){a.invoke("focus")}).text(d.placeholder).prependTo(c)},this.destroy=function(){this.$placeholder.remove()},this.update=function(){var b=!a.invoke("codeview.isActivated")&&a.invoke("editor.isEmpty");this.$placeholder.toggle(b)}},Buttons=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.toolbar,e=a.options,f=e.langInfo,g=func.invertObject(e.keyMap[agent.isMac?"mac":"pc"]),h=this.representShortcut=function(a){var b=g[a];return e.shortcuts&&b?(agent.isMac&&(b=b.replace("CMD","⌘").replace("SHIFT","⇧"))," ("+(b=b.replace("BACKSLASH","\\").replace("SLASH","/").replace("LEFTBRACKET","[").replace("RIGHTBRACKET","]"))+")"):""};this.initialize=function(){this.addToolbarButtons(),this.addImagePopoverButtons(),this.addLinkPopoverButtons(),this.fontInstalledMap={}},this.destroy=function(){delete this.fontInstalledMap},this.isFontInstalled=function(a){return b.fontInstalledMap.hasOwnProperty(a)||(b.fontInstalledMap[a]=agent.isFontInstalled(a)||list.contains(e.fontNamesIgnoreCheck,a)),b.fontInstalledMap[a]},this.addToolbarButtons=function(){a.memo("button.style",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:c.icon(e.icons.magic)+" "+c.icon(e.icons.caret,"span"),tooltip:f.style.style,data:{toggle:"dropdown"}}),c.dropdown({className:"dropdown-style",items:a.options.styleTags,template:function(a){"string"==typeof a&&(a={tag:a,title:f.style.hasOwnProperty(a)?f.style[a]:a});var b=a.tag,c=a.title;return"<"+b+(a.style?' style="'+a.style+'" ':"")+(a.className?' class="'+a.className+'"':"")+">"+c+"</"+b+">"},click:a.createInvokeHandler("editor.formatBlock")})]).render()}),a.memo("button.bold",function(){return c.button({className:"note-btn-bold",contents:c.icon(e.icons.bold),tooltip:f.font.bold+h("bold"),click:a.createInvokeHandler("editor.bold")}).render()}),a.memo("button.italic",function(){return c.button({className:"note-btn-italic",contents:c.icon(e.icons.italic),tooltip:f.font.italic+h("italic"),click:a.createInvokeHandler("editor.italic")}).render()}),a.memo("button.underline",function(){return c.button({className:"note-btn-underline",contents:c.icon(e.icons.underline),tooltip:f.font.underline+h("underline"),click:a.createInvokeHandler("editor.underline")}).render()}),a.memo("button.clear",function(){return c.button({contents:c.icon(e.icons.eraser),tooltip:f.font.clear+h("removeFormat"),click:a.createInvokeHandler("editor.removeFormat")}).render()}),a.memo("button.strikethrough",function(){return c.button({className:"note-btn-strikethrough",contents:c.icon(e.icons.strikethrough),tooltip:f.font.strikethrough+h("strikethrough"),click:a.createInvokeHandler("editor.strikethrough")}).render()}),a.memo("button.superscript",function(){return c.button({className:"note-btn-superscript",contents:c.icon(e.icons.superscript),tooltip:f.font.superscript,click:a.createInvokeHandler("editor.superscript")}).render()}),a.memo("button.subscript",function(){return c.button({className:"note-btn-subscript",contents:c.icon(e.icons.subscript),tooltip:f.font.subscript,click:a.createInvokeHandler("editor.subscript")}).render()}),a.memo("button.fontname",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:'<span class="note-current-fontname"/> '+c.icon(e.icons.caret,"span"),tooltip:f.font.name,data:{toggle:"dropdown"}}),c.dropdownCheck({className:"dropdown-fontname",checkClassName:e.icons.menuCheck,items:e.fontNames.filter(b.isFontInstalled),template:function(a){return'<span style="font-family:'+a+'">'+a+"</span>"},click:a.createInvokeHandler("editor.fontName")})]).render()}),a.memo("button.fontsize",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:'<span class="note-current-fontsize"/>'+c.icon(e.icons.caret,"span"),tooltip:f.font.size,data:{toggle:"dropdown"}}),c.dropdownCheck({className:"dropdown-fontsize",checkClassName:e.icons.menuCheck,items:e.fontSizes,click:a.createInvokeHandler("editor.fontSize")})]).render()}),a.memo("button.color",function(){return c.buttonGroup({className:"note-color",children:[c.button({className:"note-current-color-button",contents:c.icon(e.icons.font+" note-recent-color"),tooltip:f.color.recent,click:function(b){var c=$(b.currentTarget);a.invoke("editor.color",{backColor:c.attr("data-backColor"),foreColor:c.attr("data-foreColor")})},callback:function(a){a.find(".note-recent-color").css("background-color","#FFFF00"),a.attr("data-backColor","#FFFF00")}}),c.button({className:"dropdown-toggle",contents:c.icon(e.icons.caret,"span"),tooltip:f.color.more,data:{toggle:"dropdown"}}),c.dropdown({items:["<li>",'<div class="btn-group">','  <div class="note-palette-title">'+f.color.background+"</div>","  <div>",'    <button type="button" class="note-color-reset btn btn-default" data-event="backColor" data-value="inherit">',f.color.transparent,"    </button>","  </div>",'  <div class="note-holder" data-event="backColor"/>',"</div>",'<div class="btn-group">','  <div class="note-palette-title">'+f.color.foreground+"</div>","  <div>",'    <button type="button" class="note-color-reset btn btn-default" data-event="removeFormat" data-value="foreColor">',f.color.resetToDefault,"    </button>","  </div>",'  <div class="note-holder" data-event="foreColor"/>',"</div>","</li>"].join(""),callback:function(a){a.find(".note-holder").each(function(){var a=$(this);a.append(c.palette({colors:e.colors,eventName:a.data("event")}).render())})},click:function(b){var c=$(b.target),d=c.data("event"),e=c.data("value");if(d&&e){var f="backColor"===d?"background-color":"color",g=c.closest(".note-color").find(".note-recent-color"),h=c.closest(".note-color").find(".note-current-color-button");g.css(f,e),h.attr("data-"+d,e),a.invoke("editor."+d,e)}}})]}).render()}),a.memo("button.ul",function(){return c.button({contents:c.icon(e.icons.unorderedlist),tooltip:f.lists.unordered+h("insertUnorderedList"),click:a.createInvokeHandler("editor.insertUnorderedList")}).render()}),a.memo("button.ol",function(){return c.button({contents:c.icon(e.icons.orderedlist),tooltip:f.lists.ordered+h("insertOrderedList"),click:a.createInvokeHandler("editor.insertOrderedList")}).render()});var d=c.button({contents:c.icon(e.icons.alignLeft),tooltip:f.paragraph.left+h("justifyLeft"),click:a.createInvokeHandler("editor.justifyLeft")}),g=c.button({contents:c.icon(e.icons.alignCenter),tooltip:f.paragraph.center+h("justifyCenter"),click:a.createInvokeHandler("editor.justifyCenter")}),i=c.button({contents:c.icon(e.icons.alignRight),tooltip:f.paragraph.right+h("justifyRight"),click:a.createInvokeHandler("editor.justifyRight")}),j=c.button({contents:c.icon(e.icons.alignJustify),tooltip:f.paragraph.justify+h("justifyFull"),click:a.createInvokeHandler("editor.justifyFull")}),k=c.button({contents:c.icon(e.icons.outdent),tooltip:f.paragraph.outdent+h("outdent"),click:a.createInvokeHandler("editor.outdent")}),l=c.button({contents:c.icon(e.icons.indent),tooltip:f.paragraph.indent+h("indent"),click:a.createInvokeHandler("editor.indent")});a.memo("button.justifyLeft",func.invoke(d,"render")),a.memo("button.justifyCenter",func.invoke(g,"render")),a.memo("button.justifyRight",func.invoke(i,"render")),a.memo("button.justifyFull",func.invoke(j,"render")),a.memo("button.outdent",func.invoke(k,"render")),a.memo("button.indent",func.invoke(l,"render")),a.memo("button.paragraph",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:c.icon(e.icons.alignLeft)+" "+c.icon(e.icons.caret,"span"),tooltip:f.paragraph.paragraph,data:{toggle:"dropdown"}}),c.dropdown([c.buttonGroup({className:"note-align",children:[d,g,i,j]}),c.buttonGroup({className:"note-list",children:[k,l]})])]).render()}),a.memo("button.height",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",
-contents:c.icon(e.icons.textHeight)+" "+c.icon(e.icons.caret,"span"),tooltip:f.font.height,data:{toggle:"dropdown"}}),c.dropdownCheck({items:e.lineHeights,checkClassName:e.icons.menuCheck,className:"dropdown-line-height",click:a.createInvokeHandler("editor.lineHeight")})]).render()}),a.memo("button.table",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:c.icon(e.icons.table)+" "+c.icon(e.icons.caret,"span"),tooltip:f.table.table,data:{toggle:"dropdown"}}),c.dropdown({className:"note-table",items:['<div class="note-dimension-picker">','  <div class="note-dimension-picker-mousecatcher" data-event="insertTable" data-value="1x1"/>','  <div class="note-dimension-picker-highlighted"/>','  <div class="note-dimension-picker-unhighlighted"/>',"</div>",'<div class="note-dimension-display">1 x 1</div>'].join("")})],{callback:function(c){c.find(".note-dimension-picker-mousecatcher").css({width:e.insertTableMaxSize.col+"em",height:e.insertTableMaxSize.row+"em"}).mousedown(a.createInvokeHandler("editor.insertTable")).on("mousemove",b.tableMoveHandler)}}).render()}),a.memo("button.link",function(){return c.button({contents:c.icon(e.icons.link),tooltip:f.link.link+h("linkDialog.show"),click:a.createInvokeHandler("linkDialog.show")}).render()}),a.memo("button.picture",function(){return c.button({contents:c.icon(e.icons.picture),tooltip:f.image.image,click:a.createInvokeHandler("imageDialog.show")}).render()}),a.memo("button.video",function(){return c.button({contents:c.icon(e.icons.video),tooltip:f.video.video,click:a.createInvokeHandler("videoDialog.show")}).render()}),a.memo("button.hr",function(){return c.button({contents:c.icon(e.icons.minus),tooltip:f.hr.insert+h("insertHorizontalRule"),click:a.createInvokeHandler("editor.insertHorizontalRule")}).render()}),a.memo("button.fullscreen",function(){return c.button({className:"btn-fullscreen",contents:c.icon(e.icons.arrowsAlt),tooltip:f.options.fullscreen,click:a.createInvokeHandler("fullscreen.toggle")}).render()}),a.memo("button.codeview",function(){return c.button({className:"btn-codeview",contents:c.icon(e.icons.code),tooltip:f.options.codeview,click:a.createInvokeHandler("codeview.toggle")}).render()}),a.memo("button.redo",function(){return c.button({contents:c.icon(e.icons.redo),tooltip:f.history.redo+h("redo"),click:a.createInvokeHandler("editor.redo")}).render()}),a.memo("button.undo",function(){return c.button({contents:c.icon(e.icons.undo),tooltip:f.history.undo+h("undo"),click:a.createInvokeHandler("editor.undo")}).render()}),a.memo("button.help",function(){return c.button({contents:c.icon(e.icons.question),tooltip:f.options.help,click:a.createInvokeHandler("helpDialog.show")}).render()})},this.addImagePopoverButtons=function(){a.memo("button.imageSize100",function(){return c.button({contents:'<span class="note-fontsize-10">100%</span>',tooltip:f.image.resizeFull,click:a.createInvokeHandler("editor.resize","1")}).render()}),a.memo("button.imageSize50",function(){return c.button({contents:'<span class="note-fontsize-10">50%</span>',tooltip:f.image.resizeHalf,click:a.createInvokeHandler("editor.resize","0.5")}).render()}),a.memo("button.imageSize25",function(){return c.button({contents:'<span class="note-fontsize-10">25%</span>',tooltip:f.image.resizeQuarter,click:a.createInvokeHandler("editor.resize","0.25")}).render()}),a.memo("button.floatLeft",function(){return c.button({contents:c.icon(e.icons.alignLeft),tooltip:f.image.floatLeft,click:a.createInvokeHandler("editor.floatMe","left")}).render()}),a.memo("button.floatRight",function(){return c.button({contents:c.icon(e.icons.alignRight),tooltip:f.image.floatRight,click:a.createInvokeHandler("editor.floatMe","right")}).render()}),a.memo("button.floatNone",function(){return c.button({contents:c.icon(e.icons.alignJustify),tooltip:f.image.floatNone,click:a.createInvokeHandler("editor.floatMe","none")}).render()}),a.memo("button.removeMedia",function(){return c.button({contents:c.icon(e.icons.trash),tooltip:f.image.remove,click:a.createInvokeHandler("editor.removeMedia")}).render()})},this.addLinkPopoverButtons=function(){a.memo("button.linkDialogShow",function(){return c.button({contents:c.icon(e.icons.link),tooltip:f.link.edit,click:a.createInvokeHandler("linkDialog.show")}).render()}),a.memo("button.unlink",function(){return c.button({contents:c.icon(e.icons.unlink),tooltip:f.link.unlink,click:a.createInvokeHandler("editor.unlink")}).render()})},this.build=function(b,d){for(var e=0,f=d.length;e<f;e++){for(var g=d[e],h=g[0],i=g[1],j=c.buttonGroup({className:"note-"+h}).render(),k=0,l=i.length;k<l;k++){var m=a.memo("button."+i[k]);m&&j.append("function"==typeof m?m(a):m)}j.appendTo(b)}},this.updateCurrentStyle=function(){var c=a.invoke("editor.currentStyle");if(this.updateBtnStates({".note-btn-bold":function(){return"bold"===c["font-bold"]},".note-btn-italic":function(){return"italic"===c["font-italic"]},".note-btn-underline":function(){return"underline"===c["font-underline"]},".note-btn-subscript":function(){return"subscript"===c["font-subscript"]},".note-btn-superscript":function(){return"superscript"===c["font-superscript"]},".note-btn-strikethrough":function(){return"strikethrough"===c["font-strikethrough"]}}),c["font-family"]){var e=c["font-family"].split(",").map(function(a){return a.replace(/[\'\"]/g,"").replace(/\s+$/,"").replace(/^\s+/,"")}),f=list.find(e,b.isFontInstalled);d.find(".dropdown-fontname li a").each(function(){var a=$(this).data("value")+""==f+"";this.className=a?"checked":""}),d.find(".note-current-fontname").text(f)}if(c["font-size"]){var g=c["font-size"];d.find(".dropdown-fontsize li a").each(function(){var a=$(this).data("value")+""==g+"";this.className=a?"checked":""}),d.find(".note-current-fontsize").text(g)}if(c["line-height"]){var h=c["line-height"];d.find(".dropdown-line-height li a").each(function(){var a=$(this).data("value")+""==h+"";this.className=a?"checked":""})}},this.updateBtnStates=function(a){$.each(a,function(a,b){c.toggleBtnActive(d.find(a),b())})},this.tableMoveHandler=function(a){var b,c=$(a.target.parentNode),d=c.next(),f=c.find(".note-dimension-picker-mousecatcher"),g=c.find(".note-dimension-picker-highlighted"),h=c.find(".note-dimension-picker-unhighlighted");if(void 0===a.offsetX){var i=$(a.target).offset();b={x:a.pageX-i.left,y:a.pageY-i.top}}else b={x:a.offsetX,y:a.offsetY};var j={c:Math.ceil(b.x/18)||1,r:Math.ceil(b.y/18)||1};g.css({width:j.c+"em",height:j.r+"em"}),f.data("value",j.c+"x"+j.r),3<j.c&&j.c<e.insertTableMaxSize.col&&h.css({width:j.c+1+"em"}),3<j.r&&j.r<e.insertTableMaxSize.row&&h.css({height:j.r+1+"em"}),d.html(j.c+" x "+j.r)}},Toolbar=function(a){var b=$.summernote.ui,c=a.layoutInfo.note,d=a.layoutInfo.toolbar,e=a.options;this.shouldInitialize=function(){return!e.airMode},this.initialize=function(){e.toolbar=e.toolbar||[],e.toolbar.length?a.invoke("buttons.build",d,e.toolbar):d.hide(),e.toolbarContainer&&d.appendTo(e.toolbarContainer),c.on("summernote.keyup summernote.mouseup summernote.change",function(){a.invoke("buttons.updateCurrentStyle")}),a.invoke("buttons.updateCurrentStyle")},this.destroy=function(){d.children().remove()},this.updateFullscreen=function(a){b.toggleBtnActive(d.find(".btn-fullscreen"),a)},this.updateCodeview=function(a){b.toggleBtnActive(d.find(".btn-codeview"),a),a?this.deactivate():this.activate()},this.activate=function(a){var c=d.find("button");a||(c=c.not(".btn-codeview")),b.toggleBtn(c,!0)},this.deactivate=function(a){var c=d.find("button");a||(c=c.not(".btn-codeview")),b.toggleBtn(c,!1)}},LinkDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b='<div class="form-group"><label>'+f.link.textToDisplay+'</label><input class="note-link-text form-control" type="text" /></div><div class="form-group"><label>'+f.link.url+'</label><input class="note-link-url form-control" type="text" value="http://" /></div>'+(e.disableLinkTarget?"":'<div class="checkbox"><label><input type="checkbox" checked> '+f.link.openInNewWindow+"</label></div>"),g='<button href="#" class="btn btn-primary note-link-btn disabled" disabled>'+f.link.insert+"</button>";this.$dialog=c.dialog({className:"link-dialog",title:f.link.insert,fade:e.dialogsFade,body:b,footer:g}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.bindEnterKey=function(a,b){a.on("keypress",function(a){a.keyCode===key.code.ENTER&&b.trigger("click")})},this.toggleLinkBtn=function(a,b,d){c.toggleBtn(a,b.val()&&d.val())},this.showLinkDialog=function(d){return $.Deferred(function(e){var f=b.$dialog.find(".note-link-text"),g=b.$dialog.find(".note-link-url"),h=b.$dialog.find(".note-link-btn"),i=b.$dialog.find("input[type=checkbox]");c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),d.url||(d.url=d.text),f.val(d.text);var c=function(){b.toggleLinkBtn(h,f,g),d.text=f.val()};f.on("input",c).on("paste",function(){setTimeout(c,0)});var j=function(){b.toggleLinkBtn(h,f,g),d.text||f.val(g.val())};g.on("input",j).on("paste",function(){setTimeout(j,0)}).val(d.url).trigger("focus"),b.toggleLinkBtn(h,f,g),b.bindEnterKey(g,h),b.bindEnterKey(f,h),i.prop("checked",d.isNewWindow),h.one("click",function(a){a.preventDefault(),e.resolve({range:d.range,url:g.val(),text:f.val(),isNewWindow:i.is(":checked")}),b.$dialog.modal("hide")})}),c.onDialogHidden(b.$dialog,function(){f.off("input paste keypress"),g.off("input paste keypress"),h.off("click"),"pending"===e.state()&&e.reject()}),c.showDialog(b.$dialog)}).promise()},this.show=function(){var b=a.invoke("editor.getLinkInfo");a.invoke("editor.saveRange"),this.showLinkDialog(b).then(function(b){a.invoke("editor.restoreRange"),a.invoke("editor.createLink",b)}).fail(function(){a.invoke("editor.restoreRange")})},a.memo("help.linkDialog.show",e.langInfo.help["linkDialog.show"])},LinkPopover=function(a){var b=this,c=$.summernote.ui,d=a.options;this.events={"summernote.keyup summernote.mouseup summernote.change summernote.scroll":function(){b.update()},"summernote.dialog.shown":function(){b.hide()}},this.shouldInitialize=function(){return!list.isEmpty(d.popover.link)},this.initialize=function(){this.$popover=c.popover({className:"note-link-popover",callback:function(a){a.find(".popover-content").prepend('<span><a target="_blank"></a>&nbsp;</span>')}}).render().appendTo("body");var b=this.$popover.find(".popover-content");a.invoke("buttons.build",b,d.popover.link)},this.destroy=function(){this.$popover.remove()},this.update=function(){if(!a.invoke("editor.hasFocus"))return void this.hide();var b=a.invoke("editor.createRange");if(b.isCollapsed()&&b.isOnAnchor()){var c=dom.ancestor(b.sc,dom.isAnchor),d=$(c).attr("href");this.$popover.find("a").attr("href",d).html(d);var e=dom.posFromPlaceholder(c);this.$popover.css({display:"block",left:e.left,top:e.top})}else this.hide()},this.hide=function(){this.$popover.hide()}},ImageDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b="";if(e.maximumImageFileSize){var g=Math.floor(Math.log(e.maximumImageFileSize)/Math.log(1024)),h=1*(e.maximumImageFileSize/Math.pow(1024,g)).toFixed(2)+" "+" KMGTP"[g]+"B";b="<small>"+f.image.maximumFileSize+" : "+h+"</small>"}var i='<div class="form-group note-group-select-from-files"><label>'+f.image.selectFromFiles+'</label><input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />'+b+'</div><div class="form-group note-group-image-url" style="overflow:auto;"><label>'+f.image.url+'</label><input class="note-image-url form-control col-md-12" type="text" /></div>',j='<button href="#" class="btn btn-primary note-image-btn disabled" disabled>'+f.image.insert+"</button>";this.$dialog=c.dialog({title:f.image.insert,fade:e.dialogsFade,body:i,footer:j}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.bindEnterKey=function(a,b){a.on("keypress",function(a){a.keyCode===key.code.ENTER&&b.trigger("click")})},this.show=function(){a.invoke("editor.saveRange"),this.showImageDialog().then(function(d){c.hideDialog(b.$dialog),a.invoke("editor.restoreRange"),"string"==typeof d?a.invoke("editor.insertImage",d):a.invoke("editor.insertImagesOrCallback",d)}).fail(function(){a.invoke("editor.restoreRange")})},this.showImageDialog=function(){return $.Deferred(function(d){var e=b.$dialog.find(".note-image-input"),f=b.$dialog.find(".note-image-url"),g=b.$dialog.find(".note-image-btn");c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),e.replaceWith(e.clone().on("change",function(){d.resolve(this.files||this.value)}).val("")),g.click(function(a){a.preventDefault(),d.resolve(f.val())}),f.on("keyup paste",function(){var a=f.val();c.toggleBtn(g,a)}).val("").trigger("focus"),b.bindEnterKey(f,g)}),c.onDialogHidden(b.$dialog,function(){e.off("change"),f.off("keyup paste keypress"),g.off("click"),"pending"===d.state()&&d.reject()}),c.showDialog(b.$dialog)})}},ImagePopover=function(a){var b=$.summernote.ui,c=a.options;this.shouldInitialize=function(){return!list.isEmpty(c.popover.image)},this.initialize=function(){this.$popover=b.popover({className:"note-image-popover"}).render().appendTo("body");var d=this.$popover.find(".popover-content");a.invoke("buttons.build",d,c.popover.image)},this.destroy=function(){this.$popover.remove()},this.update=function(a){if(dom.isImg(a)){var b=dom.posFromPlaceholder(a);this.$popover.css({display:"block",left:b.left,top:b.top})}else this.hide()},this.hide=function(){this.$popover.hide()}},VideoDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b='<div class="form-group row-fluid"><label>'+f.video.url+' <small class="text-muted">'+f.video.providers+'</small></label><input class="note-video-url form-control span12" type="text" /></div>',g='<button href="#" class="btn btn-primary note-video-btn disabled" disabled>'+f.video.insert+"</button>";this.$dialog=c.dialog({title:f.video.insert,fade:e.dialogsFade,body:b,footer:g}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.bindEnterKey=function(a,b){a.on("keypress",function(a){a.keyCode===key.code.ENTER&&b.trigger("click")})},this.createVideoNode=function(a){var b,c=a.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/),d=a.match(/(?:www\.|\/\/)instagram\.com\/p\/(.[a-zA-Z0-9_-]*)/),e=a.match(/\/\/vine\.co\/v\/([a-zA-Z0-9]+)/),f=a.match(/\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/),g=a.match(/.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/),h=a.match(/\/\/v\.youku\.com\/v_show\/id_(\w+)=*\.html/),i=a.match(/^.+.(mp4|m4v)$/),j=a.match(/^.+.(ogg|ogv)$/),k=a.match(/^.+.(webm)$/);if(c&&11===c[1].length){var l=c[1];b=$("<iframe>").attr("frameborder",0).attr("src","//www.youtube.com/embed/"+l).attr("width","640").attr("height","360")}else if(d&&d[0].length)b=$("<iframe>").attr("frameborder",0).attr("src","https://instagram.com/p/"+d[1]+"/embed/").attr("width","612").attr("height","710").attr("scrolling","no").attr("allowtransparency","true");else if(e&&e[0].length)b=$("<iframe>").attr("frameborder",0).attr("src",e[0]+"/embed/simple").attr("width","600").attr("height","600").attr("class","vine-embed");else if(f&&f[3].length)b=$("<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>").attr("frameborder",0).attr("src","//player.vimeo.com/video/"+f[3]).attr("width","640").attr("height","360");else if(g&&g[2].length)b=$("<iframe>").attr("frameborder",0).attr("src","//www.dailymotion.com/embed/video/"+g[2]).attr("width","640").attr("height","360");else if(h&&h[1].length)b=$("<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>").attr("frameborder",0).attr("height","498").attr("width","510").attr("src","//player.youku.com/embed/"+h[1]);else{if(!(i||j||k))return!1;b=$("<video controls>").attr("src",a).attr("width","640").attr("height","360")}return b.addClass("note-video-clip"),b[0]},this.show=function(){var d=a.invoke("editor.getSelectedText");a.invoke("editor.saveRange"),this.showVideoDialog(d).then(function(d){c.hideDialog(b.$dialog),a.invoke("editor.restoreRange");var e=b.createVideoNode(d);e&&a.invoke("editor.insertNode",e)}).fail(function(){a.invoke("editor.restoreRange")})},this.showVideoDialog=function(d){return $.Deferred(function(e){var f=b.$dialog.find(".note-video-url"),g=b.$dialog.find(".note-video-btn");c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),f.val(d).on("input",function(){c.toggleBtn(g,f.val())}).trigger("focus"),g.click(function(a){a.preventDefault(),e.resolve(f.val())}),b.bindEnterKey(f,g)}),c.onDialogHidden(b.$dialog,function(){f.off("input"),g.off("click"),"pending"===e.state()&&e.reject()}),c.showDialog(b.$dialog)})}},HelpDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.createShortCutList=function(){var b=e.keyMap[agent.isMac?"mac":"pc"];return Object.keys(b).map(function(c){var d=b[c],e=$('<div><div class="help-list-item"/></div>');return e.append($("<label><kbd>"+c+"</kdb></label>").css({width:180,"margin-right":10})).append($("<span/>").html(a.memo("help."+d)||d)),e.html()}).join("")},this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b=['<p class="text-center">','<a href="http://summernote.org/" target="_blank">Summernote 0.8.3</a> · ','<a href="https://github.com/summernote/summernote" target="_blank">Project</a> · ','<a href="https://github.com/summernote/summernote/issues" target="_blank">Issues</a>',"</p>"].join("");this.$dialog=c.dialog({title:f.options.help,fade:e.dialogsFade,body:this.createShortCutList(),footer:b,callback:function(a){a.find(".modal-body").css({"max-height":300,overflow:"scroll"})}}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.showHelpDialog=function(){return $.Deferred(function(d){c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),d.resolve()}),c.showDialog(b.$dialog)}).promise()},this.show=function(){a.invoke("editor.saveRange"),this.showHelpDialog().then(function(){a.invoke("editor.restoreRange")})}},AirPopover=function(a){var b=this,c=$.summernote.ui,d=a.options;this.events={"summernote.keyup summernote.mouseup summernote.scroll":function(){b.update()},"summernote.change summernote.dialog.shown":function(){b.hide()},"summernote.focusout":function(a,c){agent.isFF||c.relatedTarget&&dom.ancestor(c.relatedTarget,func.eq(b.$popover[0]))||b.hide()}},this.shouldInitialize=function(){return d.airMode&&!list.isEmpty(d.popover.air)},this.initialize=function(){this.$popover=c.popover({className:"note-air-popover"}).render().appendTo("body");var b=this.$popover.find(".popover-content");a.invoke("buttons.build",b,d.popover.air)},this.destroy=function(){this.$popover.remove()},this.update=function(){var b=a.invoke("editor.currentStyle");if(b.range&&!b.range.isCollapsed()){var c=list.last(b.range.getClientRects());if(c){var d=func.rect2bnd(c);this.$popover.css({display:"block",left:Math.max(d.left+d.width/2,0)-20,top:d.top+d.height})}}else this.hide()},this.hide=function(){this.$popover.hide()}},HintPopover=function(a){var b=this,c=$.summernote.ui,d=a.options.hint||[],e=a.options.hintDirection||"bottom",f=$.isArray(d)?d:[d];this.events={"summernote.keyup":function(a,c){c.isDefaultPrevented()||b.handleKeyup(c)},"summernote.keydown":function(a,c){b.handleKeydown(c)},"summernote.dialog.shown":function(){b.hide()}},this.shouldInitialize=function(){return f.length>0},this.initialize=function(){this.lastWordRange=null,this.$popover=c.popover({className:"note-hint-popover",hideArrow:!0,direction:""}).render().appendTo("body"),this.$popover.hide(),this.$content=this.$popover.find(".popover-content"),this.$content.on("click",".note-hint-item",function(){b.$content.find(".active").removeClass("active"),$(this).addClass("active"),b.replace()})},this.destroy=function(){this.$popover.remove()},this.selectItem=function(a){this.$content.find(".active").removeClass("active"),a.addClass("active"),this.$content[0].scrollTop=a[0].offsetTop-this.$content.innerHeight()/2},this.moveDown=function(){var a=this.$content.find(".note-hint-item.active"),b=a.next();if(b.length)this.selectItem(b);else{var c=a.parent().next();c.length||(c=this.$content.find(".note-hint-group").first()),this.selectItem(c.find(".note-hint-item").first())}},this.moveUp=function(){var a=this.$content.find(".note-hint-item.active"),b=a.prev();if(b.length)this.selectItem(b);else{var c=a.parent().prev();c.length||(c=this.$content.find(".note-hint-group").last()),this.selectItem(c.find(".note-hint-item").last())}},this.replace=function(){var b=this.$content.find(".note-hint-item.active");if(b.length){var c=this.nodeFromItem(b);this.lastWordRange.insertNode(c),range.createFromNode(c).collapse().select(),this.lastWordRange=null,this.hide(),a.invoke("editor.focus")}},this.nodeFromItem=function(a){var b=f[a.data("index")],c=a.data("item"),d=b.content?b.content(c):c;return"string"==typeof d&&(d=dom.createText(d)),d},this.createItemTemplates=function(a,b){var c=f[a];return b.map(function(b,d){var e=$('<div class="note-hint-item"/>');return e.append(c.template?c.template(b):b+""),e.data({index:a,item:b}),0===a&&0===d&&e.addClass("active"),e})},this.handleKeydown=function(a){this.$popover.is(":visible")&&(a.keyCode===key.code.ENTER?(a.preventDefault(),this.replace()):a.keyCode===key.code.UP?(a.preventDefault(),this.moveUp()):a.keyCode===key.code.DOWN&&(a.preventDefault(),this.moveDown()))},this.searchKeyword=function(a,b,c){var d=f[a];if(d&&d.match.test(b)&&d.search){var e=d.match.exec(b);d.search(e[1],c)}else c()},this.createGroup=function(a,c){var d=$('<div class="note-hint-group note-hint-group-'+a+'"/>');return this.searchKeyword(a,c,function(c){c=c||[],c.length&&(d.html(b.createItemTemplates(a,c)),b.show())}),d},this.handleKeyup=function(c){if(list.contains([key.code.ENTER,key.code.UP,key.code.DOWN],c.keyCode)){if(c.keyCode===key.code.ENTER&&this.$popover.is(":visible"))return}else{var d=a.invoke("editor.createRange").getWordRange(),g=d.toString();if(f.length&&g){this.$content.empty();var h=func.rect2bnd(list.last(d.getClientRects()));h&&(this.$popover.hide(),this.lastWordRange=d,f.forEach(function(a,c){a.match.test(g)&&b.createGroup(c,g).appendTo(b.$content)}),"top"===e?this.$popover.css({left:h.left,top:h.top-this.$popover.outerHeight()-5}):this.$popover.css({left:h.left,top:h.top+h.height+5}))}else this.hide()}},this.show=function(){this.$popover.show()},this.hide=function(){this.$popover.hide()}};$.summernote=$.extend($.summernote,{version:"0.8.3",ui:ui,dom:dom,plugins:{},options:{modules:{editor:Editor,clipboard:Clipboard,dropzone:Dropzone,codeview:Codeview,statusbar:Statusbar,fullscreen:Fullscreen,handle:Handle,hintPopover:HintPopover,autoLink:AutoLink,autoSync:AutoSync,placeholder:Placeholder,buttons:Buttons,toolbar:Toolbar,linkDialog:LinkDialog,linkPopover:LinkPopover,imageDialog:ImageDialog,imagePopover:ImagePopover,videoDialog:VideoDialog,helpDialog:HelpDialog,airPopover:AirPopover},buttons:{},lang:"en-US",toolbar:[["style",["style"]],["font",["bold","underline","clear"]],["fontname",["fontname"]],["color",["color"]],["para",["ul","ol","paragraph"]],["table",["table"]],["insert",["link","picture","video"]],["view",["fullscreen","codeview","help"]]],popover:{image:[["imagesize",["imageSize100","imageSize50","imageSize25"]],["float",["floatLeft","floatRight","floatNone"]],["remove",["removeMedia"]]],link:[["link",["linkDialogShow","unlink"]]],air:[["color",["color"]],["font",["bold","underline","clear"]],["para",["ul","paragraph"]],["table",["table"]],["insert",["link","picture"]]]},airMode:!1,width:null,height:null,focus:!1,tabSize:4,styleWithSpan:!0,shortcuts:!0,textareaAutoSync:!0,direction:null,styleTags:["p","blockquote","pre","h1","h2","h3","h4","h5","h6"],fontNames:["Arial","Arial Black","Comic Sans MS","Courier New","Helvetica Neue","Helvetica","Impact","Lucida Grande","Tahoma","Times New Roman","Verdana"],fontSizes:["8","9","10","11","12","14","18","24","36"],colors:[["#000000","#424242","#636363","#9C9C94","#CEC6CE","#EFEFEF","#F7F7F7","#FFFFFF"],["#FF0000","#FF9C00","#FFFF00","#00FF00","#00FFFF","#0000FF","#9C00FF","#FF00FF"],["#F7C6CE","#FFE7CE","#FFEFC6","#D6EFD6","#CEDEE7","#CEE7F7","#D6D6E7","#E7D6DE"],["#E79C9C","#FFC69C","#FFE79C","#B5D6A5","#A5C6CE","#9CC6EF","#B5A5D6","#D6A5BD"],["#E76363","#F7AD6B","#FFD663","#94BD7B","#73A5AD","#6BADDE","#8C7BC6","#C67BA5"],["#CE0000","#E79439","#EFC631","#6BA54A","#4A7B8C","#3984C6","#634AA5","#A54A7B"],["#9C0000","#B56308","#BD9400","#397B21","#104A5A","#085294","#311873","#731842"],["#630000","#7B3900","#846300","#295218","#083139","#003163","#21104A","#4A1031"]],lineHeights:["1.0","1.2","1.4","1.5","1.6","1.8","2.0","3.0"],tableClassName:"table table-bordered",insertTableMaxSize:{col:10,row:10},dialogsInBody:!1,dialogsFade:!1,maximumImageFileSize:null,callbacks:{onInit:null,onFocus:null,onBlur:null,onEnter:null,onKeyup:null,onKeydown:null,onImageUpload:null,onImageUploadError:null},codemirror:{mode:"text/html",htmlMode:!0,lineNumbers:!0},keyMap:{pc:{ENTER:"insertParagraph","CTRL+Z":"undo","CTRL+Y":"redo",TAB:"tab","SHIFT+TAB":"untab","CTRL+B":"bold","CTRL+I":"italic","CTRL+U":"underline","CTRL+SHIFT+S":"strikethrough","CTRL+BACKSLASH":"removeFormat","CTRL+SHIFT+L":"justifyLeft","CTRL+SHIFT+E":"justifyCenter","CTRL+SHIFT+R":"justifyRight","CTRL+SHIFT+J":"justifyFull","CTRL+SHIFT+NUM7":"insertUnorderedList","CTRL+SHIFT+NUM8":"insertOrderedList","CTRL+LEFTBRACKET":"outdent","CTRL+RIGHTBRACKET":"indent","CTRL+NUM0":"formatPara","CTRL+NUM1":"formatH1","CTRL+NUM2":"formatH2","CTRL+NUM3":"formatH3","CTRL+NUM4":"formatH4","CTRL+NUM5":"formatH5","CTRL+NUM6":"formatH6","CTRL+ENTER":"insertHorizontalRule","CTRL+K":"linkDialog.show"},mac:{ENTER:"insertParagraph","CMD+Z":"undo","CMD+SHIFT+Z":"redo",TAB:"tab","SHIFT+TAB":"untab","CMD+B":"bold","CMD+I":"italic","CMD+U":"underline","CMD+SHIFT+S":"strikethrough","CMD+BACKSLASH":"removeFormat","CMD+SHIFT+L":"justifyLeft","CMD+SHIFT+E":"justifyCenter","CMD+SHIFT+R":"justifyRight","CMD+SHIFT+J":"justifyFull","CMD+SHIFT+NUM7":"insertUnorderedList","CMD+SHIFT+NUM8":"insertOrderedList","CMD+LEFTBRACKET":"outdent","CMD+RIGHTBRACKET":"indent","CMD+NUM0":"formatPara","CMD+NUM1":"formatH1","CMD+NUM2":"formatH2","CMD+NUM3":"formatH3","CMD+NUM4":"formatH4","CMD+NUM5":"formatH5","CMD+NUM6":"formatH6","CMD+ENTER":"insertHorizontalRule","CMD+K":"linkDialog.show"}},icons:{align:"note-icon-align",alignCenter:"note-icon-align-center",alignJustify:"note-icon-align-justify",alignLeft:"note-icon-align-left",alignRight:"note-icon-align-right",indent:"note-icon-align-indent",outdent:"note-icon-align-outdent",arrowsAlt:"note-icon-arrows-alt",bold:"note-icon-bold",caret:"note-icon-caret",circle:"note-icon-circle",close:"note-icon-close",code:"note-icon-code",eraser:"note-icon-eraser",font:"note-icon-font",frame:"note-icon-frame",italic:"note-icon-italic",link:"note-icon-link",unlink:"note-icon-chain-broken",magic:"note-icon-magic",menuCheck:"note-icon-check",minus:"note-icon-minus",orderedlist:"note-icon-orderedlist",pencil:"note-icon-pencil",picture:"note-icon-picture",question:"note-icon-question",redo:"note-icon-redo",square:"note-icon-square",strikethrough:"note-icon-strikethrough",subscript:"note-icon-subscript",superscript:"note-icon-superscript",table:"note-icon-table",textHeight:"note-icon-text-height",trash:"note-icon-trash",underline:"note-icon-underline",undo:"note-icon-undo",unorderedlist:"note-icon-unorderedlist",video:"note-icon-video"}}})});
+/*! Summernote v0.8.4 | (c) 2013- Alan Hong and other contributors | MIT license */
+
+!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof module&&module.exports?module.exports=a(require("jquery")):a(window.jQuery)}(function($){"use strict";var isSupportAmd="function"==typeof define&&define.amd,isFontInstalled=function(a){var b="Comic Sans MS"===a?"Courier New":"Comic Sans MS",c=$("<div>").css({position:"absolute",left:"-9999px",top:"-9999px",fontSize:"200px"}).text("mmmmmmmmmwwwwwww").appendTo(document.body),d=c.css("fontFamily",b).width(),e=c.css("fontFamily",a+","+b).width();return c.remove(),d!==e},userAgent=navigator.userAgent,isMSIE=/MSIE|Trident/i.test(userAgent),browserVersion;if(isMSIE){var matches=/MSIE (\d+[.]\d+)/.exec(userAgent);matches&&(browserVersion=parseFloat(matches[1])),matches=/Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(userAgent),matches&&(browserVersion=parseFloat(matches[1]))}var isEdge=/Edge\/\d+/.test(userAgent),hasCodeMirror=!!window.CodeMirror;if(!hasCodeMirror&&isSupportAmd&&"undefined"!=typeof require)if(void 0!==require.resolve)try{require.resolve("codemirror"),hasCodeMirror=!0}catch(a){}else void 0!==eval("require").specified&&(hasCodeMirror=eval("require").specified("codemirror"));var isSupportTouch="ontouchstart"in window||navigator.MaxTouchPoints>0||navigator.msMaxTouchPoints>0,agent={isMac:navigator.appVersion.indexOf("Mac")>-1,isMSIE:isMSIE,isEdge:isEdge,isFF:!isEdge&&/firefox/i.test(userAgent),isPhantom:/PhantomJS/i.test(userAgent),isWebkit:!isEdge&&/webkit/i.test(userAgent),isChrome:!isEdge&&/chrome/i.test(userAgent),isSafari:!isEdge&&/safari/i.test(userAgent),browserVersion:browserVersion,jqueryVersion:parseFloat($.fn.jquery),isSupportAmd:isSupportAmd,isSupportTouch:isSupportTouch,hasCodeMirror:hasCodeMirror,isFontInstalled:isFontInstalled,isW3CRangeSupport:!!document.createRange},func=function(){var a=function(a){return function(b){return a===b}},b=function(a,b){return a===b},c=function(a){return function(b,c){return b[a]===c[a]}},d=function(){return!0},e=function(){return!1},f=function(a){return function(){return!a.apply(a,arguments)}},g=function(a,b){return function(c){return a(c)&&b(c)}},h=0;return{eq:a,eq2:b,peq2:c,ok:d,fail:e,self:function(a){return a},not:f,and:g,invoke:function(a,b){return function(){return a[b].apply(a,arguments)}},uniqueId:function(a){var b=++h+"";return a?a+b:b},rect2bnd:function(a){var b=$(document);return{top:a.top+b.scrollTop(),left:a.left+b.scrollLeft(),width:a.right-a.left,height:a.bottom-a.top}},invertObject:function(a){var b={};for(var c in a)a.hasOwnProperty(c)&&(b[a[c]]=c);return b},namespaceToCamel:function(a,b){return(b=b||"")+a.split(".").map(function(a){return a.substring(0,1).toUpperCase()+a.substring(1)}).join("")},debounce:function(a,b,c){var d;return function(){var e=this,f=arguments,g=function(){d=null,c||a.apply(e,f)},h=c&&!d;clearTimeout(d),d=setTimeout(g,b),h&&a.apply(e,f)}}}}(),list=function(){var a=function(a){return a[0]},b=function(a){return a[a.length-1]},c=function(a){return a.slice(0,a.length-1)},d=function(a){return a.slice(1)},e=function(a,b){for(var c=0,d=a.length;c<d;c++){var e=a[c];if(b(e))return e}},f=function(a,b){for(var c=0,d=a.length;c<d;c++)if(!b(a[c]))return!1;return!0},g=function(a,b){return $.inArray(b,a)},h=function(a,b){return-1!==g(a,b)},i=function(a,b){return b=b||func.self,a.reduce(function(a,c){return a+b(c)},0)},j=function(a){for(var b=[],c=-1,d=a.length;++c<d;)b[c]=a[c];return b},k=function(a){return!a||!a.length},l=function(c,e){return c.length?d(c).reduce(function(a,c){var d=b(a);return e(b(d),c)?d[d.length]=c:a[a.length]=[c],a},[[a(c)]]):[]},m=function(a){for(var b=[],c=0,d=a.length;c<d;c++)a[c]&&b.push(a[c]);return b},n=function(a){for(var b=[],c=0,d=a.length;c<d;c++)h(b,a[c])||b.push(a[c]);return b},o=function(a,b){var c=g(a,b);return-1===c?null:a[c+1]};return{head:a,last:b,initial:c,tail:d,prev:function(a,b){var c=g(a,b);return-1===c?null:a[c-1]},next:o,find:e,contains:h,all:f,sum:i,from:j,isEmpty:k,clusterBy:l,compact:m,unique:n}}(),NBSP_CHAR=String.fromCharCode(160),ZERO_WIDTH_NBSP_CHAR="\ufeff",dom=function(){var a=function(a){return a&&$(a).hasClass("note-editable")},b=function(a){return a&&$(a).hasClass("note-control-sizing")},c=function(a){return a=a.toUpperCase(),function(b){return b&&b.nodeName.toUpperCase()===a}},d=function(a){return a&&3===a.nodeType},e=function(a){return a&&1===a.nodeType},f=function(a){return a&&/^BR|^IMG|^HR|^IFRAME|^BUTTON/.test(a.nodeName.toUpperCase())},g=function(b){return!a(b)&&(b&&/^DIV|^P|^LI|^H[1-7]/.test(b.nodeName.toUpperCase()))},h=function(a){return a&&/^H[1-7]/.test(a.nodeName.toUpperCase())},i=c("PRE"),j=c("LI"),k=function(a){return g(a)&&!j(a)},l=c("TABLE"),m=c("DATA"),n=function(a){return!(s(a)||o(a)||p(a)||g(a)||l(a)||r(a)||m(a))},o=function(a){return a&&/^UL|^OL/.test(a.nodeName.toUpperCase())},p=c("HR"),q=function(a){return a&&/^TD|^TH/.test(a.nodeName.toUpperCase())},r=c("BLOCKQUOTE"),s=function(b){return q(b)||r(b)||a(b)},t=c("A"),u=function(a){return n(a)&&!!D(a,g)},v=function(a){return n(a)&&!D(a,g)},w=c("BODY"),x=function(a,b){return a.nextSibling===b||a.previousSibling===b},y=function(a,b){b=b||func.ok;var c=[];return a.previousSibling&&b(a.previousSibling)&&c.push(a.previousSibling),c.push(a),a.nextSibling&&b(a.nextSibling)&&c.push(a.nextSibling),c},z=agent.isMSIE&&agent.browserVersion<11?"&nbsp;":"<br>",A=function(a){return d(a)?a.nodeValue.length:a?a.childNodes.length:0},B=function(a){var b=A(a);return 0===b||(!d(a)&&1===b&&a.innerHTML===z||!(!list.all(a.childNodes,d)||""!==a.innerHTML))},C=function(a){f(a)||A(a)||(a.innerHTML=z)},D=function(b,c){for(;b;){if(c(b))return b;if(a(b))break;b=b.parentNode}return null},E=function(b,c){for(b=b.parentNode;b&&1===A(b);){if(c(b))return b;if(a(b))break;b=b.parentNode}return null},F=function(b,c){c=c||func.fail;var d=[];return D(b,function(b){return a(b)||d.push(b),c(b)}),d},G=function(a,b){var c=F(a);return list.last(c.filter(b))},H=function(a,b){for(var c=F(a),d=b;d;d=d.parentNode)if($.inArray(d,c)>-1)return d;return null},I=function(a,b){b=b||func.fail;for(var c=[];a&&!b(a);)c.push(a),a=a.previousSibling;return c},J=function(a,b){b=b||func.fail;for(var c=[];a&&!b(a);)c.push(a),a=a.nextSibling;return c},K=function(a,b){var c=[];return b=b||func.ok,function d(e){a!==e&&b(e)&&c.push(e);for(var f=0,g=e.childNodes.length;f<g;f++)d(e.childNodes[f])}(a),c},L=function(a,b){var c=a.parentNode,d=$("<"+b+">")[0];return c.insertBefore(d,a),d.appendChild(a),d},M=function(a,b){var c=b.nextSibling,d=b.parentNode;return c?d.insertBefore(a,c):d.appendChild(a),a},N=function(a,b){return $.each(b,function(b,c){a.appendChild(c)}),a},O=function(a){return 0===a.offset},P=function(a){return a.offset===A(a.node)},Q=function(a){return O(a)||P(a)},R=function(a,b){for(;a&&a!==b;){if(0!==V(a))return!1;a=a.parentNode}return!0},S=function(a,b){if(!b)return!1;for(;a&&a!==b;){if(V(a)!==A(a.parentNode)-1)return!1;a=a.parentNode}return!0},T=function(a,b){return O(a)&&R(a.node,b)},U=function(a,b){return P(a)&&S(a.node,b)},V=function(a){for(var b=0;a=a.previousSibling;)b+=1;return b},W=function(a){return!!(a&&a.childNodes&&a.childNodes.length)},X=function(b,c){var d,e;if(0===b.offset){if(a(b.node))return null;d=b.node.parentNode,e=V(b.node)}else W(b.node)?(d=b.node.childNodes[b.offset-1],e=A(d)):(d=b.node,e=c?0:b.offset-1);return{node:d,offset:e}},Y=function(b,c){var d,e;if(A(b.node)===b.offset){if(a(b.node))return null;d=b.node.parentNode,e=V(b.node)+1}else W(b.node)?(d=b.node.childNodes[b.offset],e=0):(d=b.node,e=c?A(b.node):b.offset+1);return{node:d,offset:e}},Z=function(a,b){return a.node===b.node&&a.offset===b.offset},_=function(a){if(d(a.node)||!W(a.node)||B(a.node))return!0;var b=a.node.childNodes[a.offset-1],c=a.node.childNodes[a.offset];return!(b&&!f(b)||c&&!f(c))},aa=function(a,b){for(;a;){if(b(a))return a;a=X(a)}return null},ba=function(a,b){for(;a;){if(b(a))return a;a=Y(a)}return null},ca=function(a){if(!d(a.node))return!1;var b=a.node.nodeValue.charAt(a.offset-1);return b&&" "!==b&&b!==NBSP_CHAR},da=function(a,b,c,d){for(var e=a;e&&(c(e),!Z(e,b));){var f=d&&a.node!==e.node&&b.node!==e.node;e=Y(e,f)}},ea=function(a,b){return F(b,func.eq(a)).map(V).reverse()},fa=function(a,b){for(var c=a,d=0,e=b.length;d<e;d++)c=c.childNodes.length<=b[d]?c.childNodes[c.childNodes.length-1]:c.childNodes[b[d]];return c},ga=function(a,b){var c=b&&b.isSkipPaddingBlankHTML,e=b&&b.isNotSplitEdgePoint;if(Q(a)&&(d(a.node)||e)){if(O(a))return a.node;if(P(a))return a.node.nextSibling}if(d(a.node))return a.node.splitText(a.offset);var f=a.node.childNodes[a.offset],g=M(a.node.cloneNode(!1),a.node);return N(g,J(f)),c||(C(a.node),C(g)),g},ha=function(a,b,c){var d=F(b.node,func.eq(a));return d.length?1===d.length?ga(b,c):d.reduce(function(a,d){return a===b.node&&(a=ga(b,c)),ga({node:d,offset:a?dom.position(a):A(d)},c)}):null},ia=function(a,b){var c,d,e=b?g:s,f=F(a.node,e),h=list.last(f)||a.node;e(h)?(c=f[f.length-2],d=h):(c=h,d=c.parentNode);var i=c&&ha(c,a,{isSkipPaddingBlankHTML:b,isNotSplitEdgePoint:b});return i||d!==a.node||(i=a.node.childNodes[a.offset]),{rightNode:i,container:d}},ja=function(a){return document.createElement(a)},ka=function(a){return document.createTextNode(a)},la=function(a,b){if(a&&a.parentNode){if(a.removeNode)return a.removeNode(b);var c=a.parentNode;if(!b){var d,e,f=[];for(d=0,e=a.childNodes.length;d<e;d++)f.push(a.childNodes[d]);for(d=0,e=f.length;d<e;d++)c.insertBefore(f[d],a)}c.removeChild(a)}},ma=function(b,c){for(;b&&!a(b)&&c(b);){var d=b.parentNode;la(b),b=d}},na=function(a,b){if(a.nodeName.toUpperCase()===b.toUpperCase())return a;var c=ja(b);return a.style.cssText&&(c.style.cssText=a.style.cssText),N(c,list.from(a.childNodes)),M(c,a),la(a),c},oa=c("TEXTAREA"),pa=function(a,b){var c=oa(a[0])?a.val():a.html();return b?c.replace(/[\n\r]/g,""):c},qa=function(a,b){var c=pa(a);if(b){c=c.replace(/<(\/?)(\b(?!!)[^>\s]*)(.*?)(\s*\/?>)/g,function(a,b,c){c=c.toUpperCase();var d=/^DIV|^TD|^TH|^P|^LI|^H[1-7]/.test(c)&&!!b,e=/^BLOCKQUOTE|^TABLE|^TBODY|^TR|^HR|^UL|^OL/.test(c);return a+(d||e?"\n":"")}),c=$.trim(c)}return c},ra=function(a){var b=$(a),c=b.offset(),d=b.outerHeight(!0);return{left:c.left,top:c.top+d}},sa=function(a,b){Object.keys(b).forEach(function(c){a.on(c,b[c])})},ta=function(a,b){Object.keys(b).forEach(function(c){a.off(c,b[c])})},ua=function(a){return a&&!dom.isText(a)&&list.contains(a.classList,"note-styletag")};return{NBSP_CHAR:NBSP_CHAR,ZERO_WIDTH_NBSP_CHAR:"\ufeff",blank:z,emptyPara:"<p>"+z+"</p>",makePredByNodeName:c,isEditable:a,isControlSizing:b,isText:d,isElement:e,isVoid:f,isPara:g,isPurePara:k,isHeading:h,isInline:n,isBlock:func.not(n),isBodyInline:v,isBody:w,isParaInline:u,isPre:i,isList:o,isTable:l,isData:m,isCell:q,isBlockquote:r,isBodyContainer:s,isAnchor:t,isDiv:c("DIV"),isLi:j,isBR:c("BR"),isSpan:c("SPAN"),isB:c("B"),isU:c("U"),isS:c("S"),isI:c("I"),isImg:c("IMG"),isTextarea:oa,isEmpty:B,isEmptyAnchor:func.and(t,B),isClosestSibling:x,withClosestSiblings:y,nodeLength:A,isLeftEdgePoint:O,isRightEdgePoint:P,isEdgePoint:Q,isLeftEdgeOf:R,isRightEdgeOf:S,isLeftEdgePointOf:T,isRightEdgePointOf:U,prevPoint:X,nextPoint:Y,isSamePoint:Z,isVisiblePoint:_,prevPointUntil:aa,nextPointUntil:ba,isCharPoint:ca,walkPoint:da,ancestor:D,singleChildAncestor:E,listAncestor:F,lastAncestor:G,listNext:J,listPrev:I,listDescendant:K,commonAncestor:H,wrap:L,insertAfter:M,appendChildNodes:N,position:V,hasChildren:W,makeOffsetPath:ea,fromOffsetPath:fa,splitTree:ha,splitPoint:ia,create:ja,createText:ka,remove:la,removeWhile:ma,replace:na,html:qa,value:pa,posFromPlaceholder:ra,attachEvents:sa,detachEvents:ta,isCustomStyleTag:ua}}(),Context=function(a,b){var c=this,d=$.summernote.ui;return this.memos={},this.modules={},this.layoutInfo={},this.options=b,this.initialize=function(){return this.layoutInfo=d.createLayout(a,b),this._initialize(),a.hide(),this},this.destroy=function(){this._destroy(),a.removeData("summernote"),d.removeLayout(a,this.layoutInfo)},this.reset=function(){var a=c.isDisabled();this.code(dom.emptyPara),this._destroy(),this._initialize(),a&&c.disable()},this._initialize=function(){var a=$.extend({},this.options.buttons);Object.keys(a).forEach(function(b){c.memo("button."+b,a[b])});var b=$.extend({},this.options.modules,$.summernote.plugins||{});Object.keys(b).forEach(function(a){c.module(a,b[a],!0)}),Object.keys(this.modules).forEach(function(a){c.initializeModule(a)})},this._destroy=function(){Object.keys(this.modules).reverse().forEach(function(a){c.removeModule(a)}),Object.keys(this.memos).forEach(function(a){c.removeMemo(a)}),this.triggerEvent("destroy",this)},this.code=function(b){var c=this.invoke("codeview.isActivated");if(void 0===b)return this.invoke("codeview.sync"),c?this.layoutInfo.codable.val():this.layoutInfo.editable.html();c?this.layoutInfo.codable.val(b):this.layoutInfo.editable.html(b),a.val(b),this.triggerEvent("change",b)},this.isDisabled=function(){return"false"===this.layoutInfo.editable.attr("contenteditable")},this.enable=function(){this.layoutInfo.editable.attr("contenteditable",!0),this.invoke("toolbar.activate",!0)},this.disable=function(){this.invoke("codeview.isActivated")&&this.invoke("codeview.deactivate"),this.layoutInfo.editable.attr("contenteditable",!1),this.invoke("toolbar.deactivate",!0)},this.triggerEvent=function(){var b=list.head(arguments),c=list.tail(list.from(arguments)),d=this.options.callbacks[func.namespaceToCamel(b,"on")];d&&d.apply(a[0],c),a.trigger("summernote."+b,c)},this.initializeModule=function(b){var c=this.modules[b];c.shouldInitialize=c.shouldInitialize||func.ok,c.shouldInitialize()&&(c.initialize&&c.initialize(),c.events&&dom.attachEvents(a,c.events))},this.module=function(a,b,c){if(1===arguments.length)return this.modules[a];this.modules[a]=new b(this),c||this.initializeModule(a)},this.removeModule=function(b){var c=this.modules[b];c.shouldInitialize()&&(c.events&&dom.detachEvents(a,c.events),c.destroy&&c.destroy()),delete this.modules[b]},this.memo=function(a,b){if(1===arguments.length)return this.memos[a];this.memos[a]=b},this.removeMemo=function(a){this.memos[a]&&this.memos[a].destroy&&this.memos[a].destroy(),delete this.memos[a]},this.createInvokeHandlerAndUpdateState=function(a,b){return function(d){c.createInvokeHandler(a,b)(d),c.invoke("buttons.updateCurrentStyle")}},this.createInvokeHandler=function(a,b){return function(d){d.preventDefault();var e=$(d.target);c.invoke(a,b||e.closest("[data-value]").data("value"),e)}},this.invoke=function(){var a=list.head(arguments),b=list.tail(list.from(arguments)),c=a.split("."),d=c.length>1,e=d&&list.head(c),f=d?list.last(c):list.head(c),g=this.modules[e||"editor"];return!e&&this[f]?this[f].apply(this,b):g&&g[f]&&g.shouldInitialize()?g[f].apply(g,b):void 0},this.initialize()};$.fn.extend({summernote:function(){var a=$.type(list.head(arguments)),b="string"===a,c="object"===a,d=c?list.head(arguments):{};d=$.extend({},$.summernote.options,d),d.langInfo=$.extend(!0,{},$.summernote.lang["en-US"],$.summernote.lang[d.lang]),d.icons=$.extend(!0,{},$.summernote.options.icons,d.icons),d.tooltip="auto"===d.tooltip?!agent.isSupportTouch:d.tooltip,this.each(function(a,b){var c=$(b);if(!c.data("summernote")){var e=new Context(c,d);c.data("summernote",e),c.data("summernote").triggerEvent("init",e.layoutInfo)}});var e=this.first();if(e.length){var f=e.data("summernote");if(b)return f.invoke.apply(f,list.from(arguments));d.focus&&f.invoke("editor.focus")}return this}});var Renderer=function(a,b,c,d){this.render=function(e){var f=$(a);if(c&&c.contents&&f.html(c.contents),c&&c.className&&f.addClass(c.className),c&&c.data&&$.each(c.data,function(a,b){f.attr("data-"+a,b)}),c&&c.click&&f.on("click",c.click),b){var g=f.find(".note-children-container");b.forEach(function(a){a.render(g.length?g:f)})}return d&&d(f,c),c&&c.callback&&c.callback(f),e&&e.append(f),f}},renderer={create:function(a,b){return function(){var c=$.isArray(arguments[0])?arguments[0]:[],d="object"==typeof arguments[1]?arguments[1]:arguments[0];return d&&d.children&&(c=d.children),new Renderer(a,c,d,b)}}},editor=renderer.create('<div class="note-editor note-frame panel panel-default"/>'),toolbar=renderer.create('<div class="note-toolbar panel-heading"/>'),editingArea=renderer.create('<div class="note-editing-area"/>'),codable=renderer.create('<textarea class="note-codable"/>'),editable=renderer.create('<div class="note-editable panel-body" contentEditable="true"/>'),statusbar=renderer.create(['<div class="note-statusbar">','  <div class="note-resizebar">','    <div class="note-icon-bar"/>','    <div class="note-icon-bar"/>','    <div class="note-icon-bar"/>',"  </div>","</div>"].join("")),airEditor=renderer.create('<div class="note-editor"/>'),airEditable=renderer.create('<div class="note-editable" contentEditable="true"/>'),buttonGroup=renderer.create('<div class="note-btn-group btn-group">'),dropdown=renderer.create('<div class="dropdown-menu">',function(a,b){var c=$.isArray(b.items)?b.items.map(function(a){var c="string"==typeof a?a:a.value||"",d=b.template?b.template(a):a,e="object"==typeof a?a.option:void 0;return'<li><a href="#" data-value="'+c+'"'+(void 0!==e?' data-option="'+e+'"':"")+">"+d+"</a></li>"}).join(""):b.items;a.html(c)}),dropdownCheck=renderer.create('<div class="dropdown-menu note-check">',function(a,b){var c=$.isArray(b.items)?b.items.map(function(a){var c="string"==typeof a?a:a.value||"",d=b.template?b.template(a):a;return'<li><a href="#" data-value="'+c+'">'+icon(b.checkClassName)+" "+d+"</a></li>"}).join(""):b.items;a.html(c)}),palette=renderer.create('<div class="note-color-palette"/>',function(a,b){for(var c=[],d=0,e=b.colors.length;d<e;d++){for(var f=b.eventName,g=b.colors[d],h=[],i=0,j=g.length;i<j;i++){var k=g[i];h.push(['<button type="button" class="note-color-btn"','style="background-color:',k,'" ','data-event="',f,'" ','data-value="',k,'" ','title="',k,'" ','data-toggle="button" tabindex="-1"></button>'].join(""))}c.push('<div class="note-color-row">'+h.join("")+"</div>")}a.html(c.join("")),a.find(".note-color-btn").tooltip({container:"body",trigger:"hover",placement:"bottom"})}),dialog=renderer.create('<div class="modal" aria-hidden="false" tabindex="-1"/>',function(a,b){b.fade&&a.addClass("fade"),a.html(['<div class="modal-dialog">','  <div class="modal-content">',b.title?'    <div class="modal-header">      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>      <h4 class="modal-title">'+b.title+"</h4>    </div>":"",'    <div class="modal-body">'+b.body+"</div>",b.footer?'    <div class="modal-footer">'+b.footer+"</div>":"","  </div>","</div>"].join(""))}),popover=renderer.create(['<div class="note-popover popover in">','  <div class="arrow"/>','  <div class="popover-content note-children-container"/>',"</div>"].join(""),function(a,b){var c=void 0!==b.direction?b.direction:"bottom";a.addClass(c),b.hideArrow&&a.find(".arrow").hide()}),icon=function(a,b){return"<"+(b=b||"i")+' class="'+a+'"/>'},ui={editor:editor,toolbar:toolbar,editingArea:editingArea,codable:codable,editable:editable,statusbar:statusbar,airEditor:airEditor,airEditable:airEditable,buttonGroup:buttonGroup,dropdown:dropdown,dropdownCheck:dropdownCheck,palette:palette,dialog:dialog,popover:popover,icon:icon,options:{},button:function(a,b){return renderer.create('<button type="button" class="note-btn btn btn-default btn-sm" tabindex="-1">',function(a,b){b&&b.tooltip&&self.options.tooltip&&a.attr({title:b.tooltip}).tooltip({container:"body",trigger:"hover",placement:"bottom"})})(a,b)},toggleBtn:function(a,b){a.toggleClass("disabled",!b),a.attr("disabled",!b)},toggleBtnActive:function(a,b){a.toggleClass("active",b)},onDialogShown:function(a,b){a.one("shown.bs.modal",b)},onDialogHidden:function(a,b){a.one("hidden.bs.modal",b)},showDialog:function(a){a.modal("show")},hideDialog:function(a){a.modal("hide")},createLayout:function(a,b){self.options=b;var c=(b.airMode?ui.airEditor([ui.editingArea([ui.airEditable()])]):ui.editor([ui.toolbar(),ui.editingArea([ui.codable(),ui.editable()]),ui.statusbar()])).render();return c.insertAfter(a),{note:a,editor:c,toolbar:c.find(".note-toolbar"),editingArea:c.find(".note-editing-area"),editable:c.find(".note-editable"),codable:c.find(".note-codable"),statusbar:c.find(".note-statusbar")}},removeLayout:function(a,b){a.html(b.editable.html()),b.editor.remove(),a.show()}};$.summernote=$.summernote||{lang:{}},$.extend($.summernote.lang,{"en-US":{font:{bold:"Bold",italic:"Italic",underline:"Underline",clear:"Remove Font Style",height:"Line Height",name:"Font Family",strikethrough:"Strikethrough",subscript:"Subscript",superscript:"Superscript",size:"Font Size"},image:{image:"Picture",insert:"Insert Image",resizeFull:"Resize Full",resizeHalf:"Resize Half",resizeQuarter:"Resize Quarter",floatLeft:"Float Left",floatRight:"Float Right",floatNone:"Float None",shapeRounded:"Shape: Rounded",shapeCircle:"Shape: Circle",shapeThumbnail:"Shape: Thumbnail",shapeNone:"Shape: None",dragImageHere:"Drag image or text here",dropImage:"Drop image or Text",selectFromFiles:"Select from files",maximumFileSize:"Maximum file size",maximumFileSizeError:"Maximum file size exceeded.",url:"Image URL",remove:"Remove Image"},video:{video:"Video",videoLink:"Video Link",insert:"Insert Video",url:"Video URL?",providers:"(YouTube, Vimeo, Vine, Instagram, DailyMotion or Youku)"},link:{link:"Link",insert:"Insert Link",unlink:"Unlink",edit:"Edit",textToDisplay:"Text to display",url:"To what URL should this link go?",openInNewWindow:"Open in new window"},table:{table:"Table"},hr:{insert:"Insert Horizontal Rule"},style:{style:"Style",p:"Normal",blockquote:"Quote",pre:"Code",h1:"Header 1",h2:"Header 2",h3:"Header 3",h4:"Header 4",h5:"Header 5",h6:"Header 6"},lists:{unordered:"Unordered list",ordered:"Ordered list"},options:{help:"Help",fullscreen:"Full Screen",codeview:"Code View"},paragraph:{paragraph:"Paragraph",outdent:"Outdent",indent:"Indent",left:"Align left",center:"Align center",right:"Align right",justify:"Justify full"},color:{recent:"Recent Color",more:"More Color",background:"Background Color",foreground:"Foreground Color",transparent:"Transparent",setTransparent:"Set transparent",reset:"Reset",resetToDefault:"Reset to default"},shortcut:{shortcuts:"Keyboard shortcuts",close:"Close",textFormatting:"Text formatting",action:"Action",paragraphFormatting:"Paragraph formatting",documentStyle:"Document Style",extraKeys:"Extra keys"},help:{insertParagraph:"Insert Paragraph",undo:"Undoes the last command",redo:"Redoes the last command",tab:"Tab",untab:"Untab",bold:"Set a bold style",italic:"Set a italic style",underline:"Set a underline style",strikethrough:"Set a strikethrough style",removeFormat:"Clean a style",justifyLeft:"Set left align",justifyCenter:"Set center align",justifyRight:"Set right align",justifyFull:"Set full align",insertUnorderedList:"Toggle unordered list",insertOrderedList:"Toggle ordered list",outdent:"Outdent on current paragraph",indent:"Indent on current paragraph",formatPara:"Change current block's format as a paragraph(P tag)",formatH1:"Change current block's format as H1",formatH2:"Change current block's format as H2",formatH3:"Change current block's format as H3",formatH4:"Change current block's format as H4",formatH5:"Change current block's format as H5",formatH6:"Change current block's format as H6",insertHorizontalRule:"Insert horizontal rule","linkDialog.show":"Show Link Dialog"},history:{undo:"Undo",redo:"Redo"},specialChar:{specialChar:"SPECIAL CHARACTERS",select:"Select Special characters"}}});var key=function(){var a={BACKSPACE:8,TAB:9,ENTER:13,SPACE:32,LEFT:37,UP:38,RIGHT:39,DOWN:40,NUM0:48,NUM1:49,NUM2:50,NUM3:51,NUM4:52,NUM5:53,NUM6:54,NUM7:55,NUM8:56,B:66,E:69,I:73,J:74,K:75,L:76,R:82,S:83,U:85,V:86,Y:89,Z:90,SLASH:191,LEFTBRACKET:219,BACKSLASH:220,RIGHTBRACKET:221};return{isEdit:function(b){return list.contains([a.BACKSPACE,a.TAB,a.ENTER,a.SPACE],b)},isMove:function(b){return list.contains([a.LEFT,a.UP,a.RIGHT,a.DOWN],b)},nameFromCode:func.invertObject(a),code:a}}(),range=function(){var a=function(a,b){var c,d,e=a.parentElement(),f=document.body.createTextRange(),g=list.from(e.childNodes);for(c=0;c<g.length;c++)if(!dom.isText(g[c])){if(f.moveToElementText(g[c]),f.compareEndPoints("StartToStart",a)>=0)break;d=g[c]}if(0!==c&&dom.isText(g[c-1])){var h=document.body.createTextRange(),i=null;h.moveToElementText(d||e),h.collapse(!d),i=d?d.nextSibling:e.firstChild;var j=a.duplicate();j.setEndPoint("StartToStart",h);for(var k=j.text.replace(/[\r\n]/g,"").length;k>i.nodeValue.length&&i.nextSibling;)k-=i.nodeValue.length,i=i.nextSibling;i.nodeValue;b&&i.nextSibling&&dom.isText(i.nextSibling)&&k===i.nodeValue.length&&(k-=i.nodeValue.length,i=i.nextSibling),e=i,c=k}return{cont:e,offset:c}},b=function(a){var b=function(a,c){var d,e;if(dom.isText(a)){var f=dom.listPrev(a,func.not(dom.isText)),g=list.last(f).previousSibling;d=g||a.parentNode,c+=list.sum(list.tail(f),dom.nodeLength),e=!g}else{if(d=a.childNodes[c]||a,dom.isText(d))return b(d,0);c=0,e=!1}return{node:d,collapseToStart:e,offset:c}},c=document.body.createTextRange(),d=b(a.node,a.offset);return c.moveToElementText(d.node),c.collapse(d.collapseToStart),c.moveStart("character",d.offset),c},c=function(a,d,e,f){this.sc=a,this.so=d,this.ec=e,this.eo=f;var g=function(){if(agent.isW3CRangeSupport){var c=document.createRange();return c.setStart(a,d),c.setEnd(e,f),c}var g=b({node:a,offset:d});return g.setEndPoint("EndToEnd",b({node:e,offset:f})),g};this.getPoints=function(){return{sc:a,so:d,ec:e,eo:f}},this.getStartPoint=function(){return{node:a,offset:d}},this.getEndPoint=function(){return{node:e,offset:f}},this.select=function(){var a=g();if(agent.isW3CRangeSupport){var b=document.getSelection();b.rangeCount>0&&b.removeAllRanges(),b.addRange(a)}else a.select();return this},this.scrollIntoView=function(a){var b=$(a).height();return a.scrollTop+b<this.sc.offsetTop&&(a.scrollTop+=Math.abs(a.scrollTop+b-this.sc.offsetTop)),this},this.normalize=function(){var a=function(a,b){if(dom.isVisiblePoint(a)&&!dom.isEdgePoint(a)||dom.isVisiblePoint(a)&&dom.isRightEdgePoint(a)&&!b||dom.isVisiblePoint(a)&&dom.isLeftEdgePoint(a)&&b||dom.isVisiblePoint(a)&&dom.isBlock(a.node)&&dom.isEmpty(a.node))return a;var c=dom.ancestor(a.node,dom.isBlock);if((dom.isLeftEdgePointOf(a,c)||dom.isVoid(dom.prevPoint(a).node))&&!b||(dom.isRightEdgePointOf(a,c)||dom.isVoid(dom.nextPoint(a).node))&&b){if(dom.isVisiblePoint(a))return a;b=!b}return(b?dom.nextPointUntil(dom.nextPoint(a),dom.isVisiblePoint):dom.prevPointUntil(dom.prevPoint(a),dom.isVisiblePoint))||a},b=a(this.getEndPoint(),!1),d=this.isCollapsed()?b:a(this.getStartPoint(),!0);return new c(d.node,d.offset,b.node,b.offset)},this.nodes=function(a,b){a=a||func.ok;var c=b&&b.includeAncestor,d=b&&b.fullyContains,e=this.getStartPoint(),f=this.getEndPoint(),g=[],h=[];return dom.walkPoint(e,f,function(b){if(!dom.isEditable(b.node)){var e;d?(dom.isLeftEdgePoint(b)&&h.push(b.node),dom.isRightEdgePoint(b)&&list.contains(h,b.node)&&(e=b.node)):e=c?dom.ancestor(b.node,a):b.node,e&&a(e)&&g.push(e)}},!0),list.unique(g)},this.commonAncestor=function(){return dom.commonAncestor(a,e)},this.expand=function(b){var g=dom.ancestor(a,b),h=dom.ancestor(e,b);if(!g&&!h)return new c(a,d,e,f);var i=this.getPoints();return g&&(i.sc=g,i.so=0),h&&(i.ec=h,i.eo=dom.nodeLength(h)),new c(i.sc,i.so,i.ec,i.eo)},this.collapse=function(b){return b?new c(a,d,a,d):new c(e,f,e,f)},this.splitText=function(){var b=a===e,g=this.getPoints();return dom.isText(e)&&!dom.isEdgePoint(this.getEndPoint())&&e.splitText(f),dom.isText(a)&&!dom.isEdgePoint(this.getStartPoint())&&(g.sc=a.splitText(d),g.so=0,b&&(g.ec=g.sc,g.eo=f-d)),new c(g.sc,g.so,g.ec,g.eo)},this.deleteContents=function(){if(this.isCollapsed())return this;var a=this.splitText(),b=a.nodes(null,{fullyContains:!0}),d=dom.prevPointUntil(a.getStartPoint(),function(a){return!list.contains(b,a.node)}),e=[];return $.each(b,function(a,b){var c=b.parentNode;d.node!==c&&1===dom.nodeLength(c)&&e.push(c),dom.remove(b,!1)}),$.each(e,function(a,b){dom.remove(b,!1)}),new c(d.node,d.offset,d.node,d.offset).normalize()};var h=function(b){return function(){var c=dom.ancestor(a,b);return!!c&&c===dom.ancestor(e,b)}};this.isOnEditable=h(dom.isEditable),this.isOnList=h(dom.isList),this.isOnAnchor=h(dom.isAnchor),this.isOnCell=h(dom.isCell),this.isOnData=h(dom.isData),this.isLeftEdgeOf=function(a){if(!dom.isLeftEdgePoint(this.getStartPoint()))return!1;var b=dom.ancestor(this.sc,a);return b&&dom.isLeftEdgeOf(this.sc,b)},this.isCollapsed=function(){return a===e&&d===f},this.wrapBodyInlineWithPara=function(){if(dom.isBodyContainer(a)&&dom.isEmpty(a))return a.innerHTML=dom.emptyPara,new c(a.firstChild,0,a.firstChild,0);var b=this.normalize();if(dom.isParaInline(a)||dom.isPara(a))return b;var d;if(dom.isInline(b.sc)){var e=dom.listAncestor(b.sc,func.not(dom.isInline));d=list.last(e),dom.isInline(d)||(d=e[e.length-2]||b.sc.childNodes[b.so])}else d=b.sc.childNodes[b.so>0?b.so-1:0];var f=dom.listPrev(d,dom.isParaInline).reverse();if(f=f.concat(dom.listNext(d.nextSibling,dom.isParaInline)),f.length){var g=dom.wrap(list.head(f),"p");dom.appendChildNodes(g,list.tail(f))}return this.normalize()},this.insertNode=function(a){var b=this.wrapBodyInlineWithPara().deleteContents(),c=dom.splitPoint(b.getStartPoint(),dom.isInline(a));return c.rightNode?c.rightNode.parentNode.insertBefore(a,c.rightNode):c.container.appendChild(a),a},this.pasteHTML=function(a){var b=$("<div></div>").html(a)[0],c=list.from(b.childNodes),d=this.wrapBodyInlineWithPara().deleteContents();return c.reverse().map(function(a){return d.insertNode(a)}).reverse()},this.toString=function(){var a=g();return agent.isW3CRangeSupport?a.toString():a.text},this.getWordRange=function(a){var b=this.getEndPoint();if(!dom.isCharPoint(b))return this;var d=dom.prevPointUntil(b,function(a){return!dom.isCharPoint(a)});return a&&(b=dom.nextPointUntil(b,function(a){return!dom.isCharPoint(a)})),new c(d.node,d.offset,b.node,b.offset)},this.bookmark=function(b){return{s:{path:dom.makeOffsetPath(b,a),offset:d},e:{path:dom.makeOffsetPath(b,e),offset:f}}},this.paraBookmark=function(b){return{s:{path:list.tail(dom.makeOffsetPath(list.head(b),a)),offset:d},e:{path:list.tail(dom.makeOffsetPath(list.last(b),e)),offset:f}}},this.getClientRects=function(){return g().getClientRects()}};return{create:function(a,b,d,e){if(4===arguments.length)return new c(a,b,d,e);if(2===arguments.length)return d=a,e=b,new c(a,b,d,e);var f=this.createFromSelection();return f||1!==arguments.length?f:(f=this.createFromNode(arguments[0]),f.collapse(dom.emptyPara===arguments[0].innerHTML))},createFromSelection:function(){var b,d,e,f;if(agent.isW3CRangeSupport){var g=document.getSelection();if(!g||0===g.rangeCount)return null;if(dom.isBody(g.anchorNode))return null;var h=g.getRangeAt(0);b=h.startContainer,d=h.startOffset,e=h.endContainer,f=h.endOffset}else{var i=document.selection.createRange(),j=i.duplicate();j.collapse(!1);var k=i;k.collapse(!0);var l=a(k,!0),m=a(j,!1);dom.isText(l.node)&&dom.isLeftEdgePoint(l)&&dom.isTextNode(m.node)&&dom.isRightEdgePoint(m)&&m.node.nextSibling===l.node&&(l=m),b=l.cont,d=l.offset,e=m.cont,f=m.offset}return new c(b,d,e,f)},createFromNode:function(a){var b=a,c=0,d=a,e=dom.nodeLength(d);return dom.isVoid(b)&&(c=dom.listPrev(b).length-1,b=b.parentNode),dom.isBR(d)?(e=dom.listPrev(d).length-1,d=d.parentNode):dom.isVoid(d)&&(e=dom.listPrev(d).length,d=d.parentNode),this.create(b,c,d,e)},createFromNodeBefore:function(a){return this.createFromNode(a).collapse(!0)},createFromNodeAfter:function(a){return this.createFromNode(a).collapse()},createFromBookmark:function(a,b){var d=dom.fromOffsetPath(a,b.s.path),e=b.s.offset,f=dom.fromOffsetPath(a,b.e.path),g=b.e.offset;return new c(d,e,f,g)},createFromParaBookmark:function(a,b){var d=a.s.offset,e=a.e.offset,f=dom.fromOffsetPath(list.head(b),a.s.path),g=dom.fromOffsetPath(list.last(b),a.e.path);return new c(f,d,g,e)}}}(),async=function(){return{
+readFileAsDataURL:function(a){return $.Deferred(function(b){$.extend(new FileReader,{onload:function(a){var c=a.target.result;b.resolve(c)},onerror:function(){b.reject(this)}}).readAsDataURL(a)}).promise()},createImage:function(a){return $.Deferred(function(b){var c=$("<img>");c.one("load",function(){c.off("error abort"),b.resolve(c)}).one("error abort",function(){c.off("load").detach(),b.reject(c)}).css({display:"none"}).appendTo(document.body).attr("src",a)}).promise()}}}(),History=function(a){var b=[],c=-1,d=a[0],e=function(){var b=range.create(d),c={s:{path:[],offset:0},e:{path:[],offset:0}};return{contents:a.html(),bookmark:b?b.bookmark(d):c}},f=function(b){null!==b.contents&&a.html(b.contents),null!==b.bookmark&&range.createFromBookmark(d,b.bookmark).select()};this.rewind=function(){a.html()!==b[c].contents&&this.recordUndo(),c=0,f(b[c])},this.reset=function(){b=[],c=-1,a.html(""),this.recordUndo()},this.undo=function(){a.html()!==b[c].contents&&this.recordUndo(),0<c&&(c--,f(b[c]))},this.redo=function(){b.length-1>c&&(c++,f(b[c]))},this.recordUndo=function(){c++,b.length>c&&(b=b.slice(0,c)),b.push(e())}},Style=function(){var a=function(a,b){if(agent.jqueryVersion<1.9){var c={};return $.each(b,function(b,d){c[d]=a.css(d)}),c}return a.css.call(a,b)};this.fromNode=function(b){var c=["font-family","font-size","text-align","list-style-type","line-height"],d=a(b,c)||{};return d["font-size"]=parseInt(d["font-size"],10),d},this.stylePara=function(a,b){$.each(a.nodes(dom.isPara,{includeAncestor:!0}),function(a,c){$(c).css(b)})},this.styleNodes=function(a,b){a=a.splitText();var c=b&&b.nodeName||"SPAN",d=!(!b||!b.expandClosestSibling),e=!(!b||!b.onlyPartialContains);if(a.isCollapsed())return[a.insertNode(dom.create(c))];var f=dom.makePredByNodeName(c),g=a.nodes(dom.isText,{fullyContains:!0}).map(function(a){return dom.singleChildAncestor(a,f)||dom.wrap(a,c)});if(d){if(e){var h=a.nodes();f=func.and(f,function(a){return list.contains(h,a)})}return g.map(function(a){var b=dom.withClosestSiblings(a,f),c=list.head(b),d=list.tail(b);return $.each(d,function(a,b){dom.appendChildNodes(c,b.childNodes),dom.remove(b)}),list.head(b)})}return g},this.current=function(a){var b=$(dom.isElement(a.sc)?a.sc:a.sc.parentNode),c=this.fromNode(b);try{c=$.extend(c,{"font-bold":document.queryCommandState("bold")?"bold":"normal","font-italic":document.queryCommandState("italic")?"italic":"normal","font-underline":document.queryCommandState("underline")?"underline":"normal","font-subscript":document.queryCommandState("subscript")?"subscript":"normal","font-superscript":document.queryCommandState("superscript")?"superscript":"normal","font-strikethrough":document.queryCommandState("strikethrough")?"strikethrough":"normal","font-family":document.queryCommandValue("fontname")||c["font-family"]})}catch(a){}if(a.isOnList()){var d=["circle","disc","disc-leading-zero","square"],e=$.inArray(c["list-style-type"],d)>-1;c["list-style"]=e?"unordered":"ordered"}else c["list-style"]="none";var f=dom.ancestor(a.sc,dom.isPara);if(f&&f.style["line-height"])c["line-height"]=f.style.lineHeight;else{var g=parseInt(c["line-height"],10)/parseInt(c["font-size"],10);c["line-height"]=g.toFixed(1)}return c.anchor=a.isOnAnchor()&&dom.ancestor(a.sc,dom.isAnchor),c.ancestors=dom.listAncestor(a.sc,dom.isEditable),c.range=a,c}},Bullet=function(){var a=this;this.insertOrderedList=function(a){this.toggleList("OL",a)},this.insertUnorderedList=function(a){this.toggleList("UL",a)},this.indent=function(a){var b=this,c=range.create(a).wrapBodyInlineWithPara(),d=c.nodes(dom.isPara,{includeAncestor:!0}),e=list.clusterBy(d,func.peq2("parentNode"));$.each(e,function(a,c){var d=list.head(c);dom.isLi(d)?b.wrapList(c,d.parentNode.nodeName):$.each(c,function(a,b){$(b).css("marginLeft",function(a,b){return(parseInt(b,10)||0)+25})})}),c.select()},this.outdent=function(a){var b=this,c=range.create(a).wrapBodyInlineWithPara(),d=c.nodes(dom.isPara,{includeAncestor:!0}),e=list.clusterBy(d,func.peq2("parentNode"));$.each(e,function(a,c){var d=list.head(c);dom.isLi(d)?b.releaseList([c]):$.each(c,function(a,b){$(b).css("marginLeft",function(a,b){return b=parseInt(b,10)||0,b>25?b-25:""})})}),c.select()},this.toggleList=function(b,c){var d=range.create(c).wrapBodyInlineWithPara(),e=d.nodes(dom.isPara,{includeAncestor:!0}),f=d.paraBookmark(e),g=list.clusterBy(e,func.peq2("parentNode"));if(list.find(e,dom.isPurePara)){var h=[];$.each(g,function(c,d){h=h.concat(a.wrapList(d,b))}),e=h}else{var i=d.nodes(dom.isList,{includeAncestor:!0}).filter(function(a){return!$.nodeName(a,b)});i.length?$.each(i,function(a,c){dom.replace(c,b)}):e=this.releaseList(g,!0)}range.createFromParaBookmark(f,e).select()},this.wrapList=function(a,b){var c=list.head(a),d=list.last(a),e=dom.isList(c.previousSibling)&&c.previousSibling,f=dom.isList(d.nextSibling)&&d.nextSibling,g=e||dom.insertAfter(dom.create(b||"UL"),d);return a=a.map(function(a){return dom.isPurePara(a)?dom.replace(a,"LI"):a}),dom.appendChildNodes(g,a),f&&(dom.appendChildNodes(g,list.from(f.childNodes)),dom.remove(f)),a},this.releaseList=function(a,b){var c=[];return $.each(a,function(a,d){var e=list.head(d),f=list.last(d),g=b?dom.lastAncestor(e,dom.isList):e.parentNode,h=g.childNodes.length>1?dom.splitTree(g,{node:f.parentNode,offset:dom.position(f)+1},{isSkipPaddingBlankHTML:!0}):null,i=dom.splitTree(g,{node:e.parentNode,offset:dom.position(e)},{isSkipPaddingBlankHTML:!0});d=b?dom.listDescendant(i,dom.isLi):list.from(i.childNodes).filter(dom.isLi),!b&&dom.isList(g.parentNode)||(d=d.map(function(a){return dom.replace(a,"P")})),$.each(list.from(d).reverse(),function(a,b){dom.insertAfter(b,g)});var j=list.compact([g,i,h]);$.each(j,function(a,b){var c=[b].concat(dom.listDescendant(b,dom.isList));$.each(c.reverse(),function(a,b){dom.nodeLength(b)||dom.remove(b,!0)})}),c=c.concat(d)}),c}},Typing=function(){var a=new Bullet;this.insertTab=function(a,b){var c=dom.createText(new Array(b+1).join(dom.NBSP_CHAR));a=a.deleteContents(),a.insertNode(c,!0),a=range.create(c,b),a.select()},this.insertParagraph=function(b){var c=range.create(b);c=c.deleteContents(),c=c.wrapBodyInlineWithPara();var d,e=dom.ancestor(c.sc,dom.isPara);if(e){if(dom.isEmpty(e)&&dom.isLi(e))return void a.toggleList(e.parentNode.nodeName);if(dom.isEmpty(e)&&dom.isPara(e)&&dom.isBlockquote(e.parentNode))dom.insertAfter(e,e.parentNode),d=e;else{d=dom.splitTree(e,c.getStartPoint());var f=dom.listDescendant(e,dom.isEmptyAnchor);f=f.concat(dom.listDescendant(d,dom.isEmptyAnchor)),$.each(f,function(a,b){dom.remove(b)}),(dom.isHeading(d)||dom.isPre(d)||dom.isCustomStyleTag(d))&&dom.isEmpty(d)&&(d=dom.replace(d,"p"))}}else{var g=c.sc.childNodes[c.so];d=$(dom.emptyPara)[0],g?c.sc.insertBefore(d,g):c.sc.appendChild(d)}range.create(d,0).normalize().select().scrollIntoView(b)}},Table=function(){this.tab=function(a,b){var c=dom.ancestor(a.commonAncestor(),dom.isCell),d=dom.ancestor(c,dom.isTable),e=dom.listDescendant(d,dom.isCell),f=list[b?"prev":"next"](e,c);f&&range.create(f,0).select()},this.createTable=function(a,b,c){for(var d,e=[],f=0;f<a;f++)e.push("<td>"+dom.blank+"</td>");d=e.join("");for(var g,h=[],i=0;i<b;i++)h.push("<tr>"+d+"</tr>");g=h.join("");var j=$("<table>"+g+"</table>");return c&&c.tableClassName&&j.addClass(c.tableClassName),j[0]}},KEY_BOGUS="bogus",Editor=function(a){var b=this,c=a.layoutInfo.note,d=a.layoutInfo.editor,e=a.layoutInfo.editable,f=a.options,g=f.langInfo,h=e[0],i=null,j=new Style,k=new Table,l=new Typing,m=new Bullet,n=new History(e);this.initialize=function(){e.on("keydown",function(c){c.keyCode===key.code.ENTER&&a.triggerEvent("enter",c),a.triggerEvent("keydown",c),c.isDefaultPrevented()||(f.shortcuts?b.handleKeyMap(c):b.preventDefaultEditableShortCuts(c))}).on("keyup",function(b){a.triggerEvent("keyup",b)}).on("focus",function(b){a.triggerEvent("focus",b)}).on("blur",function(b){a.triggerEvent("blur",b)}).on("mousedown",function(b){a.triggerEvent("mousedown",b)}).on("mouseup",function(b){a.triggerEvent("mouseup",b)}).on("scroll",function(b){a.triggerEvent("scroll",b)}).on("paste",function(b){a.triggerEvent("paste",b)}),e.html(dom.html(c)||dom.emptyPara);var g=agent.isMSIE?"DOMCharacterDataModified DOMSubtreeModified DOMNodeInserted":"input";e.on(g,func.debounce(function(){a.triggerEvent("change",e.html())},250)),d.on("focusin",function(b){a.triggerEvent("focusin",b)}).on("focusout",function(b){a.triggerEvent("focusout",b)}),f.airMode||(f.width&&d.outerWidth(f.width),f.height&&e.outerHeight(f.height),f.maxHeight&&e.css("max-height",f.maxHeight),f.minHeight&&e.css("min-height",f.minHeight)),n.recordUndo()},this.destroy=function(){e.off()},this.handleKeyMap=function(b){var c=f.keyMap[agent.isMac?"mac":"pc"],d=[];b.metaKey&&d.push("CMD"),b.ctrlKey&&!b.altKey&&d.push("CTRL"),b.shiftKey&&d.push("SHIFT");var e=key.nameFromCode[b.keyCode];e&&d.push(e);var g=c[d.join("+")];g?(b.preventDefault(),a.invoke(g)):key.isEdit(b.keyCode)&&this.afterCommand()},this.preventDefaultEditableShortCuts=function(a){(a.ctrlKey||a.metaKey)&&list.contains([66,73,85],a.keyCode)&&a.preventDefault()},this.createRange=function(){return this.focus(),range.create(h)},this.saveRange=function(a){i=this.createRange(),a&&i.collapse().select()},this.restoreRange=function(){i&&(i.select(),this.focus())},this.saveTarget=function(a){e.data("target",a)},this.clearTarget=function(){e.removeData("target")},this.restoreTarget=function(){return e.data("target")},this.currentStyle=function(){var a=range.create();return a&&(a=a.normalize()),a?j.current(a):j.fromNode(e)},this.styleFromNode=function(a){return j.fromNode(a)},this.undo=function(){a.triggerEvent("before.command",e.html()),n.undo(),a.triggerEvent("change",e.html())},a.memo("help.undo",g.help.undo),this.redo=function(){a.triggerEvent("before.command",e.html()),n.redo(),a.triggerEvent("change",e.html())},a.memo("help.redo",g.help.redo);for(var o=this.beforeCommand=function(){a.triggerEvent("before.command",e.html()),b.focus()},p=this.afterCommand=function(b){n.recordUndo(),b||a.triggerEvent("change",e.html())},q=["bold","italic","underline","strikethrough","superscript","subscript","justifyLeft","justifyCenter","justifyRight","justifyFull","formatBlock","removeFormat","backColor","foreColor","fontName"],r=0,s=q.length;r<s;r++)this[q[r]]=function(a){return function(b){o(),document.execCommand(a,!1,b),p(!0)}}(q[r]),a.memo("help."+q[r],g.help[q[r]]);this.tab=function(){var a=this.createRange();a.isCollapsed()&&a.isOnCell()?k.tab(a):(o(),l.insertTab(a,f.tabSize),p())},a.memo("help.tab",g.help.tab),this.untab=function(){var a=this.createRange();a.isCollapsed()&&a.isOnCell()&&k.tab(a,!0)},a.memo("help.untab",g.help.untab),this.wrapCommand=function(a){return function(){o(),a.apply(b,arguments),p()}},this.insertParagraph=this.wrapCommand(function(){l.insertParagraph(h)}),a.memo("help.insertParagraph",g.help.insertParagraph),this.insertOrderedList=this.wrapCommand(function(){m.insertOrderedList(h)}),a.memo("help.insertOrderedList",g.help.insertOrderedList),this.insertUnorderedList=this.wrapCommand(function(){m.insertUnorderedList(h)}),a.memo("help.insertUnorderedList",g.help.insertUnorderedList),this.indent=this.wrapCommand(function(){m.indent(h)}),a.memo("help.indent",g.help.indent),this.outdent=this.wrapCommand(function(){m.outdent(h)}),a.memo("help.outdent",g.help.outdent),this.insertImage=function(b,c){return async.createImage(b,c).then(function(a){o(),"function"==typeof c?c(a):("string"==typeof c&&a.attr("data-filename",c),a.css("width",Math.min(e.width(),a.width()))),a.show(),range.create(h).insertNode(a[0]),range.createFromNodeAfter(a[0]).select(),p()}).fail(function(b){a.triggerEvent("image.upload.error",b)})},this.insertImages=function(c){$.each(c,function(c,d){var e=d.name;f.maximumImageFileSize&&f.maximumImageFileSize<d.size?a.triggerEvent("image.upload.error",g.image.maximumFileSizeError):async.readFileAsDataURL(d).then(function(a){return b.insertImage(a,e)}).fail(function(){a.triggerEvent("image.upload.error")})})},this.insertImagesOrCallback=function(b){f.callbacks.onImageUpload?a.triggerEvent("image.upload",b):this.insertImages(b)},this.insertNode=this.wrapCommand(function(a){this.createRange().insertNode(a),range.createFromNodeAfter(a).select()}),this.insertText=this.wrapCommand(function(a){var b=this.createRange(),c=b.insertNode(dom.createText(a));range.create(c,dom.nodeLength(c)).select()}),this.getSelectedText=function(){var a=this.createRange();return a.isOnAnchor()&&(a=range.createFromNode(dom.ancestor(a.sc,dom.isAnchor))),a.toString()},this.pasteHTML=this.wrapCommand(function(a){var b=this.createRange().pasteHTML(a);range.createFromNodeAfter(list.last(b)).select()}),this.formatBlock=this.wrapCommand(function(b,c){var d=a.options.callbacks.onApplyCustomStyle;d?d.call(this,c,a,this.onFormatBlock):this.onFormatBlock(b)}),this.onFormatBlock=function(a){a=agent.isMSIE?"<"+a+">":a,document.execCommand("FormatBlock",!1,a)},this.formatPara=function(){this.formatBlock("P")},a.memo("help.formatPara",g.help.formatPara);for(var r=1;r<=6;r++)this["formatH"+r]=function(a){return function(){this.formatBlock("H"+a)}}(r),a.memo("help.formatH"+r,g.help["formatH"+r]);this.fontSize=function(a){var b=this.createRange();if(b&&b.isCollapsed()){var c=j.styleNodes(b),d=list.head(c);$(c).css({"font-size":a+"px"}),d&&!dom.nodeLength(d)&&(d.innerHTML=dom.ZERO_WIDTH_NBSP_CHAR,range.createFromNodeAfter(d.firstChild).select(),e.data("bogus",d))}else o(),$(j.styleNodes(b)).css({"font-size":a+"px"}),p()},this.insertHorizontalRule=this.wrapCommand(function(){var a=this.createRange().insertNode(dom.create("HR"));a.nextSibling&&range.create(a.nextSibling,0).normalize().select()}),a.memo("help.insertHorizontalRule",g.help.insertHorizontalRule),this.removeBogus=function(){var a=e.data("bogus");if(a){var b=list.find(list.from(a.childNodes),dom.isText),c=b.nodeValue.indexOf(dom.ZERO_WIDTH_NBSP_CHAR);-1!==c&&b.deleteData(c,1),dom.isEmpty(a)&&dom.remove(a),e.removeData("bogus")}},this.lineHeight=this.wrapCommand(function(a){j.stylePara(this.createRange(),{lineHeight:a})}),this.unlink=function(){var a=this.createRange();if(a.isOnAnchor()){var b=dom.ancestor(a.sc,dom.isAnchor);a=range.createFromNode(b),a.select(),o(),document.execCommand("unlink"),p()}},this.createLink=this.wrapCommand(function(a){var b=a.url,c=a.text,d=a.isNewWindow,e=a.range||this.createRange(),g=e.toString()!==c;"string"==typeof b&&(b=b.trim()),b=f.onCreateLink?f.onCreateLink(b):/^[A-Za-z][A-Za-z0-9+-.]*\:[\/\/]?/.test(b)?b:"http://"+b;var h=[];if(g){e=e.deleteContents();var i=e.insertNode($("<A>"+c+"</A>")[0]);h.push(i)}else h=j.styleNodes(e,{nodeName:"A",expandClosestSibling:!0,onlyPartialContains:!0});$.each(h,function(a,c){$(c).attr("href",b),d?$(c).attr("target","_blank"):$(c).removeAttr("target")});var k=range.createFromNodeBefore(list.head(h)),l=k.getStartPoint(),m=range.createFromNodeAfter(list.last(h)),n=m.getEndPoint();range.create(l.node,l.offset,n.node,n.offset).select()}),this.getLinkInfo=function(){var a=this.createRange().expand(dom.isAnchor),b=$(list.head(a.nodes(dom.isAnchor))),c={range:a,text:a.toString(),url:b.length?b.attr("href"):""};return b.length&&(c.isNewWindow="_blank"===b.attr("target")),c},this.color=this.wrapCommand(function(a){var b=a.foreColor,c=a.backColor;b&&document.execCommand("foreColor",!1,b),c&&document.execCommand("backColor",!1,c)}),this.insertTable=this.wrapCommand(function(a){var b=a.split("x");this.createRange().deleteContents().insertNode(k.createTable(b[0],b[1],f))}),this.floatMe=this.wrapCommand(function(a){$(this.restoreTarget()).css("float",a)}),this.resize=this.wrapCommand(function(a){$(this.restoreTarget()).css({width:100*a+"%",height:""})}),this.resizeTo=function(a,b,c){var d;if(c){var e=a.y/a.x,f=b.data("ratio");d={width:f>e?a.x:a.y/f,height:f>e?a.x*f:a.y}}else d={width:a.x,height:a.y};b.css(d)},this.removeMedia=this.wrapCommand(function(){var b=$(this.restoreTarget()).detach();a.triggerEvent("media.delete",b,e)}),this.hasFocus=function(){return e.is(":focus")},this.focus=function(){this.hasFocus()||e.focus()},this.isEmpty=function(){return dom.isEmpty(e[0])||dom.emptyPara===e.html()},this.empty=function(){a.invoke("code",dom.emptyPara)}},Clipboard=function(a){var b=this,c=a.layoutInfo.editable;this.events={"summernote.keydown":function(c,d){b.needKeydownHook()&&(d.ctrlKey||d.metaKey)&&d.keyCode===key.code.V&&(a.invoke("editor.saveRange"),b.$paste.focus(),setTimeout(function(){b.pasteByHook()},0))}},this.needKeydownHook=function(){return agent.isMSIE&&agent.browserVersion>10||agent.isFF},this.initialize=function(){this.needKeydownHook()?(this.$paste=$('<div tabindex="-1" />').attr("contenteditable",!0).css({position:"absolute",left:-1e5,opacity:0}),c.before(this.$paste),this.$paste.on("paste",function(b){a.triggerEvent("paste",b)})):c.on("paste",this.pasteByEvent)},this.destroy=function(){this.needKeydownHook()&&(this.$paste.remove(),this.$paste=null)},this.pasteByHook=function(){var b=this.$paste[0].firstChild,c=b&&b.src;if(dom.isImg(b)&&0===c.indexOf("data:")){for(var d=atob(b.src.split(",")[1]),e=new Uint8Array(d.length),f=0;f<d.length;f++)e[f]=d.charCodeAt(f);var g=new Blob([e],{type:"image/png"});g.name="clipboard.png",a.invoke("editor.restoreRange"),a.invoke("editor.focus"),a.invoke("editor.insertImagesOrCallback",[g])}else{var h=$("<div />").html(this.$paste.html()).html();a.invoke("editor.restoreRange"),a.invoke("editor.focus"),h&&a.invoke("editor.pasteHTML",h)}this.$paste.empty()},this.pasteByEvent=function(b){var c=b.originalEvent.clipboardData;if(c&&c.items&&c.items.length){var d=list.head(c.items);"file"===d.kind&&-1!==d.type.indexOf("image/")&&a.invoke("editor.insertImagesOrCallback",[d.getAsFile()]),a.invoke("editor.afterCommand")}}},Dropzone=function(a){var b=$(document),c=a.layoutInfo.editor,d=a.layoutInfo.editable,e=a.options,f=e.langInfo,g={},h=$(['<div class="note-dropzone">','  <div class="note-dropzone-message"/>',"</div>"].join("")).prependTo(c),i=function(){Object.keys(g).forEach(function(a){b.off(a.substr(2).toLowerCase(),g[a])}),g={}};this.initialize=function(){e.disableDragAndDrop?(g.onDrop=function(a){a.preventDefault()},b.on("drop",g.onDrop)):this.attachDragAndDropEvent()},this.attachDragAndDropEvent=function(){var e=$(),i=h.find(".note-dropzone-message");g.onDragenter=function(b){var d=a.invoke("codeview.isActivated"),g=c.width()>0&&c.height()>0;d||e.length||!g||(c.addClass("dragover"),h.width(c.width()),h.height(c.height()),i.text(f.image.dragImageHere)),e=e.add(b.target)},g.onDragleave=function(a){e=e.not(a.target),e.length||c.removeClass("dragover")},g.onDrop=function(){e=$(),c.removeClass("dragover")},b.on("dragenter",g.onDragenter).on("dragleave",g.onDragleave).on("drop",g.onDrop),h.on("dragenter",function(){h.addClass("hover"),i.text(f.image.dropImage)}).on("dragleave",function(){h.removeClass("hover"),i.text(f.image.dragImageHere)}),h.on("drop",function(b){var c=b.originalEvent.dataTransfer;c&&c.files&&c.files.length?(b.preventDefault(),d.focus(),a.invoke("editor.insertImagesOrCallback",c.files)):$.each(c.types,function(b,d){var e=c.getData(d);d.toLowerCase().indexOf("text")>-1?a.invoke("editor.pasteHTML",e):$(e).each(function(){a.invoke("editor.insertNode",this)})})}).on("dragover",!1)},this.destroy=function(){i()}},CodeMirror;agent.hasCodeMirror&&(agent.isSupportAmd?require(["codemirror"],function(a){CodeMirror=a}):CodeMirror=window.CodeMirror);var Codeview=function(a){var b=a.layoutInfo.editor,c=a.layoutInfo.editable,d=a.layoutInfo.codable,e=a.options;this.sync=function(){this.isActivated()&&agent.hasCodeMirror&&d.data("cmEditor").save()},this.isActivated=function(){return b.hasClass("codeview")},this.toggle=function(){this.isActivated()?this.deactivate():this.activate(),a.triggerEvent("codeview.toggled")},this.activate=function(){if(d.val(dom.html(c,e.prettifyHtml)),d.height(c.height()),a.invoke("toolbar.updateCodeview",!0),b.addClass("codeview"),d.focus(),agent.hasCodeMirror){var f=CodeMirror.fromTextArea(d[0],e.codemirror);if(e.codemirror.tern){var g=new CodeMirror.TernServer(e.codemirror.tern);f.ternServer=g,f.on("cursorActivity",function(a){g.updateArgHints(a)})}f.setSize(null,c.outerHeight()),d.data("cmEditor",f)}},this.deactivate=function(){if(agent.hasCodeMirror){var f=d.data("cmEditor");d.val(f.getValue()),f.toTextArea()}var g=dom.value(d,e.prettifyHtml)||dom.emptyPara,h=c.html()!==g;c.html(g),c.height(e.height?d.height():"auto"),b.removeClass("codeview"),h&&a.triggerEvent("change",c.html(),c),c.focus(),a.invoke("toolbar.updateCodeview",!1)},this.destroy=function(){this.isActivated()&&this.deactivate()}},EDITABLE_PADDING=24,Statusbar=function(a){var b=$(document),c=a.layoutInfo.statusbar,d=a.layoutInfo.editable,e=a.options;this.initialize=function(){if(e.airMode||e.disableResizeEditor)return void this.destroy();c.on("mousedown",function(a){a.preventDefault(),a.stopPropagation();var c=d.offset().top-b.scrollTop(),f=function(a){var b=a.clientY-(c+24);b=e.minheight>0?Math.max(b,e.minheight):b,b=e.maxHeight>0?Math.min(b,e.maxHeight):b,d.height(b)};b.on("mousemove",f).one("mouseup",function(){b.off("mousemove",f)})})},this.destroy=function(){c.off(),c.remove()}},Fullscreen=function(a){var b=this,c=a.layoutInfo.editor,d=a.layoutInfo.toolbar,e=a.layoutInfo.editable,f=a.layoutInfo.codable,g=$(window),h=$("html, body");this.resizeTo=function(a){e.css("height",a.h),f.css("height",a.h),f.data("cmeditor")&&f.data("cmeditor").setsize(null,a.h)},this.onResize=function(){b.resizeTo({h:g.height()-d.outerHeight()})},this.toggle=function(){c.toggleClass("fullscreen"),this.isFullscreen()?(e.data("orgHeight",e.css("height")),g.on("resize",this.onResize).trigger("resize"),h.css("overflow","hidden")):(g.off("resize",this.onResize),this.resizeTo({h:e.data("orgHeight")}),h.css("overflow","visible")),a.invoke("toolbar.updateFullscreen",this.isFullscreen())},this.isFullscreen=function(){return c.hasClass("fullscreen")}},Handle=function(a){var b=this,c=$(document),d=a.layoutInfo.editingArea,e=a.options;this.events={"summernote.mousedown":function(a,c){b.update(c.target)&&c.preventDefault()},"summernote.keyup summernote.scroll summernote.change summernote.dialog.shown":function(){b.update()}},this.initialize=function(){this.$handle=$(['<div class="note-handle">','<div class="note-control-selection">','<div class="note-control-selection-bg"></div>','<div class="note-control-holder note-control-nw"></div>','<div class="note-control-holder note-control-ne"></div>','<div class="note-control-holder note-control-sw"></div>','<div class="',e.disableResizeImage?"note-control-holder":"note-control-sizing",' note-control-se"></div>',e.disableResizeImage?"":'<div class="note-control-selection-info"></div>',"</div>","</div>"].join("")).prependTo(d),this.$handle.on("mousedown",function(d){if(dom.isControlSizing(d.target)){d.preventDefault(),d.stopPropagation();var e=b.$handle.find(".note-control-selection").data("target"),f=e.offset(),g=c.scrollTop(),h=function(c){a.invoke("editor.resizeTo",{x:c.clientX-f.left,y:c.clientY-(f.top-g)},e,!c.shiftKey),b.update(e[0])};c.on("mousemove",h).one("mouseup",function(b){b.preventDefault(),c.off("mousemove",h),a.invoke("editor.afterCommand")}),e.data("ratio")||e.data("ratio",e.height()/e.width())}})},this.destroy=function(){this.$handle.remove()},this.update=function(b){var c=dom.isImg(b),d=this.$handle.find(".note-control-selection");if(a.invoke("imagePopover.update",b),c){var e=$(b),f=e.position(),g={w:e.outerWidth(!0),h:e.outerHeight(!0)};d.css({display:"block",left:f.left,top:f.top,width:g.w,height:g.h}).data("target",e);var h=g.w+"x"+g.h;d.find(".note-control-selection-info").text(h),a.invoke("editor.saveTarget",b)}else this.hide();return c},this.hide=function(){a.invoke("editor.clearTarget"),this.$handle.children().hide()}},AutoLink=function(a){var b=this;this.events={"summernote.keyup":function(a,c){c.isDefaultPrevented()||b.handleKeyup(c)},"summernote.keydown":function(a,c){b.handleKeydown(c)}},this.initialize=function(){this.lastWordRange=null},this.destroy=function(){this.lastWordRange=null},this.replace=function(){if(this.lastWordRange){var b=this.lastWordRange.toString(),c=b.match(/^([A-Za-z][A-Za-z0-9+-.]*\:[\/\/]?|mailto:[A-Z0-9._%+-]+@)?(www\.)?(.+)$/i);if(c&&(c[1]||c[2])){var d=c[1]?b:"http://"+b,e=$("<a />").html(b).attr("href",d)[0];this.lastWordRange.insertNode(e),this.lastWordRange=null,a.invoke("editor.focus")}}},this.handleKeydown=function(b){if(list.contains([key.code.ENTER,key.code.SPACE],b.keyCode)){var c=a.invoke("editor.createRange").getWordRange();this.lastWordRange=c}},this.handleKeyup=function(a){list.contains([key.code.ENTER,key.code.SPACE],a.keyCode)&&this.replace()}},AutoSync=function(a){var b=a.layoutInfo.note;this.events={"summernote.change":function(){b.val(a.invoke("code"))}},this.shouldInitialize=function(){return dom.isTextarea(b[0])}},Placeholder=function(a){var b=this,c=a.layoutInfo.editingArea,d=a.options;this.events={"summernote.init summernote.change":function(){b.update()},"summernote.codeview.toggled":function(){b.update()}},this.shouldInitialize=function(){return!!d.placeholder},this.initialize=function(){this.$placeholder=$('<div class="note-placeholder">'),this.$placeholder.on("click",function(){a.invoke("focus")}).text(d.placeholder).prependTo(c)},this.destroy=function(){this.$placeholder.remove()},this.update=function(){var b=!a.invoke("codeview.isActivated")&&a.invoke("editor.isEmpty");this.$placeholder.toggle(b)}},Buttons=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.toolbar,e=a.options,f=e.langInfo,g=func.invertObject(e.keyMap[agent.isMac?"mac":"pc"]),h=this.representShortcut=function(a){var b=g[a];return e.shortcuts&&b?(agent.isMac&&(b=b.replace("CMD","⌘").replace("SHIFT","⇧"))," ("+(b=b.replace("BACKSLASH","\\").replace("SLASH","/").replace("LEFTBRACKET","[").replace("RIGHTBRACKET","]"))+")"):""};this.initialize=function(){this.addToolbarButtons(),this.addImagePopoverButtons(),this.addLinkPopoverButtons(),this.fontInstalledMap={}},this.destroy=function(){delete this.fontInstalledMap},this.isFontInstalled=function(a){return b.fontInstalledMap.hasOwnProperty(a)||(b.fontInstalledMap[a]=agent.isFontInstalled(a)||list.contains(e.fontNamesIgnoreCheck,a)),b.fontInstalledMap[a]},this.addToolbarButtons=function(){a.memo("button.style",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:c.icon(e.icons.magic)+" "+c.icon(e.icons.caret,"span"),tooltip:f.style.style,data:{toggle:"dropdown"}}),c.dropdown({className:"dropdown-style",items:a.options.styleTags,template:function(a){"string"==typeof a&&(a={tag:a,title:f.style.hasOwnProperty(a)?f.style[a]:a});var b=a.tag,c=a.title;return"<"+b+(a.style?' style="'+a.style+'" ':"")+(a.className?' class="'+a.className+'"':"")+">"+c+"</"+b+">"},click:a.createInvokeHandler("editor.formatBlock")})]).render()}),a.memo("button.bold",function(){return c.button({className:"note-btn-bold",contents:c.icon(e.icons.bold),tooltip:f.font.bold+h("bold"),click:a.createInvokeHandlerAndUpdateState("editor.bold")}).render()}),a.memo("button.italic",function(){return c.button({className:"note-btn-italic",contents:c.icon(e.icons.italic),tooltip:f.font.italic+h("italic"),click:a.createInvokeHandlerAndUpdateState("editor.italic")}).render()}),a.memo("button.underline",function(){return c.button({className:"note-btn-underline",contents:c.icon(e.icons.underline),tooltip:f.font.underline+h("underline"),click:a.createInvokeHandlerAndUpdateState("editor.underline")}).render()}),a.memo("button.clear",function(){return c.button({contents:c.icon(e.icons.eraser),tooltip:f.font.clear+h("removeFormat"),click:a.createInvokeHandler("editor.removeFormat")}).render()}),a.memo("button.strikethrough",function(){return c.button({className:"note-btn-strikethrough",contents:c.icon(e.icons.strikethrough),tooltip:f.font.strikethrough+h("strikethrough"),click:a.createInvokeHandlerAndUpdateState("editor.strikethrough")}).render()}),a.memo("button.superscript",function(){return c.button({className:"note-btn-superscript",contents:c.icon(e.icons.superscript),tooltip:f.font.superscript,click:a.createInvokeHandlerAndUpdateState("editor.superscript")}).render()}),a.memo("button.subscript",function(){return c.button({className:"note-btn-subscript",contents:c.icon(e.icons.subscript),tooltip:f.font.subscript,click:a.createInvokeHandlerAndUpdateState("editor.subscript")}).render()}),a.memo("button.fontname",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:'<span class="note-current-fontname"/> '+c.icon(e.icons.caret,"span"),tooltip:f.font.name,data:{toggle:"dropdown"}}),c.dropdownCheck({className:"dropdown-fontname",checkClassName:e.icons.menuCheck,items:e.fontNames.filter(b.isFontInstalled),template:function(a){return'<span style="font-family:'+a+'">'+a+"</span>"},click:a.createInvokeHandlerAndUpdateState("editor.fontName")})]).render()}),a.memo("button.fontsize",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:'<span class="note-current-fontsize"/>'+c.icon(e.icons.caret,"span"),tooltip:f.font.size,data:{toggle:"dropdown"}}),c.dropdownCheck({className:"dropdown-fontsize",checkClassName:e.icons.menuCheck,items:e.fontSizes,click:a.createInvokeHandler("editor.fontSize")})]).render()}),a.memo("button.color",function(){return c.buttonGroup({className:"note-color",children:[c.button({className:"note-current-color-button",contents:c.icon(e.icons.font+" note-recent-color"),tooltip:f.color.recent,click:function(b){var c=$(b.currentTarget);a.invoke("editor.color",{backColor:c.attr("data-backColor"),foreColor:c.attr("data-foreColor")})},callback:function(a){a.find(".note-recent-color").css("background-color","#FFFF00"),a.attr("data-backColor","#FFFF00")}}),c.button({className:"dropdown-toggle",contents:c.icon(e.icons.caret,"span"),tooltip:f.color.more,data:{toggle:"dropdown"}}),c.dropdown({items:["<li>",'<div class="btn-group">','  <div class="note-palette-title">'+f.color.background+"</div>","  <div>",'    <button type="button" class="note-color-reset btn btn-default" data-event="backColor" data-value="inherit">',f.color.transparent,"    </button>","  </div>",'  <div class="note-holder" data-event="backColor"/>',"</div>",'<div class="btn-group">','  <div class="note-palette-title">'+f.color.foreground+"</div>","  <div>",'    <button type="button" class="note-color-reset btn btn-default" data-event="removeFormat" data-value="foreColor">',f.color.resetToDefault,"    </button>","  </div>",'  <div class="note-holder" data-event="foreColor"/>',"</div>","</li>"].join(""),callback:function(a){a.find(".note-holder").each(function(){var a=$(this);a.append(c.palette({colors:e.colors,eventName:a.data("event")}).render())})},click:function(b){var c=$(b.target),d=c.data("event"),e=c.data("value");if(d&&e){var f="backColor"===d?"background-color":"color",g=c.closest(".note-color").find(".note-recent-color"),h=c.closest(".note-color").find(".note-current-color-button");g.css(f,e),h.attr("data-"+d,e),a.invoke("editor."+d,e)}}})]}).render()}),a.memo("button.ul",function(){return c.button({contents:c.icon(e.icons.unorderedlist),tooltip:f.lists.unordered+h("insertUnorderedList"),click:a.createInvokeHandler("editor.insertUnorderedList")}).render()}),a.memo("button.ol",function(){return c.button({contents:c.icon(e.icons.orderedlist),tooltip:f.lists.ordered+h("insertOrderedList"),click:a.createInvokeHandler("editor.insertOrderedList")}).render()});var d=c.button({contents:c.icon(e.icons.alignLeft),tooltip:f.paragraph.left+h("justifyLeft"),click:a.createInvokeHandler("editor.justifyLeft")}),g=c.button({contents:c.icon(e.icons.alignCenter),tooltip:f.paragraph.center+h("justifyCenter"),click:a.createInvokeHandler("editor.justifyCenter")}),i=c.button({contents:c.icon(e.icons.alignRight),tooltip:f.paragraph.right+h("justifyRight"),click:a.createInvokeHandler("editor.justifyRight")}),j=c.button({contents:c.icon(e.icons.alignJustify),tooltip:f.paragraph.justify+h("justifyFull"),
+click:a.createInvokeHandler("editor.justifyFull")}),k=c.button({contents:c.icon(e.icons.outdent),tooltip:f.paragraph.outdent+h("outdent"),click:a.createInvokeHandler("editor.outdent")}),l=c.button({contents:c.icon(e.icons.indent),tooltip:f.paragraph.indent+h("indent"),click:a.createInvokeHandler("editor.indent")});a.memo("button.justifyLeft",func.invoke(d,"render")),a.memo("button.justifyCenter",func.invoke(g,"render")),a.memo("button.justifyRight",func.invoke(i,"render")),a.memo("button.justifyFull",func.invoke(j,"render")),a.memo("button.outdent",func.invoke(k,"render")),a.memo("button.indent",func.invoke(l,"render")),a.memo("button.paragraph",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:c.icon(e.icons.alignLeft)+" "+c.icon(e.icons.caret,"span"),tooltip:f.paragraph.paragraph,data:{toggle:"dropdown"}}),c.dropdown([c.buttonGroup({className:"note-align",children:[d,g,i,j]}),c.buttonGroup({className:"note-list",children:[k,l]})])]).render()}),a.memo("button.height",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:c.icon(e.icons.textHeight)+" "+c.icon(e.icons.caret,"span"),tooltip:f.font.height,data:{toggle:"dropdown"}}),c.dropdownCheck({items:e.lineHeights,checkClassName:e.icons.menuCheck,className:"dropdown-line-height",click:a.createInvokeHandler("editor.lineHeight")})]).render()}),a.memo("button.table",function(){return c.buttonGroup([c.button({className:"dropdown-toggle",contents:c.icon(e.icons.table)+" "+c.icon(e.icons.caret,"span"),tooltip:f.table.table,data:{toggle:"dropdown"}}),c.dropdown({className:"note-table",items:['<div class="note-dimension-picker">','  <div class="note-dimension-picker-mousecatcher" data-event="insertTable" data-value="1x1"/>','  <div class="note-dimension-picker-highlighted"/>','  <div class="note-dimension-picker-unhighlighted"/>',"</div>",'<div class="note-dimension-display">1 x 1</div>'].join("")})],{callback:function(c){c.find(".note-dimension-picker-mousecatcher").css({width:e.insertTableMaxSize.col+"em",height:e.insertTableMaxSize.row+"em"}).mousedown(a.createInvokeHandler("editor.insertTable")).on("mousemove",b.tableMoveHandler)}}).render()}),a.memo("button.link",function(){return c.button({contents:c.icon(e.icons.link),tooltip:f.link.link+h("linkDialog.show"),click:a.createInvokeHandler("linkDialog.show")}).render()}),a.memo("button.picture",function(){return c.button({contents:c.icon(e.icons.picture),tooltip:f.image.image,click:a.createInvokeHandler("imageDialog.show")}).render()}),a.memo("button.video",function(){return c.button({contents:c.icon(e.icons.video),tooltip:f.video.video,click:a.createInvokeHandler("videoDialog.show")}).render()}),a.memo("button.hr",function(){return c.button({contents:c.icon(e.icons.minus),tooltip:f.hr.insert+h("insertHorizontalRule"),click:a.createInvokeHandler("editor.insertHorizontalRule")}).render()}),a.memo("button.fullscreen",function(){return c.button({className:"btn-fullscreen",contents:c.icon(e.icons.arrowsAlt),tooltip:f.options.fullscreen,click:a.createInvokeHandler("fullscreen.toggle")}).render()}),a.memo("button.codeview",function(){return c.button({className:"btn-codeview",contents:c.icon(e.icons.code),tooltip:f.options.codeview,click:a.createInvokeHandler("codeview.toggle")}).render()}),a.memo("button.redo",function(){return c.button({contents:c.icon(e.icons.redo),tooltip:f.history.redo+h("redo"),click:a.createInvokeHandler("editor.redo")}).render()}),a.memo("button.undo",function(){return c.button({contents:c.icon(e.icons.undo),tooltip:f.history.undo+h("undo"),click:a.createInvokeHandler("editor.undo")}).render()}),a.memo("button.help",function(){return c.button({contents:c.icon(e.icons.question),tooltip:f.options.help,click:a.createInvokeHandler("helpDialog.show")}).render()})},this.addImagePopoverButtons=function(){a.memo("button.imageSize100",function(){return c.button({contents:'<span class="note-fontsize-10">100%</span>',tooltip:f.image.resizeFull,click:a.createInvokeHandler("editor.resize","1")}).render()}),a.memo("button.imageSize50",function(){return c.button({contents:'<span class="note-fontsize-10">50%</span>',tooltip:f.image.resizeHalf,click:a.createInvokeHandler("editor.resize","0.5")}).render()}),a.memo("button.imageSize25",function(){return c.button({contents:'<span class="note-fontsize-10">25%</span>',tooltip:f.image.resizeQuarter,click:a.createInvokeHandler("editor.resize","0.25")}).render()}),a.memo("button.floatLeft",function(){return c.button({contents:c.icon(e.icons.alignLeft),tooltip:f.image.floatLeft,click:a.createInvokeHandler("editor.floatMe","left")}).render()}),a.memo("button.floatRight",function(){return c.button({contents:c.icon(e.icons.alignRight),tooltip:f.image.floatRight,click:a.createInvokeHandler("editor.floatMe","right")}).render()}),a.memo("button.floatNone",function(){return c.button({contents:c.icon(e.icons.alignJustify),tooltip:f.image.floatNone,click:a.createInvokeHandler("editor.floatMe","none")}).render()}),a.memo("button.removeMedia",function(){return c.button({contents:c.icon(e.icons.trash),tooltip:f.image.remove,click:a.createInvokeHandler("editor.removeMedia")}).render()})},this.addLinkPopoverButtons=function(){a.memo("button.linkDialogShow",function(){return c.button({contents:c.icon(e.icons.link),tooltip:f.link.edit,click:a.createInvokeHandler("linkDialog.show")}).render()}),a.memo("button.unlink",function(){return c.button({contents:c.icon(e.icons.unlink),tooltip:f.link.unlink,click:a.createInvokeHandler("editor.unlink")}).render()})},this.build=function(b,d){for(var e=0,f=d.length;e<f;e++){for(var g=d[e],h=g[0],i=g[1],j=c.buttonGroup({className:"note-"+h}).render(),k=0,l=i.length;k<l;k++){var m=a.memo("button."+i[k]);m&&j.append("function"==typeof m?m(a):m)}j.appendTo(b)}},this.updateCurrentStyle=function(){var c=a.invoke("editor.currentStyle");if(this.updateBtnStates({".note-btn-bold":function(){return"bold"===c["font-bold"]},".note-btn-italic":function(){return"italic"===c["font-italic"]},".note-btn-underline":function(){return"underline"===c["font-underline"]},".note-btn-subscript":function(){return"subscript"===c["font-subscript"]},".note-btn-superscript":function(){return"superscript"===c["font-superscript"]},".note-btn-strikethrough":function(){return"strikethrough"===c["font-strikethrough"]}}),c["font-family"]){var e=c["font-family"].split(",").map(function(a){return a.replace(/[\'\"]/g,"").replace(/\s+$/,"").replace(/^\s+/,"")}),f=list.find(e,b.isFontInstalled);d.find(".dropdown-fontname li a").each(function(){var a=$(this).data("value")+""==f+"";this.className=a?"checked":""}),d.find(".note-current-fontname").text(f)}if(c["font-size"]){var g=c["font-size"];d.find(".dropdown-fontsize li a").each(function(){var a=$(this).data("value")+""==g+"";this.className=a?"checked":""}),d.find(".note-current-fontsize").text(g)}if(c["line-height"]){var h=c["line-height"];d.find(".dropdown-line-height li a").each(function(){var a=$(this).data("value")+""==h+"";this.className=a?"checked":""})}},this.updateBtnStates=function(a){$.each(a,function(a,b){c.toggleBtnActive(d.find(a),b())})},this.tableMoveHandler=function(a){var b,c=$(a.target.parentNode),d=c.next(),f=c.find(".note-dimension-picker-mousecatcher"),g=c.find(".note-dimension-picker-highlighted"),h=c.find(".note-dimension-picker-unhighlighted");if(void 0===a.offsetX){var i=$(a.target).offset();b={x:a.pageX-i.left,y:a.pageY-i.top}}else b={x:a.offsetX,y:a.offsetY};var j={c:Math.ceil(b.x/18)||1,r:Math.ceil(b.y/18)||1};g.css({width:j.c+"em",height:j.r+"em"}),f.data("value",j.c+"x"+j.r),3<j.c&&j.c<e.insertTableMaxSize.col&&h.css({width:j.c+1+"em"}),3<j.r&&j.r<e.insertTableMaxSize.row&&h.css({height:j.r+1+"em"}),d.html(j.c+" x "+j.r)}},Toolbar=function(a){var b=$.summernote.ui,c=a.layoutInfo.note,d=a.layoutInfo.toolbar,e=a.options;this.shouldInitialize=function(){return!e.airMode},this.initialize=function(){e.toolbar=e.toolbar||[],e.toolbar.length?a.invoke("buttons.build",d,e.toolbar):d.hide(),e.toolbarContainer&&d.appendTo(e.toolbarContainer),c.on("summernote.keyup summernote.mouseup summernote.change",function(){a.invoke("buttons.updateCurrentStyle")}),a.invoke("buttons.updateCurrentStyle")},this.destroy=function(){d.children().remove()},this.updateFullscreen=function(a){b.toggleBtnActive(d.find(".btn-fullscreen"),a)},this.updateCodeview=function(a){b.toggleBtnActive(d.find(".btn-codeview"),a),a?this.deactivate():this.activate()},this.activate=function(a){var c=d.find("button");a||(c=c.not(".btn-codeview")),b.toggleBtn(c,!0)},this.deactivate=function(a){var c=d.find("button");a||(c=c.not(".btn-codeview")),b.toggleBtn(c,!1)}},LinkDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b='<div class="form-group"><label>'+f.link.textToDisplay+'</label><input class="note-link-text form-control" type="text" /></div><div class="form-group"><label>'+f.link.url+'</label><input class="note-link-url form-control" type="text" value="http://" /></div>'+(e.disableLinkTarget?"":'<div class="checkbox"><label for="sn-checkbox-open-in-new-window"><input type="checkbox" id="sn-checkbox-open-in-new-window" checked />'+f.link.openInNewWindow+"</label></div>"),g='<button href="#" class="btn btn-primary note-link-btn disabled" disabled>'+f.link.insert+"</button>";this.$dialog=c.dialog({className:"link-dialog",title:f.link.insert,fade:e.dialogsFade,body:b,footer:g}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.bindEnterKey=function(a,b){a.on("keypress",function(a){a.keyCode===key.code.ENTER&&b.trigger("click")})},this.toggleLinkBtn=function(a,b,d){c.toggleBtn(a,b.val()&&d.val())},this.showLinkDialog=function(d){return $.Deferred(function(e){var f=b.$dialog.find(".note-link-text"),g=b.$dialog.find(".note-link-url"),h=b.$dialog.find(".note-link-btn"),i=b.$dialog.find("input[type=checkbox]");c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),d.url||(d.url=d.text),f.val(d.text);var c=function(){b.toggleLinkBtn(h,f,g),d.text=f.val()};f.on("input",c).on("paste",function(){setTimeout(c,0)});var j=function(){b.toggleLinkBtn(h,f,g),d.text||f.val(g.val())};g.on("input",j).on("paste",function(){setTimeout(j,0)}).val(d.url).trigger("focus"),b.toggleLinkBtn(h,f,g),b.bindEnterKey(g,h),b.bindEnterKey(f,h);var k=void 0!==d.isNewWindow?d.isNewWindow:a.options.linkTargetBlank;i.prop("checked",k),h.one("click",function(a){a.preventDefault(),e.resolve({range:d.range,url:g.val(),text:f.val(),isNewWindow:i.is(":checked")}),b.$dialog.modal("hide")})}),c.onDialogHidden(b.$dialog,function(){f.off("input paste keypress"),g.off("input paste keypress"),h.off("click"),"pending"===e.state()&&e.reject()}),c.showDialog(b.$dialog)}).promise()},this.show=function(){var b=a.invoke("editor.getLinkInfo");a.invoke("editor.saveRange"),this.showLinkDialog(b).then(function(b){a.invoke("editor.restoreRange"),a.invoke("editor.createLink",b)}).fail(function(){a.invoke("editor.restoreRange")})},a.memo("help.linkDialog.show",e.langInfo.help["linkDialog.show"])},LinkPopover=function(a){var b=this,c=$.summernote.ui,d=a.options;this.events={"summernote.keyup summernote.mouseup summernote.change summernote.scroll":function(){b.update()},"summernote.dialog.shown":function(){b.hide()}},this.shouldInitialize=function(){return!list.isEmpty(d.popover.link)},this.initialize=function(){this.$popover=c.popover({className:"note-link-popover",callback:function(a){a.find(".popover-content").prepend('<span><a target="_blank"></a>&nbsp;</span>')}}).render().appendTo("body");var b=this.$popover.find(".popover-content");a.invoke("buttons.build",b,d.popover.link)},this.destroy=function(){this.$popover.remove()},this.update=function(){if(!a.invoke("editor.hasFocus"))return void this.hide();var b=a.invoke("editor.createRange");if(b.isCollapsed()&&b.isOnAnchor()){var c=dom.ancestor(b.sc,dom.isAnchor),d=$(c).attr("href");this.$popover.find("a").attr("href",d).html(d);var e=dom.posFromPlaceholder(c);this.$popover.css({display:"block",left:e.left,top:e.top})}else this.hide()},this.hide=function(){this.$popover.hide()}},ImageDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b="";if(e.maximumImageFileSize){var g=Math.floor(Math.log(e.maximumImageFileSize)/Math.log(1024)),h=1*(e.maximumImageFileSize/Math.pow(1024,g)).toFixed(2)+" "+" KMGTP"[g]+"B";b="<small>"+f.image.maximumFileSize+" : "+h+"</small>"}var i='<div class="form-group note-group-select-from-files"><label>'+f.image.selectFromFiles+'</label><input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />'+b+'</div><div class="form-group note-group-image-url" style="overflow:auto;"><label>'+f.image.url+'</label><input class="note-image-url form-control col-md-12" type="text" /></div>',j='<button href="#" class="btn btn-primary note-image-btn disabled" disabled>'+f.image.insert+"</button>";this.$dialog=c.dialog({title:f.image.insert,fade:e.dialogsFade,body:i,footer:j}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.bindEnterKey=function(a,b){a.on("keypress",function(a){a.keyCode===key.code.ENTER&&b.trigger("click")})},this.show=function(){a.invoke("editor.saveRange"),this.showImageDialog().then(function(d){c.hideDialog(b.$dialog),a.invoke("editor.restoreRange"),"string"==typeof d?a.invoke("editor.insertImage",d):a.invoke("editor.insertImagesOrCallback",d)}).fail(function(){a.invoke("editor.restoreRange")})},this.showImageDialog=function(){return $.Deferred(function(d){var e=b.$dialog.find(".note-image-input"),f=b.$dialog.find(".note-image-url"),g=b.$dialog.find(".note-image-btn");c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),e.replaceWith(e.clone().on("change",function(){d.resolve(this.files||this.value)}).val("")),g.click(function(a){a.preventDefault(),d.resolve(f.val())}),f.on("keyup paste",function(){var a=f.val();c.toggleBtn(g,a)}).val("").trigger("focus"),b.bindEnterKey(f,g)}),c.onDialogHidden(b.$dialog,function(){e.off("change"),f.off("keyup paste keypress"),g.off("click"),"pending"===d.state()&&d.reject()}),c.showDialog(b.$dialog)})}},ImagePopover=function(a){var b=$.summernote.ui,c=a.options;this.shouldInitialize=function(){return!list.isEmpty(c.popover.image)},this.initialize=function(){this.$popover=b.popover({className:"note-image-popover"}).render().appendTo("body");var d=this.$popover.find(".popover-content");a.invoke("buttons.build",d,c.popover.image)},this.destroy=function(){this.$popover.remove()},this.update=function(a){if(dom.isImg(a)){var b=dom.posFromPlaceholder(a);this.$popover.css({display:"block",left:b.left,top:b.top})}else this.hide()},this.hide=function(){this.$popover.hide()}},VideoDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b='<div class="form-group row-fluid"><label>'+f.video.url+' <small class="text-muted">'+f.video.providers+'</small></label><input class="note-video-url form-control span12" type="text" /></div>',g='<button href="#" class="btn btn-primary note-video-btn disabled" disabled>'+f.video.insert+"</button>";this.$dialog=c.dialog({title:f.video.insert,fade:e.dialogsFade,body:b,footer:g}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.bindEnterKey=function(a,b){a.on("keypress",function(a){a.keyCode===key.code.ENTER&&b.trigger("click")})},this.createVideoNode=function(a){var b,c=a.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/),d=a.match(/(?:www\.|\/\/)instagram\.com\/p\/(.[a-zA-Z0-9_-]*)/),e=a.match(/\/\/vine\.co\/v\/([a-zA-Z0-9]+)/),f=a.match(/\/\/(player\.)?vimeo\.com\/([a-z]*\/)*(\d+)[?]?.*/),g=a.match(/.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/),h=a.match(/\/\/v\.youku\.com\/v_show\/id_(\w+)=*\.html/),i=a.match(/^.+.(mp4|m4v)$/),j=a.match(/^.+.(ogg|ogv)$/),k=a.match(/^.+.(webm)$/);if(c&&11===c[1].length){var l=c[1];b=$("<iframe>").attr("frameborder",0).attr("src","//www.youtube.com/embed/"+l).attr("width","640").attr("height","360")}else if(d&&d[0].length)b=$("<iframe>").attr("frameborder",0).attr("src","https://instagram.com/p/"+d[1]+"/embed/").attr("width","612").attr("height","710").attr("scrolling","no").attr("allowtransparency","true");else if(e&&e[0].length)b=$("<iframe>").attr("frameborder",0).attr("src",e[0]+"/embed/simple").attr("width","600").attr("height","600").attr("class","vine-embed");else if(f&&f[3].length)b=$("<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>").attr("frameborder",0).attr("src","//player.vimeo.com/video/"+f[3]).attr("width","640").attr("height","360");else if(g&&g[2].length)b=$("<iframe>").attr("frameborder",0).attr("src","//www.dailymotion.com/embed/video/"+g[2]).attr("width","640").attr("height","360");else if(h&&h[1].length)b=$("<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>").attr("frameborder",0).attr("height","498").attr("width","510").attr("src","//player.youku.com/embed/"+h[1]);else{if(!(i||j||k))return!1;b=$("<video controls>").attr("src",a).attr("width","640").attr("height","360")}return b.addClass("note-video-clip"),b[0]},this.show=function(){var d=a.invoke("editor.getSelectedText");a.invoke("editor.saveRange"),this.showVideoDialog(d).then(function(d){c.hideDialog(b.$dialog),a.invoke("editor.restoreRange");var e=b.createVideoNode(d);e&&a.invoke("editor.insertNode",e)}).fail(function(){a.invoke("editor.restoreRange")})},this.showVideoDialog=function(d){return $.Deferred(function(e){var f=b.$dialog.find(".note-video-url"),g=b.$dialog.find(".note-video-btn");c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),f.val(d).on("input",function(){c.toggleBtn(g,f.val())}).trigger("focus"),g.click(function(a){a.preventDefault(),e.resolve(f.val())}),b.bindEnterKey(f,g)}),c.onDialogHidden(b.$dialog,function(){f.off("input"),g.off("click"),"pending"===e.state()&&e.reject()}),c.showDialog(b.$dialog)})}},HelpDialog=function(a){var b=this,c=$.summernote.ui,d=a.layoutInfo.editor,e=a.options,f=e.langInfo;this.createShortCutList=function(){var b=e.keyMap[agent.isMac?"mac":"pc"];return Object.keys(b).map(function(c){var d=b[c],e=$('<div><div class="help-list-item"/></div>');return e.append($("<label><kbd>"+c+"</kdb></label>").css({width:180,"margin-right":10})).append($("<span/>").html(a.memo("help."+d)||d)),e.html()}).join("")},this.initialize=function(){var a=e.dialogsInBody?$(document.body):d,b=['<p class="text-center">','<a href="http://summernote.org/" target="_blank">Summernote 0.8.4</a> · ','<a href="https://github.com/summernote/summernote" target="_blank">Project</a> · ','<a href="https://github.com/summernote/summernote/issues" target="_blank">Issues</a>',"</p>"].join("");this.$dialog=c.dialog({title:f.options.help,fade:e.dialogsFade,body:this.createShortCutList(),footer:b,callback:function(a){a.find(".modal-body").css({"max-height":300,overflow:"scroll"})}}).render().appendTo(a)},this.destroy=function(){c.hideDialog(this.$dialog),this.$dialog.remove()},this.showHelpDialog=function(){return $.Deferred(function(d){c.onDialogShown(b.$dialog,function(){a.triggerEvent("dialog.shown"),d.resolve()}),c.showDialog(b.$dialog)}).promise()},this.show=function(){a.invoke("editor.saveRange"),this.showHelpDialog().then(function(){a.invoke("editor.restoreRange")})}},AirPopover=function(a){var b=this,c=$.summernote.ui,d=a.options;this.events={"summernote.keyup summernote.mouseup summernote.scroll":function(){b.update()},"summernote.change summernote.dialog.shown":function(){b.hide()},"summernote.focusout":function(a,c){agent.isFF||c.relatedTarget&&dom.ancestor(c.relatedTarget,func.eq(b.$popover[0]))||b.hide()}},this.shouldInitialize=function(){return d.airMode&&!list.isEmpty(d.popover.air)},this.initialize=function(){this.$popover=c.popover({className:"note-air-popover"}).render().appendTo("body");var b=this.$popover.find(".popover-content");a.invoke("buttons.build",b,d.popover.air)},this.destroy=function(){this.$popover.remove()},this.update=function(){var b=a.invoke("editor.currentStyle");if(b.range&&!b.range.isCollapsed()){var c=list.last(b.range.getClientRects());if(c){var d=func.rect2bnd(c);this.$popover.css({display:"block",left:Math.max(d.left+d.width/2,0)-20,top:d.top+d.height})}}else this.hide()},this.hide=function(){this.$popover.hide()}},HintPopover=function(a){var b=this,c=$.summernote.ui,d=a.options.hint||[],e=a.options.hintDirection||"bottom",f=$.isArray(d)?d:[d];this.events={"summernote.keyup":function(a,c){c.isDefaultPrevented()||b.handleKeyup(c)},"summernote.keydown":function(a,c){b.handleKeydown(c)},"summernote.dialog.shown":function(){b.hide()}},this.shouldInitialize=function(){return f.length>0},this.initialize=function(){this.lastWordRange=null,this.$popover=c.popover({className:"note-hint-popover",hideArrow:!0,direction:""}).render().appendTo("body"),this.$popover.hide(),this.$content=this.$popover.find(".popover-content"),this.$content.on("click",".note-hint-item",function(){b.$content.find(".active").removeClass("active"),$(this).addClass("active"),b.replace()})},this.destroy=function(){this.$popover.remove()},this.selectItem=function(a){this.$content.find(".active").removeClass("active"),a.addClass("active"),this.$content[0].scrollTop=a[0].offsetTop-this.$content.innerHeight()/2},this.moveDown=function(){var a=this.$content.find(".note-hint-item.active"),b=a.next();if(b.length)this.selectItem(b);else{var c=a.parent().next();c.length||(c=this.$content.find(".note-hint-group").first()),this.selectItem(c.find(".note-hint-item").first())}},this.moveUp=function(){var a=this.$content.find(".note-hint-item.active"),b=a.prev();if(b.length)this.selectItem(b);else{var c=a.parent().prev();c.length||(c=this.$content.find(".note-hint-group").last()),this.selectItem(c.find(".note-hint-item").last())}},this.replace=function(){var b=this.$content.find(".note-hint-item.active");if(b.length){var c=this.nodeFromItem(b);this.lastWordRange.insertNode(c),range.createFromNode(c).collapse().select(),this.lastWordRange=null,this.hide(),a.triggerEvent("change",a.layoutInfo.editable.html(),a.layoutInfo.editable),a.invoke("editor.focus")}},this.nodeFromItem=function(a){var b=f[a.data("index")],c=a.data("item"),d=b.content?b.content(c):c;return"string"==typeof d&&(d=dom.createText(d)),d},this.createItemTemplates=function(a,b){var c=f[a];return b.map(function(b,d){var e=$('<div class="note-hint-item"/>');return e.append(c.template?c.template(b):b+""),e.data({index:a,item:b}),0===a&&0===d&&e.addClass("active"),e})},this.handleKeydown=function(a){this.$popover.is(":visible")&&(a.keyCode===key.code.ENTER?(a.preventDefault(),this.replace()):a.keyCode===key.code.UP?(a.preventDefault(),this.moveUp()):a.keyCode===key.code.DOWN&&(a.preventDefault(),this.moveDown()))},this.searchKeyword=function(a,b,c){var d=f[a];if(d&&d.match.test(b)&&d.search){var e=d.match.exec(b);d.search(e[1],c)}else c()},this.createGroup=function(a,c){var d=$('<div class="note-hint-group note-hint-group-'+a+'"/>');return this.searchKeyword(a,c,function(c){c=c||[],c.length&&(d.html(b.createItemTemplates(a,c)),b.show())}),d},this.handleKeyup=function(c){if(list.contains([key.code.ENTER,key.code.UP,key.code.DOWN],c.keyCode)){if(c.keyCode===key.code.ENTER&&this.$popover.is(":visible"))return}else{var d=a.invoke("editor.createRange").getWordRange(),g=d.toString();if(f.length&&g){this.$content.empty();var h=func.rect2bnd(list.last(d.getClientRects()));h&&(this.$popover.hide(),this.lastWordRange=d,f.forEach(function(a,c){a.match.test(g)&&b.createGroup(c,g).appendTo(b.$content)}),"top"===e?this.$popover.css({left:h.left,top:h.top-this.$popover.outerHeight()-5}):this.$popover.css({left:h.left,top:h.top+h.height+5}))}else this.hide()}},this.show=function(){this.$popover.show()},this.hide=function(){this.$popover.hide()}};$.summernote=$.extend($.summernote,{version:"0.8.4",ui:ui,dom:dom,plugins:{},options:{modules:{editor:Editor,clipboard:Clipboard,dropzone:Dropzone,codeview:Codeview,statusbar:Statusbar,fullscreen:Fullscreen,handle:Handle,hintPopover:HintPopover,autoLink:AutoLink,autoSync:AutoSync,placeholder:Placeholder,buttons:Buttons,toolbar:Toolbar,linkDialog:LinkDialog,linkPopover:LinkPopover,imageDialog:ImageDialog,imagePopover:ImagePopover,videoDialog:VideoDialog,helpDialog:HelpDialog,airPopover:AirPopover},buttons:{},lang:"en-US",toolbar:[["style",["style"]],["font",["bold","underline","clear"]],["fontname",["fontname"]],["color",["color"]],["para",["ul","ol","paragraph"]],["table",["table"]],["insert",["link","picture","video"]],["view",["fullscreen","codeview","help"]]],popover:{image:[["imagesize",["imageSize100","imageSize50","imageSize25"]],["float",["floatLeft","floatRight","floatNone"]],["remove",["removeMedia"]]],link:[["link",["linkDialogShow","unlink"]]],air:[["color",["color"]],["font",["bold","underline","clear"]],["para",["ul","paragraph"]],["table",["table"]],["insert",["link","picture"]]]},airMode:!1,width:null,height:null,linkTargetBlank:!0,focus:!1,tabSize:4,styleWithSpan:!0,shortcuts:!0,textareaAutoSync:!0,direction:null,tooltip:"auto",styleTags:["p","blockquote","pre","h1","h2","h3","h4","h5","h6"],fontNames:["Arial","Arial Black","Comic Sans MS","Courier New","Helvetica Neue","Helvetica","Impact","Lucida Grande","Tahoma","Times New Roman","Verdana"],fontSizes:["8","9","10","11","12","14","18","24","36"],colors:[["#000000","#424242","#636363","#9C9C94","#CEC6CE","#EFEFEF","#F7F7F7","#FFFFFF"],["#FF0000","#FF9C00","#FFFF00","#00FF00","#00FFFF","#0000FF","#9C00FF","#FF00FF"],["#F7C6CE","#FFE7CE","#FFEFC6","#D6EFD6","#CEDEE7","#CEE7F7","#D6D6E7","#E7D6DE"],["#E79C9C","#FFC69C","#FFE79C","#B5D6A5","#A5C6CE","#9CC6EF","#B5A5D6","#D6A5BD"],["#E76363","#F7AD6B","#FFD663","#94BD7B","#73A5AD","#6BADDE","#8C7BC6","#C67BA5"],["#CE0000","#E79439","#EFC631","#6BA54A","#4A7B8C","#3984C6","#634AA5","#A54A7B"],["#9C0000","#B56308","#BD9400","#397B21","#104A5A","#085294","#311873","#731842"],["#630000","#7B3900","#846300","#295218","#083139","#003163","#21104A","#4A1031"]],lineHeights:["1.0","1.2","1.4","1.5","1.6","1.8","2.0","3.0"],tableClassName:"table table-bordered",insertTableMaxSize:{col:10,row:10},dialogsInBody:!1,dialogsFade:!1,maximumImageFileSize:null,callbacks:{onInit:null,onFocus:null,onBlur:null,onEnter:null,onKeyup:null,onKeydown:null,onImageUpload:null,onImageUploadError:null},codemirror:{mode:"text/html",htmlMode:!0,lineNumbers:!0},keyMap:{pc:{ENTER:"insertParagraph","CTRL+Z":"undo","CTRL+Y":"redo",TAB:"tab","SHIFT+TAB":"untab","CTRL+B":"bold","CTRL+I":"italic","CTRL+U":"underline","CTRL+SHIFT+S":"strikethrough","CTRL+BACKSLASH":"removeFormat","CTRL+SHIFT+L":"justifyLeft","CTRL+SHIFT+E":"justifyCenter","CTRL+SHIFT+R":"justifyRight","CTRL+SHIFT+J":"justifyFull","CTRL+SHIFT+NUM7":"insertUnorderedList","CTRL+SHIFT+NUM8":"insertOrderedList","CTRL+LEFTBRACKET":"outdent","CTRL+RIGHTBRACKET":"indent","CTRL+NUM0":"formatPara","CTRL+NUM1":"formatH1","CTRL+NUM2":"formatH2","CTRL+NUM3":"formatH3","CTRL+NUM4":"formatH4","CTRL+NUM5":"formatH5","CTRL+NUM6":"formatH6","CTRL+ENTER":"insertHorizontalRule","CTRL+K":"linkDialog.show"},mac:{ENTER:"insertParagraph","CMD+Z":"undo","CMD+SHIFT+Z":"redo",TAB:"tab","SHIFT+TAB":"untab","CMD+B":"bold","CMD+I":"italic","CMD+U":"underline","CMD+SHIFT+S":"strikethrough","CMD+BACKSLASH":"removeFormat","CMD+SHIFT+L":"justifyLeft","CMD+SHIFT+E":"justifyCenter","CMD+SHIFT+R":"justifyRight","CMD+SHIFT+J":"justifyFull","CMD+SHIFT+NUM7":"insertUnorderedList","CMD+SHIFT+NUM8":"insertOrderedList","CMD+LEFTBRACKET":"outdent","CMD+RIGHTBRACKET":"indent","CMD+NUM0":"formatPara","CMD+NUM1":"formatH1","CMD+NUM2":"formatH2","CMD+NUM3":"formatH3","CMD+NUM4":"formatH4","CMD+NUM5":"formatH5","CMD+NUM6":"formatH6","CMD+ENTER":"insertHorizontalRule","CMD+K":"linkDialog.show"}},icons:{align:"note-icon-align",alignCenter:"note-icon-align-center",alignJustify:"note-icon-align-justify",alignLeft:"note-icon-align-left",alignRight:"note-icon-align-right",indent:"note-icon-align-indent",outdent:"note-icon-align-outdent",arrowsAlt:"note-icon-arrows-alt",bold:"note-icon-bold",caret:"note-icon-caret",circle:"note-icon-circle",close:"note-icon-close",code:"note-icon-code",eraser:"note-icon-eraser",font:"note-icon-font",frame:"note-icon-frame",italic:"note-icon-italic",link:"note-icon-link",unlink:"note-icon-chain-broken",magic:"note-icon-magic",menuCheck:"note-icon-check",minus:"note-icon-minus",orderedlist:"note-icon-orderedlist",pencil:"note-icon-pencil",picture:"note-icon-picture",question:"note-icon-question",redo:"note-icon-redo",square:"note-icon-square",strikethrough:"note-icon-strikethrough",subscript:"note-icon-subscript",superscript:"note-icon-superscript",table:"note-icon-table",textHeight:"note-icon-text-height",trash:"note-icon-trash",underline:"note-icon-underline",undo:"note-icon-undo",unorderedlist:"note-icon-unorderedlist",video:"note-icon-video"}}})});
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -39069,6 +43591,252 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
+/*!
+ * angular-translate - v2.15.2 - 2017-06-22
+ * 
+ * Copyright (c) 2017 The angular-translate team, Pascal Precht; Licensed MIT
+ */
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    define([], function () {
+      return (factory());
+    });
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    factory();
+  }
+}(this, function () {
+
+$translateCookieStorageFactory.$inject = ['$injector'];
+angular.module('pascalprecht.translate')
+
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateCookieStorage
+ * @requires $cookieStore
+ *
+ * @description
+ * Abstraction layer for cookieStore. This service is used when telling angular-translate
+ * to use cookieStore as storage.
+ *
+ */
+  .factory('$translateCookieStorage', $translateCookieStorageFactory);
+
+function $translateCookieStorageFactory($injector) {
+
+  'use strict';
+
+  // Since AngularJS 1.4, $cookieStore is deprecated
+  var delegate;
+  if (angular.version.major === 1 && angular.version.minor >= 4) {
+    var $cookies = $injector.get('$cookies');
+    delegate = {
+      get : function (key) {
+        return $cookies.get(key);
+      },
+      put : function (key, value) {
+        $cookies.put(key, value);
+      }
+    };
+  } else {
+    var $cookieStore = $injector.get('$cookieStore');
+    delegate = {
+      get : function (key) {
+        return $cookieStore.get(key);
+      },
+      put : function (key, value) {
+        $cookieStore.put(key, value);
+      }
+    };
+  }
+
+  var $translateCookieStorage = {
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translateCookieStorage#get
+     * @methodOf pascalprecht.translate.$translateCookieStorage
+     *
+     * @description
+     * Returns an item from cookieStorage by given name.
+     *
+     * @param {string} name Item name
+     * @return {string} Value of item name
+     */
+    get : function (name) {
+      return delegate.get(name);
+    },
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translateCookieStorage#set
+     * @methodOf pascalprecht.translate.$translateCookieStorage
+     *
+     * @description
+     * Sets an item in cookieStorage by given name.
+     *
+     * @deprecated use #put
+     *
+     * @param {string} name Item name
+     * @param {string} value Item value
+     */
+    set : function (name, value) {
+      delegate.put(name, value);
+    },
+
+    /**
+     * @ngdoc function
+     * @name pascalprecht.translate.$translateCookieStorage#put
+     * @methodOf pascalprecht.translate.$translateCookieStorage
+     *
+     * @description
+     * Sets an item in cookieStorage by given name.
+     *
+     * @param {string} name Item name
+     * @param {string} value Item value
+     */
+    put : function (name, value) {
+      delegate.put(name, value);
+    }
+  };
+
+  return $translateCookieStorage;
+}
+
+$translateCookieStorageFactory.displayName = '$translateCookieStorage';
+return 'pascalprecht.translate';
+
+}));
+
+/*!
+ * angular-translate - v2.15.2 - 2017-06-22
+ * 
+ * Copyright (c) 2017 The angular-translate team, Pascal Precht; Licensed MIT
+ */
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    define([], function () {
+      return (factory());
+    });
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    factory();
+  }
+}(this, function () {
+
+$translateLocalStorageFactory.$inject = ['$window', '$translateCookieStorage'];
+angular.module('pascalprecht.translate')
+
+/**
+ * @ngdoc object
+ * @name pascalprecht.translate.$translateLocalStorage
+ * @requires $window
+ * @requires $translateCookieStorage
+ *
+ * @description
+ * Abstraction layer for localStorage. This service is used when telling angular-translate
+ * to use localStorage as storage.
+ *
+ */
+.factory('$translateLocalStorage', $translateLocalStorageFactory);
+
+function $translateLocalStorageFactory($window, $translateCookieStorage) {
+
+  'use strict';
+
+  // Setup adapter
+  var localStorageAdapter = (function(){
+    var langKey;
+    return {
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateLocalStorage#get
+       * @methodOf pascalprecht.translate.$translateLocalStorage
+       *
+       * @description
+       * Returns an item from localStorage by given name.
+       *
+       * @param {string} name Item name
+       * @return {string} Value of item name
+       */
+      get: function (name) {
+        if(!langKey) {
+          langKey = $window.localStorage.getItem(name);
+        }
+
+        return langKey;
+      },
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateLocalStorage#set
+       * @methodOf pascalprecht.translate.$translateLocalStorage
+       *
+       * @description
+       * Sets an item in localStorage by given name.
+       *
+       * @deprecated use #put
+       *
+       * @param {string} name Item name
+       * @param {string} value Item value
+       */
+      set: function (name, value) {
+        langKey=value;
+        $window.localStorage.setItem(name, value);
+      },
+      /**
+       * @ngdoc function
+       * @name pascalprecht.translate.$translateLocalStorage#put
+       * @methodOf pascalprecht.translate.$translateLocalStorage
+       *
+       * @description
+       * Sets an item in localStorage by given name.
+       *
+       * @param {string} name Item name
+       * @param {string} value Item value
+       */
+      put: function (name, value) {
+        langKey=value;
+        $window.localStorage.setItem(name, value);
+      }
+    };
+  }());
+
+  var hasLocalStorageSupport = 'localStorage' in $window;
+  if (hasLocalStorageSupport) {
+    var testKey = 'pascalprecht.translate.storageTest';
+    try {
+      // this check have to be wrapped within a try/catch because on
+      // a SecurityError: Dom Exception 18 on iOS
+      if ($window.localStorage !== null) {
+        $window.localStorage.setItem(testKey, 'foo');
+        $window.localStorage.removeItem(testKey);
+        hasLocalStorageSupport = true;
+      } else {
+        hasLocalStorageSupport = false;
+      }
+    } catch (e){
+      hasLocalStorageSupport = false;
+    }
+  }
+  var $translateLocalStorage = hasLocalStorageSupport ? localStorageAdapter : $translateCookieStorage;
+  return $translateLocalStorage;
+}
+
+$translateLocalStorageFactory.displayName = '$translateLocalStorageFactory';
+return 'pascalprecht.translate';
+
+}));
+
 (function () {
 
   'use strict';

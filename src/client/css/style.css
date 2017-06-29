@@ -1136,6 +1136,9 @@
 .menu-main-layout__padding--size10 {
   padding: 0 10px;
 }
+.menu-main-layout__footer-lang {
+  position: relative;
+}
 
 .container {
   min-width: 960px;
