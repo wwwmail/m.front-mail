@@ -411,5 +411,6 @@
   "NO_IMPORTANT_ONE": "Not important",
   "ALL_MAIL2": "All mail",
   "MESSAGE_ACTION": "Actions with email",
-  "TO_ARCHIVE": "To archive"
+  "TO_ARCHIVE": "To archive",
+  "ENTER_EMAIL_OR_LOGIN": "Enter your email address or login"
 }

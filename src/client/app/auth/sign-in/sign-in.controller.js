@@ -64,7 +64,7 @@
                     $state.go('mail.inbox', {mbox: 'INBOX'});
                 })
                 .catch(function (response) {
-                    vm.userForm.errors = "Не правильный логин или пароль";
+                    vm.userForm.errors = 'WRONG_LOGIN_OF_PASSWORD';
                     console.log('error', vm.userForm.errors);
                 });
         }

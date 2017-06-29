@@ -15,7 +15,7 @@
             model: {},
             validations: {
                 username: {
-                    'required': 'Введите email или логин'
+                    'required': 'ENTER_EMAIL_OR_LOGIN'
                 }
             }
         };

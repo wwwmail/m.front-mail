@@ -411,5 +411,7 @@
   "NO_IMPORTANT_ONE": "Не важное",
   "ALL_MAIL2": "Вся почта",
   "MESSAGE_ACTION": "Действия с письмом",
-  "TO_ARCHIVE": "В архив"
+  "TO_ARCHIVE": "В архив",
+
+  "ENTER_EMAIL_OR_LOGIN": "Введите email или логин"
 }

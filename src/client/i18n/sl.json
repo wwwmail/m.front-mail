@@ -279,5 +279,6 @@
 	"IMPORTANT": "Pomembno",
 	"CREATE_TAG": "Ustvarjanje oznake",
 	"LIST_TAGS": "Seznam oznak",
-	"ADD_OTHER_MAIL": "Dodaj novo polje"
+	"ADD_OTHER_MAIL": "Dodaj novo polje",
+	"ENTER_EMAIL_OR_LOGIN": "Zadajte svoju e-mailovú adresu alebo užívateľské meno"
 }

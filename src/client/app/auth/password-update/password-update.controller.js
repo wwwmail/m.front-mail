@@ -15,13 +15,13 @@
             model: {},
             validations: {
                 code: {
-                    'required': 'Введите код'
+                    'required': 'INPUT_PLACEHOLDER_ENTER_SMS_CODE'
                 },
                 newpassword: {
-                    'required': 'Введите новый пароль'
+                    'required': 'INPUT_PLACEHOLDER_ENTER_NEW_PASSWORD'
                 },
                 passwordConf: {
-                    'required': 'Повторите новый пароль'
+                    'required': 'INPUT_PLACEHOLDER_CONFIRM_NEW_PASSWORD'
                 }
             }
         };
