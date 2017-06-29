@@ -98,16 +98,11 @@
             getProfiles();
 
             vm.user = $auth.user;
-
-            // vm.user.profile.photo = CONFIG.MediaUrl + vm.user.profile.photo;
-            // console.log('vm.user', vm.user);
         }
         
         function goToDesktopVersion(target) {
             var url = window.location.origin + target + '&token=' + vm.user.access_token.split(' ')[1];
-
             window.location.href = url;
-            // window.location.reload(true);
         }
 
         function getMailBox() {

@@ -10,7 +10,6 @@
     /* @ngInject */
     function HeaderController($rootScope, $scope, $state, $timeout, mail) {
         var vm = this;
-        vm.title = 'Header';
 
         vm.searchForm = {
             model: {}
@@ -79,6 +78,7 @@
             _.forEach(vm.folder.data.items, function (folder) {
                 if (folder.name === vm.$state.params.mbox) {
                     vm.currentFolder = folder;
+                    console.log('vm.currentFolder', vm.currentFolder);
                 }
             });
         }
