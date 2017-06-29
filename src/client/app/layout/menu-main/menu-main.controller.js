@@ -104,9 +104,8 @@
         }
         
         function goToDesktopVersion(target) {
+            var url = $location.host() + target + '&token=' + vm.user.access_token.split(' ')[1];
 
-            var url = $location.origin + target + '&token=' + vm.user.access_token.split(' ')[1];
-            // alert(target);
             window.location.href = url;
             // window.location.reload(true);
         }
