@@ -1919,11 +1919,19 @@
   color: #888888;
 }
 
-[placeholder] {
+::-webkit-input-placeholder {
   color: #999999;
 }
 
-::-webkit-input-placeholder {
+:-moz-placeholder {
+  color: #999999;
+}
+
+::-moz-placeholder {
+  color: #999999;
+}
+
+:-ms-input-placeholder {
   color: #999999;
 }
 
@@ -2287,16 +2295,6 @@
   border-left: 1px solid #fff;
 }
 
-[placeholder] {
-  color: #999999;
-  font-size: 16px;
-}
-
-::-webkit-input-placeholder {
-  color: #999999;
-  font-size: 16px;
-}
-
 .input-line {
   position: relative;
   display: flex;
@@ -2318,7 +2316,24 @@
   display: block;
   border: none;
   outline: none;
+  color: #000;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.input-line__input ::-webkit-input-placeholder {
+  color: #999999;
+  font-size: 16px;
+}
+.input-line__input :-moz-placeholder {
+  color: #999999;
+  font-size: 16px;
+}
+.input-line__input ::-moz-placeholder {
+  color: #999999;
+  font-size: 16px;
+}
+.input-line__input :-ms-input-placeholder {
+  color: #999999;
+  font-size: 16px;
 }
 .input-line__input:active, .input-line__input:focus {
   border-bottom: 1px solid #fc0;
@@ -2933,7 +2948,7 @@
   min-height: 46px;
   background: transparent;
   box-shadow: none !important;
-  padding: 4px 100px 0 30px !important;
+  padding: 4px 100px 4px 30px !important;
   border: none;
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
@@ -2948,11 +2963,14 @@
 .tags-input .tags .input {
   min-width: 40px;
   max-width: 100%;
-  line-height: 1;
+  height: 24px;
+  position: relative;
+  top: 1px;
   white-space: pre-wrap;
   word-wrap: break-word;
   margin: 0;
   padding-left: 0 !important;
+  font-size: 16px !important;
 }
 .tags-input .tags .input ::-webkit-input-placeholder {
   color: #999999;
@@ -2971,7 +2989,7 @@
   font-size: 16px !important;
 }
 .tags-input .tags .tag-item {
-  margin: 2px 5px 2px 0;
+  margin: 3px 5px 3px 0;
   padding: 0 10px 0 0;
   height: 20px !important;
   border-radius: 100px;
@@ -2995,7 +3013,7 @@
   background-color: #fee481 !important;
 }
 .tags-input .tags .tag-item:hover .tag-contact, .tags-input .tags .tag-item:focus .tag-contact, .tags-input .tags .tag-item:active .tag-contact {
-  padding-right: 13px;
+  padding-right: 15px;
 }
 .tags-input .tags .tag-item:hover .tag-remove, .tags-input .tags .tag-item:focus .tag-remove, .tags-input .tags .tag-item:active .tag-remove {
   display: block;
@@ -3029,12 +3047,14 @@
 .tags-input .tags .tag-remove {
   display: none;
   position: absolute;
-  top: 5px;
+  top: calc(50% - (9px / 2));
   bottom: 0;
-  right: -5px;
+  right: -3px;
   padding: 0;
   font-size: 9px;
-  width: 13px;
+  line-height: 1;
+  width: 9px;
+  height: 9px;
   opacity: 1;
 }
 .tags-input .tags .tag-remove:hover, .tags-input .tags .tag-remove:focus, .tags-input .tags .tag-remove:active {
@@ -5447,6 +5467,11 @@
   line-height: 0;
 }
 .tag-contact__name {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  font-size: 16px;
+  line-height: 1;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #000;

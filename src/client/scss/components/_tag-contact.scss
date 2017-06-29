@@ -2,30 +2,38 @@
   display: inline-flex;
   align-items: center;
 
-  &__avatar{
+  &__avatar {
     background-color: $select-input-line-active-item-color !important;
+
     .avatar__first-name, .avatar__last-name {
       color: rgba($textBlack, .5);
-      //font-size: 10px!important;
       font-size: 67% !important;
-
       line-height: 0;
     }
   }
 
   &__name {
+    display: flex;
+    align-items: center;
+
+    height: 20px;
+
+    font-size: 16px;
+    line-height: 1;
     white-space: nowrap;
     text-overflow: ellipsis;
     color: $textBlack;
   }
+
   &__email {
     //color: $storage-text-color;
     color: $textBlack;
     font-weight: bold;
     font-size: 14px;
-    margin-top: 1px;
 
+    margin-top: 1px;
   }
+
   &__phone {
     color: $storage-text-color;
   }

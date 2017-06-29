@@ -1,8 +1,4 @@
-[placeholder] {
-  color: $input-hlaceholder-color;
-}
-
-::-webkit-input-placeholder {
+@include placeholder {
   color: $input-hlaceholder-color;
 }
 
@@ -24,13 +20,14 @@
 
   border: 1px solid $button-border-color;
   outline: 1px solid transparent;
+
   background: 0 0 transparent;
 
   padding: 0 10px;
 
   -webkit-appearance: none;
 
-  &:disabled{
+  &:disabled {
     background-color: $white-color;
     //color: $input-hlaceholder-color;
   }
@@ -39,20 +36,19 @@
     border: 1px solid $yellow-yandex;
     outline: 1px solid $yellow-yandex;
   }
-  &--no-focus{
-    border: none!important;
-    outline: none!important;
+  &--no-focus {
+    border: none !important;
+    outline: none !important;
   }
 
-  &--compose-line{
-    &:disabled{
+  &--compose-line {
+    &:disabled {
       background-color: $white-color;
       color: $input-hlaceholder-color;
     }
   }
 
-
-  &--fc-sh-yellow{
+  &--fc-sh-yellow {
     border: 1px solid $input-border-color-black-yellow;
     &:focus {
       outline: none;
@@ -61,7 +57,7 @@
     }
   }
 
-  &--up-shadow{
+  &--up-shadow {
     box-shadow: $input-insert-shadow;
   }
 
@@ -83,28 +79,44 @@
 
 }
 
-.input-plash{
+.input-plash {
   position: absolute;
   right: 7px;
 
   color: $sillver-input-plsah-color;
   line-height: 1;
 
-  &--top11{top: calc(50% - (11px / 2));}
-  &--top12{top: calc(50% - (12px / 2));}
-  &--top13{top: calc(50% - (13px / 2));}
-  &--top14{top: calc(50% - (14px / 2));}
-  &--top15{top: calc(50% - (15px / 2));}
-  &--top16{top: calc(50% - (16px / 2));}
-  &--top17{top: calc(50% - (17px / 2));}
-  &--top18{top: calc(50% - (18px / 2));}
+  &--top11 {
+    top: calc(50% - (11px / 2));
+  }
+  &--top12 {
+    top: calc(50% - (12px / 2));
+  }
+  &--top13 {
+    top: calc(50% - (13px / 2));
+  }
+  &--top14 {
+    top: calc(50% - (14px / 2));
+  }
+  &--top15 {
+    top: calc(50% - (15px / 2));
+  }
+  &--top16 {
+    top: calc(50% - (16px / 2));
+  }
+  &--top17 {
+    top: calc(50% - (17px / 2));
+  }
+  &--top18 {
+    top: calc(50% - (18px / 2));
+  }
 }
 
-.input-data-valide-test{
+.input-data-valide-test {
   font: 12px/1 $mainFont;
   color: $input-data-valide-test-color;
 
-  &__we-offer{
+  &__we-offer {
     color: $input-data-valide-test-offer-color;
 
     padding-left: 15px;
