@@ -2310,7 +2310,7 @@
 }
 .input-line__input {
   position: relative;
-  padding: 0 62px 5px 32px;
+  padding: 0 62px 5px 30px;
   min-height: 58px;
   line-height: 21px;
   font-size: 16px;
@@ -2359,7 +2359,7 @@
 .input-line__btn-more {
   position: absolute;
   top: 19px;
-  right: 11px;
+  right: 10px;
   margin-right: 10px;
   cursor: pointer;
 }
@@ -2921,7 +2921,7 @@
   width: auto;
   background: transparent;
   border: none;
-  min-height: 0px !important;
+  min-height: 0 !important;
 }
 .tags-input .host {
   outline: none;
@@ -2930,6 +2930,7 @@
   outline: none !important;
 }
 .tags-input .tags {
+  min-height: 46px;
   background: transparent;
   box-shadow: none !important;
   padding: 4px 100px 0 30px !important;
@@ -2937,7 +2938,6 @@
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
   border-radius: 0 !important;
-  min-height: 46px;
 }
 .tags-input .tags.focused, .tags-input .tags:active, .tags-input .tags:focus, .tags-input .tags:hover {
   border: none;
@@ -2951,7 +2951,7 @@
   line-height: 1;
   white-space: pre-wrap;
   word-wrap: break-word;
-  margin: 0 2px;
+  margin: 0;
   padding-left: 0 !important;
 }
 .tags-input .tags .input ::-webkit-input-placeholder {
@@ -3862,17 +3862,17 @@
   flex-flow: column wrap;
   justify-content: flex-start;
   width: 100%;
-  font: 100 14px/1 Arial, sans-serif;
   min-width: 60px;
+  font: 100 14px/1 Arial, sans-serif;
 }
 .inbox-message__subject {
   display: inline-block;
-  flex-shrink: 0;
-  color: #373737;
+  min-height: 16px;
   margin: 0 0 10px 0;
-  overflow: hidden;
+  color: #373737;
   text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
 }
 .inbox-message__message {
   display: inline-block;
@@ -3915,7 +3915,7 @@
   margin-right: 10px;
 }
 .inbox-message__label {
-  margin: 2px 20px 2px 0px;
+  margin: 2px 20px 2px 0;
 }
 .inbox-message--new .inbox-message__name {
   font-weight: 600;
