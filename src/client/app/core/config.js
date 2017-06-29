@@ -5,6 +5,17 @@
     
     var core = angular.module('app.core');
 
+    core.config(function ($translateProvider) {
+        $translateProvider.useStaticFilesLoader({
+            prefix: 'i18n/',
+            suffix: '.json'
+        });
+        $translateProvider.fallbackLanguage('ru');
+        $translateProvider.preferredLanguage('ru');
+        $translateProvider.useLocalStorage();
+        $translateProvider.useLoaderCache('$translationCache');
+    });
+
     core.config(function (toastrConfig) {
         angular.extend(toastrConfig, {
             timeOut: 2000,

@@ -154,6 +154,13 @@ gulp.task('jsonDev', function () {
         .pipe(gulp.dest(pathBuildDev + 'json'));
 });
 
+gulp.task('translationDev', function buildTranslationCache() {
+    var jsonMinify = require('gulp-jsonminify');
+    return gulp.src([pathClient + 'i18n/*.json'])
+        .pipe(jsonMinify())
+        .pipe(gulp.dest(pathBuildDev + 'i18n'));
+});
+
 gulp.task('serverDev', function () {
     var middleware = history({});
 
@@ -352,6 +359,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('default', [
+    'translationDev',
     'bowerDev',
     'angularDev',
     'bowerCssDev',

@@ -21,6 +21,8 @@
             'infinite-scroll',
             'content-editable',
             'LocalStorageModule',
-            'ngTagsInput'
+            'ngTagsInput',
+            'pascalprecht.translate',
+            'ngCookies'
         ]);
 })();

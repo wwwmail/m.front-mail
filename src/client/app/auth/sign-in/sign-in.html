@@ -15,7 +15,8 @@
                         <div class="form__field-item mrg__bottom10">
                             <div class="field-style">
                                 <input class="input input--size_l input--up-shadow width--inh" type="text"
-                                       ng-model="vm.userForm.model.username" required placeholder="Логин">
+                                       ng-model="vm.userForm.model.username" required
+                                       placeholder="{{ 'INPUT_PLACEHOLDER_LOGIN' | translate }}">
                                 <validation-errors data="userForm.username"
                                                    server="vm.userForm.errors"
                                                    messages="vm.userForm.validations.username">
@@ -28,7 +29,8 @@
                             <div class="field-style">
                                 <input class="input input--size_l input--up-shadow width--inh"
                                        type="password"
-                                       ng-model="vm.userForm.model.password" required placeholder="Пароль">
+                                       ng-model="vm.userForm.model.password" required
+                                       placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}">
                             </div>
                             <validation-errors data="userForm.password"
                                                server="vm.userForm.errors"
@@ -39,7 +41,9 @@
                         <!-- войти -->
                         <div class="form__field-item mrg__bottom10">
                             <div class="field-style">
-                                <button class="btn btn--size_l btn--yellow width--inh" type="submit">Войти</button>
+                                <button class="btn btn--size_l btn--yellow width--inh" type="submit">
+                                    {{ 'SING_IN' | translate }}
+                                </button>
                             </div>
                         </div>
 
@@ -61,19 +65,23 @@
                                             </span>
                                     </div>
                                     <span class="checkbox__text " role="presentation">
-                                        Запомнить меня
+                                       {{'REMEMBER_ME' | translate }}
                                     </span>
                                 </label>
                             </div>
                             <div class="field-style widtn--inh font--right">
-                                <a class="link link-aith" ui-sref="passwordReset">Забыли пароль?</a>
+                                <a class="link link-aith" ui-sref="passwordReset">
+                                    {{ 'FORGOT_YOUR_PASSWORD' | translate }}
+                                </a>
                             </div>
                         </div>
 
 
                     </form>
                     <hr class="hr hr--auth ">
-                    <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" ui-sref="signUp">Регистрация</button>
+                    <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" ui-sref="signUp">
+                        {{ 'CHECK_IN' | translate }}
+                    </button>
                 </div>
             </div>
 
@@ -91,33 +99,36 @@
 
                 <div class="navigation">
                     <div class="navigation__row">
-                        <div class="navigation__item position width--size28 ">
+                        <div class="navigation__item position width--size28">
 
-                            <div class="choice-language">
+                            <!-- Языковое меню-->
+                            <choice-language></choice-language>
 
-                                <a class="choice-language__link choice-language--active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a>
-                                <!---->
-                                <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a>
+                            <!--    <div class="choice-language">
 
-                            </div>
+                                    <a class="choice-language__link choice-language&#45;&#45;active" href=""><img class="choice-language__country" src="images/country/albania.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/bosnia.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/croatia.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/cz.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/macedonia.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/russia.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/serbia.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/slovakia.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/Slovenia.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/uk.svg" alt=""></a>
+                                    &lt;!&ndash;&ndash;&gt;
+                                    <a class="choice-language__link" href=""><img class="choice-language__country" src="images/country/ukraine.svg" alt=""></a>
+
+                                </div>-->
                         </div>
                     </div>
                 </div>
