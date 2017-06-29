@@ -168,7 +168,6 @@ gulp.task('faviconDev', function () {
 
 gulp.task('serverDev', function () {
     var middleware = history({});
-
     connect.server({
         root: ['build-dev'],
         livereload: false,
@@ -267,14 +266,13 @@ gulp.task('fontsProd', function () {
         .pipe(gulp.dest(pathBuildProd + 'fonts'));
 });
 
-// gulp.task('configProd', function () {
-//     return gulp.src(config)
-//         .pipe(gulp.dest(pathBuildProd + 'config'));
-// });
+gulp.task('configProd', function () {
+    return gulp.src(config)
+        .pipe(gulp.dest(pathBuildProd + 'config'));
+});
 
 gulp.task('imagesProd', function () {
     return gulp.src(pathClient + 'images/**/*')
-        // .pipe(imagemin())
         .pipe(gulp.dest(pathBuildProd + 'images'));
 });
 
@@ -350,7 +348,7 @@ gulp.task('build', [
     'compassProd',
     'indexProd',
     'fontsProd',
-    // 'configProd',
+    'configProd',
     'imagesProd',
     'jsonProd',
     'stylesCopyProd',
