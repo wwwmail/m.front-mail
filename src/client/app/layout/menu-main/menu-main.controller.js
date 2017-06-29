@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
+    MenuMainController.$inject = ['$scope', '$rootScope', '$uibModal', '$auth', 'mail', 'mailBox', 'tag', 'profile', '$location'];
 
     /* @ngInject */
-    function MenuMainController($scope, $rootScope, $uibModal, $auth, mail, mailBox, tag, profile, CONFIG) {
+    function MenuMainController($scope, $rootScope, $uibModal, $auth, mail, mailBox, tag, profile, $location) {
         var vm = this;
 
         vm.standartFolders = [
@@ -104,8 +104,10 @@
         }
         
         function goToDesktopVersion(target) {
+
+            var url = $location.origin + target + '&token=' + vm.user.access_token.split(' ')[1];
             // alert(target);
-            window.location.href = target + '&token=' + vm.user.access_token.split(' ')[1];
+            window.location.href = url;
             // window.location.reload(true);
         }
 
