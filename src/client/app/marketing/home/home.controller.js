@@ -18,7 +18,7 @@
             //     return;
             // }
 
-            $state.go('mail.inbox');
+            $state.go('mail.inbox', {mbox: 'INBOX'});
         }
     }
 })();
