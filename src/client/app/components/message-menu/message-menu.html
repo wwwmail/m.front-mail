@@ -1,5 +1,5 @@
 <div class="popup__head">
-    <span class="popup__head__title">Действия с письмом</span>
+    <span class="popup__head__title">{{ 'MESSAGE_ACTION' | translate }}</span>
     <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s"
             type="button"
             ng-click="vm.close()"></button>
@@ -9,7 +9,7 @@
 <div class="popup__content scrollables">
     <div class="popup__item" ng-click="vm.goToAnswer()">
         <span class="icon-reply popup__icon"></span>
-        <span class="popup__item__title">Ответить</span>
+        <span class="popup__item__title">{{ 'REPLAY' | translate }}</span>
     </div>
 
     <!--<div class="popup__item" ng-click="vm.goToFwd()">-->
@@ -20,56 +20,56 @@
     <div class="popup__item"
          ng-click="vm.goToFwd()">
         <span class="icon-forward popup__icon"></span>
-        <span class="popup__item__title">Переслать</span>
+        <span class="popup__item__title">{{ 'FORWARD' | translate }}</span>
     </div>
 
     <div class="popup__item"
          ng-if="vm.$state.params.mbox !== 'Trash'"
-         ng-click="vm.move({name: 'Trash', caption: 'Корзина'})">
+         ng-click="vm.move({name: 'Trash', caption: ('Trash' | translate)})">
         <span class="icon-delete popup__icon color--light-red"></span>
-        <span class="popup__item__title">Удалить</span>
+        <span class="popup__item__title">{{ 'DELETE' | translate }}</span>
     </div>
 
     <div class="popup__item"
          ng-if="vm.$state.params.mbox === 'Trash'"
          ng-click="vm.destroy({name: 'Trash'})">
         <span class="icon-delete popup__icon color--light-red"></span>
-        <span class="popup__item__title">Удалить</span>
+        <span class="popup__item__title">{{ 'DELETE' | translaste }}</span>
     </div>
 
     <div class="popup__item" ng-click="vm.triggerSeen()">
         <span class="icon-unread popup__icon"></span>
-        <span class="popup__item__title" ng-if="!vm.message.seen">Прочитано</span>
-        <span class="popup__item__title" ng-if="vm.message.seen">Не прочитано</span>
+        <span class="popup__item__title" ng-if="!vm.message.seen">{{ 'READ' | translate }}</span>
+        <span class="popup__item__title" ng-if="vm.message.seen">{{ 'NOT_READ' | translate }}</span>
     </div>
 
     <div class="popup__item" ng-click="vm.openLayoutFolder()">
         <span class="icon-folder popup__icon"></span>
-        <span class="popup__item__title">В папку</span>
+        <span class="popup__item__title">{{ 'IN_FOLDER' | translate }}</span>
     </div>
 
     <div class="popup__item" ng-click="vm.openTagListPopup()">
         <span class="icon-tag popup__icon"></span>
-        <span class="popup__item__title">Метки</span>
+        <span class="popup__item__title">{{ 'TAGS' | translate }}</span>
     </div>
 
-    <div class="popup__item" ng-click="vm.move({name: 'Archive', caption: 'Архив'})">
+    <div class="popup__item" ng-click="vm.move({name: 'Archive', caption: ('Archive' | translate)})">
         <span class="icon-archive popup__icon"></span>
-        <span class="popup__item__title">В архив</span>
+        <span class="popup__item__title">{{ 'TO_ARCHIVE' | translate }}</span>
     </div>
 
     <div class="popup__item"
          ng-if="vm.$state.params.mbox === 'Junk'"
-         ng-click="vm.move({name: 'INBOX', caption: 'Входящие'})">
+         ng-click="vm.move({name: 'INBOX', caption: ('INBOX' | translate)})">
         <span class="icon-spam popup__icon color--yellow"></span>
-        <span class="popup__item__title">Не спам</span>
+        <span class="popup__item__title">{{ 'NO_SPAM' | translate }}</span>
     </div>
 
     <div class="popup__item"
          ng-if="vm.$state.params.mbox !== 'Junk'"
-         ng-click="vm.move({name: 'Junk', caption: 'Спам'})">
+         ng-click="vm.move({name: 'Junk', caption: ('SPAM' | translate) })">
         <span class="icon-spam popup__icon color--yellow"></span>
-        <span class="popup__item__title">Спам</span>
+        <span class="popup__item__title">('SPAM' | translate)</span>
     </div>
 
     <!--    <div class="popup__item">
@@ -79,7 +79,7 @@
 
     <div class="popup__item" ng-click="vm.setImportant()">
         <span class="icon-important-solid popup__icon color--semi-dark-red"></span>
-        <span class="popup__item__title" ng-if="!vm.message.important">Важное</span>
-        <span class="popup__item__title" ng-if="vm.message.important">Не важное</span>
+        <span class="popup__item__title" ng-if="!vm.message.important">{{ 'IMPORTANT_ONE' | translate }}</span>
+        <span class="popup__item__title" ng-if="vm.message.important">{{ 'NOT_IMPORTANT_ONE' | translate }}</span>
     </div>
 </div>

@@ -1,25 +1,21 @@
-<div class="mail-message ">
-    <div class="mail-message__main-info ">
+<div class="mail-message">
+    <div class="mail-message__main-info">
 
         <!-- Хедер сообщения -->
         <div class="mail-message__title wrapper">
             {{ vm.message.model.Subject }}
         </div>
 
-
         <div class="mail-message__main-content wrapper">
-            <!--<div class="mail-message__header">-->
-                <!--<div class="mail-message__header-container">-->
-                <!--</div>-->
-            <!--</div>-->
-            <!---->
+
             <div class="mail-message__info position--sticky wrapper wrapper--is-margin">
                 <div class="info-sender width--all">
                     <div class="info-sender__head flex--inline">
                         <div class="info-sender__avatar flex">
                             <div class="avatar avatar--settings avatar--size42 avatar--second-style">
                                 <avatar-name name="vm.message.model.from"
-                                             email="vm.message.model.to[0].fromAddress"></avatar-name>
+                                             email="vm.message.model.to[0].fromAddress">
+                                </avatar-name>
                             </div>
                         </div>
 
@@ -44,7 +40,7 @@
                                  ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div>
                             <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
                                  ng-if="vm.$state.params.mbox !== 'Trash'"
-                                 ng-click="vm.move({name: 'Trash', caption: 'Корзина'})"></div>
+                                 ng-click="vm.move({name: 'Trash', caption: ('Trash' | translate)})"></div>
                             <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
                                  ng-if="vm.$state.params.mbox === 'Trash'"
                                  ng-click="vm.destroy({name: 'Trash'})"></div>
@@ -64,7 +60,7 @@
 
                     <div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo">
                         <div class="info-sender__message-info-item to-whom">
-                            <span class="to-whom__title width--min60">Кому</span>
+                            <span class="to-whom__title width--min60">{{ 'TO' | translate }}</span>
                             <div class="avatar avatar--settings avatar--size28 avatar--second-style">
                                 <avatar-name name="vm.message.model.to[0].name"
                                              email="vm.message.model.to[0].address"></avatar-name>
@@ -75,7 +71,7 @@
                         </div>
 
                         <div class="info-sender__message-info-item to-whom">
-                            <span class="to-whom__title width--min60">От Кого</span>
+                            <span class="to-whom__title width--min60">{{ 'FROM_WHOM_U' | translate }}</span>
                             <div class="avatar avatar--settings avatar--size28 avatar--second-style"
                                  ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">
                                 <avatar-name name="vm.message.model.from"
@@ -87,14 +83,14 @@
                         </div>
 
                         <div class="info-sender__message-info-item to-whom">
-                            <span class="to-whom__title width--min60">Папка</span>
+                            <span class="to-whom__title width--min60">{{ 'FOLDER' | translate }}</span>
                             <div class="to-whom__folders">
                                 <div class="to-whom__folder">{{ vm.message.model.mboxi18n }}</div>
                             </div>
                         </div>
 
                         <div class="info-sender__message-info-item to-whom">
-                            <span class="to-whom__title width--min60">Метки</span>
+                            <span class="to-whom__title width--min60">{{ 'TAGS' | translate }}</span>
                             <div class="inbox-message__labels">
                                 <button class="info-sender__important-tags important-tags btn--not-style btn--not-events "
                                         ng-class="{'important-tags--active': vm.message.model.important}"
@@ -124,7 +120,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Тело сообщения -->
             <div class="mail-message__body">
                 <div class="body-message">
@@ -148,24 +144,14 @@
                              contenteditable="true"
                              ng-model="vm.text"
                              required
-                             placeholder="Быстрый ответ"
-                        >
+                             placeholder="{{ 'QUICK_RESPONSE' | translate }}">
                         </div>
                     </div>
-                    <button class="quick-reply__send btn btn--not-style">Отпр.</button>
+                    <button class="quick-reply__send btn btn--not-style">{{ 'SEND_SHORT' | translate }}</button>
                 </div>
             </div>
         </form>
     </div>
-
-
-
-
-
-    <!--<div class="mail-message__footer">-->
-        <!--<div class="btn btn&#45;&#45;not-events btn&#45;&#45;not-style btn&#45;&#45;main-mobile-color btn&#45;&#45;size_20 icon-more mrg__right"></div>-->
-    <!--</div>-->
-
 </div>
 
 

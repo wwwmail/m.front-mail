@@ -358,7 +358,6 @@
   "CLEAR_FOLDER": "Очистить папку",
   "SEND_IN_ATTACH": "Отправить",
   "SEND_IN_ATTACH_1": "как вложение",
-
   "COLOR": "Цветная",
   "GRASS": "Трава",
   "WORLD_OF_TANKS": "World of Tanks",
@@ -373,7 +372,6 @@
   "IN": "в",
   "YESTERDAY": "вчера",
   "TODAY": "сегодня",
-
   "ALL_TAGS": "Все метки",
   "ALL_TAGS_2": "Все тэги",
   "ALL_FOLDERS": "Все папки",
@@ -382,17 +380,37 @@
   "IN_THE_FIELD_RECIPIENT": "в поле \"Получатель\"",
   "IN_THE_BODY_OF_THE_LETTER": "в теле письма",
   "IN_THE_TEXT_OF_THE_LETTER": "в теле письма",
-
   "cs": "Чешский",
   "sk": "Словацкий",
   "en": "Английский",
   "ru": "Русский",
   "uk": "Украинский",
-
   "DOWNLOAD_CONTACTS_FORM_FILE": "Загрузить контакты из файла",
   "SUPPORTS_IMPORT": "mail.cz поддерживает импорт контактов, сохранённых в форматах .csv и vCard.",
   "DRAG_THE_FILE_HERE": "Перетащите файл сюда",
   "OR_SELECT_A_FILE": "или выберете файл",
   "CONTACT_IMPORT_FAIL": "Не удалось добавить контакты. Убедитесь, что загружаете файл формата .csv или vCard.",
-  "CONTACTS_MOVER": "Контакты перенесены."
+  "CONTACTS_MOVER": "Контакты перенесены.",
+
+  "SEARCH_FOR_LETTERS": "Поиск писем",
+  "BACK": "Назад",
+  "NEW_LETTER": "Новое письмо",
+  "LETTER_SEND_SUCCESS": "Сообщение было успешно отправленно",
+  "MOBILE": "Мобильная",
+  "FULL": "Полная",
+  "SETTING": "Настройки",
+  "FILTERS": "Фильтры",
+  "SEARCH_NO_RESULT": "Не нашлось писем по вашему запросу",
+  "TRY_SEARCH": "Попробуйте поискать",
+  "ALL_MAIL": "по всей почте",
+  "EMPTY_FOLDER": "Пустая папка",
+  "GO_TO_FOLDER": "Перейти в папку",
+  "FOLDER": "Папки",
+  "QUICK_RESPONSE": "Быстрый ответ",
+  "SEND_SHORT": "Отпр.",
+  "IMPORTANT_ONE": "Важное",
+  "NO_IMPORTANT_ONE": "Не важное",
+  "ALL_MAIL2": "Вся почта",
+  "MESSAGE_ACTION": "Действия с письмом",
+  "TO_ARCHIVE": "В архив"
 }

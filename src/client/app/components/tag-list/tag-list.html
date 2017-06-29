@@ -1,5 +1,5 @@
 <div class="popup__head">
-    <span class="popup__head__title">Метки</span>
+    <span class="popup__head__title">{{ 'TAGS' | translate }}</span>
     <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s"
             type="button"
             ng-click="vm.close()"></button>
@@ -11,8 +11,9 @@
         <div class="letter-tags">
             <span class="icon-important popup__icon popup__icon--not-size color--semi-dark-red"></span>
         </div>
-        <span class="tag-list__title tag-list__title--mrg-left" ng-if="vm.isImportant">Важное</span>
-        <span class="tag-list__title tag-list__title--mrg-left" ng-if="!vm.isImportant">Не важное</span>
+        <span class="tag-list__title tag-list__title--mrg-left"
+              ng-if="vm.isImportant">{{ 'IMPORTANT_ONE' | translate }}</span>
+        <span class="tag-list__title tag-list__title--mrg-left" ng-if="!vm.isImportant">{{ 'NO_IMPORTANT_ONE' | translate }}</span>
         <input class="tag-list__checked" type="checkbox"
                ng-model="vm.isImportant"
                ng-change="vm.setImportant()">
@@ -22,12 +23,9 @@
     <label class="tag-list__item" ng-repeat="tag in vm.tags.items">
         <div class="letter-tags" style="color: {{ tag.bgcolor }}">
             <span class="letter-tags__icon icon-label-message font--size21"></span>
-            <!--<svg class="">-->
-                <!--<use xlink:href="#ico_label-message"></use>-->
-            <!--</svg>-->
         </div>
         <span class="tag-list__title tag-list__title--mrg-left">
-                {{ tag.tag_name }}
+            {{ tag.tag_name }}
         </span>
         <input class="tag-list__checked"
                type="checkbox"
@@ -41,6 +39,6 @@
 <div class="popup__footer">
     <button class="btn btn--yellow btn--no-radius width--all height--min-inh font--size20"
             ng-click="vm.close()">
-        Готово
+        {{ 'IS_DONE' | translate }}
     </button>
 </div>

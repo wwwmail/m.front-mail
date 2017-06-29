@@ -1,5 +1,5 @@
 <div class="menu-main-layout scrollables">
-    <!-- хедер меню-->
+
     <div class="menu-main-layout__header">
         <img class="menu-main-layout__header__logo img-responsive" src="/images/logo.png">
         <button class="menu-main-layout__button-close btn"
@@ -54,7 +54,8 @@
                        ng-click="vm.closeMenu();"
                        ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
                         <span class="{{ folder.icon }} menu-main__icon"></span>
-                        <span class="menu-main__title">{{ folder.caption }}</span>
+                        <!--<span class="menu-main__title">{{ folder.caption }}</span>-->
+                        <span class="menu-main__title">{{ folder.name | translate }}</span>
                     </a>
                     <div class="menu-main__additional-option">
                         <button class="menu-main__clear-brush icon-brush btn--not-style font--size12"
@@ -81,7 +82,10 @@
                                    ng-click="vm.closeMenu();"
                                    ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined})">
                                     <span class="icon-folder-desk menu-main__icon"></span>
-                                    <span class="menu-main__title">{{ folderSub.caption }}</span></a>
+                                    <span class="menu-main__title">
+                                        {{ folderSub.caption }}
+                                    </span>
+                                </a>
                                 <div class="menu-main__additional-option">
                                     <span class="menu-main__count">{{ folderSub.messagesCount || '' }}</span>
                                 </div>
@@ -102,7 +106,7 @@
                        ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})"
                        ng-click="vm.closeMenu();">
                         <span class="icon-icon-flag-light menu-main__icon"></span>
-                        <span class="menu-main__title">Важные</span>
+                        <span class="menu-main__title">{{ 'IMPORTANT' | translate }}</span>
                     </a>
                     <div class="menu-main__additional-option"></div>
                 </div>
@@ -113,7 +117,7 @@
                        ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})"
                        ng-click="vm.closeMenu();">
                         <span class="icon-icon-screpka menu-main__icon"></span>
-                        <span class="menu-main__title">С вложениями</span>
+                        <span class="menu-main__title">{{ 'SEARCH_IS_ATTACH' | translate }}</span>
                     </a>
                 </div>
             </li>
@@ -123,7 +127,7 @@
                        ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})"
                        ng-click="vm.closeMenu();">
                         <span class="icon-icon-mail-light menu-main__icon"></span>
-                        <span class="menu-main__title">Непрочитанные</span>
+                        <span class="menu-main__title">{{ 'UNREAD' | translate }}</span>
                     </a>
                 </div>
             </li>
@@ -149,7 +153,7 @@
                 <div class="menu-main__item-content">
                     <a class="menu-main__link" href>
                         <span class="icon-filter menu-main__icon"></span>
-                        <span class="menu-main__title">Фильтры</span>
+                        <span class="menu-main__title">{{ 'FILTERS' | translate }}</span>
                     </a>
                     <div class="menu-main__additional-option">
                         <div class="radio-button">
@@ -165,9 +169,11 @@
             </li>
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
-                    <a class="menu-main__link" ng-click="vm.goToDesktopVersion('http://m.mailcz.devogic.com/?version=desktop&page=settings.main')" target="_blank">
+                    <a class="menu-main__link"
+                       ng-click="vm.goToDesktopVersion('http://m.mailcz.devogic.com/?version=desktop&page=settings.main')"
+                       target="_blank">
                         <span class="icon-settings-desk menu-main__icon"></span>
-                        <span class="menu-main__title">Настройки</span>
+                        <span class="menu-main__title">{{ 'SETTING' | translate }}</span>
                     </a>
                 </div>
             </li>
@@ -178,8 +184,10 @@
         <hr class="hr hr--main-menu">
         <div class="mrg__left10 mrg__top10 mrg__bottom5">
             <span class="link link--gray"
-                  ng-click="vm.goToDesktopVersion('http://m.mailcz.devogic.com/?version=desktop&page=mail.inbox')">Полная |</span>
-            <span class="font--normal">Мобильная v 1.0</span>
+                  ng-click="vm.goToDesktopVersion('http://m.mailcz.devogic.com/?version=desktop&page=mail.inbox')">
+                {{ 'FULL' | translate }} |
+            </span>
+            <span class="font--normal">{{ 'MOBILE' | translate }} v 1.0</span>
             <choice-language></choice-language>
         </div>
     </div>

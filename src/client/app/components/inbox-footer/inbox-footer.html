@@ -13,8 +13,6 @@
              ng-if="vm.messages.checked.length"
              ng-class="{'is-more-switch': vm.isMoreSwitch}">
 
-
-
             <div class="inbox-footer__group-option-wrapper">
                 <div class="inbox-footer__group-option-content">
 
@@ -22,59 +20,59 @@
                     <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font--size20 flex flex--column align-items--cn color--light-red padding"
                             type="button"
                             ng-if="vm.$state.params.mbox !== 'Trash'"
-                            ng-click="vm.move({name: 'Trash', caption: 'Корзина'})">
-                        <span class="font--arial font--size14 mrg__top5">Удалить</span>
+                            ng-click="vm.move({name: 'Trash', caption: ('BASKET' | translate)})">
+                        <span class="font--arial font--size14 mrg__top5">{{ 'DELETE' | translate }}</span>
                     </button>
 
                     <button class="inbox-footer__group-option-item btn btn--not-style icon-delete font--size20 flex flex--column align-items--cn color--light-red padding"
                             type="button"
                             ng-if="vm.$state.params.mbox === 'Trash'"
                             ng-click="vm.destroy({name: 'Trash'})">
-                        <span class="font--arial font--size14 mrg__top5">Удалить</span>
+                        <span class="font--arial font--size14 mrg__top5">{{ 'DELETE' | translate }}</span>
                     </button>
 
                     <button class="inbox-footer__group-option-item btn btn--not-style  icon-spam font--size20 flex flex--column align-items--cn color--yellow padding"
                             type="button"
                             ng-if="vm.$state.params.mbox !== 'Junk'"
-                            ng-click="vm.move({name: 'Junk', caption: 'Спам'})">
-                        <span class="font--arial font--size14 mrg__top5">Это спам</span>
+                            ng-click="vm.move({name: 'Junk', caption: ('SPAM' | translate)})">
+                        <span class="font--arial font--size14 mrg__top5">{{ 'SPAM' | translate }}</span>
                     </button>
 
                     <button class="inbox-footer__group-option-item btn btn--not-style  icon-spam font--size20 flex flex--column align-items--cn color--yellow padding"
                             type="button"
                             ng-if="vm.$state.params.mbox === 'Junk'"
-                            ng-click="vm.move({name: 'Inbox', caption: 'Входящие'})">
-                        <span class="font--arial font--size14 mrg__top5">Не спам</span>
+                            ng-click="vm.move({name: 'Inbox', caption: ('INBOX' | translate)})">
+                        <span class="font--arial font--size14 mrg__top5">{{ 'NOT_SPAM' | translate }}</span>
                     </button>
 
                     <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-unread font--size20 flex flex--column align-items--cn padding"
                             type="button" ng-click="vm.triggerSeen()">
-                        <span class="font--arial font--size14 mrg__top5" ng-if="vm.isSeen">Не прочитано</span>
-                        <span class="font--arial font--size14 mrg__top5" ng-if="!vm.isSeen">Прочитано</span>
+                        <span class="font--arial font--size14 mrg__top5" ng-if="vm.isSeen">{{ 'NOT_READ' | translate }}</span>
+                        <span class="font--arial font--size14 mrg__top5" ng-if="!vm.isSeen">{{ 'READ' | translate }}</span>
                     </button>
 
                     <!-- переключатель-->
                     <button class="inbox-footer__group-option-item inbox-footer__group-option-item-switch btn btn--not-style icon-double-arrow-right font--size20 flex flex--column align-items--cn padding"
                             type="button" ng-click="vm.isMoreSwitch = !vm.isMoreSwitch">
-                        <span class="font--arial font--size14 mrg__top5">Еще</span>
+                        <span class="font--arial font--size14 mrg__top5">{{ 'YET' | translate }}</span>
                     </button>
 
                     <!-- вторичные кнопки-->
                     <button class="inbox-footer__group-option-item btn btn--not-style icon-folder font--size20 flex flex--column align-items--cn padding"
                             type="button" ng-click="vm.openLayoutFolder()">
-                        <span class="font--arial font--size14 mrg__top5">В папку</span>
+                        <span class="font--arial font--size14 mrg__top5">{{ 'IN_FOLDER' | translate }}</span>
                     </button>
 
                     <button class="inbox-footer__group-option-item btn btn--not-style icon-tag font--size20 flex flex--column align-items--cn padding"
                             type="openTagListPopup"
                             ng-click="vm.openTagListPopup()">
-                        <span class=" font--arial font--size14 mrg__top5">Метки</span>
+                        <span class=" font--arial font--size14 mrg__top5">{{ 'TAGS' | translate }}</span>
                     </button>
 
                     <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-archive font--size20 flex flex--column align-items--cn padding"
                             type="button"
-                            ng-click="vm.move({name: 'Archive', caption: 'Архив'})">
-                        <span class="font--arial font--size14 mrg__top5">Архив</span>
+                            ng-click="vm.move({name: 'Archive', caption: ('Archive' | translate)})">
+                        <span class="font--arial font--size14 mrg__top5">{{ 'Archive' | translate }}</span>
                     </button>
                 </div>
             </div>

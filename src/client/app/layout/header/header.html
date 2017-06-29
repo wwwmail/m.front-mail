@@ -40,7 +40,7 @@
                     <input class="input input--no-border input--no-focus input--size_l width--all"
                            id="search-input"
                            type="text"
-                           placeholder="Поиск писем"
+                           placeholder="{{ 'SEARCH_FOR_LETTERS' | translate }}"
                            ng-model="vm.searchForm.model.search">
                 </form>
             </div>
@@ -60,7 +60,7 @@
                 <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left"
                         type="button"
                         ui-sref="mail.inbox({mbox: vm.$state.params.mbox})">
-                    <span class="font--arial font--size15 mrg__left5">Назад</span>
+                    <span class="font--arial font--size15 mrg__left5">{{ 'BACK' | translate }}</span>
                 </button>
             </div>
             <div class="header__right">
@@ -89,7 +89,7 @@
             </div>
 
             <div class="header__center ">
-                <span class="header__title-text font--size18 font--bold">Новое письмо</span>
+                <span class="header__title-text font--size18 font--bold">{{ 'NEW_LETTER' | translate }}</span>
             </div>
 
             <div class="header__right">
@@ -130,7 +130,7 @@
         <div class="pop-up-notification__container">
             <span class="pop-up-notification__validate-icon"></span>
             <span class="pop-up-notification__notific" ng-bind-html="vm.notify.message">
-                Сообщение было успешно отправленно.
+               {{ 'LETTER_SEND_SUCCESS' | translate }}
                 <!--<a class="pop-up-notification__link"> Смотреть почту</a>-->
             </span>
             <button class="pop-up-notification__close btn--not-style icon-remove-thick btn--main-mobile-color"
