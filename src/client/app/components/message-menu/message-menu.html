@@ -69,7 +69,7 @@
          ng-if="vm.$state.params.mbox !== 'Junk'"
          ng-click="vm.move({name: 'Junk', caption: ('SPAM' | translate) })">
         <span class="icon-spam popup__icon color--yellow"></span>
-        <span class="popup__item__title">('SPAM' | translate)</span>
+        <span class="popup__item__title">{{ 'SPAM' | translate }}</span>
     </div>
 
     <!--    <div class="popup__item">
