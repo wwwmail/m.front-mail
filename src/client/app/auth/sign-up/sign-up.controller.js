@@ -48,22 +48,20 @@
                     $state.go('mail.inbox');
                 })
                 .catch(function (response) {
+                    vm.userForm.isLoading = false;
                     vm.userForm.errors = response.data.data;
-                    console.log('error', response);
+                    vm.error = response.data.data;
                 });
         }
 
         function sendCode() {
-            var phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
-            // console.log('vm.userForm.model.phone', phone);
+            var phone = vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
             authService.sendCode({}, {phone: phone})
                 .then(function (response) {
-                    console.log('response', response);
                     vm.codeResult = response.data;
                 })
                 .catch(function (response) {
                     vm.userForm.errors = response.data;
-                    console.log('error', response);
                 });
         }
 
