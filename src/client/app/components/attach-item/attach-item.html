@@ -1,5 +1,5 @@
 <div class="attach-item">
-    <a href="http://apimail.devogic.com/mail/{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&screen=true&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}"
+    <a href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&screen=true&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}"
        target="_blank">
         <div>
             <div class="attach-item__image-block">
