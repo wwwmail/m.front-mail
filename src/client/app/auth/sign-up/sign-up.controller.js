@@ -5,9 +5,9 @@
         .module('auth.signUp')
         .controller('SignUpController', SignUpController);
 
-    SignUpController.$inject = ['$state', '$auth', 'authService'];
+    SignUpController.$inject = ['$state', '$auth', '$timeout', 'authService'];
     /* @ngInject */
-    function SignUpController($state, $auth, authService) {
+    function SignUpController($state, $auth, $timeout, authService) {
         var vm = this;
 
         vm.userForm = {
