@@ -27,11 +27,19 @@
         vm.signUp = signUp;
         vm.sendCode = sendCode;
 
+        activate();
+
+        function activate() {
+            $timeout(function () {
+                vm.userForm.model.phone = 420;
+            }, 1250);
+        }
+
         function signUp(form) {
             var data = angular.copy(vm.userForm.model);
 
             if (vm.userForm.model.phone) {
-                data.phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
+                data.phone = vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
             }
 
             $auth.submitRegistration(data)
