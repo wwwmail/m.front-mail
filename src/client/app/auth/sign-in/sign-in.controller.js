@@ -30,26 +30,9 @@
             vm.$state = $state;
 
             if ($state.params.token) {
-                signWidthToken();
+                $state.go('home', vm.$state.params);
+                return;
             }
-        }
-
-        function signWidthToken() {
-            vm.isTokenAuthLoading = true;
-
-            $auth.setAuthHeaders({
-                "Authorization": "Bearer " + $state.params.token
-            });
-
-            $auth.validateUser().then(function() {
-                if ($state.params.compose) {
-                    $state.go('mail.compose');
-                }
-
-                if (!$state.params.compose) {
-                    $state.go('mail.inbox', {mbox: 'INBOX'});
-                }
-            });
         }
 
         function login() {

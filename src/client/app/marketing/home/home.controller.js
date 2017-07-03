@@ -5,15 +5,13 @@
         .module('marketing.home')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$state'];
+    HomeController.$inject = [];
     /* @ngInject */
-    function HomeController($state) {
+    function HomeController() {
         var vm = this;
 
         activate();
-        
-        function activate() {
-            $state.go('mail.inbox', {mbox: 'INBOX'});
-        }
+
+        function activate() {}
     }
 })();
