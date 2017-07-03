@@ -41,6 +41,8 @@
                                 params.mbox = 'INBOX';
 
                                 $state.go('mail.inbox', params);
+                            }, function () {
+                                $state.go('mail.inbox', {mbox: 'INBOX'});
                             });
                             return;
                         }
