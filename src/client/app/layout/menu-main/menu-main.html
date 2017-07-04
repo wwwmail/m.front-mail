@@ -183,13 +183,17 @@
     <div class="menu-main-layout__footer-menu">
         <hr class="hr hr--main-menu">
         <div class="flex align-items--cn mrg__left10 mrg__top10 mrg__bottom5">
-            <div class="link link--gray"
-                  ng-click="vm.goToDesktopVersion('/?version=desktop&page=mail.inbox')">
-                {{ 'FULL' | translate }} |
+
+            <div class="flex flex--row-wrap align-items--cn ">
+                <div class="link link--gray"
+                     ng-click="vm.goToDesktopVersion('/?version=desktop&page=mail.inbox')">
+                    {{ 'FULL' | translate }} |
+                </div>
+                <div class="font--normal">
+                    {{ 'MOBILE' | translate }} v 1.0
+                </div>
             </div>
-            <div class="font--normal">
-                {{ 'MOBILE' | translate }} v 1.0
-            </div>
+
             <div class="menu-main-layout__footer-lang">
                 <choice-language></choice-language>
             </div>
