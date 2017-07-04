@@ -1138,6 +1138,7 @@
 }
 .menu-main-layout__footer-lang {
   position: relative;
+  margin: auto 45px auto auto;
 }
 
 .container {
@@ -2308,16 +2309,16 @@
 }
 .input-line__input {
   position: relative;
+  display: block;
   padding: 0 62px 5px 30px;
+  width: 100%;
   min-height: 58px;
   line-height: 21px;
   font-size: 16px;
-  width: 100%;
-  display: block;
-  border: none;
-  outline: none;
   color: #000;
+  border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  outline: none;
 }
 .input-line__input ::-webkit-input-placeholder {
   color: #999999;
@@ -2344,11 +2345,11 @@
 }
 .input-line__label {
   position: relative;
+  display: flex;
+  align-items: flex-end;
   margin: 0;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: flex-end;
 }
 .input-line__links {
   position: absolute;
@@ -2359,9 +2360,9 @@
 }
 .input-line__title {
   position: absolute;
-  z-index: 1;
   top: 30px;
   left: 32px;
+  z-index: 1;
   font-size: 12px;
   line-height: 12px;
   font-family: "HelveticaNeueCyr", sans-serif;
@@ -3064,8 +3065,8 @@
   margin: 1px 0 0;
   padding: 0;
   border-radius: 0 !important;
-  box-shadow: 0px 16px 26px -7px rgba(0, 0, 0, 0.32) !important;
   border: none;
+  box-shadow: 0px 16px 26px -7px rgba(0, 0, 0, 0.32) !important;
 }
 .tags-input .autocomplete .suggestion-list .suggestion-item {
   position: relative;
@@ -4798,16 +4799,17 @@
   bottom: -13px;
   display: flex;
   flex-flow: column;
-  padding: 0 5px;
+  padding: 0;
   border-radius: 3px;
   overflow: hidden;
 }
 .choice-language__link {
   display: none;
   position: relative;
+  padding: 0 5px;
 }
 .choice-language__link:hover {
-  background: #fc0;
+  background: #ffdb4d;
 }
 .choice-language__link:hover:before {
   content: "";
@@ -4827,7 +4829,7 @@
   display: block;
 }
 .choice-language:hover {
-  background: rgba(255, 219, 77, 0.4);
+  background: rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 2px 0px rgba(255, 219, 77, 0.6);
 }
 .choice-language:hover .choice-language__link {

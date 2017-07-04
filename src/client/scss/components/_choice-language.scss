@@ -3,17 +3,18 @@
   bottom: -13px;
   display: flex;
   flex-flow: column;
-  padding: 0 5px ;
+  padding: 0;
   border-radius: 3px;
   overflow: hidden;
 
   &__link{
     display: none;
     position: relative;
+    padding: 0 5px ;
 
   &:hover{
 
-      background: $yellow-yandex;
+      background: $yellow-normal-light;
 
       &:before{
         content: "";
@@ -43,7 +44,7 @@
   }
 
   &:hover{
-    background: rgba($yellow-normal-light, 0.4);
+    background: rgba($textBlack, 0.4);
     box-shadow: $button-shadow;
 
     .choice-language__link{
