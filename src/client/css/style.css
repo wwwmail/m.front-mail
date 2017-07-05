@@ -1048,6 +1048,7 @@
   right: -15%;
   position: relative;
   top: 14px;
+  z-index: 2;
   margin: 0;
   padding-left: 10px;
 }
@@ -1058,8 +1059,10 @@
 .menu-main-layout__user-item--active {
   top: auto;
   right: auto;
+  position: relative;
   display: inline-block;
   text-align: center;
+  z-index: 1;
   margin: auto !important;
   padding-left: 0 !important;
   width: 100%;

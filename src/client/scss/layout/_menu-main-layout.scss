@@ -24,8 +24,8 @@
     }
   }
 
-  &__button-close{
-    position: absolute!important;
+  &__button-close {
+    position: absolute !important;
     top: 22px;
     right: -24px;
 
@@ -40,11 +40,11 @@
 
     background-color: $yellow-normal-light;
     color: $menu-text-color;
-    box-shadow: inset 0px 0px 12px -6px rgba(0,0,0,0.37);
+    box-shadow: inset 0px 0px 12px -6px rgba(0, 0, 0, 0.37);
 
     z-index: 2;
 
-    &:after{
+    &:after {
       content: '';
       position: absolute;
       top: -5px;
@@ -57,10 +57,9 @@
       border: 1px solid $yellow-yandex;
       opacity: .4;
     }
-
   }
 
-  &__user-info{
+  &__user-info {
     //display: -webkit-inline-box;
     //justify-content: center;
     //align-items: center;
@@ -70,10 +69,10 @@
     min-height: 160px;
 
     //padding: 10px;
-    margin: 5px 0 ;
+    margin: 5px 0;
   }
 
-  &__user-info-container{
+  &__user-info-container {
     height: 180px;
 
     padding-top: 20px;
@@ -89,7 +88,7 @@
 
   }
 
-  &__users-list{
+  &__users-list {
     max-height: 180px;
 
     display: block;
@@ -115,10 +114,12 @@
     position: relative;
     top: 14px;
 
+    z-index: 2;
+
     margin: 0;
     padding-left: 10px;
 
-    &:first-child{
+    &:first-child {
       padding-left: 0;
       margin-left: -15%;
     }
@@ -127,12 +128,16 @@
       top: auto;
       right: auto;
 
+      position: relative;
+
       display: inline-block;
 
       text-align: center;
 
-      margin: auto!important;
-      padding-left: 0!important;
+      z-index: 1;
+
+      margin: auto !important;
+      padding-left: 0 !important;
 
       width: 100%;
       height: auto;
@@ -166,7 +171,7 @@
     }
   }
 
-  &__add-btn{
+  &__add-btn {
     position: absolute;
     top: calc(50% - 20px);
     right: -60px;
@@ -181,10 +186,10 @@
       //background-color: rgba($yellow-yandex, .9);
       color: rgba($menu-main-color, .9);
     }
-    &:focus{
-     outline: none;
+    &:focus {
+      outline: none;
     }
-    &:before{
+    &:before {
       content: "";
       display: flex;
       justify-content: center;
@@ -192,7 +197,7 @@
     }
   }
 
-  &__avatar{
+  &__avatar {
     position: relative;
 
     display: flex;
@@ -206,24 +211,24 @@
 
   }
 
-  &__user-name{
+  &__user-name {
     //visibility: hidden;
     display: none;
     color: $menu-text-color;
   }
 
-  &__user-mail{
+  &__user-mail {
     display: none;
     //visibility: hidden;
     color: $menu-text-color;
 
   }
 
-  &__item{
+  &__item {
     flex: 1 0 auto;
   }
 
-  &__footer-menu{
+  &__footer-menu {
     flex: 0 0 auto;
     color: $header-mein-menu-text-color;
     font: 12px/1 $mainFont;

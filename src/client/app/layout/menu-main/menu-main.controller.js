@@ -99,7 +99,7 @@
 
             vm.user = $auth.user;
         }
-        
+
         function goToDesktopVersion(target) {
             var url = window.location.origin + target + '&token=' + vm.user.access_token.split(' ')[1];
             window.location.href = url;
@@ -187,11 +187,19 @@
             vm.profiles = profile.getStorageProfiles();
         }
 
-        function setAuthProfile(profile) {
+        function setAuthProfile(profileItem) {
             $auth.setAuthHeaders({
-                "Authorization": profile.access_token
+                "Authorization": profileItem.access_token
             });
-            location.reload();
+
+            $auth.validateUser().then(function (response) {
+                console.log('response', response);
+                location.reload();
+            }, function () {
+                console.info('not authenticated', err);
+            }).catch(function (err) {
+                console.info('not authenticated', err);
+            });
         }
 
         function clearFolder(e, folder) {
