@@ -20,11 +20,7 @@
                 $timeout(function () {
                     $('#' + attrs.setFocus).focus();
                     event.preventDefault();
-                }, 550);
-
-                $timeout(function () {
-                    $('#' + attrs.setFocus).focus();
-                }, 1000);
+                });
             });
         }
     }
