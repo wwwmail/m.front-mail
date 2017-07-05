@@ -6075,3 +6075,9 @@ a:hover, a:focus {
 label {
   font-weight: normal;
 }
+
+.for-focus {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
