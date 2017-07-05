@@ -17,9 +17,13 @@
 
         function link(scope, element, attrs) {
             element.on('click', function () {
-                // $timeout(function () {
+                $timeout(function () {
                     $('#' + attrs.setFocus).focus();
-                // }, 250);
+                }, 550);
+
+                $timeout(function () {
+                    $('#' + attrs.setFocus).focus();
+                }, 1000);
             });
         }
     }
