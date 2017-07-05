@@ -18,9 +18,7 @@
         function link(scope, element, attrs) {
             element.on('click', function () {
                 $timeout(function () {
-                    var el = $window.document.getElementById(attrs.setFocus);
-                    console.log('element', el);
-                    el.focus();
+                    $('#' + attrs.setFocus).focus();
                 }, 250);
             });
         }
