@@ -5457,7 +5457,7 @@
 }
 
 .tag-contact {
-  display: flex;
+  display: inline-flex;
   align-items: center;
 }
 .tag-contact__avatar {
