@@ -16,6 +16,8 @@
         return directive;
 
         function link(scope, element, attrs) {
+            document.body.ontouchend = function() { document.querySelector('#' + attrs.setFocus).focus(); };
+
             element.on('click', function (event) {
                 var $el = $('#' + attrs.setFocus);
                 event.preventDefault();
