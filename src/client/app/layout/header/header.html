@@ -20,10 +20,12 @@
             </div>
 
             <div class="header__right">
-                <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
-                        type="button"
-                        set-focus="search-input"
-                        ng-click="vm.isSearch = true; vm.focusOnInput()"></button>
+                <label for="search-input">
+                    <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
+                            type="button"
+                            set-focus="search-input"
+                            ng-click="vm.isSearch = true;"></button>
+                </label>
             </div>
             <hr class="hr hr--header hr--yellow">
         </div>
@@ -104,23 +106,23 @@
     </div>
 
     <!--<div class="header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">-->
-        <!--<div class="header__container">-->
-            <!--<div class="header__left">-->
-                <!--<button class="icon-cancel btn btn&#45;&#45;not-style btn&#45;&#45;main-mobile-color header__icon header__icon&#45;&#45;close padding&#45;&#45;hor12"-->
-                        <!--ui-sref="mail.inbox({mbox: 'INBOX'})">-->
-                <!--</button>-->
-            <!--</div>-->
+    <!--<div class="header__container">-->
+    <!--<div class="header__left">-->
+    <!--<button class="icon-cancel btn btn&#45;&#45;not-style btn&#45;&#45;main-mobile-color header__icon header__icon&#45;&#45;close padding&#45;&#45;hor12"-->
+    <!--ui-sref="mail.inbox({mbox: 'INBOX'})">-->
+    <!--</button>-->
+    <!--</div>-->
 
-            <!--<div class="header__right">-->
-                <!--<button class="btn btn&#45;&#45;mail-send btn&#45;&#45;size_s header__icon mrg__right14 font&#45;&#45;arial font&#45;&#45;size15 padding&#45;&#45;hor12 width&#45;&#45;inh"-->
-                        <!--type="button"-->
-                        <!--ng-click="vm.send()"-->
-                        <!--ng-disabledd="!vm.isSend">-->
-                     <!--Отправить-->
-                <!--</button>-->
-            <!--</div>-->
-            <!--&lt;!&ndash;<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">&ndash;&gt;-->
-        <!--</div>-->
+    <!--<div class="header__right">-->
+    <!--<button class="btn btn&#45;&#45;mail-send btn&#45;&#45;size_s header__icon mrg__right14 font&#45;&#45;arial font&#45;&#45;size15 padding&#45;&#45;hor12 width&#45;&#45;inh"-->
+    <!--type="button"-->
+    <!--ng-click="vm.send()"-->
+    <!--ng-disabledd="!vm.isSend">-->
+    <!--Отправить-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">&ndash;&gt;-->
+    <!--</div>-->
     <!--</div>-->
 
     <!-- Уведомления и статусы-->

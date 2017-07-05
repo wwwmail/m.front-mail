@@ -25,10 +25,6 @@
         vm.search = search;
         vm.send = send;
 
-        vm.focusOnInput = function () {
-            $('#search-input').focus();
-        };
-
         $scope.$watch('vm.$state.params.mbox', function () {
             getCurrentFolder();
         });

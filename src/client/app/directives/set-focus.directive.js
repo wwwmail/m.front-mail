@@ -19,7 +19,6 @@
             element.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-
                 $timeout(function () {
                     var $el = $('#' + attrs.setFocus);
                     $el.focus();
