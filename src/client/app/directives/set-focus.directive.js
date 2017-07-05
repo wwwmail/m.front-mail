@@ -16,9 +16,10 @@
         return directive;
 
         function link(scope, element, attrs) {
-            element.on('click', function () {
+            element.on('click', function (event) {
                 $timeout(function () {
                     $('#' + attrs.setFocus).focus();
+                    event.preventDefault();
                 }, 550);
 
                 $timeout(function () {
