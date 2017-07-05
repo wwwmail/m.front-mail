@@ -114,7 +114,7 @@
             mail.post({}, data).then(function (response) {
                 console.log('response', response);
                 if (response.success) {
-                    $state.go('mail.inbox');
+                    $state.go('mail.inbox', {mbox: 'INBOX'});
                 }
             });
         }
