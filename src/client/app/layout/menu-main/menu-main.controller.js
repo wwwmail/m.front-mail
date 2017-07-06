@@ -35,6 +35,10 @@
             {
                 name: 'Archive',
                 icon: 'icon-archive-desk'
+            },
+            {
+                name: 'Outbox',
+                icon: 'icon-outbox'
             }
         ];
 
@@ -136,13 +140,15 @@
         }
 
         function sortFolder() {
+            vm.folders.items = _.sortBy(vm.folders.items, 'caption').reverse();
             vm.folders.items = _.sortBy(vm.folders.items, [
                 {'name': 'INBOX'},
                 {'isSub': true},
                 {'name': 'Sent'},
                 {'name': 'Trash'},
                 {'name': 'Junk'},
-                {'name': 'Drafts'}
+                {'name': 'Drafts'},
+                {'name': 'Outbox'}
             ]).reverse();
         }
 

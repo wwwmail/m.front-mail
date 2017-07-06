@@ -49,7 +49,7 @@
             <li class="menu-main__item is-sub-menu"
                 ng-class="{'is-sub-menu--open': folder.isOpen}"
                 ng-repeat="folder in vm.folders.items">
-                <div class="menu-main__item-content" ng-if="!folder.isSub">
+                <div class="menu-main__item-content" ng-if="!folder.isSub && folder.name !== 'Archive'">
                     <a class="menu-main__link"
                        ng-click="vm.closeMenu();"
                        ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
@@ -65,7 +65,7 @@
                                 }"
                                 ng-click="vm.clearFolder($event, folder);"></button>
                         <span class="menu-main__count"
-                              ng-if="folder.messagesCount">{{ folder.messagesCount || '' }}</span>
+                              ng-if="folder.messagesCount">{{ folder.unseen || '' }}</span>
                         <button class="menu-main__show-additional icon-arrow-down btn--not-style"
                                 type="button"
                                 ng-if="folder.name === 'INBOX'"
@@ -75,7 +75,7 @@
 
                 <div ng-if="folder.isOpen">
                     <div class="menu-main__item-content" ng-repeat="folderSub in vm.folders.items"
-                         ng-if="folderSub.isSub">
+                         ng-if="folderSub.isSub || folderSub.name === 'Archive'">
                         <ul class="menu-main menu-main--additional">
                             <li class="menu-main__item-sub">
                                 <a class="menu-main__link"
@@ -83,11 +83,11 @@
                                    ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined})">
                                     <span class="icon-folder-desk menu-main__icon"></span>
                                     <span class="menu-main__title">
-                                        {{ folderSub.caption }}
+                                        {{ folderSub.name | translate }}
                                     </span>
                                 </a>
                                 <div class="menu-main__additional-option">
-                                    <span class="menu-main__count">{{ folderSub.messagesCount || '' }}</span>
+                                    <span class="menu-main__count">{{ folderSub.unseen || '' }}</span>
                                 </div>
                             </li>
                         </ul>
