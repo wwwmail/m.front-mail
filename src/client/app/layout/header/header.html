@@ -129,8 +129,10 @@
          ng-class="{'is-show': vm.notify.isOpen}">
         <div class="pop-up-notification__container">
             <span class="pop-up-notification__validate-icon"></span>
-            <span class="pop-up-notification__notific" ng-bind-html="vm.notify.message">
-               {{ 'LETTER_SEND_SUCCESS' | translate }}
+            <span class="pop-up-notification__notific"
+                  ng-bind-html="vm.message | translate:{folder: (vm.folder.name | translate)} ">
+               <!--{{ 'LETTER_SEND_SUCCESS' | translate }}-->
+
                 <!--<a class="pop-up-notification__link"> Смотреть почту</a>-->
             </span>
             <button class="pop-up-notification__close btn--not-style icon-remove-thick btn--main-mobile-color"

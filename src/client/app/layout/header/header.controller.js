@@ -32,7 +32,10 @@
         $scope.$on('notify:message', function (e, data) {
             console.log('data', data);
             vm.notify.isOpen = true;
-            vm.notify.message = data.message;
+
+            vm.message = data.message;
+            vm.folder = data.folder;
+
             $timeout(function () {
                 vm.notify.isOpen = false;
             }, 3000);

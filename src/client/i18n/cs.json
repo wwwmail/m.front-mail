@@ -412,5 +412,9 @@
   "ALL_MAIL2": "Všechny zprávy",
   "MESSAGE_ACTION": "Akce se zprávou",
   "TO_ARCHIVE": "V archivu",
-  "ENTER_EMAIL_OR_LOGIN": "Zadejte svou e-mailovou adresu nebo uživatelské jméno"
+  "ENTER_EMAIL_OR_LOGIN": "Zadejte svou e-mailovou adresu nebo uživatelské jméno",
+
+  "EMAIL_SUCCESS_SENT": "E-mail úspešne odoslaný",
+  "LETTERS_MOVED_TO_A_FOLDER": "Písmená sú presunuté do zložky {{ folder }}",
+  "LETTER_MOVED_TO_A_FOLDER": "Zpráva přesunuta do složky {{ folder }}"
 }

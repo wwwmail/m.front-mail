@@ -141,7 +141,7 @@
             }
 
             $rootScope.$broadcast('notify:message', {
-                message: 'Письмо успешно отправлено'
+                message: 'EMAIL_SUCCESS_SENT'
             });
 
             $state.go('mail.inbox', {mbox: 'INBOX'});
