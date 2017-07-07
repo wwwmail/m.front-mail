@@ -49,12 +49,12 @@
             }
 
             function showMenu() {
-                var $headerNavigation = angular.element(document.querySelector('.header__navigation'));
+                var $headerNavigation = angular.element(document.querySelector('.main-header__navigation'));
                 $headerNavigation.css({'display': 'block'});
             }
 
             function hideMenu() {
-                var element = angular.element(document.querySelector('.header__navigation'));
+                var element = angular.element(document.querySelector('.main-header__navigation'));
                 element.css({'display': 'none'});
             }
         }

@@ -1,21 +1,21 @@
-<section class="layout">
-    <div class="layout__header">
+<section class="main-layout">
+    <div class="main-layout__header">
 
         <header folder="vm.folder"></header>
 
-        <div class="layout__menu" ng-class="{'layout__menu--is-active-menu': isOpenMenu}">
-            <div class="layout__menu-content">
+        <div class="main-layout__menu" ng-class="{'main-layout__menu--is-active-menu': isOpenMenu}">
+            <div class="main-layout__menu-content">
                 <menu-main></menu-main>
             </div>
-            <button class="layout__menu-closer btn--not-events btn--not-style"
+            <button class="main-layout__menu-closer btn--not-events btn--not-style"
                     type="button"
                     ng-click="vm.closeMenu()">
             </button>
         </div>
     </div>
 
-    <div class="layout__inner" layout-height>
-        <div class="layout__content">
+    <div class="main-layout__inner" layout-height>
+        <div class="main-layout__content">
             <ui-view class="height--min-inh height--all"></ui-view>
         </div>
     </div>

@@ -1,4 +1,4 @@
-.layout {
+.main-layout {
   position: relative;
 
   display: flex;
@@ -49,11 +49,11 @@
       background-color: rgba($black, .54);
       transition: transform 2s, background-color 2s;
 
-      .layout__menu-content{
+      .main-layout__menu-content{
         transform: translate3d(0px, 0px, 0px);
         transition: transform 500ms ease-in-out;
       }
-      .layout__menu-closer{
+      .main-layout__menu-closer{
         display: block;
       }
     }
@@ -168,13 +168,13 @@
 
 .isopen-menu{
   overflow: hidden!important;
-  .layout__menu{
+  .main-layout__menu{
     //display: block;
     visibility: visible;
     background-color: rgba($black, .54);
   }
 
-  .layout__menu-content{
+  .main-layout__menu-content{
     transform: translate3d(0px, 0px, 0px);
   }
 }

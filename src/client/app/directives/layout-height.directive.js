@@ -17,7 +17,7 @@
         return directive;
 
         function link(scope, element, attrs) {
-            $('.layout__inner').css({
+            $('.main-layout__inner').css({
                 minHeight: $(document).innerHeight()
             });
         }
