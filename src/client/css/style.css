@@ -1295,10 +1295,11 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: auto;
+  bottom: 0;
   min-height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
+  padding-bottom: 3px;
 }
 .mail-message__main-info {
   position: relative;
@@ -1307,13 +1308,13 @@
 }
 .mail-message__main-info:before {
   content: "";
-  position: fixed;
+  position: absolute;
   top: auto;
-  right: 0;
-  left: 0;
-  bottom: 48px;
-  height: 15px;
+  right: -100vw;
+  left: -100vw;
+  bottom: 0;
   z-index: -1;
+  height: 10px;
   background: #f6f5f3;
 }
 .mail-message__main-content {
@@ -4560,18 +4561,14 @@
   align-items: flex-end;
   width: inherit;
   height: inherit;
-  margin-bottom: 15px;
 }
 .quick-reply__message {
   position: relative;
-  bottom: -3px;
-  overflow: scroll;
   display: inline-block;
   width: 100%;
   height: auto;
   min-height: 20px;
   max-height: 120px;
-  padding-top: 4px;
   vertical-align: bottom;
   line-height: 22px;
   outline: none;
@@ -4581,10 +4578,9 @@
 .quick-reply__message-input {
   font: normal 16px/1.33 "HelveticaNeueCyr", sans-serif;
   color: #000;
-  min-height: 20px;
   max-height: 100px;
   height: auto;
-  margin-left: 5px;
+  margin: 5px 0 5px 5px;
 }
 .quick-reply__message-input:focus, .quick-reply__message-input:active {
   outline: none;
@@ -4593,10 +4589,14 @@
 .quick-reply__send {
   color: #0670c1;
   font: normal 16px/1 "HelveticaNeueCyr", sans-serif;
+  position: relative;
+  top: -8px;
 }
 .quick-reply__write {
   color: #808080;
   font-size: 16px;
+  position: relative;
+  top: -8px;
 }
 @media only screen and (max-width: 562px) {
   .quick-reply__send, .quick-reply__write {
@@ -5964,7 +5964,8 @@
   width: 100%;
   flex: 0 0 auto;
   height: auto;
-  min-height: 50px;
+  padding-top: 3px;
+  min-height: 40px;
   max-height: 120px;
   display: flex;
   align-items: flex-end;
@@ -5991,7 +5992,6 @@
   max-width: 768px;
   min-height: 100%;
   padding: 2px 0px;
-  margin: auto auto 0;
 }
 
 .inbox-plash {

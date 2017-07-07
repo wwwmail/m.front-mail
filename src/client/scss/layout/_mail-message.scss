@@ -3,12 +3,14 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: auto;
+  bottom: 0;
 
   min-height: calc(100vh - 50px);
 
   display: flex;
   flex-direction: column;
+
+  padding-bottom: 3px;
 
   &__main-info{
     position: relative;
@@ -17,13 +19,16 @@
 
     &:before{
       content: "";
-      position: fixed;
+
+      position: absolute;
       top: auto;
-      right: 0;
-      left: 0;
-      bottom: 48px;
-      height: 15px;
+      right: -100vw;
+      left: -100vw;
+      bottom: 0;
       z-index: -1;
+
+      height: 10px;
+
       background: #f6f5f3;
     }
   }

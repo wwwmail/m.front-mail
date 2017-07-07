@@ -8,14 +8,14 @@
 
   width: inherit;
   height: inherit;
-  margin-bottom: 15px;
+  //margin-bottom: 15px;
+
 
 
   &__message{
     position: relative;
-    bottom: -3px;
+    //bottom: -3px;
 
-    overflow: scroll;
     display: inline-block;
 
     width: 100%;
@@ -24,7 +24,7 @@
     min-height: 20px;
     max-height: 120px;
 
-    padding-top: 4px;
+    //padding-top: 4px;
 
     vertical-align: bottom;
     line-height: 22px;
@@ -39,10 +39,12 @@
     font: normal 16px/1.33 $mainFont;
     color: $black;
 
-    min-height: 20px;
+    //min-height: 20px;
     max-height: 100px;
     height: auto;
-    margin-left: 5px;
+    margin: 5px 0 5px 5px;
+
+    &:before{}
 
     &:focus, &:active{
       outline: none;
@@ -53,10 +55,16 @@
   &__send{
     color: $message-replay-btn;
     font: normal 16px/1 $mainFont;
+
+    position: relative;
+    top: -8px;
   }
   &__write{
     color: $main-btn-color;
     font-size: 16px;
+
+    position: relative;
+    top: -8px;
   }
 
   @media only screen and (max-width: 562px) {
