@@ -1375,20 +1375,20 @@
   padding: 16px;
 }
 
-.wrapper {
+.wrapper-container {
   padding-left: 22px;
   padding-right: 22px;
 }
-.wrapper--is-margin {
+.wrapper-container--is-margin {
   margin-right: -22px;
   margin-left: -22px;
 }
 @media only screen and (max-width: 562px) {
-  .wrapper {
+  .wrapper-container {
     padding-left: 10px;
     padding-right: 10px;
   }
-  .wrapper--is-margin {
+  .wrapper-container--is-margin {
     margin-right: -10px;
     margin-left: -10px;
   }
