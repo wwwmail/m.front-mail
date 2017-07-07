@@ -412,5 +412,9 @@
   "ALL_MAIL2": "All mail",
   "MESSAGE_ACTION": "Actions with email",
   "TO_ARCHIVE": "To archive",
-  "ENTER_EMAIL_OR_LOGIN": "Enter your email address or login"
+  "ENTER_EMAIL_OR_LOGIN": "Enter your email address or login",
+
+  "EMAIL_SUCCESS_SENT": "Email Successfully Sent",
+  "LETTERS_MOVED_TO_A_FOLDER": "Leaves moved to folder {{ folder }}",
+  "LETTER_MOVED_TO_A_FOLDER": "The sheet is moved to the folder {{ folder }}"
 }
