@@ -1,48 +1,48 @@
-.compose{
-  &__header{
+.compose {
+  &__header {
     margin-left: -20px;
     margin-right: -20px;
   }
 
-  &__from{
+  &__from {
     position: relative;
 
-    &--add-features{
+    &--add-features {
       visibility: hidden;
       display: none;
     }
 
-    &.is-show-features{
+    &.is-show-features {
 
-      .compose__from--add-features{
+      .compose__from--add-features {
         visibility: visible;
         display: block;
 
       }
-      .input-line__btn-more{
+      .input-line__btn-more {
         opacity: .6;
 
-        &:before{
+        &:before {
           content: "-";
         }
       }
     }
-
-  }
-  &__letter-subject{
-    position: relative;
-    //margin-left: -20px;
-    //margin-right: -20px;
-
   }
 
-  &__content{
-
+  &__letter-subject {
     position: relative;
+  }
+
+  &__content {
+    position: relative;
+
     min-height: 56px;
+
     padding: 0 32px;
     margin-top: 1px;
+
     color: #222;
+
     background-color: $white-color;
 
     box-shadow: none;
@@ -50,9 +50,8 @@
 
     -webkit-overflow-scrolling: touch;
     overflow-y: hidden;
-
   }
-  &__message{
+  &__message {
     position: relative;
 
     overflow-x: auto;
@@ -60,43 +59,39 @@
 
     display: block;
 
-    line-height: 20px;
     height: 100%;
     min-height: 205px;
     min-width: 100%;
 
-
     color: #000;
+    line-height: 20px;
     white-space: normal;
 
     outline: none;
 
     background-color: $white-color;
-    transform: translateZ(0);
 
-    &:before, &:after{
-      //display: none!important;
-      //color: $white-color;
-    }
+    transform: translateZ(0);
   }
 
-  &__btn-attach{
+  &__btn-attach {
     position: absolute;
     top: 20px;
     right: 0;
-    margin-right: 20px;
 
+    margin-right: 20px;
   }
 
-
-  &__attachments-upload{
+  &__attachments-upload {
     white-space: nowrap;
+
+    margin: 10px 32px;
+
     overflow-x: auto;
     overflow-y: hidden;
-    margin: 10px 32px;
     -webkit-overflow-scrolling: touch;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-  }
 
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
 }

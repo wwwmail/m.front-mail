@@ -4034,7 +4034,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 10px 0;
+  padding: 7px 0;
   background: #ffffff;
   transition: .6s;
 }
@@ -4044,6 +4044,7 @@
   min-width: 25%;
   color: #808080;
   display: inline-flex;
+  padding: 3px 0 !important;
 }
 
 .date-sort {
@@ -5733,11 +5734,11 @@
   overflow-x: auto;
   overflow-y: hidden;
   display: block;
-  line-height: 20px;
   height: 100%;
   min-height: 205px;
   min-width: 100%;
   color: #000;
+  line-height: 20px;
   white-space: normal;
   outline: none;
   background-color: #ffffff;
@@ -5751,9 +5752,9 @@
 }
 .compose__attachments-upload {
   white-space: nowrap;
+  margin: 10px 32px;
   overflow-x: auto;
   overflow-y: hidden;
-  margin: 10px 32px;
   -webkit-overflow-scrolling: touch;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
