@@ -39,7 +39,7 @@
             var data = angular.copy(vm.userForm.model);
 
             if (vm.userForm.model.phone) {
-                data.phone = vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
+                data.phone = vm.userForm.model.phone.toString().replace(/\s{2,}/g, ' ');
             }
 
             $auth.submitRegistration(data)

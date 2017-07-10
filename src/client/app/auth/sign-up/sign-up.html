@@ -42,14 +42,11 @@
                         <!-- логин в базе -->
                         <div class="form__field-item mrg__bottom10">
                             <div class="field-style">
-
-                                <label class="field-style__title font--size13">{{ 'AUTH_CREATE_A_USER_NAME' | translate
-                                    }}</label>
-
+                                <label class="field-style__title font--size13">
+                                    {{ 'AUTH_CREATE_A_USER_NAME' | translate }}
+                                </label>
                                 <div class="field-style__group">
                                     <div class="width--inh position">
-
-
                                         <span class="input-plash input-plash--top13 font--size13">@mail.cz</span>
                                         <input class="input input--size_l input--up-shadow width--inh"
                                                type="text"
@@ -63,20 +60,7 @@
                                                        server="vm.userForm.errors"
                                                        messages="vm.userForm.validations.username">
                                     </validation-errors>
-                                    <!-- <div class="validation">
-                                         <div class="validation__message validation__message&#45;&#45;red">
-                                             Это имя пользователя уже занято. Попробуйте
-                                             другое
-                                         </div>
-                                     </div>-->
-
-
                                 </div>
-
-                                <!--<div class="input-data-valide-test mrg__top10 mrg__bottom10 ">-->
-                                <!--Свободно: <span class="input-data-valide-test__we-offer">abc779736</span>-->
-                                <!--</div>-->
-
                             </div>
                         </div>
 
@@ -113,8 +97,8 @@
                         </div>
 
                         <!-- СМС валидация -->
-                        <!--для Отключения выделения блока подложкой просто добавляем юsms-bg  -->
-                        <div class="form__field-item mrg__bottom25 mrg__top30 flex flex--row-wrap ">
+                        <!--для Отключения выделения блока подложкой просто добавляем sms-bg-->
+                        <div class="form__field-item mrg__bottom25 mrg__top30 flex flex--row-wrap">
                             <div class="field-style flex--inline">
                                 <input class="input input--size_l input--up-shadow width--inh"
                                        type="text"
@@ -127,7 +111,8 @@
                                        required>
 
                                 <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button"
-                                        ng-click="vm.sendCode()">{{ 'BTN_TO_GET_THE_CODE' | translate }}
+                                        ng-click="vm.sendCode()">
+                                    {{ 'BTN_TO_GET_THE_CODE' | translate }}
                                 </button>
                             </div>
                             <div class="field-style width--inh">
@@ -145,7 +130,7 @@
 
                         <!-- СМС подтверждение кода -->
                         <div class="form__field-item mrg__bottom20 mrg__top16 flex flex--row-wrap"
-                             ng-if="vm.codeResult.code">
+                             ng-if="vm.codeResult.code || vm.userForm.errors">
                             <div class="width-inh flex--inline align-items--cn">
                                 <div class="field-style mrg__right5 width--size177">
                                     <input class="input input--size_l input--up-shadow width--inh"
@@ -168,28 +153,6 @@
                                                messages="vm.userForm.validations.code"></validation-errors>
                         </div>
 
-                        <!-- СМС подтверждение кода -->
-                        <!--<div class="form__field-item mrg__bottom20 mrg__top16 flex flex&#45;&#45;row-wrap ">-->
-                        <!--<div class="field-style flex&#45;&#45;inline align-items&#45;&#45;cn">-->
-                        <!--<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow width&#45;&#45;inh mrg__right5"-->
-                        <!--type="text"-->
-                        <!--name="code"-->
-                        <!--ng-model="vm.userForm.model.code"-->
-                        <!--placeholder="Введите код из смс"-->
-                        <!--required>-->
-
-                        <!--<button class="btn btn&#45;&#45;size_l btn&#45;&#45;normal width&#45;&#45;inh btn&#45;&#45;s-gradient" type="button">Подтвердить-->
-                        <!--</button>-->
-                        <!--&lt;!&ndash;<span class="ok-validates width&#45;&#45;inh">Подтвержден</span>&ndash;&gt;-->
-                        <!--</div>-->
-
-                        <!--<div class="field-style width&#45;&#45;aut">-->
-                        <!--<validation-errors  data="userForm.code"-->
-                        <!--server="vm.userForm.errors"-->
-                        <!--messages="vm.userForm.validations.code"></validation-errors>-->
-                        <!--</div>-->
-                        <!--</div>-->
-
                         <!-- Соглашение -->
                         <div class="form__field-item mrg__bottom10">
                             <div class="field-style widtn--inh">
@@ -199,19 +162,17 @@
                                     <input class="checkbox-y__input" id="isChecked" type="checkbox" name="agree"
                                            ng-model="vm.userForm.model.agree">
                                     <div class="checkbox-y__body">
-                                            <span class="checkbox-y__icon icon-mark">
-                                            </span>
+                                        <span class="checkbox-y__icon icon-mark"></span>
                                     </div>
                                     <span class="checkbox__text font--size12 color--silver" role="presentation">
                                              {{ 'AUTH_CHECKBOX_CONFORMING_1' | translate }} <a
                                             class="link link-aith" href="">{{ 'AUTH_CHECKBOX_CONFORMING_2' | translate }}</a>
-                                        </span>
+                                    </span>
                                 </label>
-
                                 <validation-errors data="userForm.agree"
                                                    server="vm.userForm.errors"
-                                                   messages="vm.userForm.validations.agree"></validation-errors>
-
+                                                   messages="vm.userForm.validations.agree">
+                                </validation-errors>
                             </div>
                         </div>
 
