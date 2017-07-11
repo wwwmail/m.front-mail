@@ -85,7 +85,9 @@
 
             $state.go('mail.compose', {
                 ids: ids,
-                fwd: true
+                fwd: true,
+                mbox: vm.messages.checked[0].mbox,
+                connection_id: vm.messages.checked[0].connection_id
             });
 
             close();

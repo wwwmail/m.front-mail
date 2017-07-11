@@ -91,7 +91,7 @@
                 vm.sendForm.model.to = $state.params.to;
             }
 
-            if ($state.params.fwd && $state.params.mbox === 'Drafts') {
+            if ($state.params.fwd) {
                 pasteFwd();
             }
 
@@ -357,7 +357,7 @@
 
         function pasteFwd() {
             mail.getById({
-                id: $state.params.id,
+                id: $state.params.ids,
                 mbox: $state.params.mbox,
                 connection_id: $state.params.connection_id,
                 part: 'headnhtml'
@@ -385,10 +385,10 @@
                 vm.sendForm.model.subject += message.Subject || '';
                 vm.sendForm.model.body = html;
 
-                vm.sendForm.model.to = getEmailSelectFormat({
-                    first_name: message.from,
-                    email: message.fromAddress
-                });
+                // vm.sendForm.model.to = getEmailSelectFormat({
+                //     first_name: message.from,
+                //     email: message.fromAddress
+                // });
             });
         }
 
@@ -502,6 +502,7 @@
         }
 
         function copyFwdMessage() {
+            return;
             var data = {
                 id: $state.params.ids,
                 mboxfrom: $state.params.mbox,
