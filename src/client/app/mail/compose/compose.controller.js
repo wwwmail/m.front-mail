@@ -98,13 +98,16 @@
             }
 
             if ($state.params.fwd) {
-                pasteFwd();
+                $translate('SENDING_MESSAGE')
+                    .then(function (translateValue) {
+                        pasteFwd(translateValue);
+                    }, function (translateValue) {
+                        pasteFwd(translateValue);
+                    });
             }
 
             if ($state.params.fwd && $state.params.mbox !== 'Drafts') {
-                vm.sendForm.id = $state.params.ids;
-
-                if (_.isArray($state.params.ids)) {
+                if (_.isArray($state.params.ids) && $state.params.ids.length > 1) {
                     pasteFwdList();
                     return;
                 }
@@ -361,7 +364,7 @@
             });
         }
 
-        function pasteFwd() {
+        function pasteFwd(resendTitle) {
             mail.getById({
                 id: $state.params.ids,
                 mbox: $state.params.mbox,
@@ -507,13 +510,15 @@
         }
 
         function copyFwdMessage() {
-            return;
             var data = {
                 id: $state.params.ids,
                 mboxfrom: $state.params.mbox,
                 connection_id: $state.params.connection_id,
                 cmd: 'forward'
             };
+
+            console.log('data', data);
+
             mail.post({}, data).then(function (response) {
                 vm.sendForm.id = response.data.id;
 
@@ -523,7 +528,14 @@
                     connection_id: vm.user.profile.default_connection_id
                 }, {notify: false});
 
-                pasteFwd();
+                $translate('SENDING_MESSAGE')
+                    .then(function (translateValue) {
+                        pasteFwd(translateValue);
+                    }, function (translateValue) {
+                        pasteFwd(translateValue);
+                    });
+
+                // pasteFwd();
             });
         }
     }
