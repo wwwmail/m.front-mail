@@ -5,9 +5,9 @@
         .module('mail.compose')
         .controller('ComposeController', ComposeController);
 
-    ComposeController.$inject = ['mail', '$interval', '$state', '$scope', '$rootScope', '$auth', 'contact', '$uibModal', 'Upload'];
+    ComposeController.$inject = ['mail', '$interval', '$state', '$scope', '$rootScope', '$auth', '$translate', '$uibModal', 'Upload'];
     /* @ngInject */
-    function ComposeController(mail, $interval, $state, $scope, $rootScope, $auth, contact, $uibModal, Upload) {
+    function ComposeController(mail, $interval, $state, $scope, $rootScope, $auth, $translate, $uibModal, Upload) {
         var vm = this;
 
         vm.connections = {
@@ -81,6 +81,12 @@
         function activate() {
             vm.user = $auth.user;
             vm.$state = $state;
+
+            $translate('SENDING_MESSAGE').then(function (translationValue) {
+                vm.resendTitle = translationValue;
+            }, function (translationId) {
+                vm.resendTitle = translationId;
+            });
 
             if ($state.params.id && $state.params.mbox && !$state.params.fwd && !$state.params.re) {
                 vm.sendForm.id = $state.params.id;
@@ -365,13 +371,12 @@
                 var message = response.data;
 
                 var html = '<br><br><br>';
-                html += '-------- Пересылаемое сообщение--------<br>';
+                html += '--------' + resendTitle + '--------<br>';
                 html += moment(message.date.date).format('DD.MM.YYYY HH.mm');
                 html += ' ';
                 html += message.fromAddress || '';
                 html += '<br><br>';
                 html += message.body + '<br>';
-                html += '-------- Конец пересылаемого сообщения --------';
                 html += '<br><br>';
                 html += vm.user.profile.sign || '';
 
