@@ -4812,10 +4812,10 @@
   position: relative;
   padding: 0 5px;
 }
-.choice-language__link:hover {
+.choice-language__link--open {
   background: #ffdb4d;
 }
-.choice-language__link:hover:before {
+.choice-language__link--open:before {
   content: "";
   position: absolute;
   top: 0;
@@ -4832,11 +4832,11 @@
 .choice-language--active {
   display: block;
 }
-.choice-language:hover {
+.choice-language--open {
   background: rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 2px 0px rgba(255, 219, 77, 0.6);
 }
-.choice-language:hover .choice-language__link {
+.choice-language--open .choice-language__link {
   display: block;
 }
 

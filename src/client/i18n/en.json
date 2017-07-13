@@ -416,5 +416,8 @@
 
   "EMAIL_SUCCESS_SENT": "Email Successfully Sent",
   "LETTERS_MOVED_TO_A_FOLDER": "Leaves moved to folder {{ folder }}",
-  "LETTER_MOVED_TO_A_FOLDER": "The sheet is moved to the folder {{ folder }}"
+  "LETTER_MOVED_TO_A_FOLDER": "The sheet is moved to the folder {{ folder }}",
+
+  "MY_FOLDERS": "My folders",
+  "MAIN_FOLDERS": "The main folders"
 }

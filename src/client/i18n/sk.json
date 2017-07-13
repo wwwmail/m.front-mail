@@ -415,5 +415,8 @@
   "ENTER_EMAIL_OR_LOGIN": "Zadajte svoju e-mailovú adresu alebo užívateľské meno",
   "EMAIL_SUCCESS_SENT": "E-mail úspešne odoslaný",
   "LETTERS_MOVED_TO_A_FOLDER": "Písmená sú presunuté do zložky {{ folder }}",
-  "LETTER_MOVED_TO_A_FOLDER": "Letter presunie do zložky {{ folder }}"
+  "LETTER_MOVED_TO_A_FOLDER": "Letter presunie do zložky {{ folder }}",
+
+  "MY_FOLDERS": "Moje složky",
+  "MAIN_FOLDERS": "Složky"
 }

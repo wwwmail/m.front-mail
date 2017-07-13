@@ -66,12 +66,14 @@
             <div class="main-header__right">
                 <button class="icon-arrow-up btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right_2"
                         type="button"
-                        ng-if="vm.paginate.prev"
-                        ui-sref="mail.message({id: vm.paginate.prev.number, connection_id: vm.paginate.prev.connection_id, mbox: vm.paginate.prev.mbox})"></button>
+                        ng-if="vm.paginate.next"
+                        ui-sref="mail.message({id: vm.paginate.next.number, connection_id: vm.paginate.next.connection_id, mbox: vm.paginate.next.mbox})">
+                </button>
                 <button class="icon-arrow-down btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
                         type="button"
-                        ng-if="vm.paginate.next"
-                        ui-sref="mail.message({id: vm.paginate.next.number, connection_id: vm.paginate.next.connection_id, mbox: vm.paginate.next.mbox})"></button>
+                        ng-if="vm.paginate.prev"
+                        ui-sref="mail.message({id: vm.paginate.prev.number, connection_id: vm.paginate.prev.connection_id, mbox: vm.paginate.prev.mbox})">
+                </button>
             </div>
             <hr class="hr hr--header hr--yellow">
         </div>

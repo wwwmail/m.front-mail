@@ -4,10 +4,10 @@
         <div class="folder-layout__header">
             <div class="">
                 <span class="icon-d-folder folder-layout__icon"></span>
-                <span>Папки</span>
+                <span>{{ 'FOLDERS' | translate }}</span>
             </div>
             <span class="font--size12"
-                  ng-click="vm.close()">Закрыть</span>
+                  ng-click="vm.close()">{{ 'CLOSE' | translate }}</span>
 
             <!--<hr class="hr hr&#45;&#45;folders hr&#45;&#45;bottom">ы-->
 
@@ -21,7 +21,7 @@
 
             <!-- Отделитель-->
             <div class="folder-layout__separate mrg__bottom10">
-                <span class="font--size12">Мои папки</span>
+                <span class="font--size12">{{ 'MY_FOLDERS'  | translate }}</span>
                 <hr class="hr hr--folders hr--bottom">
             </div>
 
@@ -31,7 +31,7 @@
                  ng-click="vm.move(folder)"
                  ng-if="folder.isSub">
                 <span class="icon-folder-desk folder-layout__icon"></span>
-                <span class="folder-layout__title">{{ folder.caption }}</span>
+                <span class="folder-layout__title">{{ folder.name | translate }}</span>
             </div>
 
             <!--            <div class="folder-layout__item">
@@ -53,7 +53,7 @@
             <!-- стандартные папки-->
             <!-- Отделитель-->
             <div class="folder-layout__separate mrg__bottom10">
-                <span class="font--size12">Основные папки</span>
+                <span class="font--size12">{{ 'MAIN_FOLDERS' | translate }}</span>
                 <hr class="hr hr--folders hr--bottom">
             </div>
 
@@ -62,7 +62,7 @@
                  ng-click="vm.move(folder)"
                  ng-if="!folder.isSub && folder.name !== vm.$state.params.mbox">
                 <span class="{{ folder.icon }} folder-layout__icon"></span>
-                <span class="folder-layout__title">{{ folder.caption }}</span>
+                <span class="folder-layout__title">{{ folder.name | translate }}</span>
             </div>
 
         </div>

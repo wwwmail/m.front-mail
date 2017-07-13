@@ -415,5 +415,8 @@
   "ENTER_EMAIL_OR_LOGIN": "Введите email или логин",
   "EMAIL_SUCCESS_SENT": "Письмо успешно отправлено",
   "LETTERS_MOVED_TO_A_FOLDER": "Письма перемещены в папку {{ folder }}",
-  "LETTER_MOVED_TO_A_FOLDER": "Письма перемещены в папку {{ folder }}"
+  "LETTER_MOVED_TO_A_FOLDER": "Письма перемещены в папку {{ folder }}",
+
+  "MY_FOLDERS": "Мои папки",
+  "MAIN_FOLDERS": "Основні папки"
 }
