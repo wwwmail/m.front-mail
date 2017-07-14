@@ -34,7 +34,7 @@
             vm.notify.isOpen = true;
 
             vm.message = data.message;
-            vm.folder = data.folder;
+            vm.folderMessage = data.folder;
 
             $timeout(function () {
                 vm.notify.isOpen = false;
@@ -78,12 +78,14 @@
         }
 
         function getCurrentFolder() {
-            _.forEach(vm.folder.data.items, function (folder) {
-                if (folder.name === vm.$state.params.mbox) {
-                    vm.currentFolder = folder;
-                    console.log('vm.currentFolder', vm.currentFolder);
-                }
-            });
+            if (vm.folder) {
+                _.forEach(vm.folder.data.items, function (folder) {
+                    if (folder.name === vm.$state.params.mbox) {
+                        vm.currentFolder = folder;
+                        console.log('vm.currentFolder', vm.currentFolder);
+                    }
+                });
+            }
         }
 
         function search() {
