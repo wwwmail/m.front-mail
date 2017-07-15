@@ -16,6 +16,10 @@
                 sendCode: {
                     method: 'POST',
                     url: API_URL + '/send-code'
+                },
+                checkUserName: {
+                    method: 'POST',
+                    url: API_URL + '/check-user-name'
                 }
             }
         );
@@ -24,8 +28,13 @@
             return resource.sendCode(params, data).$promise;
         }
 
+        function checkUserName(params, data) {
+            return resource.checkUserName(params, data).$promise;
+        }
+
         return {
-            sendCode: sendCode
+            sendCode: sendCode,
+            checkUserName: checkUserName
         }
     }
 

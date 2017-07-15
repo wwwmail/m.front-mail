@@ -52,6 +52,7 @@
                                                type="text"
                                                name="username"
                                                ng-model="vm.userForm.model.username"
+                                               ng-blur="vm.checkUserName()"
                                                placeholder="{{'INPUT_PLACEHOLDER_MAIL_NAME' | translate }}"
                                                required>
                                     </div>
