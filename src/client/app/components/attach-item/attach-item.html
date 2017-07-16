@@ -5,7 +5,7 @@
             <div class="attach-item__image-block">
                 <div class="attach-item__image"
                      ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'"
-                     style="background-image: url('http://apimail.devogic.com/mail/{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}')"></div>
+                     style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}')"></div>
                 <div class="attach-item__image"
                      ng-if="vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg'"
                      style="background-image: url('images/upload-file.png')"></div>
