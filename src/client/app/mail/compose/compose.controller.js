@@ -366,7 +366,7 @@
 
         function pasteFwd(resendTitle) {
             mail.getById({
-                id: $state.params.ids,
+                id: $state.params.id,
                 mbox: $state.params.mbox,
                 connection_id: $state.params.connection_id,
                 part: 'headnhtml'
@@ -511,7 +511,7 @@
 
         function copyFwdMessage() {
             var data = {
-                id: $state.params.ids,
+                id: $state.params.id,
                 mboxfrom: $state.params.mbox,
                 connection_id: $state.params.connection_id,
                 cmd: 'forward'
