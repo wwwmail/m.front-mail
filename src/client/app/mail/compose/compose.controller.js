@@ -5,9 +5,9 @@
         .module('mail.compose')
         .controller('ComposeController', ComposeController);
 
-    ComposeController.$inject = ['mail', '$interval', '$state', '$scope', '$rootScope', '$auth', '$translate', '$uibModal', 'Upload'];
+    ComposeController.$inject = ['mail', '$timeout', '$interval', '$state', '$scope', '$rootScope', '$auth', '$translate', '$uibModal', 'Upload'];
     /* @ngInject */
-    function ComposeController(mail, $interval, $state, $scope, $rootScope, $auth, $translate, $uibModal, Upload) {
+    function ComposeController(mail, $timeout, $interval, $state, $scope, $rootScope, $auth, $translate, $uibModal, Upload) {
         var vm = this;
 
         vm.connections = {
@@ -97,20 +97,20 @@
                 vm.sendForm.model.to = $state.params.to;
             }
 
-            if ($state.params.fwd) {
-                $translate('SENDING_MESSAGE')
-                    .then(function (translateValue) {
-                        pasteFwd(translateValue);
-                    }, function (translateValue) {
-                        pasteFwd(translateValue);
-                    });
-            }
+            // if ($state.params.fwd) {
+            //     $translate('SENDING_MESSAGE')
+            //         .then(function (translateValue) {
+            //             pasteFwd(translateValue);
+            //         }, function (translateValue) {
+            //             pasteFwd(translateValue);
+            //         });
+            // }
 
             if ($state.params.fwd && $state.params.mbox !== 'Drafts') {
-                if (_.isArray($state.params.ids) && $state.params.ids.length > 1) {
-                    pasteFwdList();
-                    return;
-                }
+                // if (_.isArray($state.params.ids) && $state.params.ids.length > 1) {
+                //     pasteFwdList();
+                //     return;
+                // }
 
                 copyFwdMessage();
             }
@@ -517,7 +517,7 @@
                 cmd: 'forward'
             };
 
-            console.log('data', data);
+            // console.log('data', data);
 
             mail.post({}, data).then(function (response) {
                 vm.sendForm.id = response.data.id;
@@ -528,12 +528,15 @@
                     connection_id: vm.user.profile.default_connection_id
                 }, {notify: false});
 
-                $translate('SENDING_MESSAGE')
-                    .then(function (translateValue) {
-                        pasteFwd(translateValue);
-                    }, function (translateValue) {
-                        pasteFwd(translateValue);
-                    });
+                $timeout(function () {
+                    $translate('SENDING_MESSAGE')
+                        .then(function (translateValue) {
+                            pasteFwd(translateValue);
+                        }, function (translateValue) {
+                            pasteFwd(translateValue);
+                        });
+                }, 250);
+
 
                 // pasteFwd();
             });

@@ -79,12 +79,12 @@
                 ids.push(item.number);
             });
 
-            console.log('ids', ids);
+            // console.log('ids', ids);
 
             mail.setFwdData(vm.messages.checked);
 
             $state.go('mail.compose', {
-                ids: ids,
+                id: ids,
                 fwd: true,
                 mbox: vm.messages.checked[0].mbox,
                 connection_id: vm.messages.checked[0].connection_id
