@@ -16,18 +16,18 @@
 
         vm.tags = {
             selected: {
-                tag_name: 'Все метки',
+                tag_name: 'ALL_TAGS',
                 id: undefined
             },
             items: [{
-                tag_name: 'Все тэги',
+                tag_name: 'ALL_TAGS',
                 id: undefined
             }]
         };
 
         vm.standartFolders = [
             {
-                caption: 'Все папки',
+                caption: 'ALL_FOLDERS',
                 name: 'ALL',
                 icon: 'icon-incoming'
             },
@@ -55,7 +55,7 @@
 
         vm.folders = {
             selected: {
-                caption: 'Все папки',
+                caption: 'ALL_FOLDERS',
                 name: 'ALL',
                 icon: 'icon-incoming'
             }
@@ -63,28 +63,28 @@
 
         vm.searchParts = {
             selected: {
-                'name': 'Искать по всему письму',
+                'name': 'SEARCH_ENTIRE_LETTER',
                 'value': 'all'
             },
             list: [
                 {
-                    'name': 'Искать по всему письму',
+                    'name': 'SEARCH_ENTIRE_LETTER',
                     'value': 'all'
                 },
                 {
-                    'name': 'в поле "Отправитель"',
+                    'name': 'IN_THE_SENDER_FIELD',
                     'value': 'from'
                 },
                 {
-                    'name': 'в поле "Получатель"',
+                    'name': 'IN_THE_FIELD_RECIPIENT',
                     'value': 'to'
                 },
                 {
-                    'name': 'в теле письма',
+                    'name': 'IN_THE_BODY_OF_THE_LETTER',
                     'value': 'body'
                 },
                 {
-                    'name': 'в тексте письма',
+                    'name': 'IN_THE_TEXT_OF_THE_LETTER',
                     'value': 'text'
                 }
             ]

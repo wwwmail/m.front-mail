@@ -33,10 +33,10 @@
                        on-select="vm.search(); vm.isOpenFilters = false">
                 <ui-select-match
                         class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">
-                    {{ $select.selected.name }}
+                    {{ $select.selected.name | translate }}
                 </ui-select-match>
                 <ui-select-choices repeat="item in vm.searchParts.list track by $index">
-                    <div ng-bind-html="item.name"></div>
+                    <div ng-bind-html="item.name | translate"></div>
                 </ui-select-choices>
             </ui-select>
         </div>
@@ -49,10 +49,10 @@
                        on-select="vm.search(); vm.isOpenFilters = false">
                 <ui-select-match
                         class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">
-                    {{ $select.selected.caption }}
+                    {{ $select.selected.name | translate }}
                 </ui-select-match>
                 <ui-select-choices repeat="item in vm.folders.items track by $index">
-                    <div ng-class="{'mrg__left10': item.isSub}" ng-bind-html="item.caption"></div>
+                    <div ng-class="{'mrg__left10': item.isSub}" ng-bind-html="item.name | translate"></div>
                 </ui-select-choices>
             </ui-select>
         </div>
@@ -65,10 +65,10 @@
                        on-select="vm.search(); vm.isOpenFilters = false">
                 <ui-select-match
                         class="select-list__body select-list--size_m width--inh padding--right30 padding--left_12">
-                    {{ $select.selected.tag_name }}
+                    {{ $select.selected.tag_name | translate }}
                 </ui-select-match>
                 <ui-select-choices repeat="item in vm.tags.items track by $index">
-                    {{ item.tag_name }}
+                    {{ item.tag_name | translate }}
                 </ui-select-choices>
             </ui-select>
         </div>
