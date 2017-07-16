@@ -5,9 +5,9 @@
         .module('mail.message')
         .controller('MessageController', MessageController);
 
-    MessageController.$inject = ['mail', '$scope', '$state', '$sce', 'message', 'tag', '$rootScope', '$uibModal'];
+    MessageController.$inject = ['mail', '$scope', '$state', '$sce', '$auth', 'message', 'tag', '$rootScope', '$uibModal'];
     /* @ngInject */
-    function MessageController(mail, $scope, $state, $sce, message, tag, $rootScope,  $uibModal) {
+    function MessageController(mail, $scope, $state, $sce, $auth, message, tag, $rootScope,  $uibModal) {
         var vm = this;
 
         vm.message = {};
@@ -48,6 +48,7 @@
 
         function activate() {
             vm.$state = $state;
+            vm.user = $auth.user;
             // getMessage();
 
             message.$promise.then(function (response) {
@@ -102,20 +103,77 @@
             return $sce.trustAsHtml(html);
         }
 
+        // function send(form) {
+        //     if (form.$invalid) return;
+        //
+        //     var data = {
+        //         to: vm.message.model.fromAddress,
+        //         body: vm.sendForm.model.body
+        //     };
+        //
+        //     data.cmd = 'send';
+        //     mail.post({}, data).then(function (response) {
+        //         console.log('response', response);
+        //         if (response.success) {
+        //             $state.go('mail.inbox', {mbox: 'INBOX'});
+        //         }
+        //     });
+        // }
         function send(form) {
-            if (form.$invalid) return;
+            copyReMessage();
+            $state.go('mail.inbox', {mbox: 'INBOX'});
+        }
 
+        function copyReMessage() {
             var data = {
-                to: vm.message.model.fromAddress,
-                body: vm.sendForm.model.body
+                id: $state.params.id,
+                mboxfrom: $state.params.mbox,
+                connection_id: $state.params.connection_id,
+                cmd: 'reply'
             };
-
-            data.cmd = 'send';
             mail.post({}, data).then(function (response) {
-                console.log('response', response);
-                if (response.success) {
-                    $state.go('mail.inbox', {mbox: 'INBOX'});
-                }
+                pasteRe(response.data.id);
+            });
+        }
+
+        function pasteRe(id) {
+            mail.getById({
+                id: id,
+                mbox: 'Drafts',
+                connection_id: $state.params.connection_id,
+                part: 'headnhtml'
+            }).then(function (response) {
+                var message = response.data;
+
+                var html = '<br><br><br>';
+                html += moment(message.date.date).format('DD.MM.YYYY HH.mm');
+                html += ' ';
+                html += message.from || '';
+                html += ' <br>';
+                html += message.body + '<br>';
+                html += '<br>';
+                html += vm.user.profile.sign || '';
+
+                vm.sendForm.id = message.number;
+
+                vm.sendForm.model.number = message.number;
+                vm.sendForm.model.mbox = message.mbox;
+                vm.sendForm.model.connection_id = message.connection_id;
+                vm.sendForm.model.attachmentsData = message.attachmentsData;
+                vm.sendForm.model.subject = 'Re: ';
+                vm.sendForm.model.subject += message.Subject || '';
+                vm.sendForm.model.body += html;
+
+                vm.sendForm.model.to = message.fromAddress;
+
+                var data = getFormattedData();
+
+                console.log('vm.sendForm', data);
+
+                data.cmd = 'send';
+                mail.post({}, data).then(function (response) {
+                    console.log('response', response);
+                });
             });
         }
 
@@ -141,6 +199,12 @@
             if (vm.sendForm.model.body) {
                 data.body = vm.sendForm.model.body;
             }
+
+            if (vm.sendForm.model.attaches) {
+                data.attaches = vm.sendForm.model.attaches;
+            }
+
+            vm.sendForm.model.connection_id = vm.user.profile.default_connection_id;
 
             return data;
         }
