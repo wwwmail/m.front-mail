@@ -5,9 +5,9 @@
         .module('app.components')
         .controller('AttachUploadController', AttachUploadController);
 
-    AttachUploadController.$inject = ['$auth', '$state'];
+    AttachUploadController.$inject = ['$auth', '$state', 'CONFIG'];
     /* @ngInject */
-    function AttachUploadController($auth, $state) {
+    function AttachUploadController($auth, $state, CONFIG) {
         var vm = this;
 
         vm.getLink = getLink;
@@ -22,7 +22,7 @@
 
         function getLink(attachment) {
             var link = [
-                "http://apimail.devogic.com/mail/",
+                CONFIG.AttachUrl,
                 vm.message.model.number,
                 "?mbox=",
                 vm.message.model.mbox || 'Drafts',
