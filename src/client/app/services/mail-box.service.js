@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('mailBox', mailBox);
 
-    mailBox.$inject = ['CONFIG', '$resource', '$http', '$rootScope'];
+    mailBox.$inject = ['CONFIG', '$resource', '$http', '$rootScope', '$state'];
 
-    function mailBox(CONFIG, $resource, $http, $rootScope) {
+    function mailBox(CONFIG, $resource, $http, $rootScope, $state) {
         var API_URL = CONFIG.APIHost + '/mail-box';
 
         var cacheList = [];
@@ -38,6 +38,12 @@
             return resource.get(params, data).$promise
                 .then(function (response) {
                     cacheList = response.data;
+
+                    if ($state.current.name === 'mail.inbox' || $state.current.name === 'mail.message') {
+                        var folder = _.find(cacheList.items, {'name': $state.params.mbox});
+                        $rootScope.folder = folder;
+                    }
+
                     return response;
                 });
         }

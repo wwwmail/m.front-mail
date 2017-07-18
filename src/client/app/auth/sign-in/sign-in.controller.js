@@ -44,6 +44,12 @@
 
                     profile.addStorageProfile(response);
 
+                    if (!response.profile.timezone) {
+                        var profileModel = {};
+                        profileModel.timezone = 'Europe/Prague';
+                        profile.put({}, profileModel);
+                    }
+
                     $state.go('mail.inbox', {mbox: 'INBOX'});
                 })
                 .catch(function (response) {

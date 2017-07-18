@@ -41,7 +41,7 @@
             </div>
 
             <div class="inbox-message__name">
-                {{ vm.message.from }}
+                {{ vm.message.from ? vm.message.from : vm.message.fromAddress }}
             </div>
 
             <div class="inbox-message__data">

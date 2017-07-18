@@ -23,7 +23,7 @@
                             <div class="info-sender__from-whom">
                                 <div class="info-sender__important-tags info-sender__important-tags--small-title important-tags--active"
                                      ng-if="vm.message.model.important"></div>
-                                {{ vm.message.model.from }}
+                                {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
                                 <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 padding--right_2 padding--left_2 mrg__left5"
                                         ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
                                         type="button"
