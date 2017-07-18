@@ -68,15 +68,15 @@
                               ng-if="folder.messagesCount">{{ folder.unseen || '' }}</span>
                         <button class="menu-main__show-additional icon-arrow-down btn--not-style"
                                 type="button"
-                                ng-if="folder.name === 'INBOX'"
+                                ng-if="folder.name === 'INBOX' || folder.name === 'Drafts'"
                                 ng-click="folder.isOpen = !folder.isOpen"></button>
                     </div>
                 </div>
 
                 <div ng-if="folder.isOpen">
                     <div class="menu-main__item-content" ng-repeat="folderSub in vm.folders.items"
-                         ng-if="folderSub.isSub || folderSub.name === 'Archive'">
-                        <ul class="menu-main menu-main--additional">
+                         ng-if="folderSub.isSub && (folder.name === 'INBOX' || folder.name === 'Drafts')">
+                        <ul class="menu-main menu-main--additional" ng-if="(folderSub.name !== 'Templates' && folder.name === 'INBOX') || (folderSub.name === 'Templates' && folder.name === 'Drafts')">
                             <li class="menu-main__item-sub">
                                 <a class="menu-main__link"
                                    ng-click="vm.closeMenu();"
