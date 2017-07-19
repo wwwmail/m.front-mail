@@ -32,10 +32,6 @@
                 name: 'Junk',
                 icon: 'icon-spam-desk'
             },
-            // {
-            //     name: 'Archive',
-            //     icon: 'icon-archive-desk'
-            // },
             {
                 name: 'Outbox',
                 icon: 'icon-outbox'
