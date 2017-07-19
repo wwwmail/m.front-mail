@@ -93,7 +93,6 @@
 
             if (vm.searchForm.model.search) {
                 data.search = vm.searchForm.model.search;
-                data.search_part = 'text';
             }
 
             $rootScope.$broadcast('search:mailQuery', {

@@ -4,12 +4,14 @@
             name="{{ vm.name }}"
             template="tag-template"
             template-scope="vm"
-            display-property="first_name"
             key-property="id"
+            display-property="first_name"
+            on-tag-adding="vm.onTagAdding($tag)"
             replace-spaces-with-dashes="true"
             allow-dblclick-to-edit="true"
             ng-focus="isTagFocus = true"
             ng-blur="isTagFocus = false"
+            add-on-space="true"
             placeholder="{{ vm.placeholder }}"
             autofocus="vm.isAutofocus">
 

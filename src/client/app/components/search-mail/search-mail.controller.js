@@ -152,6 +152,8 @@
 
             console.log('params', data);
 
+            // return;
+
             $rootScope.$broadcast('search:mail', {
                 search: data
             });

@@ -37,15 +37,23 @@
         });
 
         $rootScope.$on('search:mailQuery', function (e, data) {
-            vm.messages.params = data.search;
+            console.log('data', data);
+            vm.messages.params.search = data.search;
             vm.searchQuery = data.search;
             vm.messages.isSearch = true;
+
+            if (!vm.messages.params.search_part) {
+                vm.messages.params.search_part = 'text';
+            }
+
             get();
         });
 
         $rootScope.$on('search:mail', function (e, data) {
+            console.log('search:mail', data);
+            // vm.messages.params = data.search;
             vm.messages.params = data.search;
-            vm.messages.params = _.assign(vm.messages.params, vm.searchQuery);
+            vm.messages.params.search = vm.searchQuery;
             vm.messages.isSearch = true;
             get();
         });

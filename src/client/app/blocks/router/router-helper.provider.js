@@ -96,6 +96,8 @@
             function updateDocTitle() {
                 $rootScope.$on('$stateChangeSuccess',
                     function (event, toState, toParams, fromState, fromParams) {
+                        document.body.scrollTop = document.documentElement.scrollTop = 0;
+
                         stateCounts.changes++;
                         handlingStateChangeError = false;
                         // var title = config.docTitle + ' ' + (toState.title || '');
