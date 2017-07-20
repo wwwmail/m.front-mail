@@ -5389,6 +5389,33 @@
   content: "\e950";
 }
 
+.icon-icon-screpka-plus:before {
+  content: "\e951";
+}
+
+.icon-strelka:before {
+  content: "\e952";
+}
+
+.icon-icon-attach-show .path1:before {
+  content: "\e953";
+}
+
+.icon-icon-attach-show .path2:before {
+  content: "\e954";
+  margin-left: -1em;
+}
+
+.icon-icon-attach-hide .path1:before {
+  content: "\e955";
+}
+
+.icon-icon-attach-hide .path2:before {
+  content: "\e956";
+  margin-left: -1em;
+  color: #8e8e8e;
+}
+
 /* icons.data.svg.css ==================================*/
 .icon-crumbs-arrow, .bread-crumbs__item::after {
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220%200%2018%2018%22%20style%3D%22enable-background%3Anew%200%200%2018%2018%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cg%3E%0A%09%3Cpath%20d%3D%22M13.7%2C5.8c0.8%2C0.8%2C1.5%2C1.5%2C2%2C1.9s1.1%2C0.8%2C1.6%2C1v0.4c-0.6%2C0.3-1.1%2C0.6-1.7%2C1.1c-0.5%2C0.4-1.2%2C1.1-2%2C1.9H13%0A%09%09c0.6-1.2%2C1.1-2.1%2C1.7-2.7h-14V8.6h14c-0.4-0.6-0.8-1-0.9-1.3S13.3%2C6.5%2C13%2C5.8H13.7z%22/%3E%0A%3C/g%3E%0A%3C/svg%3E%0A");
