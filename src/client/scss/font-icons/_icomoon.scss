@@ -273,6 +273,28 @@
 .icon-icon-flag-light:before {
   content: "\e950";
 }
+.icon-icon-screpka-plus:before {
+  content: "\e951";
+}
+.icon-strelka:before {
+  content: "\e952";
+}
+.icon-icon-attach-show .path1:before {
+  content: "\e953";
+}
+.icon-icon-attach-show .path2:before {
+  content: "\e954";
+  margin-left: -1em;
+}
+.icon-icon-attach-hide .path1:before {
+  content: "\e955";
+}
+.icon-icon-attach-hide .path2:before {
+  content: "\e956";
+  margin-left: -1em;
+  color: rgb(142, 142, 142);
+}
+
 
 /* icons.data.svg.css ==================================*/
 
