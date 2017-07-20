@@ -24,6 +24,7 @@
         vm.clearSearch = clearSearch;
         vm.search = search;
         vm.send = send;
+        vm.closeCompose = closeCompose;
 
         $scope.$watch('vm.$state.params.mbox', function () {
             getCurrentFolder();
@@ -107,6 +108,10 @@
 
         function send() {
             $rootScope.$broadcast('mail:send');
+        }
+
+        function closeCompose() {
+            $rootScope.$broadcast('mail:compose:close');
         }
 
     }

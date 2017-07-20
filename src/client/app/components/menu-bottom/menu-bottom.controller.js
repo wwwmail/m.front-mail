@@ -5,11 +5,17 @@
         .module('app.components')
         .controller('MenuBottomController', MenuBottomController);
 
-    MenuBottomController.$inject = ['$scope', '$auth', '$state', '$uibModal', 'mailBox', 'mail'];
+    MenuBottomController.$inject = ['$state'];
     /* @ngInject */
-    function MenuBottomController($scope, $auth, $state, $uibModal, mailBox, mail) {
+    function MenuBottomController($state) {
         var vm = this;
 
-        
+        vm.save = save;
+
+        function save() {
+            vm.onSave();
+            vm.isOpen = false;
+            $state.go('mail.inbox', {mbox: 'INBOX'});
+        }
     }
 })();

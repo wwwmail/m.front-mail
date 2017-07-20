@@ -5,7 +5,8 @@
         .module('app.components')
         .component('menuBottom', {
             bindings: {
-                messages: '='
+                isOpen: '=',
+                onSave: '&'
             },
             templateUrl: 'app/components/menu-bottom/menu-bottom.html',
             controller: 'MenuBottomController',

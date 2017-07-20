@@ -45,6 +45,11 @@
         vm.save = save;
         vm.upload = upload;
         vm.saveTemplate = saveTemplate;
+        vm.close = close;
+
+        $rootScope.$on('mail:compose:close', function () {
+            close();
+        });
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             $interval.cancel(vm.interval);
@@ -65,10 +70,10 @@
         $scope.$watch('vm.sendForm.model.body', function (data, oldData) {
             if (data) {
                 if (!vm.isSaveDraft && !$state.params.fwd && !$state.params.re && !$state.params.template) {
-                    save();
+                    save({isGoDraft: true});
                     vm.interval = $interval(function () {
                         if (vm.sendForm.model.to && !vm.$state.params.template) {
-                            save();
+                            save({isGoDraft: true});
                         }
                     }, 1000 * 60);
                     vm.isSaveDraft = true;
@@ -156,7 +161,9 @@
             $state.go('mail.inbox', {mbox: 'INBOX'});
         }
 
-        function save() {
+        function save(options) {
+            options = options || {};
+
             var data = getFormattedData();
 
             data.mbox = $state.params.mbox || 'Drafts';
@@ -183,12 +190,13 @@
                         date: setNowTime()
                     };
 
-                    $state.go('mail.compose', {
-                        id: vm.sendForm.id,
-                        mbox: 'Drafts',
-                        connection_id: vm.user.profile.default_connection_id
-                    }, {notify: false});
-
+                    if (options.isGoDrafts) {
+                        $state.go('mail.compose', {
+                            id: vm.sendForm.id,
+                            mbox: 'Drafts',
+                            connection_id: vm.user.profile.default_connection_id
+                        }, {notify: false});
+                    }
                 }
             });
         }
@@ -540,6 +548,17 @@
 
                 // pasteFwd();
             });
+        }
+
+        function close() {
+            $interval.cancel(vm.interval);
+
+            if ($state.params.mbox === 'Drafts' || vm.sendForm.id) {
+                vm.isMenuBottomOpen = true;
+                return;
+            }
+
+            $state.go('mail.inbox', {mbox: 'INBOX'});
         }
     }
 })();

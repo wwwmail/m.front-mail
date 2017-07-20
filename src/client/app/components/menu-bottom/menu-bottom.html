@@ -1,25 +1,24 @@
-<div class="menu-bottom">
+<div class="menu-bottom" ng-if="vm.isOpen">
     <div class="menu-bottom__container">
         <div class="menu-bottom__item">
             <div>
                 Сохранить сделанные изменения?
             </div>
-            <div>
+            <div ng-click="vm.isOpen = false;">
                 Отмена
             </div>
         </div>
 
         <div class="menu-bottom__item">
-            <div>
+            <div ng-click="vm.isOpen = false" ui-sref="mail.inbox({mbox: 'INBOX'})">
                Не сохранять
             </div>
         </div>
 
         <div class="menu-bottom__item">
-            <div>
+            <div ng-click="vm.save()">
                 Сохранить и перейти
             </div>
         </div>
     </div>
 </div>
-<div class="menu-bottom__bg"></div>
