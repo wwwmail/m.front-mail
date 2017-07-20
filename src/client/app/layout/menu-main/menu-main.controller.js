@@ -34,7 +34,7 @@
             },
             {
                 name: 'Outbox',
-                icon: 'icon-outbox'
+                icon: 'icon-strelka'
             }
         ];
 
