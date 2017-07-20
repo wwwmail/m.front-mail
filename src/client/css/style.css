@@ -3692,6 +3692,9 @@
   width: 53px;
   height: 53px;
 }
+.avatar--size53 .avatar__symbol-image {
+  font: 500 26px/1 Arial, sans-serif;
+}
 .avatar--size68 {
   width: 68px;
   height: 68px;

@@ -98,6 +98,10 @@
   &--size53 {
     width: 53px;
     height: 53px;
+
+    .avatar__symbol-image {
+      font: 500 26px/1 Arial, sans-serif;
+    }
   }
 
   &--size68 {

@@ -40,8 +40,14 @@
                 <span class="important-tags important-tags--active"></span>
             </div>
 
-            <div class="inbox-message__name">
+            <div class="inbox-message__name"
+                 ng-if="vm.$state.params.mbox !== 'Sent' && vm.$state.params.mbox !== 'Drafts'">
                 {{ vm.message.from ? vm.message.from : vm.message.fromAddress }}
+            </div>
+
+            <div class="inbox-message__name"
+                 ng-if="vm.$state.params.mbox === 'Sent' || vm.$state.params.mbox === 'Drafts'">
+                {{ vm.message.to[0].address }}
             </div>
 
             <div class="inbox-message__data">
