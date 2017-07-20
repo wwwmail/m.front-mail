@@ -69,12 +69,14 @@
                                        placeholder="{{ 'SUBJECT' | translate }}">
                             </label>
                         </div>
-                        <button class="compose__btn-attach btn btn--not-style btn--light-hover icon-clip font--size16"
+                        <button class="compose__btn-attach btn--attach btn btn--not-style btn--light-hover font--size16"
                                 type="button"
                                 type="file"
                                 multiple
                                 accept="**/*"
-                                ngf-select="vm.upload($files, $invalidFiles)"></button>
+                                ngf-select="vm.upload($files, $invalidFiles)">
+                            <img src="/images/icon-screpka-plus.svg">
+                        </button>
                     </div>
                 </div>
 
