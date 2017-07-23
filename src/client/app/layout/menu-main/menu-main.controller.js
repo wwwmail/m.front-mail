@@ -190,6 +190,8 @@
         }
 
         function setAuthProfile(profileItem) {
+            $auth.user.access_token = profile.access_token;
+
             $auth.setAuthHeaders({
                 "Authorization": profileItem.access_token
             });
@@ -201,6 +203,10 @@
                 console.info('not authenticated', err);
             }).catch(function (err) {
                 console.info('not authenticated', err);
+            });
+
+            $('#iframe--auth').on('load', function () {
+                location.reload();
             });
         }
 

@@ -6,7 +6,14 @@
         .run(appRun);
 
     /* @ngInject */
-    function appRun(routerHelper) {
+    function appRun(routerHelper, $cookies, $auth) {
+        if ($cookies.get('authToken')) {
+            var tokenArr = $cookies.get('authToken').split('+');
+            $auth.setAuthHeaders({
+                "Authorization": "Bearer " + tokenArr[1]
+            });
+        }
+
         var otherwise = '404';
         routerHelper.configureStates(getStates(), otherwise);
     }
