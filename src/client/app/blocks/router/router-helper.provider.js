@@ -109,7 +109,7 @@
                             return;
                         }
 
-                        $rootScope.title = title;
+                        // $rootScope.title = title;
                         $rootScope.isOpenMenu = false;
                     }
                 );

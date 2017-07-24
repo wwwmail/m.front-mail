@@ -38,8 +38,8 @@
 
         $rootScope.$on('search:mailQuery', function (e, data) {
             console.log('data', data);
-            vm.messages.params.search = data.search;
-            vm.searchQuery = data.search;
+            vm.messages.params.search = data.search.search;
+            vm.searchQuery = data.search.search;
             vm.messages.isSearch = true;
 
             if (!vm.messages.params.search_part) {
