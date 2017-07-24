@@ -21,6 +21,7 @@
                 'len': 100,
                 'part': 'bodytext'
             },
+            searchParams: {},
             checked: []
         };
 
@@ -38,12 +39,12 @@
 
         $rootScope.$on('search:mailQuery', function (e, data) {
             console.log('data', data);
-            vm.messages.params.search = data.search.search;
+            vm.messages.searchParams.search = data.search.search;
             vm.searchQuery = data.search.search;
             vm.messages.isSearch = true;
 
-            if (!vm.messages.params.search_part) {
-                vm.messages.params.search_part = 'text';
+            if (!vm.messages.searchParams.search_part) {
+                vm.messages.searchParams.search_part = 'text';
             }
 
             get();
@@ -52,8 +53,8 @@
         $rootScope.$on('search:mail', function (e, data) {
             console.log('search:mail', data);
             // vm.messages.params = data.search;
-            vm.messages.params = data.search;
-            vm.messages.params.search = vm.searchQuery;
+            vm.messages.searchParams = data.search;
+            vm.messages.searchParams.search = vm.searchQuery;
             vm.messages.isSearch = true;
             get();
         });
@@ -101,7 +102,16 @@
 
         function get() {
             vm.messages.isLoading = true;
-            mail.get(vm.messages.params).then(function (response) {
+
+            var params = {};
+
+            if (vm.messages.isSearch) {
+                params = vm.messages.searchParams;
+            } else {
+                params = vm.messages.params;
+            }
+
+            mail.get(params).then(function (response) {
                 vm.messages.isLoading = false;
                 vm.messages.checked = [];
                 vm.messages = _.assign(vm.messages, response.data);
