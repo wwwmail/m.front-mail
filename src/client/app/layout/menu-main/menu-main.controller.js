@@ -189,21 +189,10 @@
             vm.profiles = profile.getStorageProfiles();
         }
 
-        function setAuthProfile(profileItem) {
+        function setAuthProfile(profile) {
+            // $auth.user.access_token = profile.access_token;
+
             $auth.user.access_token = profile.access_token;
-
-            $auth.setAuthHeaders({
-                "Authorization": profileItem.access_token
-            });
-
-            $auth.validateUser().then(function (response) {
-                console.log('response', response);
-                location.reload();
-            }, function () {
-                console.info('not authenticated', err);
-            }).catch(function (err) {
-                console.info('not authenticated', err);
-            });
 
             $('#iframe--auth').on('load', function () {
                 location.reload();
