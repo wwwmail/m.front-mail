@@ -5,9 +5,9 @@
         .module('mail.inbox')
         .controller('InboxController', InboxController);
 
-    InboxController.$inject = ['$rootScope', '$state', '$http', 'mail', 'mailBox', 'profile', 'messages'];
+    InboxController.$inject = ['$scope', '$state', '$http', 'mail', 'mailBox', 'profile', 'messages'];
     /* @ngInject */
-    function InboxController($rootScope, $state, $http, mail, mailBox, profile, messages) {
+    function InboxController($scope, $state, $http, mail, mailBox, profile, messages) {
         var vm = this;
 
         vm.messages = {
@@ -27,17 +27,17 @@
 
         vm.folders = {};
 
-        $rootScope.$on('mail:sync', function () {
+        $scope.$on('mail:sync', function () {
             get();
         });
 
-        $rootScope.$on('mail:inbox:messages:update', function (e, data) {
+        $scope.$on('mail:inbox:messages:update', function (e, data) {
             // console.log(data);
             vm.messages = data;
             // get();
         });
 
-        $rootScope.$on('search:mailQuery', function (e, data) {
+        $scope.$on('search:mailQuery', function (e, data) {
             console.log('data', data);
             vm.messages.searchParams.search = data.search.search;
             vm.searchQuery = data.search.search;
@@ -50,7 +50,7 @@
             get();
         });
 
-        $rootScope.$on('search:mail', function (e, data) {
+        $scope.$on('search:mail', function (e, data) {
             console.log('search:mail', data);
             // vm.messages.params = data.search;
             vm.messages.searchParams = data.search;
@@ -59,7 +59,7 @@
             get();
         });
 
-        $rootScope.$on('search:close', function (e, data) {
+        $scope.$on('search:close', function (e, data) {
             vm.messages.params = angular.copy(vm.messages.defaultParams);
             vm.messages.params.mbox = $state.params.mbox;
             vm.messages.isSearch = false;
