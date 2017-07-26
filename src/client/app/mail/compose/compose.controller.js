@@ -47,7 +47,7 @@
         vm.saveTemplate = saveTemplate;
         vm.close = close;
 
-        $rootScope.$on('mail:compose:close', function () {
+        $scope.$on('mail:compose:close', function () {
             close();
         });
 
