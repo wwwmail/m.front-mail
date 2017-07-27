@@ -5,10 +5,12 @@
         .module('mail.inbox')
         .controller('InboxController', InboxController);
 
-    InboxController.$inject = ['$scope', '$state', '$http', 'mail', 'mailBox', 'profile', 'messages'];
+    InboxController.$inject = ['$scope', '$state', '$http', '$auth', 'mail', 'mailBox', 'profile', 'messages'];
     /* @ngInject */
-    function InboxController($scope, $state, $http, mail, mailBox, profile, messages) {
+    function InboxController($scope, $state, $http, $auth, mail, mailBox, profile, messages) {
         var vm = this;
+
+        vm.user = $auth.user;
 
         vm.messages = {
             params: {
@@ -68,6 +70,7 @@
 
         vm.openTagList = openTagList;
         vm.paginate = paginate;
+        vm.clearFolder = clearFolder;
 
         activate();
 
@@ -143,6 +146,16 @@
                     console.log('pag', vm.messages);
                 });
             }
+        }
+
+        function clearFolder(e, folder) {
+            e.stopPropagation();
+            mail.deleteAll({}, {
+                mbox: folder.name,
+                connection_id: vm.user.profile.default_connection_id
+            }).then(function () {
+                get();
+            });
         }
     }
 })();

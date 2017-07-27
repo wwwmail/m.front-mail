@@ -18,12 +18,14 @@
 </div>
 
 <!--vm.data._links.next-->
-<div class="inbox-plash hide-elm">
+<div class="inbox-plash" ng-if="vm.messages.items.length && vm.$state.params.mbox === 'Junk'">
     <div class="inbox-plash__message">
-        <div class="main-plash__text">В эту папку попадают письма, определённые, как нежелательные или вредоносные.
+        <div class="main-plash__text">
+            {{ 'SPAM_PLASH_TEXT_THIS_FOLDER_CONTAINS' | translate }}
         </div>
-        <button class="btn btn--normal btn--not-events btn--size_s mrg__top8 font--size12 mrg__top5" type="button">
-            Очистить папку
+        <button class="btn btn--normal btn--not-events btn--size_s mrg__top8 font--size12 mrg__top5"
+                type="button"
+                ng-click="vm.clearFolder($event, {name: 'Junk'})">{{ 'CLEAR_FOLDER' | translate }}
         </button>
     </div>
 </div>
