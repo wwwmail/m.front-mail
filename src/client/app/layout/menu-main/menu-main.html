@@ -16,14 +16,15 @@
                      ng-repeat="profile in vm.profiles"
                      ng-if="profile.profile.email !== vm.user.profile.email">
                     <button class="menu-main-layout__avatar" ng-click="vm.setAuthProfile(profile)">
-                        <!--<div class="avatar avatar&#45;&#45;size53 avatar&#45;&#45;second-style"
+                        <div class="avatar avatar--size53 avatar--second-style"
                              ng-if="profile.profile.photo">
                             <img class="avatar__image"
                                  media-url="profile.profile.photo"
                                  fallback-src="{{'/images/avatar-personal.svg'}}">
-                        </div>-->
+                        </div>
 
                         <avatar-name class="avatar avatar--size53 avatar--second-style"
+                                     ng-if="!profile.profile.photo"
                                      name="profile.profile.user_name"
                                      email="profile.profile.email">
                         </avatar-name>
