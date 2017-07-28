@@ -119,18 +119,15 @@
                 profiles = [];
             }
 
-            var isSet = false;
-
-            _.forEach(profiles, function (item) {
-                if (item.profile.email === user.profile.email) {
-                    isSet = true;
-                }
+            _.remove(profiles, function (item) {
+                return item.profile.email === user.profile.email;
             });
 
-            if (!isSet) {
-                profiles.push(user);
-                localStorageService.set('profiles', profiles);
-            }
+            profiles.push(user);
+
+            localStorageService.set('profiles', profiles);
+
+            console.log('profiles', user, profiles);
         }
 
         function destroyStorageProfile(user) {
