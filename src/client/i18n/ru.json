@@ -416,7 +416,8 @@
   "EMAIL_SUCCESS_SENT": "Письмо успешно отправлено",
   "LETTERS_MOVED_TO_A_FOLDER": "Письма перемещены в папку {{ folder }}",
   "LETTER_MOVED_TO_A_FOLDER": "Письма перемещены в папку {{ folder }}",
-
   "MY_FOLDERS": "Мои папки",
-  "MAIN_FOLDERS": "Основні папки"
+  "MAIN_FOLDERS": "Основні папки",
+  "SAVE_AND_GO": "Сохранить и перейти",
+  "NOT_SAVE": "Не сохранять",
 }

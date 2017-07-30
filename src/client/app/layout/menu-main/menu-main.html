@@ -67,7 +67,7 @@
                 <div class="menu-main__item-content" ng-if="!folder.isSub && folder.name !== 'Archive'">
                     <a class="menu-main__link"
                        ng-click="vm.closeMenu();"
-                       ui-sref="mail.inbox({mbox: folder.name, filter: undefined})">
+                       ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined})">
                         <span class="{{ folder.icon }} menu-main__icon"></span>
                         <!--<span class="menu-main__title">{{ folder.caption }}</span>-->
                         <span class="menu-main__title">{{ folder.name | translate }}</span>
@@ -95,7 +95,7 @@
                             <li class="menu-main__item-sub">
                                 <a class="menu-main__link"
                                    ng-click="vm.closeMenu();"
-                                   ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined})">
+                                   ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})">
                                     <span class="icon-folder-desk menu-main__icon"></span>
                                     <span class="menu-main__title">
                                         {{ folderSub.name | translate }}
@@ -118,7 +118,7 @@
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
                     <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: 'flagged'})"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'flagged', tag_id: undefined})"
                        ng-click="vm.closeMenu();">
                         <span class="icon-icon-flag-light menu-main__icon"></span>
                         <span class="menu-main__title">{{ 'IMPORTANT' | translate }}</span>
@@ -129,7 +129,7 @@
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
                     <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: 'attaches'})"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'attach', tag_id: undefined})"
                        ng-click="vm.closeMenu();">
                         <span class="icon-icon-screpka menu-main__icon"></span>
                         <span class="menu-main__title">{{ 'SEARCH_IS_ATTACH' | translate }}</span>
@@ -139,7 +139,7 @@
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
                     <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: 'unseen'})"
+                       ui-sref="mail.inbox({mbox: undefined, filter: 'unseen', tag_id: undefined})"
                        ng-click="vm.closeMenu();">
                         <span class="icon-icon-mail-light menu-main__icon"></span>
                         <span class="menu-main__title">{{ 'UNREAD' | translate }}</span>
@@ -198,7 +198,6 @@
     <div class="menu-main-layout__footer-menu">
         <hr class="hr hr--main-menu">
         <div class="flex align-items--cn mrg__left10 mrg__top10 mrg__bottom5">
-
             <div class="flex flex--row-wrap align-items--cn ">
                 <div class="link link--gray"
                      ng-click="vm.goToDesktopVersion('/?version=desktop&page=mail.inbox')">

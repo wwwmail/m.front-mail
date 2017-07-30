@@ -2,22 +2,22 @@
     <div class="menu-bottom__container">
         <div class="menu-bottom__item">
             <div>
-                Сохранить сделанные изменения?
+                {{ 'SAVE_CHANGES' | translate }}?
             </div>
             <div ng-click="vm.isOpen = false;">
-                Отмена
+                {{ 'CANCEL' | translate }}
             </div>
         </div>
 
         <div class="menu-bottom__item">
             <div ng-click="vm.isOpen = false" ui-sref="mail.inbox({mbox: 'INBOX'})">
-               Не сохранять
+                {{ 'NOT_SAVE' | translate }}
             </div>
         </div>
 
         <div class="menu-bottom__item">
             <div ng-click="vm.save()">
-                Сохранить и перейти
+                {{ 'SAVE_AND_GO' | translate }}
             </div>
         </div>
     </div>

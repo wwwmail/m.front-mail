@@ -413,11 +413,11 @@
   "MESSAGE_ACTION": "Дії з листом",
   "TO_ARCHIVE": "В архів",
   "ENTER_EMAIL_OR_LOGIN": "Введіть адресу електронної пошти або логін",
-
   "EMAIL_SUCCESS_SENT": "Лист успішно відправлено",
   "LETTERS_MOVED_TO_A_FOLDER": "Листи переміщені в папку {{ folder }}",
   "LETTER_MOVED_TO_A_FOLDER": "Лист переміщено в папку {{ folder }}",
-
   "MY_FOLDERS": "Мої папки",
-  "MAIN_FOLDERS": "Основні папки"
+  "MAIN_FOLDERS": "Основні папки",
+  "SAVE_AND_GO": "Зберегти і перейти",
+  "NOT_SAVE": "Не зберігати"
 }

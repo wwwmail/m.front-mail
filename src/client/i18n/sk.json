@@ -416,7 +416,8 @@
   "EMAIL_SUCCESS_SENT": "Správa bola úspešne odoslaná!",
   "LETTERS_MOVED_TO_A_FOLDER": "Správy presunuté do zložky {{folder}}",
   "LETTER_MOVED_TO_A_FOLDER": "Správy presunuté do zložky {{folder}}",
- 
   "MY_FOLDERS": "Zložky",
-  "MAIN_FOLDERS": "Hlavné zložky"
+  "MAIN_FOLDERS": "Hlavné zložky",
+  "SAVE_AND_GO": "Uložit a pokračovat",
+  "NOT_SAVE": "Neukládat"
 } 
