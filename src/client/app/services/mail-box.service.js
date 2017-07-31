@@ -41,6 +41,19 @@
 
                     if ($state.current.name === 'mail.inbox' || $state.current.name === 'mail.message') {
                         var folder = _.find(cacheList.items, {'name': $state.params.mbox});
+
+                        if ($state.params.filter === 'unseen') {
+                            folder = {name: 'UNREAD'};
+                        }
+
+                        if ($state.params.filter === 'attach') {
+                            folder = {name: 'SEARCH_IS_ATTACH'};
+                        }
+
+                        if ($state.params.filter === 'flagged') {
+                            folder = {name: 'IMPORTANT'};
+                        }
+
                         $rootScope.folder = folder;
                     }
 
@@ -75,7 +88,7 @@
             });
             // return resource.destroy(params, data).$promise;
         }
-        
+
         function openLayoutFolder(data) {
             $rootScope.$broadcast('mailBox:layout:open', data);
         }

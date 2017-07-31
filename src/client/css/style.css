@@ -735,8 +735,8 @@
   margin: auto;
   text-align: center;
   color: black;
-  font-size: 13px;
-  opacity: 0.6;
+  font-size: 14px;
+  font-weight: bold;
 }
 .menu-main__additional-option {
   cursor: pointer;
@@ -3974,6 +3974,9 @@
   .inbox-message__message {
     max-height: 40px !important;
   }
+}
+.inbox-message__attach {
+  font-size: 22px;
 }
 
 .inbox-footer {

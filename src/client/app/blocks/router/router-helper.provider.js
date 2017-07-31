@@ -100,17 +100,32 @@
 
                         stateCounts.changes++;
                         handlingStateChangeError = false;
-                        // var title = config.docTitle + ' ' + (toState.title || '');
-                        // var title = 'Mail.cz';
+
+                        console.log('toParams', toParams);
+
+                        $rootScope.isOpenMenu = false;
 
                         if (toState.name === 'mail.inbox' || toState.name === 'mail.message') {
-                            var folder = _.find(mailBox.getCacheList().items, {'name': toParams.mbox});
-                            $rootScope.folder = folder;
-                            return;
-                        }
+                            if (!toParams.filter) {
+                                var folder = _.find(mailBox.getCacheList().items, {'name': toParams.mbox});
+                            }
 
-                        // $rootScope.title = title;
-                        $rootScope.isOpenMenu = false;
+                            if (toParams.filter === 'unseen') {
+                                folder = {name: 'UNREAD'};
+                            }
+
+                            if (toParams.filter === 'attach') {
+                                folder = {name: 'SEARCH_IS_ATTACH'};
+                            }
+
+                            if (toParams.filter === 'flagged') {
+                                folder = {name: 'IMPORTANT'};
+                            }
+
+                            $rootScope.folder = folder;
+
+                            console.log('$rootScope.folder', $rootScope.folder);
+                        }
                     }
                 );
             }
