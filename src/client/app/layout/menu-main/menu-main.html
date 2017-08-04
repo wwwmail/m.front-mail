@@ -185,7 +185,7 @@
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
                     <a class="menu-main__link"
-                       ng-click="vm.goToDesktopVersion('/?version=desktop&page=settings.main')"
+                       ng-click="vm.goToDesktopVersion('/settings/main?version=desktop')"
                        target="_blank">
                         <span class="icon-settings-desk menu-main__icon"></span>
                         <span class="menu-main__title">{{ 'SETTING' | translate }}</span>
@@ -200,7 +200,7 @@
         <div class="flex align-items--cn mrg__left10 mrg__top10 mrg__bottom5">
             <div class="flex flex--row-wrap align-items--cn ">
                 <div class="link link--gray"
-                     ng-click="vm.goToDesktopVersion('/?version=desktop&page=mail.inbox')">
+                     ng-click="vm.goToDesktopVersion('/mail/inbox?mbox=INBOX&version=desktop')">
                     {{ 'FULL' | translate }} |
                 </div>
                 <div class="font--normal">
