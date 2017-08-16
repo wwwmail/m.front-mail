@@ -46,7 +46,7 @@
 
                     if (!response.profile.timezone) {
                         var profileModel = {};
-                        profileModel.timezone = 'Europe/Prague';
+                        profileModel.timezone = 'Central Europe Standard Time';
                         profile.put({}, profileModel);
                     }
 

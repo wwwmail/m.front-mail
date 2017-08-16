@@ -6,7 +6,10 @@
         .run(appRun);
 
     /* @ngInject */
-    function appRun(routerHelper, $cookies, $auth) {
+    function appRun(routerHelper, $cookies, $auth, timezone) {
+
+        timezone.get();
+
         if ($cookies.get('authToken')) {
             var tokenArr = $cookies.get('authToken').split('+');
             $auth.setAuthHeaders({
