@@ -12,14 +12,11 @@
         var timezoneList = null;
 
         $rootScope.$on('auth:validation-success', function () {
-            var tz = _.find(timezoneList, {'value': $auth.user.profile.timezone});
-            moment.tz.setDefault(tz.utc[0]);
-            console.log('tz', tz);
+            moment.tz.setDefault($auth.user.profile.timezone);
         });
 
         $rootScope.$on('auth:login-success', function () {
-            var tz = _.find(timezoneList, {'value': $auth.user.profile.timezone});
-            moment.tz.setDefault(tz.utc[0]);
+            moment.tz.setDefault($auth.user.profile.timezone);
         });
 
         function get(params, data) {
