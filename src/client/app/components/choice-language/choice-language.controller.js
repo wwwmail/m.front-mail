@@ -33,10 +33,10 @@
                     lang: 'sk',
                     icon: 'sk.svg'
                 },
-                // {
-                //     lang: 'sl',
-                //     icon: 'sl.svg'
-                // },
+                {
+                    lang: 'sl',
+                    icon: 'sl.svg'
+                },
                 {
                     lang: 'en',
                     icon: 'en.svg'
