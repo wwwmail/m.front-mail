@@ -12,7 +12,12 @@
 
                 <div class="auth-form" ng-if="!vm.isTokenAuthLoading">
                     <div class="auth-form__logo mrg__bottom16">
-                        <img class="img-responsive mrg__auto" src="/images/logo.png">
+                        <a href="https://mail.cz">
+                            <img class="img-responsive mrg__auto"
+                                 src="/images/logo-mailcz-dark.svg"
+                                 style="width: 141px;"
+                                 logo-hover>
+                        </a>
                         <hr class="hr hr--auth mrg__top16">
                     </div>
                     <form class="form" name="userForm" ng-submit="vm.socialComplete(userForm)" novalidate>
