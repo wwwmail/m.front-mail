@@ -16,38 +16,40 @@
             {
                 state: 'home',
                 config: {
-                    url: '/?version&token&page&compose',
+                    url: '/?version&token&page&compose&success',
                     controller: 'HomeController',
                     controllerAs: 'vm',
-                    onEnter: function ($auth, $state) {
-                        if ($state.params.token) {
-                            $auth.setAuthHeaders({
-                                "Authorization": "Bearer " + $state.params.token
-                            });
+                    onEnter: function ($auth, $state, $stateParams, $rootScope, profile) {
+                        console.log('profile', profile);
 
-                            $auth.validateUser().then(function() {
-                                var params = {};
+                        var params = {};
 
-                                if ($state.params.compose) {
-                                    $state.go('mail.compose', params);
-                                    return;
-                                }
+                        if ($stateParams.compose) {
+                            params.compose = $state.params.compose
+                        }
 
-                                if ($state.params.page) {
-                                    $state.go($state.params.page, params);
-                                    return;
-                                }
-
-                                params.mbox = 'INBOX';
-
-                                $state.go('mail.inbox', params);
-                            }, function () {
-                                $state.go('mail.inbox', {mbox: 'INBOX'});
-                            });
+                        if ($stateParams.page) {
+                            $state.go($stateParams.page, params);
                             return;
                         }
 
-                        $state.go('mail.inbox', {mbox: 'INBOX'});
+                        if ($stateParams.token) {
+                            $auth.setAuthHeaders({
+                                "Authorization": 'Bearer ' + $stateParams.token
+                            });
+
+                            $auth.validateUser().then(function (response) {
+                                profile.addStorageProfile(response);
+                            });
+
+                            $state.go('mail.inbox', {mbox: 'INBOX'});
+
+                            return;
+                        }
+
+                        params.mbox = 'INBOX';
+
+                        $state.go('mail.inbox', params);
                     }
                 }
             }

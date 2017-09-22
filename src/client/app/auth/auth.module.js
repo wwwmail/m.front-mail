@@ -5,6 +5,7 @@
         'auth.signIn',
         'auth.signUp',
         'auth.passwordReset',
-        'auth.passwordUpdate'
+        'auth.passwordUpdate',
+        'auth.signTemp'
     ]);
 })();

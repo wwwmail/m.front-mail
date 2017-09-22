@@ -23,6 +23,7 @@
             'LocalStorageModule',
             'ngTagsInput',
             'pascalprecht.translate',
-            'ngCookies'
+            'ngCookies',
+            'ngPasswordStrength'
         ]);
 })();

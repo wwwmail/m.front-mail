@@ -22,6 +22,16 @@
                     controllerAs: 'vm',
                     title: 'Войти'
                 }
+            },
+            {
+                state: 'logout',
+                config: {
+                    url: '/logout',
+                    onEnter: function ($auth, $state) {
+                        $auth.signOut();
+                        $state.go('signIn');
+                    }
+                }
             }
         ];
     }

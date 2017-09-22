@@ -5,10 +5,12 @@
         .module('auth.signUp')
         .controller('SignUpController', SignUpController);
 
-    SignUpController.$inject = ['$state', '$auth', '$timeout', 'authService'];
+    SignUpController.$inject = ['$state', '$auth', '$timeout', 'authService', 'profile'];
     /* @ngInject */
-    function SignUpController($state, $auth, $timeout, authService) {
+    function SignUpController($state, $auth, $timeout, authService, profile) {
         var vm = this;
+
+        vm.isAdditionalEmail = true;
 
         vm.userForm = {
             isLoading: false,
@@ -16,7 +18,13 @@
                 phone: '420'
             },
             validations: {
-                phone: {}
+                phone: {},
+                password: {
+                    'password-verify': 'Введенные пароли не совпадают'
+                },
+                passwordConf: {
+                    'password-verify': 'Введенные пароли не совпадают'
+                }
             }
         };
 
@@ -36,17 +44,43 @@
             }, 1250);
         }
 
-        function signUp(form) {
+        function signUp() {
             var data = angular.copy(vm.userForm.model);
 
             if (vm.userForm.model.phone) {
                 data.phone = vm.userForm.model.phone.toString().replace(/\s{2,}/g, ' ');
             }
 
+            if (vm.isAdditionalEmail) {
+                data.phone = undefined;
+                data.code = undefined;
+            }
+
+            if (!vm.isAdditionalEmail) {
+                data.email = undefined;
+            }
+
+            vm.userForm.isLoading = true;
+
             $auth.submitRegistration(data)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
-                    $state.go('mail.inbox');
+                    // $state.go('signIn');
+                    console.log('response', response);
+
+                    profile.addStorageProfile(response.data.data);
+
+                    if (!response.data.data.profile.timezone) {
+                        var profileModel = {};
+                        profileModel.timezone = 'Europe/Belgrade';
+                        profile.put({}, profileModel);
+                    }
+
+                    $auth.setAuthHeaders({
+                        "Authorization": response.data.data.access_token
+                    });
+
+                    $state.go('mail.inbox', {mbox: 'INBOX'});
                 })
                 .catch(function (response) {
                     vm.userForm.isLoading = false;
@@ -62,7 +96,8 @@
                     vm.codeResult = response.data;
                 })
                 .catch(function (response) {
-                    vm.userForm.errors = response.data;
+                    vm.userForm.errors = response.data.data;
+                    console.log('error', response);
                 });
         }
 

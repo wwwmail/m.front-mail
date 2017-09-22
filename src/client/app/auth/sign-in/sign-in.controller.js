@@ -5,10 +5,12 @@
         .module('auth.signIn')
         .controller('SignInController', SignInController);
 
-    SignInController.$inject = ['$scope', '$state', '$auth', 'profile'];
+    SignInController.$inject = ['$scope', '$state', '$auth', '$cookies', 'profile'];
     /* @ngInject */
-    function SignInController($scope, $state, $auth, profile) {
+    function SignInController($scope, $state, $auth, $cookies, profile) {
         var vm = this;
+
+        vm.user = $auth.user;
 
         vm.userForm = {
             isLoading: false,
@@ -36,27 +38,25 @@
         }
 
         function login() {
-            console.log(vm.userForm);
             vm.userForm.isLoading = true;
-            $auth.submitLogin(vm.userForm.model)
-                .then(function (response) {
-                    vm.userForm.isLoading = false;
+            $auth.submitLogin(vm.userForm.model).then(function (response) {
+                vm.userForm.isLoading = false;
 
-                    profile.addStorageProfile(response);
+                profile.addStorageProfile(response);
 
-                    if (!response.profile.timezone) {
-                        var profileModel = {};
-                        profileModel.timezone = 'Europe/Belgrade';
-                        profile.put({}, profileModel);
-                    }
+                if (!response.profile.timezone) {
+                    var profileModel = {};
+                    profileModel.timezone = 'Europe/Belgrade';
+                    profile.put({}, profileModel);
+                }
 
-                    $state.go('mail.inbox', {mbox: 'INBOX'});
-                })
-                .catch(function (response) {
-                    vm.userForm.errors = 'WRONG_LOGIN_OF_PASSWORD';
-                    console.log('error', vm.userForm.errors);
-                });
+                $state.go('mail.inbox', {mbox: 'INBOX'});
+
+            }).catch(function (response) {
+                vm.userForm.isLoading = false;
+                vm.userForm.errors = 'WRONG_LOGIN_OF_PASSWORD';
+                console.log('error', vm.userForm.errors);
+            });
         }
-
     }
 })();

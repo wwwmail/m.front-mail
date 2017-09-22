@@ -419,5 +419,13 @@
   "MY_FOLDERS": "Moje složky",
   "MAIN_FOLDERS": "Složky",
   "SAVE_AND_GO": "Uložit a pokračovat",
-  "NOT_SAVE": "Neukládat"
+  "NOT_SAVE": "Neukládat",
+  "ACTIVE_PHONE": "Vaše telefonní číslo",
+  "NO_PHONE": "Nemám telefon",
+  "ACCESS_RECOVERY_STEP_2": "Obnovení hesla k účtu",
+  "ENTER_PHONE_OR_EMAIL": "Zadejte, prosím, své telefonní číslo nebo alternativní e-mail, který jste zadali při registraci.",
+  "PHONE_OR_EMAIL": "Telefon nebo alternativní e-mail",
+  "ENTER_MAIL_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš alternativní e-mail",
+  "ENTER_PHONE_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš telefon",
+  "SELECT_YOUR_NAME": "Vymyslete svoje uživatelské jméno"
 }

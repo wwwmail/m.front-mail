@@ -50,7 +50,8 @@
     "angular-cookies": "1.5.3",
     "angular-translate-loader-url": "^2.15.2",
     "bower": "*",
-    "install": "^1.0.4"
+    "install": "^1.0.4",
+    "ng-password-strength": "^0.2.1"
   },
   "overrides": {
     "jquery": {

@@ -1,37 +1,35 @@
 <div class="auth-layout">
-
     <div class="auth-layout__content">
-        <div class="auth-layout__form auth-layout__form--wd388 ">
+        <div class="auth-layout__form auth-layout__form--wd388">
 
             <div class="card">
                 <div class="auth-form">
-
                     <div class="auth-form__logo mrg__bottom16">
-                        <img class="img-responsive mrg__auto" src="/images/logo.png">
+                        <a href="https://mail.cz">
+                            <img class="img-responsive mrg__auto" src="/images/logo.png">
+                        </a>
                         <hr class="hr hr--auth mrg__top16">
                     </div>
 
-                    <form class="form" name="userForm" ng-submit="vm.signUp(userForm)" novalidate>
+                    <form class="form form--validation" name="userForm" ng-submit="vm.signUp(userForm)" novalidate>
 
-                        <!-- имя и фамилия -->
-                        <div class="form__field-item form__field-item--mob-modif mrg__bottom8 flex--inline">
-                            <div class="field-style mrg__right5 mrg__bottom6">
-                                <input class="input input--size_l input--up-shadow width--inh" type="text"
+                        <!-- Имя и фамилия -->
+                        <div class="form__field-item mrg__bottom20 flex--inline">
+                            <div class="field-style mrg__right5">
+                                <input class="input input--size_l input--fc-sh-yellow width--inh" type="text"
                                        name="first_name"
                                        ng-model="vm.userForm.model.first_name"
-                                       placeholder="{{ 'INPUT_PLACEHOLDER_NAME' | translate }}"
-                                       required>
+                                       placeholder="{{ 'INPUT_PLACEHOLDER_NAME' | translate }}">
                                 <validation-errors data="userForm.first_name"
                                                    server="vm.userForm.errors"
                                                    messages="vm.userForm.validations.first_name">
                                 </validation-errors>
                             </div>
-
-                            <div class="field-style mrg__bottom6">
-                                <input class="input input--size_l input--up-shadow width--inh" type="text"
+                            <div class="field-style">
+                                <input class="input input--size_l input--fc-sh-yellow width--inh" type="text"
+                                       name="last_name"
                                        ng-model="vm.userForm.model.last_name"
-                                       placeholder="{{ 'INPUT_PLACEHOLDER_LAST_MANE' | translate }}"
-                                       required>
+                                       placeholder="{{ 'INPUT_PLACEHOLDER_LAST_MANE' | translate }}">
                                 <validation-errors data="userForm.last_name"
                                                    server="vm.userForm.errors"
                                                    messages="vm.userForm.validations.last_name">
@@ -39,24 +37,24 @@
                             </div>
                         </div>
 
-                        <!-- логин в базе -->
+                        <!-- Логин в базе -->
                         <div class="form__field-item mrg__bottom10">
                             <div class="field-style">
-                                <label class="field-style__title font--size13">
+                                <label class="field-style__title font__size13">
                                     {{ 'AUTH_CREATE_A_USER_NAME' | translate }}
                                 </label>
                                 <div class="field-style__group">
                                     <div class="width--inh position">
-                                        <span class="input-plash input-plash--top13 font--size13">@mail.cz</span>
-                                        <input class="input input--size_l input--up-shadow width--inh"
+                                        <span class="input-plash input-plash--top13 font__size13">@mail.cz</span>
+                                        <input class="input input--size_l input--fc-sh-yellow width--inh"
                                                type="text"
                                                name="username"
                                                ng-model="vm.userForm.model.username"
-                                               ng-blur="vm.checkUserName()"
+                                               ng-change="vm.checkUserName()"
                                                placeholder="{{'INPUT_PLACEHOLDER_MAIL_NAME' | translate }}"
+                                               login-format
                                                required>
                                     </div>
-
                                     <validation-errors data="userForm.username"
                                                        server="vm.userForm.errors"
                                                        messages="vm.userForm.validations.username">
@@ -65,30 +63,45 @@
                             </div>
                         </div>
 
-                        <!-- пароль -->
-                        <div class="form__field-item mrg__bottom6">
+                        <!-- Пароль -->
+                        <div class="m-input m-input--password form__field-item mrg__bottom6">
                             <div class="field-style">
-                                <input class="input input--size_l input--up-shadow width--inh"
-                                       type="password"
-                                       name="password"
-                                       ng-model="vm.userForm.model.password"
-                                       placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}"
-                                       required>
+                                <div class="m-input__body">
+                                    <input class="m-input__element input input--size_l input--fc-sh-yellow"
+                                           type="{{ vm.isPasswordShow ? 'text' : 'password' }}"
+                                           name="password"
+                                           ng-model="vm.userForm.model.password"
+                                           placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}"
+                                           password-verify="{{ vm.userForm.model.passwordConf }}"
+                                           required>
+                                    <span class="password-eye m-input__password-icon"
+                                          ng-class="{'password-eye--show': vm.isPasswordShow}"
+                                          ng-click="vm.isPasswordShow = !vm.isPasswordShow">
+                                    </span>
+                                </div>
                                 <validation-errors data="userForm.password"
                                                    server="vm.userForm.errors"
                                                    messages="vm.userForm.validations.password">
                                 </validation-errors>
                             </div>
+
+                            <div class="mrg__top5 progress-bar--password"
+                                 ng-password-strength="vm.userForm.model.password"
+                                 strength="passStrength"
+                                 inner-class="progress-bar progress-bar--password"
+                                 inner-class-prefix="progress-bar-">
+                            </div>
                         </div>
 
-                        <!-- подтверждение пароля -->
+                        <!-- Подтверждение пароля -->
                         <div class="form__field-item mrg__bottom10">
                             <div class="field-style">
-                                <input class="input input--size_l input--up-shadow width--inh"
-                                       type="password"
+                                <input class="input input--size_l input--fc-sh-yellow width--inh"
+                                       type="{{ vm.isPasswordShow ? 'text' : 'password' }}"
                                        name="passwordConf"
                                        ng-model="vm.userForm.model.passwordConf"
                                        placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD_CONFIRMATION' | translate }}"
+                                       password-verify="{{ vm.userForm.model.password }}"
                                        required>
                                 <validation-errors data="userForm.passwordConf"
                                                    server="vm.userForm.errors"
@@ -97,61 +110,96 @@
                             </div>
                         </div>
 
-                        <!-- СМС валидация -->
-                        <!--для Отключения выделения блока подложкой просто добавляем sms-bg-->
-                        <div class="form__field-item mrg__bottom25 mrg__top30 flex flex--row-wrap">
-                            <div class="field-style flex--inline">
-                                <input class="input input--size_l input--up-shadow width--inh"
-                                       type="text"
-                                       name="phone"
-                                       ng-model="vm.userForm.model.phone"
-                                       ui-mask-placeholder
-                                       ui-mask-placeholder-char="x"
-                                       ui-mask="+999 999-999-999"
-                                       ui-options="{allowInvalidValue: true, clearOnBlur: false}"
-                                       required>
+                        <!--Дополнительный адрес: телефон-->
+                        <div class="mrg__t10" ng-if="!vm.isAdditionalEmail">
 
-                                <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button"
-                                        ng-click="vm.sendCode()">
-                                    {{ 'BTN_TO_GET_THE_CODE' | translate }}
-                                </button>
-                            </div>
-                            <div class="field-style width--inh">
+                            <!-- СМС валидация -->
+                            <label class="field-style__title font__size13">
+                                {{ 'ACTIVE_PHONE' | translate }}
+                                <a class="pull-right" ng-click="vm.isAdditionalEmail = true">
+                                    {{ 'NO_PHONE' | translate }}
+                                </a>
+                            </label>
+
+                            <div class="form__field-item mrg__bottom25 flex flex--row-wrap">
+                                <div class="field-style mrg__right5 width--size177">
+                                    <input class="input input--size_l input--fc-sh-yellow width--inh"
+                                           type="text"
+                                           name="phone"
+                                           ng-model="vm.userForm.model.phone"
+                                           ui-mask-placeholder
+                                           ui-mask-placeholder-char="x"
+                                           ui-mask="+999 999-999-999"
+                                           ui-options="{allowInvalidValue: true, clearOnBlur: false}"
+                                           required>
+                                </div>
+
+                                <div class="field-style width--inh width--max126">
+                                    <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button"
+                                            ng-click="vm.sendCode()">
+                                        {{ 'BTN_TO_GET_THE_CODE' | translate }}
+                                    </button>
+                                </div>
+
                                 <validation-errors data="userForm.phone"
                                                    server="vm.userForm.errors"
-                                                   messages="vm.userForm.validations.phone"></validation-errors>
-                                <span class="notific notific--auth" ng-if="vm.codeResult">
-                                     {{ 'AUTH_NOTIFIC_PHONE_1' | translate }} +{{ vm.userForm.model.phone }}  {{ 'AUTH_NOTIFIC_PHONE_2' | translate }}
-                                </span>
+                                                   messages="vm.userForm.validations.phone">
+                                </validation-errors>
 
+                                <span class="notific notific--auth" ng-if="vm.codeResult && vm.userForm.model.phone">
+                                         {{ 'AUTH_NOTIFIC_PHONE_1' | translate }} +{{ vm.userForm.model.phone }}  {{ 'AUTH_NOTIFIC_PHONE_2' | translate }}
+                                </span>
+                            </div>
+
+                            <!-- СМС подтверждение кода -->
+                            <div class="form__field-item mrg__bottom20 mrg__top16"
+                                 ng-if="vm.codeResult.code || vm.userForm.errors">
+
+                                <div class="width-inh flex--inline align-items--cn">
+                                    <div class="field-style mrg__right5 width--size177">
+                                        <input class="input input--size_l input--fc-sh-yellow width--inh"
+                                               type="text"
+                                               name="code"
+                                               ng-model="vm.userForm.model.code"
+                                               placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_SMS_CODE' | translate }}"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <div class="color--red">
+                                    {{ vm.error.message }}
+                                </div>
+
+                                <validation-errors data="userForm.code"
+                                                   server="vm.userForm.errors"
+                                                   messages="vm.userForm.validations.code">
+                                </validation-errors>
                             </div>
 
                         </div>
 
+                        <!--Дополнительный адрес: email-->
+                        <div class="mrg__t10" ng-if="vm.isAdditionalEmail">
+                            <label class="field-style__title font__size13">
+                                {{ 'ACTIVE_EMAIL' | translate }}
+                                <a class="pull-right" ng-click="vm.isAdditionalEmail = false">
+                                    {{ 'NO_EMAIL' | translate }}
+                                </a>
+                            </label>
 
-                        <!-- СМС подтверждение кода -->
-                        <div class="form__field-item mrg__bottom20 mrg__top16 flex flex--row-wrap"
-                             ng-if="vm.codeResult.code || vm.userForm.errors">
-                            <div class="width-inh flex--inline align-items--cn">
-                                <div class="field-style mrg__right5 width--size177">
-                                    <input class="input input--size_l input--up-shadow width--inh"
-                                           type="text"
-                                           name="code"
-                                           ng-model="vm.userForm.model.code"
-                                           placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_SMS_CODE' | translate }}"
+                            <div class="form__field-item mrg__bottom25 flex flex--row-wrap">
+                                <div class="field-style mrg__right5">
+                                    <input class="input input--size_l input--fc-sh-yellow width--inh"
+                                           type="email"
+                                           name="email"
+                                           ng-model="vm.userForm.model.email"
                                            required>
                                 </div>
-                                <!--<div class="field-style width&#45;&#45;aut">
-                                    &lt;!&ndash;<button class="btn btn&#45;&#45;size_l btn&#45;&#45;normal width&#45;&#45;inh btn&#45;&#45;s-gradient" type="button">Подтвердить&ndash;&gt;
-                                    &lt;!&ndash;</button>&ndash;&gt;
-                                    <span class="ok-validates width&#45;&#45;inh">Подтвержден</span>
-                                </div>-->
-
+                                <validation-errors data="userForm.email"
+                                                   server="vm.userForm.errors"
+                                                   messages="vm.userForm.validations.email">
+                                </validation-errors>
                             </div>
-
-                            <validation-errors data="userForm.code"
-                                               server="vm.userForm.errors"
-                                               messages="vm.userForm.validations.code"></validation-errors>
                         </div>
 
                         <!-- Соглашение -->
@@ -159,57 +207,76 @@
                             <div class="field-style widtn--inh">
 
                                 <!--наш чекбокс -->
-                                <label class="checkbox-y__label checkbox-y checkbox-y--chek-top" for="isChecked">
+                                <label class="checkbox-y__label checkbox-y--size15 checkbox-y checkbox-y--chek-top"
+                                       for="isChecked">
                                     <input class="checkbox-y__input" id="isChecked" type="checkbox" name="agree"
                                            ng-model="vm.userForm.model.agree">
                                     <div class="checkbox-y__body">
-                                        <span class="checkbox-y__icon icon-mark"></span>
+                                            <span class="checkbox-y__icon">
+                                            </span>
                                     </div>
-                                    <span class="checkbox__text font--size12 color--silver" role="presentation">
-                                             {{ 'AUTH_CHECKBOX_CONFORMING_1' | translate }} <a
-                                            class="link link-auth"
+                                    <span class="checkbox__text font__size12 color--silver" role="presentation">
+                                            {{ 'AUTH_CHECKBOX_CONFORMING_1' | translate }} <a
+                                            class="link link-aith"
                                             href="https://mail.cz/obchodni-podminky/"
                                             target="_blank">{{ 'AUTH_CHECKBOX_CONFORMING_2' | translate }}</a>
-                                    </span>
+                                        </span>
                                 </label>
+
                                 <validation-errors data="userForm.agree"
                                                    server="vm.userForm.errors"
-                                                   messages="vm.userForm.validations.agree">
-                                </validation-errors>
+                                                   messages="vm.userForm.validations.agree"></validation-errors>
+
                             </div>
                         </div>
 
                         <!-- Зарегистрироватся -->
                         <div class="form__field-item mrg__bottom10">
                             <hr class="hr hr--auth ">
-                            <div class="field-style">
-                                <button class="btn btn--size_l btn--yellow width--inh" type="submit">
+                            <div class="field-style text-center">
+                                <button class="btn btn--size_l btn--yellow width--inh" type="submit"
+                                        ng-if="!vm.userForm.isLoading">
                                     {{ 'BTN_SING_UP_NOW' | translate }}
                                 </button>
+                                <div ng-if="vm.userForm.isLoading">
+                                    <spinner is-global="false"
+                                             is-open="true"></spinner>
+                                </div>
                             </div>
                         </div>
 
                     </form>
 
-                    <!--<hr class="hr hr&#45;&#45;auth ">-->
-                    <button class="btn btn--size_l btn--link-style " ui-sref="signIn">
+                    <button class="btn btn--size_l btn--link-style" ui-sref="signIn">
                         {{ 'SING_IN' | translate }}
                     </button>
+
+                    <div class="text-center mrg__top20">
+                        <social-auth></social-auth>
+                    </div>
+
                 </div>
             </div>
 
         </div>
 
-        <!-- футтер на странице авторизации-->
-        <div class="footer footer__auth">
 
-            <!-- Копирайт-->
+        <div class="footer footer__auth">
             <div class="footer__copyright">
                 <span class="">© 2001—2017 «Mail.cz» Group a.s.</span>
             </div>
-            <!-- Дополнительное меню с выбором языка-->
-            <div class="footer__right-menu  mrg__right">
 
+            <div class="footer__menu">
+                <div class="navigation">
+                    <div class="navigation__row">
+                        <div class="navigation__item">
+                            <!--<a class="navigation__link navigation__link&#45;&#45;footer-a" href="">Контакты</a>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer__right-menu  mrg__right">
                 <div class="navigation">
                     <div class="navigation__row">
                         <div class="navigation__item position width--size28">
@@ -217,13 +284,18 @@
                             <choice-language></choice-language>
 
                         </div>
+                        <!--<div class="navigation__item">
+                            <a class="navigation__link" href="">
+                                {{ 'CONTACTS' | translate }}
+                            </a>
+                        </div>-->
+                        <!--<div class="navigation__item"><a class="navigation__link" href="">Реклама</a></div>-->
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
 
     <div class="auth-layout__bg"></div>
-
 </div>

@@ -5,9 +5,9 @@
         .module('auth.passwordReset')
         .controller('PasswordResetController', PasswordResetController);
 
-    PasswordResetController.$inject = ['$state', '$auth', 'authService'];
+    PasswordResetController.$inject = ['$state', 'authService'];
     /* @ngInject */
-    function PasswordResetController($state, $auth, authService) {
+    function PasswordResetController($state, authService) {
         var vm = this;
 
         vm.userForm = {
@@ -20,9 +20,9 @@
             }
         };
 
-        vm.requestPasswordReset = requestPasswordReset;
+        vm.preRequestPasswordReset = preRequestPasswordReset;
 
-        function requestPasswordReset(form) {
+        function preRequestPasswordReset(form) {
             if (form.$invalid) return;
 
             var data = vm.userForm.model;
@@ -32,35 +32,15 @@
             }
 
             vm.userForm.isLoading = true;
-            $auth.requestPasswordReset(data)
+            authService.preRequestPasswordReset({}, data)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
                     $state.go('passwordUpdate', {
                         username: vm.userForm.model.username
                     });
-                })
-                .catch(function (response) {
-                    // handle error response
+                }, function (response) {
                     vm.userForm.errors = response.data.data;
-                    console.log('error', vm.userForm.errors);
                 });
         }
-
-        // function sendCode() {
-        //     if (!vm.userForm.model.phone) return;
-        //
-        //     var phone = '420' + vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
-        //
-        //     // console.log('vm.userForm.model.phone', phone);
-        //     authService.sendCode({}, {phone: phone})
-        //         .then(function (response) {
-        //             console.log('response', response);
-        //             vm.codeResult = response;
-        //         })
-        //         .catch(function (response) {
-        //             vm.userForm.errors = response.data;
-        //             console.log('error', response);
-        //         });
-        // }
     }
 })();

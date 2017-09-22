@@ -6,7 +6,8 @@
             <div class="card">
                 <div class="text-center" ng-if="vm.isTokenAuthLoading">
                     <spinner is-global="false"
-                             is-open="true"></spinner>
+                             is-open="true">
+                    </spinner>
                 </div>
 
                 <div class="auth-form" ng-if="!vm.isTokenAuthLoading">
@@ -14,85 +15,71 @@
                         <img class="img-responsive mrg__auto" src="/images/logo.png">
                         <hr class="hr hr--auth mrg__top16">
                     </div>
-                    <form class="form" name="userForm" ng-submit="vm.login(userForm)" novalidate>
-                        <!-- логин -->
+                    <form class="form" name="userForm" ng-submit="vm.socialComplete(userForm)" novalidate>
                         <div class="form__field-item mrg__bottom10">
+                            <label class="font__size13">
+                                {{ 'SELECT_YOUR_NAME' | translate : {name: 'mail.cz'} }}
+                            </label>
                             <div class="field-style position">
                                 <span class="input-plash input-plash--top13 font__size13">@mail.cz</span>
                                 <input class="input input--size_l input--up-shadow width--inh"
                                        type="text"
-                                       placeholder="{{ 'INPUT_PLACEHOLDER_LOGIN' | translate }}"
+                                       name="username"
+                                       placeholder="{{ 'INPUT_PLACEHOLDER_MAIL_NAME' | translate }}"
                                        ng-model="vm.userForm.model.username"
                                        login-format
                                        required>
-                                <validation-errors data="userForm.username"
-                                                   messages="vm.userForm.validations.username">
-                                </validation-errors>
                             </div>
-                        </div>
-
-                        <!-- пароль -->
-                        <div class="form__field-item mrg__bottom10">
-                            <div class="field-style">
-                                <input class="input input--size_l input--up-shadow width--inh"
-                                       type="password"
-                                       ng-model="vm.userForm.model.password" required placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}">
-                            </div>
-                            <validation-errors data="userForm.password"
-                                               messages="vm.userForm.validations.password">
+                            <validation-errors data="userForm.username"
+                                               server="vm.userForm.errors"
+                                               messages="vm.userForm.validations.username">
                             </validation-errors>
                         </div>
 
-                        <!-- войти -->
                         <div class="form__field-item mrg__bottom10">
-                            <div class="field-style text-center">
-                                <button class="btn btn--size_l btn--yellow width--inh" type="submit"
-                                        ng-if="!vm.userForm.isLoading">{{ 'SING_IN' | translate }}</button>
-                                <div ng-if="vm.userForm.isLoading">
-                                    <spinner is-global="false"
-                                             is-open="true"></spinner>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="validation mrg__bottom10">
-                            <div class="validation__message validation__message--red">
-                                {{ vm.userForm.errors | translate }}
-                            </div>
-                        </div>
-
-                        <!-- запомнить / забыли-->
-                        <div class="form__field-item mrg__bottom10 flex flex--just-s-a">
                             <div class="field-style widtn--inh">
+
                                 <!--наш чекбокс -->
-                                <label class="checkbox-y__label checkbox-y" for="isChecked">
-                                    <input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked"
-                                           ng-model="isChecked">
+                                <label class="checkbox-y__label checkbox-y--size15 checkbox-y checkbox-y--chek-top"
+                                       for="isChecked">
+                                    <input class="checkbox-y__input" id="isChecked" type="checkbox" name="agree"
+                                           ng-model="vm.userForm.model.agree">
                                     <div class="checkbox-y__body">
                                             <span class="checkbox-y__icon">
                                             </span>
                                     </div>
-                                    <span class="checkbox__text " role="presentation">
-                                        {{'REMEMBER_ME' | translate }}
-                                    </span>
+                                    <span class="checkbox__text font__size12 color--silver" role="presentation">
+                                            {{ 'AUTH_CHECKBOX_CONFORMING_1' | translate }} <a
+                                            class="link link-aith"
+                                            href="https://mail.cz/obchodni-podminky/"
+                                            target="_blank">{{ 'AUTH_CHECKBOX_CONFORMING_2' | translate }}</a>
+                                        </span>
                                 </label>
-                            </div>
-                            <div class="field-style widtn--inh font__right">
-                                <a class="link link-aith" ui-sref="passwordReset">{{ 'FORGOT_YOUR_PASSWORD' | translate }}</a>
+
+                                <validation-errors data="userForm.agree"
+                                                   server="vm.userForm.errors"
+                                                   messages="vm.userForm.validations.agree">
+                                </validation-errors>
+
                             </div>
                         </div>
 
+                        <hr class="hr hr--auth">
 
+                        <div class="form__field-item mrg__bottom10">
+                            <div class="field-style text-center">
+                                <button class="btn btn--size_l btn--yellow width--inh"
+                                        type="submit"
+                                        ng-if="!vm.userForm.isLoading">{{ 'BTN_SING_UP_NOW' | translate }}
+                                </button>
+                                <div ng-if="vm.userForm.isLoading">
+                                    <spinner is-global="false"
+                                             is-open="true">
+                                    </spinner>
+                                </div>
+                            </div>
+                        </div>
                     </form>
-
-                    <hr class="hr hr--auth ">
-
-                    <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" ui-sref="signUp">{{ 'CHECK_IN' | translate }}</button>
-
-                    <div class="text-center mrg__top20">
-                        <social-auth></social-auth>
-                    </div>
-
                 </div>
             </div>
 

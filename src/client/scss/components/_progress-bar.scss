@@ -1,0 +1,24 @@
+.progress-bar {
+  &--password {
+    .progress {
+      height: 5px;
+      margin: 0;
+
+      .progress-bar {
+        transition: none !important;
+
+        &.danger {
+          background-color: $light-red;
+        }
+
+        &.progress-bar-warning {
+          background-color: $yellow-yandex;
+        }
+
+        &.progress-bar-success {
+          background-color: $validtae-ok-green;
+        }
+      }
+    }
+  }
+}

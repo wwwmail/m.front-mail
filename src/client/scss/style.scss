@@ -43,6 +43,7 @@
 @import "ui/tags-input";
 @import "ui/radiobutton";
 @import "ui/select-list";
+@import "ui/m-input";
 @import "components/search-block";
 @import "components/validation";
 @import 'components/avatar';
@@ -95,6 +96,8 @@
 @import "components/inbox-plash";
 @import "components/search-filters";
 @import "components/menu-bottom";
+@import "components/social-auth";
+@import "components/progress-bar";
 
 body {
   width: 100%;

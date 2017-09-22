@@ -419,5 +419,15 @@
 	"MY_FOLDERS": "Moje mape",
 	"MAIN_FOLDERS": "Mape",
 	"SAVE_AND_GO": "Shrani in nadaljuj",
-	"NOT_SAVE": "Ne shranjuj"
+	"NOT_SAVE": "Ne shranjuj",
+	"ACTIVE_EMAIL": "Vaš alternativni e-naslov",
+	"NO_EMAIL": "Nimam e-pošte",
+	"ACTIVE_PHONE": "Vaša telefonska številka",
+	"NO_PHONE": "Nimam telefona",
+	"ACCESS_RECOVERY_STEP_2": "Obnovitev gesla k računu",
+	"ENTER_PHONE_OR_EMAIL": "Prosimo, da vnesete svojo telefonsko številko ali alternativni e-naslov, ki ste ga vnesli pri registraciji.",
+	"PHONE_OR_EMAIL": "Telefon ali alternativni e-naslov",
+	"ENTER_MAIL_CODE": "Za spremembo vašega gesla vnesite kodo, ki smo vam jo poslali na vaš alternativni e-naslov",
+	"ENTER_PHONE_CODE": "Za spremembo vašega gesla vnesite kodo, ki smo vam jo poslali na vaš telefon",
+	"SELECT_YOUR_NAME": "Izverite svoje uporabniško ime"
 }

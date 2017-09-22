@@ -6,8 +6,8 @@
         .component('validationErrors', {
             bindings: {
                 data: '=',
-                server: '=',
-                messages: '='
+                server: '=?',
+                messages: '=?'
             },
             templateUrl: 'app/components/validation-errors/validation-errors.html',
             controller: 'ValidationErrorsController',
