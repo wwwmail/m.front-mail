@@ -77,7 +77,7 @@
                     }
                 });
 
-            });
+            }, 250);
         }
 
         function selectLang(lang) {
