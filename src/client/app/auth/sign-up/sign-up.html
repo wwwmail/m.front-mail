@@ -2,19 +2,19 @@
     <div class="auth-layout__content">
         <div class="auth-layout__form auth-layout__form--wd388">
 
-            <div class="card">
+            <div class="card card--black">
                 <div class="auth-form">
                     <div class="auth-form__logo mrg__bottom16">
                         <a href="https://mail.cz">
                             <img class="img-responsive mrg__auto"
-                                 src="/images/logo-mailcz-dark.svg"
+                                 src="/images/logo-mailcz-white.svg"
                                  style="width: 141px;"
                                  logo-hover>
                         </a>
                         <hr class="hr hr--auth mrg__top16">
                     </div>
 
-                    <form class="form form--validation" name="userForm" ng-submit="vm.signUp(userForm)" novalidate>
+                    <form class="form form--dark form--validation" name="userForm" ng-submit="vm.signUp(userForm)" novalidate>
 
                         <!-- Имя и фамилия -->
                         <div class="form__field-item mrg__bottom20 flex--inline">
@@ -119,7 +119,7 @@
                             <!-- СМС валидация -->
                             <label class="field-style__title font__size13">
                                 {{ 'ACTIVE_PHONE' | translate }}
-                                <a class="pull-right" ng-click="vm.isAdditionalEmail = true">
+                                <a class="pull-right link link--yellow" ng-click="vm.isAdditionalEmail = true">
                                     {{ 'NO_PHONE' | translate }}
                                 </a>
                             </label>
@@ -185,7 +185,7 @@
                         <div class="mrg__t10" ng-if="vm.isAdditionalEmail">
                             <label class="field-style__title font__size13">
                                 {{ 'ACTIVE_EMAIL' | translate }}
-                                <a class="pull-right" ng-click="vm.isAdditionalEmail = false">
+                                <a class="pull-right link link--yellow" ng-click="vm.isAdditionalEmail = false">
                                     {{ 'NO_EMAIL' | translate }}
                                 </a>
                             </label>
@@ -218,9 +218,9 @@
                                             <span class="checkbox-y__icon">
                                             </span>
                                     </div>
-                                    <span class="checkbox__text font__size12 color--silver" role="presentation">
+                                    <span class="checkbox__text font font--size12 color--white" role="presentation">
                                             {{ 'AUTH_CHECKBOX_CONFORMING_1' | translate }} <a
-                                            class="link link-aith"
+                                            class="link link--yellow"
                                             href="https://mail.cz/obchodni-podminky/"
                                             target="_blank">{{ 'AUTH_CHECKBOX_CONFORMING_2' | translate }}</a>
                                         </span>
@@ -250,7 +250,7 @@
 
                     </form>
 
-                    <button class="btn btn--size_l btn--link-style" ui-sref="signIn">
+                    <button class="btn btn--size_l btn--link-style link--yellow" ui-sref="signIn">
                         {{ 'SING_IN' | translate }}
                     </button>
 

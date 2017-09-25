@@ -11,8 +11,8 @@
 .color__gray {
   color: #717376;
 }
-.color--gray {
-  color: #717376;
+.color--white {
+  color: #fff;
 }
 .color--green {
   color: #5c9042;
@@ -1256,7 +1256,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("../images/auth-bg.png");
+  background-image: url("../images/bg-for-mainpage.jpg");
   background-position: center;
   background-size: cover;
   z-index: -1;
@@ -1613,6 +1613,9 @@
   height: 14px;
 }
 
+.form--dark .field-style__title {
+  color: #fff;
+}
 .form__field-item {
   margin-bottom: 16px;
   align-items: center;
@@ -1664,6 +1667,9 @@
 .field-style--flex {
   display: flex;
 }
+.field-style .input {
+  background-color: #fff;
+}
 
 .link {
   transition: all .6s;
@@ -1700,6 +1706,12 @@
 }
 .link--violet {
   color: #666699;
+}
+.link--yellow {
+  color: #fc0 !important;
+}
+.link--yellow:hover {
+  color: #fc0 !important;
 }
 .link--hv-red:hover {
   color: red;
@@ -2297,6 +2309,9 @@
   .card {
     padding: 20px 15px;
   }
+}
+.card--black {
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .btn-group__btn {

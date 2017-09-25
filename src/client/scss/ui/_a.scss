@@ -47,6 +47,14 @@
     color: #666699;
   }
 
+  &--yellow {
+    color: $yellow-yandex !important;
+
+    &:hover {
+      color: $yellow-yandex !important;
+    }
+  }
+
   &--hv-red {
     &:hover {
       color: red;

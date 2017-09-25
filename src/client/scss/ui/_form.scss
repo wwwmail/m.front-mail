@@ -2,6 +2,12 @@
   &__fields {
   }
 
+  &--dark {
+    .field-style__title {
+      color: #fff;
+    }
+  }
+
   &__field-item {
     margin-bottom: 16px;
     align-items: center;
@@ -74,6 +80,10 @@
 
   &--flex {
     display: flex;
+  }
+
+  .input {
+    background-color: #fff;
   }
 
   @media only screen and (max-width: 768px) {

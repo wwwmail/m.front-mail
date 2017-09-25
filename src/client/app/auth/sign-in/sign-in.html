@@ -3,7 +3,7 @@
     <div class="auth-layout__content">
         <div class="auth-layout__form">
 
-            <div class="card">
+            <div class="card card--black">
                 <div class="text-center" ng-if="vm.isTokenAuthLoading">
                     <spinner is-global="false"
                              is-open="true"></spinner>
@@ -13,13 +13,13 @@
                     <div class="auth-form__logo mrg__bottom16">
                         <a href="https://mail.cz">
                             <img class="img-responsive mrg__auto"
-                                 src="/images/logo-mailcz-dark.svg"
+                                 src="/images/logo-mailcz-white.svg"
                                  style="width: 141px;"
                                  logo-hover>
                         </a>
                         <hr class="hr hr--auth mrg__top16">
                     </div>
-                    <form class="form" name="userForm" ng-submit="vm.login(userForm)" novalidate>
+                    <form class="form form--dark form--validation" name="userForm" ng-submit="vm.login(userForm)" novalidate>
                         <!-- логин -->
                         <div class="form__field-item mrg__bottom10">
                             <div class="field-style position">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
 
-                        <div class="validation mrg__bottom10">
+                        <div class="validation mrg__bottom10" ng-if="vm.userForm.errors">
                             <div class="validation__message validation__message--red">
                                 {{ vm.userForm.errors | translate }}
                             </div>
@@ -77,13 +77,13 @@
                                             <span class="checkbox-y__icon">
                                             </span>
                                     </div>
-                                    <span class="checkbox__text " role="presentation">
+                                    <span class="checkbox__text color--white" role="presentation">
                                         {{'REMEMBER_ME' | translate }}
                                     </span>
                                 </label>
                             </div>
                             <div class="field-style widtn--inh font__right">
-                                <a class="link link-aith" ui-sref="passwordReset">{{ 'FORGOT_YOUR_PASSWORD' | translate }}</a>
+                                <a class="link link--yellow" ui-sref="passwordReset">{{ 'FORGOT_YOUR_PASSWORD' | translate }}</a>
                             </div>
                         </div>
 
