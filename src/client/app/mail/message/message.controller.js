@@ -205,6 +205,7 @@
             }
 
             vm.sendForm.model.connection_id = vm.user.profile.default_connection_id;
+            data.from_connection = vm.user.profile.default_connection_id;
 
             return data;
         }
