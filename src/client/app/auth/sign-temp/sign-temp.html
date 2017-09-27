@@ -12,7 +12,7 @@
 
                 <div class="auth-form" ng-if="!vm.isTokenAuthLoading">
                     <div class="auth-form__logo mrg__bottom16">
-                        <a href="https://mail.cz">
+                        <a href="{{ vm.CONFIG.parentHost }}">
                             <img class="img-responsive mrg__auto"
                                  src="/images/logo-mailcz-dark.svg"
                                  style="width: 141px;"
@@ -56,7 +56,7 @@
                                     <span class="checkbox__text font__size12 color--silver" role="presentation">
                                             {{ 'AUTH_CHECKBOX_CONFORMING_1' | translate }} <a
                                             class="link link-aith"
-                                            href="https://mail.cz/obchodni-podminky/"
+                                            href="{{ vm.CONFIG.parentHost }}/obchodni-podminky/"
                                             target="_blank">{{ 'AUTH_CHECKBOX_CONFORMING_2' | translate }}</a>
                                         </span>
                                 </label>

@@ -5,10 +5,12 @@
         .module('auth.signUp')
         .controller('SignUpController', SignUpController);
 
-    SignUpController.$inject = ['$state', '$auth', '$timeout', 'authService', 'profile'];
+    SignUpController.$inject = ['$state', '$auth', '$timeout', 'authService', 'profile', 'CONFIG'];
     /* @ngInject */
-    function SignUpController($state, $auth, $timeout, authService, profile) {
+    function SignUpController($state, $auth, $timeout, authService, profile, CONFIG) {
         var vm = this;
+
+        vm.CONFIG = CONFIG;
 
         vm.isAdditionalEmail = true;
 

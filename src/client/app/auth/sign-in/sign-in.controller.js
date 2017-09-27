@@ -5,10 +5,12 @@
         .module('auth.signIn')
         .controller('SignInController', SignInController);
 
-    SignInController.$inject = ['$scope', '$state', '$auth', '$cookies', 'profile'];
+    SignInController.$inject = ['$scope', '$state', '$auth', '$cookies', 'profile', 'CONFIG'];
     /* @ngInject */
-    function SignInController($scope, $state, $auth, $cookies, profile) {
+    function SignInController($scope, $state, $auth, $cookies, profile, CONFIG) {
         var vm = this;
+
+        vm.CONFIG = CONFIG;
 
         vm.user = $auth.user;
 

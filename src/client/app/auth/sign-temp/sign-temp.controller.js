@@ -5,10 +5,12 @@
         .module('auth.signTemp')
         .controller('SignTempController', SignTempController);
 
-    SignTempController.$inject = ['$scope', '$state', '$stateParams', '$auth', 'authService', 'profile'];
+    SignTempController.$inject = ['$scope', '$state', '$stateParams', '$auth', 'authService', 'profile', 'CONFIG'];
     /* @ngInject */
-    function SignTempController($scope, $state, $stateParams, $auth, authService, profile) {
+    function SignTempController($scope, $state, $stateParams, $auth, authService, profile, CONFIG) {
         var vm = this;
+
+        vm.CONFIG = CONFIG;
 
         vm.user = $auth.user;
 
