@@ -1,31 +1,46 @@
 <div class="attach-item">
-    <a href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&screen=true&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}"
-       target="_blank">
-        <div>
-            <div class="attach-item__image-block">
-                <div class="attach-item__image"
-                     ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'"
-                     style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}')"></div>
-                <div class="attach-item__image"
-                     ng-if="vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg'"
-                     style="background-image: url('images/upload-file.png')"></div>
-            </div>
-            <div class="attach-item__name" ng-if="vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg'">
-                <span class="attach-item__file-name">
-                    {{ vm.attach.title }}
-                </span>
-            </div>
-            <div class="attach-item__type">
-                <span class="attach-item__type-name">
-                    {{ vm.attach.mime.split('/')[1]; }}
-                </span>
-            </div>
-            <div class="attach-item__size">
-                {{ vm.attach.size / 1024 | number:2 }} kb
-            </div>
-            <button class="attach-item__button btn--not-style btn--not-events">
-                <span class="icon-download"></span>
-            </button>
+    <div class="attach-item__body">
+        <div class="attach-item__buttons">
+            <a class="attach-item__buttons-link"
+               ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'">
+                <button class="attach-item__button">
+                    <span class="icon-eye"></span>
+                </button>
+            </a>
+            <a class="attach-item__buttons-link"
+               ng-if="vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg'"
+               href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?screen=true&mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}"
+               target="_blank">
+                <button class="attach-item__button">
+                    <span class="icon-eye"></span>
+                </button>
+            </a>
+            <a class="attach-item__buttons-link"
+               target="_blank"
+               href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}"
+               ng-click="$event.stopPropagation();">
+                <button class="attach-item__button">
+                    <span class="icon-download-stroke"></span>
+                </button>
+            </a>
         </div>
-    </a>
+
+        <div class="attach-item__image"
+             ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'"
+             style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}')"></div>
+
+        <div class="attach-item__image"
+             ng-if="vm.attach.mime === 'image/svg+xml'"
+             style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&screen=true')"></div>
+
+        <div class="attach-item__image"
+             ng-if="vm.attach.mime === 'application/pdf'"
+             style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&preview=1')"></div>
+
+        <div class="attach-item__image attach-item__image--file"
+             style="background-image: url(images/attachments/{{ vm.isIcon ? vm.getFileExt() : 'other' }}.png)"></div>
+    </div>
+    <div class="attach-item__name2">
+        {{ vm.attach.title }}
+    </div>
 </div>

@@ -1,8 +1,9 @@
-(function() {
+(function () {
     'use strict';
 
     window.appConfig = {
         env: 'sandbox',
+        domainZone: 'cz',
         parentHost: 'https://mail.cz',
         APIHost: 'http://apimail.devogic.com',
         MediaUrl: 'http://apimail.devogic.com/',

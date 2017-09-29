@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', 'mail', 'mailBox', 'tag', 'profile', '$location'];
+    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
 
     /* @ngInject */
-    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, mail, mailBox, tag, profile, $location) {
+    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, mail, mailBox, tag, profile, CONFIG) {
         var vm = this;
 
         vm.standartFolders = [
@@ -98,6 +98,7 @@
             getProfiles();
 
             vm.user = $auth.user;
+            vm.CONFIG = CONFIG;
         }
 
         function goToDesktopVersion(target) {

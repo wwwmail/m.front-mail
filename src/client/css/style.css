@@ -5686,114 +5686,113 @@
 }
 
 .attach-item {
+  width: 100px;
+}
+.attach-item__body {
   position: relative;
-  width: 84px;
-  height: 86px;
-  background: #4d4e48;
+  margin: 0 auto;
+  width: 50px;
+  height: 65px;
   overflow: hidden;
-  cursor: pointer;
-  box-shadow: -8px 9px 35px -12px rgba(0, 0, 0, 0.28);
-}
-.attach-item:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 14px;
-  height: 14px;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 2;
-}
-.attach-item:after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  top: -18px;
-  right: -15px;
-  width: 21px;
-  height: 30px;
-  background-color: #ffffff;
-  transform: rotate(45deg);
-}
-.attach-item__size {
-  position: absolute;
-  bottom: 32px;
-  right: 0;
-  left: 0;
-  width: 100%;
-  padding: 0 7px;
-  text-align: left;
-  color: #d9d9d9;
-  font: 400 13px/1 "HelveticaNeueCyr", sans-serif;
-  opacity: .8;
 }
 .attach-item__name {
   position: absolute;
-  top: 55px;
-  left: 7px;
-  opacity: .95;
-  width: 100%;
-}
-.attach-item__file-name {
-  display: block;
-  text-align: left;
-  color: #d9d9d9;
-  font: bold 10px/1 "HelveticaNeueCyr", sans-serif;
-  text-overflow: ellipsis;
+  top: 10px;
+  left: 10px;
+  font: bold 12px/1.1 "HelveticaNeueCyr", sans-serif;
   overflow: hidden;
-  white-space: nowrap;
-  padding: 0 6px 0 0;
+  text-overflow: ellipsis;
 }
-.attach-item__image-block {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.attach-item__name2 {
+  height: 36px;
+  text-align: center;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .attach-item__image {
-  max-width: 181%;
-  opacity: .3;
-  width: 84px;
-  height: 86px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  width: 45px;
+  height: 56px;
   background-size: cover;
   background-position: center;
 }
 .attach-item__image--file {
+  border: none;
+  width: 50px;
+  height: 65px;
+  z-index: 2;
   background-repeat: no-repeat;
   background-size: contain;
 }
 .attach-item__type {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   position: absolute;
-  height: 17px;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  height: 20px;
   display: inline-flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  padding: 2px 7px 0;
-  background: rgba(0, 0, 0, 0.4);
-}
-.attach-item__type-name {
-  color: #ffffff;
-  font: bold 11px/1 "HelveticaNeueCyr", sans-serif;
+  bottom: 10px;
+  left: 10px;
+  padding: 0 7px;
+  background: #cc0000;
+  color: #fff;
+  font: bold 12px/1 "HelveticaNeueCyr", sans-serif;
   text-transform: uppercase;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+}
+.attach-item__buttons {
+  display: none;
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  justify-content: flex-start;
+  padding-left: 11px;
+  z-index: 3;
+}
+.attach-item__buttons-link:first-child {
+  margin-right: 1px;
+}
+.attach-item__buttons-link:first-child .attach-item__button {
+  -moz-border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px 0 0 3px;
+}
+.attach-item__buttons-link:last-child .attach-item__button {
+  -moz-border-radius: 0 3px 3px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 3px 3px 0;
 }
 .attach-item__button {
-  position: absolute;
-  top: 9px;
-  left: 9px;
-  display: flex;
-  border-radius: 2px;
-  padding: 2px;
-  font-size: 18px;
-  color: #fc0;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  width: 22px;
+  height: 22px;
+  font-size: 16px;
+  color: #fff;
   border: none;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.attach-item__button:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+.attach-item:hover .attach-item__type {
+  display: none;
+}
+.attach-item:hover .attach-item__buttons {
+  display: flex;
 }
 
 .attachments {
