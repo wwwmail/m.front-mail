@@ -10,55 +10,77 @@
     function AttachItemController($auth, CONFIG) {
         var vm = this;
 
-        vm.formats = [
-            'accdb',
-            'avi',
-            'bat',
-            'bmp',
-            'CDA',
-            'chm',
-            'css',
-            'djvu',
-            'doc',
-            'docx',
-            'eps',
-            'exe',
-            'fb2',
-            'gif',
-            'hlp',
-            'htm',
-            'html',
-            'jpeg',
-            'jpg',
-            'mdb',
-            'mdv',
-            'mov',
-            'mp3',
-            'mpeg',
-            'mpg',
-            'odp',
-            'ods',
-            'odt',
-            'other',
-            'pdf',
-            'png',
-            'ppt',
-            'pptx',
-            'rar',
-            'rtf',
-            'svg+xml',
-            'tiff',
-            'ttf',
-            'txt',
-            'wav',
-            'wma',
-            'xls',
-            'xlsx',
-            'zip'
+        vm.assocFormats = [
+            {
+                id: 1,
+                name: 'doc'
+            }
         ];
 
-        vm.getFileExt = getFileExt;
-        // vm.openGallery = openGallery;
+        vm.formats = [
+            {name: 'accdb'},
+            {name: 'avi'},
+            {name: 'bat'},
+            {name: 'bmp'},
+            {name: 'CDA'},
+            {name: 'chm'},
+            {name: 'css'},
+            {name: 'djvu'},
+            {
+                name: 'doc',
+                assocId: 1
+            },
+            {
+                name: 'docx',
+                assocId: 1
+            },
+            {
+                name: 'msword',
+                assocId: 1
+            },
+            {
+                name: 'vnd.openxmlformats-officedocument.wordprocessingml.document',
+                assocId: 1
+            },
+            {name: 'eps'},
+            {name: 'exe'},
+            {name: 'fb2'},
+            {name: 'gif'},
+            {name: 'hlp'},
+            {name: 'htm'},
+            {name: 'html'},
+            {name: 'jpeg'},
+            {name: 'jpg'},
+            {name: 'mdb'},
+            {name: 'mdv'},
+            {name: 'mov'},
+            {name: 'mp3'},
+            {name: 'mpeg'},
+            {name: 'mpg'},
+            {name: 'odp'},
+            {name: 'ods'},
+            {name: 'odt'},
+            {name: 'other'},
+            {name: 'pdf'},
+            {name: 'png'},
+            {name: 'ppt'},
+            {name: 'pptx'},
+            {name: 'rar'},
+            {name: 'rtf'},
+            {name: 'svg+xml'},
+            {name: 'tiff'},
+            {name: 'ttf'},
+            {name: 'txt'},
+            {name: 'wav'},
+            {name: 'wma'},
+            {name: 'xls'},
+            {name: 'xlsx'},
+            {name: 'zip'}
+        ];
+
+        vm.fileFormat = null;
+
+        ////
 
         activate();
 
@@ -69,29 +91,22 @@
             findFormat();
         }
 
-        // function openGallery() {
-        //     gallery.openGallery({
-        //         attachIndex: vm.index,
-        //         attach: vm.attach,
-        //         attachments: vm.attachments,
-        //         message: vm.message
-        //     });
-        // }
-
-        function getFileExt() {
-            return vm.attach.mime.split('/')[1];
-        }
-
         function findFormat() {
-            var isFind = false;
-            _.forEach(vm.formats, function (item) {
-                if (item === vm.attach.mime.split('/')[1]) {
-                    isFind = true;
-                }
+            var result = _.find(vm.formats, function (item) {
+                return item.name === vm.attach.mime.split('/')[1];
             });
 
-            vm.isIcon = isFind;
-            console.log('isFind', isFind);
+            if (result) {
+                if (result.assocId) {
+                    vm.fileFormat = _.result(_.find(vm.assocFormats, {id: result.assocId}), 'name');
+                    console.log('vm.fileFormat', vm.fileFormat);
+                    return;
+                }
+                vm.fileFormat = result.name;
+                return;
+            }
+
+            return 'other';
         }
     }
 })();

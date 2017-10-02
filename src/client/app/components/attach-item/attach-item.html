@@ -39,7 +39,7 @@
                  style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&preview=1')"></div>
 
             <div class="attach-item__image attach-item__image--file"
-                 style="background-image: url(images/attachments/{{ vm.isIcon ? vm.getFileExt() : 'other' }}.png)"></div>
+                 style="background-image: url(images/attachments/{{ vm.fileFormat }}.png)"></div>
         </a>
     </div>
     <div class="attach-item__name2">
