@@ -1,6 +1,6 @@
 <div class="attach-item">
     <div class="attach-item__body">
-        <div class="attach-item__buttons">
+        <!--<div class="attach-item__buttons">
             <a class="attach-item__buttons-link"
                ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'">
                 <button class="attach-item__button">
@@ -9,7 +9,6 @@
             </a>
             <a class="attach-item__buttons-link"
                ng-if="vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg'"
-               href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?screen=true&mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}"
                target="_blank">
                 <button class="attach-item__button">
                     <span class="icon-eye"></span>
@@ -23,22 +22,25 @@
                     <span class="icon-download-stroke"></span>
                 </button>
             </a>
-        </div>
+        </div>-->
 
-        <div class="attach-item__image"
-             ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'"
-             style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}')"></div>
+        <a target="_blank"
+           href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?screen=true&mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}">
+            <div class="attach-item__image"
+                 ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'"
+                 style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}')"></div>
 
-        <div class="attach-item__image"
-             ng-if="vm.attach.mime === 'image/svg+xml'"
-             style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&screen=true')"></div>
+            <div class="attach-item__image"
+                 ng-if="vm.attach.mime === 'image/svg+xml'"
+                 style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&screen=true')"></div>
 
-        <div class="attach-item__image"
-             ng-if="vm.attach.mime === 'application/pdf'"
-             style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&preview=1')"></div>
+            <div class="attach-item__image"
+                 ng-if="vm.attach.mime === 'application/pdf'"
+                 style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&preview=1')"></div>
 
-        <div class="attach-item__image attach-item__image--file"
-             style="background-image: url(images/attachments/{{ vm.isIcon ? vm.getFileExt() : 'other' }}.png)"></div>
+            <div class="attach-item__image attach-item__image--file"
+                 style="background-image: url(images/attachments/{{ vm.isIcon ? vm.getFileExt() : 'other' }}.png)"></div>
+        </a>
     </div>
     <div class="attach-item__name2">
         {{ vm.attach.title }}
