@@ -20,7 +20,12 @@
                     templateUrl: 'app/auth/password-update/password-update.html',
                     controller: 'PasswordUpdateController',
                     controllerAs: 'vm',
-                    title: 'Войти'
+                    title: 'Войти',
+                    resolve: {
+                        configResolve: function (config) {
+                            return config.getIndex();
+                        }
+                    }
                 }
             }
         ];

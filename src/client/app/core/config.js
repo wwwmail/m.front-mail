@@ -11,7 +11,7 @@
             suffix: '.json'
         });
         $translateProvider.fallbackLanguage('cs');
-        $translateProvider.preferredLanguage('cs');
+        // $translateProvider.preferredLanguage('cs');
         $translateProvider.useLocalStorage();
         $translateProvider.useLoaderCache('$translationCache');
     });

@@ -20,7 +20,12 @@
                     templateUrl: 'app/auth/sign-temp/sign-temp.html',
                     controller: 'SignTempController',
                     controllerAs: 'vm',
-                    title: 'Подтверждение пользователя'
+                    title: 'Подтверждение пользователя',
+                    resolve: {
+                        configResolve: function (config) {
+                            return config.getIndex();
+                        }
+                    }
                 }
             }
         ];

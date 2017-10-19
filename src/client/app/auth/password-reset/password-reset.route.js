@@ -20,7 +20,12 @@
                     templateUrl: 'app/auth/password-reset/password-reset.html',
                     controller: 'PasswordResetController',
                     controllerAs: 'vm',
-                    title: 'Войти'
+                    title: 'Войти',
+                    resolve: {
+                        configResolve: function (config) {
+                            return config.getIndex();
+                        }
+                    }
                 }
             }
         ];

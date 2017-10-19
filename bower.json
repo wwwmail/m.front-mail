@@ -92,10 +92,18 @@
     "moment": {
       "main": [
         "min/moment.min.js",
+        "locale/al.js",
+        "locale/bs.js",
         "locale/cs.js",
-        "locale/uk.js",
+        "locale/en.js",
+        "locale/hr.js",
+        "locale/mk.js",
+        "locale/ro.js",
         "locale/ru.js",
-        "locale/sk.js"
+        "locale/sk.js",
+        "locale/sl.js",
+        "locale/sr.js",
+        "locale/uk.js"
       ]
     },
     "ng-tags-input": {

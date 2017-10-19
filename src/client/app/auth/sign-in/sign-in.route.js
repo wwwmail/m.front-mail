@@ -20,7 +20,12 @@
                     templateUrl: 'app/auth/sign-in/sign-in.html',
                     controller: 'SignInController',
                     controllerAs: 'vm',
-                    title: 'Войти'
+                    title: 'Войти',
+                    resolve: {
+                        configResolve: function (config) {
+                            return config.getIndex();
+                        }
+                    }
                 }
             },
             {

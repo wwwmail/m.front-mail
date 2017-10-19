@@ -5,59 +5,16 @@
         .module('app.components')
         .controller('ChoiceLanguageController', ChoiceLanguageController);
 
-    ChoiceLanguageController.$inject = ['$http', '$timeout', '$translate'];
+    ChoiceLanguageController.$inject = ['$http', '$timeout', '$translate', 'lang', 'config'];
     /* @ngInject */
-    function ChoiceLanguageController($http, $timeout, $translate) {
+    function ChoiceLanguageController($http, $timeout, $translate, lang, config) {
         var vm = this;
+
+        vm.config = {};
 
         vm.lang = {
             selected: {},
-            items: [
-                // {
-                //     lang: 'sq',
-                //     icon: 'sq.svg'
-                // },
-                // {
-                //     lang: 'bs',
-                //     icon: 'bs.svg'
-                // },
-                // {
-                //     lang: 'hr',
-                //     icon: 'hr.svg'
-                // },
-                {
-                    lang: 'cs',
-                    icon: 'cs.svg'
-                },
-                {
-                    lang: 'sk',
-                    icon: 'sk.svg'
-                },
-                {
-                    lang: 'sl',
-                    icon: 'sl.svg'
-                },
-                {
-                    lang: 'en',
-                    icon: 'en.svg'
-                },
-                // {
-                //     lang: 'mk',
-                //     icon: 'mk.svg'
-                // },
-                {
-                    lang: 'ru',
-                    icon: 'ru.svg'
-                },
-                // {
-                //     lang: 'sk',
-                //     icon: 'sk.svg'
-                // },
-                {
-                    lang: 'uk',
-                    icon: 'uk.svg'
-                }
-            ]
+            items: []
         };
 
         vm.selectLang = selectLang;
@@ -65,30 +22,49 @@
         activate();
 
         function activate() {
-            $timeout(function () {
-                var lang = $translate.use();
-                moment.locale(lang);
+            vm.config = config.getConfig();
 
-                $http.defaults.headers.common["Accept-Language"] = lang;
+            if (!$translate.use()) {
+                selectLang(
+                    lang.getLangByIco(vm.config.language)
+                );
+            }
+
+            vm.lang.items = lang.getList();
+
+            $timeout(function () {
+                var useLang = $translate.use();
+
+                moment.locale(useLang);
+
+                $http.defaults.headers.common["Accept-Language"] = useLang;
 
                 _.forEach(vm.lang.items, function (item) {
-                    if (item.lang === lang) {
+                    if (item.lang === useLang) {
                         vm.lang.selected = item;
                     }
                 });
 
+                sortLang(useLang);
             }, 250);
         }
 
-        function selectLang(lang) {
-            vm.lang.selected = lang;
+        function selectLang(selectLang) {
+            vm.lang.selected = selectLang;
 
             $timeout(function () {
-                $translate.use(lang.lang);
-                moment.locale(lang.lang);
+                $translate.use(selectLang.lang);
 
-                $http.defaults.headers.common["Accept-Language"] = lang.lang;
+                moment.locale(selectLang.lang);
+
+                $http.defaults.headers.common["Accept-Language"] = selectLang.lang;
+
+                sortLang(selectLang.lang);
             });
+        }
+
+        function sortLang(useLang) {
+            vm.lang.items = _.sortBy(vm.lang.items, {'lang': useLang});
         }
     }
 })();

@@ -106,7 +106,7 @@
                 return;
             }
 
-            return 'other';
+            return vm.fileFormat = 'other';
         }
     }
 })();

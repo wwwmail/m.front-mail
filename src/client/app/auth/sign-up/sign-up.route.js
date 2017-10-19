@@ -20,7 +20,12 @@
                     templateUrl: 'app/auth/sign-up/sign-up.html',
                     controller: 'SignUpController',
                     controllerAs: 'vm',
-                    title: 'Регистрация'
+                    title: 'Регистрация',
+                    resolve: {
+                        configResolve: function (config) {
+                            return config.getIndex();
+                        }
+                    }
                 }
             }
         ];
