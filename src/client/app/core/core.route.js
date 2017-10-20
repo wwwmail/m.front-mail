@@ -6,7 +6,9 @@
         .run(appRun);
 
     /* @ngInject */
-    function appRun(routerHelper, $cookies, $auth, timezone) {
+    function appRun(routerHelper, $cookies, $auth, timezone, CONFIG, $rootScope) {
+
+        $rootScope.CONFIG = CONFIG;
 
         timezone.get();
 

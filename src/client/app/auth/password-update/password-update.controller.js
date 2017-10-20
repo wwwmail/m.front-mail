@@ -5,9 +5,9 @@
         .module('auth.passwordUpdate')
         .controller('PasswordUpdateController', PasswordUpdateController);
 
-    PasswordUpdateController.$inject = ['$state', '$auth'];
+    PasswordUpdateController.$inject = ['$state', '$auth', 'CONFIG'];
     /* @ngInject */
-    function PasswordUpdateController($state, $auth) {
+    function PasswordUpdateController($state, $auth, CONFIG) {
         var vm = this;
 
         vm.step = 1;
@@ -47,6 +47,7 @@
         activate();
 
         function activate() {
+            vm.CONFIG = CONFIG;
             vm.username = $state.params.username;
         }
 

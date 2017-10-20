@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <!--<meta name="keywords" content="Mail">-->
     <!--<meta name="description" content="Mail">-->
-    <title ng-bind="(folder.unseen || '') + ' ' + (folder.name ? (folder.name | translate) + ' - Mail.cz' : 'Mail.cz')"></title>
+    <title ng-bind="(folder.unseen || '') + ' ' + (folder.name ? (folder.name | translate) + ' - Mail.' + CONFIG.domainZone : 'Mail.' + CONFIG.domainZone)"></title>
 
     <title ng-if="!title">
-        Mail.cz
+        Mail.{{ CONFIG.domainZone }}
     </title>
 
     <meta name="viewport"
@@ -37,7 +37,7 @@
 
 <script type="text/javascript" src="/config/config.js?v=0.12"></script>
 <script type="text/javascript" src="/js/vendor-3d16f17deb.js"></script>
-<script type="text/javascript" src="/js/app-3ef8b2c01f.js"></script>
+<script type="text/javascript" src="/js/app-f38297079d.js"></script>
 
 </body>
 </html>
