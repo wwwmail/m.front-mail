@@ -29,8 +29,10 @@
             vm.messages = messages;
             vm.message = message;
 
-            console.log('vm.message', vm.message);
-            console.log('vm.messages', vm.messages);
+            // console.log('vm.message', vm.message);
+            // console.log('vm.messages', vm.messages);
+
+            mail.setAnswerData(vm.message);
         }
 
         function move(folder) {

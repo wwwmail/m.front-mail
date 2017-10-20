@@ -119,6 +119,7 @@
         //         }
         //     });
         // }
+
         function send(form) {
             copyReMessage();
             $state.go('mail.inbox', {mbox: 'INBOX'});

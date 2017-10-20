@@ -121,6 +121,7 @@
             }
 
             if ($state.params.re && $state.params.mbox === 'Drafts') {
+                vm.sendForm.id = $state.params.id;
                 pasteRe();
             }
 
