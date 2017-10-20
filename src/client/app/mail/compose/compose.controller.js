@@ -150,7 +150,7 @@
             data.mbox = $state.params.mbox || 'Drafts';
 
             if ($state.params.id) {
-                mail.put({id: vm.sendForm.id}, data);
+                mail.put({id: $state.params.id}, data);
             } else {
                 mail.post({}, data);
             }
