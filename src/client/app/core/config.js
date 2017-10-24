@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    moment.locale('ru');
-    
+    // moment.locale('ru');
+
     var core = angular.module('app.core');
 
     core.config(function ($translateProvider) {
@@ -11,7 +11,6 @@
             suffix: '.json'
         });
         $translateProvider.fallbackLanguage('cs');
-        // $translateProvider.preferredLanguage('cs');
         $translateProvider.useLocalStorage();
         $translateProvider.useLoaderCache('$translationCache');
     });
@@ -95,7 +94,7 @@
                 return response.data;
             }
         });
-    })
+    });
 
     core.config(function ($httpProvider) {
         $httpProvider.$inject = ['$q', '$rootScope', '$injector', '$location'];
@@ -121,5 +120,11 @@
                     }
                 };
             });
+    });
+
+    core.run(function($translate, lang, config) {
+        config.getIndex(function () {
+            lang.init();
+        });
     });
 })();

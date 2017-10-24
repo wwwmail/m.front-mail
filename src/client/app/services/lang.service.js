@@ -5,14 +5,14 @@
         .module('app.services')
         .factory('lang', lang);
 
-    lang.$inject = ['CONFIG', '$translate'];
+    lang.$inject = ['$translate', 'config', '$http'];
 
-    function lang(CONFIG, $translate) {
+    function lang($translate, config, $http) {
         var list = [
             {
-                lang: 'al',
+                lang: 'sq',
                 ico: 'sq-AL',
-                icon: 'al.svg',
+                icon: 'sq.svg',
                 caption: 'Албанский'
             },
             {
@@ -83,6 +83,26 @@
             }
         ];
 
+        function init() {
+            var configObj = config.getConfig();
+
+            if (!$translate.use()) {
+                selectLang(
+                    getLangByIco(configObj.language)
+                );
+            }
+        }
+
+        function selectLang(selectLang) {
+            $translate.use(selectLang.lang);
+
+            moment.locale(selectLang.lang);
+
+            $http.defaults.headers.common["Accept-Language"] = selectLang.lang;
+
+            return selectLang;
+        }
+
         function getCurrentLang() {
             return _.find(list, {lang: $translate.use()});
         }
@@ -91,12 +111,13 @@
             return list;
         }
 
-
         function getLangByIco(ico) {
             return _.find(list, {ico: ico});
         }
 
         return {
+            init: init,
+            selectLang: selectLang,
             getCurrentLang: getCurrentLang,
             getList: getList,
             getLangByIco: getLangByIco
