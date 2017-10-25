@@ -7,7 +7,6 @@
         </div>
 
         <div class="mail-message__main-content wrapper-container">
-
             <div class="mail-message__info position--sticky wrapper-container wrapper-container--is-margin">
                 <div class="info-sender width--all">
                     <div class="info-sender__head flex--inline">
@@ -27,7 +26,8 @@
                                 <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 padding--right_2 padding--left_2 mrg__left5"
                                         ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
                                         type="button"
-                                        ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo"></button>
+                                        ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo">
+                                </button>
                             </div>
 
                             <div class="info-sender__date">
@@ -47,7 +47,6 @@
                             <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply padding--right"
                                  ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></div>
                         </div>
-
                     </div>
 
                     <!--
@@ -63,23 +62,24 @@
                             <span class="to-whom__title width--min60">{{ 'TO' | translate }}</span>
                             <div class="avatar avatar--settings avatar--size28 avatar--second-style">
                                 <avatar-name name="vm.message.model.to[0].name"
-                                             email="vm.message.model.to[0].address"></avatar-name>
+                                             email="vm.message.model.to[0].address">
+                                </avatar-name>
                             </div>
-                            <span class="to-whom__mail-recipient">
-                        {{ vm.message.model.to[0].name ? vm.message.model.to[0].name : vm.message.model.to[0].address }}
-                    </span>
+                            <span class="to-whom__mail-recipient" ng-click="vm.isToEmail = !vm.isToEmail">
+                                {{ vm.isToEmail ? (vm.message.model.to[0].address ? vm.message.model.to[0].address : vm.message.model.to[0].name) : (vm.message.model.to[0].name ? vm.message.model.to[0].name : vm.message.model.to[0].address) }}
+                            </span>
                         </div>
 
-                        <div class="info-sender__message-info-item to-whom">
+                        <div class="info-sender__message-info-item to-whom" ng-click="vm.isFromEmail = !vm.isFromEmail">
                             <span class="to-whom__title width--min60">{{ 'FROM_WHOM_U' | translate }}</span>
-                            <div class="avatar avatar--settings avatar--size28 avatar--second-style"
-                                 ng-if="vm.isFromOpen && vm.$state.params.mbox !== 'Sent'">
+                            <div class="avatar avatar--settings avatar--size28 avatar--second-style">
                                 <avatar-name name="vm.message.model.from"
-                                             email="vm.message.model.fromAddress"></avatar-name>
+                                             email="vm.message.model.fromAddress">
+                                </avatar-name>
                             </div>
-                            <span class="to-whom__mail-recipient to-whom__mail-recipient--name">
-                        {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
-                    </span>
+                            <span class="to-whom__mail-recipient">
+                                {{ vm.isFromEmail ? (vm.message.model.fromAddress ? vm.message.model.fromAddress : vm.message.model.from) : (vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress) }}
+                            </span>
                         </div>
 
                         <div class="info-sender__message-info-item to-whom">
@@ -125,8 +125,8 @@
             <div class="mail-message__body">
                 <div class="body-message">
                     <!--Само сообщение-->
-                    <div class="body-message__content" ng-bind-html="vm.getTrustHtml(vm.message.model.body)">
-                        <!--<div class="body-message__r"></div>-->
+                    <div class="body-message__content"
+                         ng-bind-html="vm.getTrustHtml(vm.message.model.body)">
                     </div>
                 </div>
 
