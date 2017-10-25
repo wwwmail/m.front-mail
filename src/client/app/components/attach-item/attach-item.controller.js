@@ -14,6 +14,10 @@
             {
                 id: 1,
                 name: 'doc'
+            },
+            {
+                id: 2,
+                name: 'xlsx'
             }
         ];
 
@@ -75,14 +79,19 @@
             {name: 'wma'},
             {name: 'xls'},
             {name: 'xlsx'},
+            {name: 'vnd.openxmlformats-officedocument.spreadsheetml.sheet', assocId: 2},
             {name: 'zip'}
         ];
 
         vm.fileFormat = null;
 
-        ////
+        vm.viewAppUrl = 'http://docs.google.com/viewer?url=';
+
+        vm.openAttach = openAttach;
 
         activate();
+
+        ////
 
         function activate() {
             vm.user = $auth.user;
@@ -107,6 +116,19 @@
             }
 
             return vm.fileFormat = 'other';
+        }
+
+        function openAttach() {
+            if (vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg') {
+                var url = vm.CONFIG.AttachUrl + vm.message.number + '?mbox=' + vm.message.mbox + '&part=attach&filename=' + vm.attach.fileName + '&token=' + vm.user.access_token + '&connection_id=' + vm.message.connection_id;
+                window.open(vm.viewAppUrl + encodeURIComponent(url), '_blank');
+                return;
+            }
+
+            if (vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg') {
+                var url = vm.CONFIG.AttachUrl + vm.message.number + '?mbox=' + vm.message.mbox + '&part=attach&filename=' + vm.attach.fileName + '&token=' + vm.user.access_token + '&connection_id=' + vm.message.connection_id;
+                window.open(url, '_blank');
+            }
         }
     }
 })();

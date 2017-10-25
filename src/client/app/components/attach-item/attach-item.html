@@ -1,31 +1,6 @@
 <div class="attach-item">
     <div class="attach-item__body">
-        <!--<div class="attach-item__buttons">
-            <a class="attach-item__buttons-link"
-               ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'">
-                <button class="attach-item__button">
-                    <span class="icon-eye"></span>
-                </button>
-            </a>
-            <a class="attach-item__buttons-link"
-               ng-if="vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg'"
-               target="_blank">
-                <button class="attach-item__button">
-                    <span class="icon-eye"></span>
-                </button>
-            </a>
-            <a class="attach-item__buttons-link"
-               target="_blank"
-               href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}"
-               ng-click="$event.stopPropagation();">
-                <button class="attach-item__button">
-                    <span class="icon-download-stroke"></span>
-                </button>
-            </a>
-        </div>-->
-
-        <a target="_blank"
-           href="{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?screen=true&mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}">
+        <a ng-click="vm.openAttach()">
             <div class="attach-item__image"
                  ng-if="vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg'"
                  style="background-image: url('{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}')"></div>
