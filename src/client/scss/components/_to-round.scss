@@ -1,0 +1,16 @@
+.to-round {
+  &--active {
+    .to-round__body {
+      background: $yellow-hard-light;
+    }
+  }
+
+  &__body {
+    border-radius: 26px;
+
+    display: flex;
+    align-items: center;
+
+    padding-right: 10px;
+  }
+}

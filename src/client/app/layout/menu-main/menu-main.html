@@ -63,6 +63,7 @@
     <div class="menu-main-layout__item">
         <ul class="menu-main">
             <li class="menu-main__item is-sub-menu"
+                ng-hide="folder.name === 'Outbox' && !folder.messagesCount"
                 ng-class="{'is-sub-menu--open': folder.isOpen}"
                 ng-repeat="folder in vm.folders.items">
                 <div class="menu-main__item-content" ng-if="!folder.isSub && folder.name !== 'Archive'">

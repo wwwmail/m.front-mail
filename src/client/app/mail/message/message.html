@@ -60,26 +60,40 @@
                     <div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo">
                         <div class="info-sender__message-info-item to-whom">
                             <span class="to-whom__title width--min60">{{ 'TO' | translate }}</span>
-                            <div class="avatar avatar--settings avatar--size28 avatar--second-style">
-                                <avatar-name name="vm.message.model.to[0].name"
-                                             email="vm.message.model.to[0].address">
-                                </avatar-name>
+                            <div class="to-round" ng-class="{'to-round--active': vm.isToEmail}">
+                                <div class="to-round__body">
+                                    <div class="avatar avatar--settings avatar--size28 avatar--second-style">
+                                        <avatar-name name="vm.message.model.to[0].name"
+                                                     email="vm.message.model.to[0].address">
+                                        </avatar-name>
+                                    </div>
+                                    <div class="to-whom__mail-recipient" ng-click="vm.isToEmail = !vm.isToEmail">
+                                        {{ vm.isToEmail ? (vm.message.model.to[0].address ?
+                                        vm.message.model.to[0].address : vm.message.model.to[0].name) :
+                                        (vm.message.model.to[0].name ? vm.message.model.to[0].name :
+                                        vm.message.model.to[0].address) }}
+                                    </div>
+                                </div>
                             </div>
-                            <span class="to-whom__mail-recipient" ng-click="vm.isToEmail = !vm.isToEmail">
-                                {{ vm.isToEmail ? (vm.message.model.to[0].address ? vm.message.model.to[0].address : vm.message.model.to[0].name) : (vm.message.model.to[0].name ? vm.message.model.to[0].name : vm.message.model.to[0].address) }}
-                            </span>
                         </div>
 
                         <div class="info-sender__message-info-item to-whom" ng-click="vm.isFromEmail = !vm.isFromEmail">
                             <span class="to-whom__title width--min60">{{ 'FROM_WHOM_U' | translate }}</span>
-                            <div class="avatar avatar--settings avatar--size28 avatar--second-style">
-                                <avatar-name name="vm.message.model.from"
-                                             email="vm.message.model.fromAddress">
-                                </avatar-name>
+                            <div class="to-round" ng-class="{'to-round--active': vm.isFromEmail}">
+                                <div class="to-round__body">
+                                    <div class="avatar avatar--settings avatar--size28 avatar--second-style">
+                                        <avatar-name name="vm.message.model.from"
+                                                     email="vm.message.model.fromAddress">
+                                        </avatar-name>
+                                    </div>
+                                    <div class="to-whom__mail-recipient">
+                                        {{ vm.isFromEmail ? (vm.message.model.fromAddress ? vm.message.model.fromAddress
+                                        :
+                                        vm.message.model.from) : (vm.message.model.from ? vm.message.model.from :
+                                        vm.message.model.fromAddress) }}
+                                    </div>
+                                </div>
                             </div>
-                            <span class="to-whom__mail-recipient">
-                                {{ vm.isFromEmail ? (vm.message.model.fromAddress ? vm.message.model.fromAddress : vm.message.model.from) : (vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress) }}
-                            </span>
                         </div>
 
                         <div class="info-sender__message-info-item to-whom">
