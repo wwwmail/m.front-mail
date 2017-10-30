@@ -50,6 +50,10 @@
                 {{ vm.message.to[0].address }}
             </div>
 
+            <div class="inbox-message__attach" ng-if="vm.message.attachments">
+                <span class="icon-icon-screpka"></span>
+            </div>
+
             <div class="inbox-message__data">
                 <to-date date="vm.message.date.date" is-small="true"></to-date>
             </div>
@@ -80,13 +84,10 @@
         </div>
     </div>
 
-    <div class="inbox-message__attach" ng-if="vm.message.attachments">
-        <span class="icon-icon-screpka"></span>
-    </div>
-
     <div class="inbox-message__right">
         <button class="inbox-message__right-btn btn btn--size_m btn--size_28 icon-more btn--not-style btn--not-events"
                 type="button"
-                ng-click="vm.openMessageMenu(); $event.stopPropagation();"></button>
+                ng-click="vm.openMessageMenu(); $event.stopPropagation();">
+        </button>
     </div>
 </div>

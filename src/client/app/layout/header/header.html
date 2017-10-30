@@ -10,7 +10,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'mail.inbox'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="icon-menu btn btn--not-style btn--main-mobile-color header__icon padding--left"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon padding--left"
                         ng-click="vm.openMenu()"></button>
             </div>
 
@@ -20,7 +20,7 @@
             </div>
 
             <div class="main-header__right">
-                <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
+                <button class="main-header__right-button search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
                         type="button"
                         set-focus="search-input"
                         ng-click="vm.isSearch = true;"></button>
@@ -35,7 +35,7 @@
 
             <div class="main-header__right width--inh">
                 <form class="search-block widtn-inh search-block" ng-submit="vm.search()">
-                    <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon padding mrg__right"
+                    <button class="main-header__left-button search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon padding mrg__right"
                             type="submit"></button>
                     <input class="input input--no-border input--no-focus input--size_l width--all"
                            id="search-input"
@@ -46,9 +46,10 @@
             </div>
 
             <div class="main-header__left">
-                <button class="icon-cancel btn btn--not-style btn--size_xl btn--main-mobile-color   padding"
+                <button class="main-header__right-button icon-cancel btn btn--not-style btn--size_xl btn--main-mobile-color"
                         type="button"
-                        ng-click="vm.isSearch = false; vm.clearSearch();"></button>
+                        ng-click="vm.isSearch = false; vm.clearSearch();">
+                </button>
             </div>
         </div>
     </div>
@@ -57,7 +58,7 @@
     <div class="main-header__massege-replay is-active" ng-if="vm.$state.current.name === 'mail.message'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left"
+                <button class="main-header__left-button icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left"
                         type="button"
                         ui-sref="mail.inbox({mbox: vm.$state.params.mbox})">
                     <span class="font--arial font--size15 mrg__left5">{{ 'BACK' | translate }}</span>
@@ -85,90 +86,38 @@
     <div class="main-header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="icon-cancel btn btn--not-style btn--main-mobile-color header__icon header__icon--close padding--hor12"
+                <button class="main-header__left-button icon-cancel btn btn--not-style btn--main-mobile-color header__icon header__icon--close padding--hor12"
                         ng-click="vm.closeCompose()">
                 </button>
             </div>
 
-            <div class="main-header__center ">
+            <div class="main-header__center">
                 <span class="main-header__title-text font--size18 font--bold">{{ 'NEW_LETTER' | translate }}</span>
             </div>
 
             <div class="main-header__right">
-                <button class="btn btn--not-style btn--mail-send header__icon mrg__right font--arial font--size15 padding--hor12 icon-send"
+                <button class="main-header__right-button btn btn--not-style btn--mail-send header__icon mrg__right font--arial font--size15 padding--hor12 icon-send"
                         type="button"
                         ng-click="vm.send()"
                         ng-disabled="!vm.isSend">
                 </button>
             </div>
-            <!--<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">-->
         </div>
     </div>
 
-    <!--<div class="main-header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">-->
-    <!--<div class="main-header__container">-->
-    <!--<div class="main-header__left">-->
-    <!--<button class="icon-cancel btn btn&#45;&#45;not-style btn&#45;&#45;main-mobile-color header__icon header__icon&#45;&#45;close padding&#45;&#45;hor12"-->
-    <!--ui-sref="mail.inbox({mbox: 'INBOX'})">-->
-    <!--</button>-->
-    <!--</div>-->
-
-    <!--<div class="main-header__right">-->
-    <!--<button class="btn btn&#45;&#45;mail-send btn&#45;&#45;size_s header__icon mrg__right14 font&#45;&#45;arial font&#45;&#45;size15 padding&#45;&#45;hor12 width&#45;&#45;inh"-->
-    <!--type="button"-->
-    <!--ng-click="vm.send()"-->
-    <!--ng-disabledd="!vm.isSend">-->
-    <!--Отправить-->
-    <!--</button>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">&ndash;&gt;-->
-    <!--</div>-->
-    <!--</div>-->
-
     <!-- Уведомления и статусы-->
-
     <div class="pop-up-notification pop-up-notification--vg-style"
          ng-class="{'is-show': vm.notify.isOpen}">
         <div class="pop-up-notification__container">
             <span class="pop-up-notification__validate-icon"></span>
             <span class="pop-up-notification__notific"
-                  ng-bind-html="vm.message | translate:{folder: (vm.folderMessage.name | translate)} ">
-               <!--{{ 'LETTER_SEND_SUCCESS' | translate }}-->
-
-                <!--<a class="pop-up-notification__link"> Смотреть почту</a>-->
+                  ng-bind-html="vm.message | translate:{folder: (vm.folderMessage.name | translate)}">
             </span>
             <button class="pop-up-notification__close btn--not-style icon-remove-thick btn--main-mobile-color"
-                    type="button"></button>
+                    type="button">
+            </button>
         </div>
         <hr class="hr hr--header hr--size-h1">
     </div>
 
 </div>
-
-<!-- Хедер для страници поиска-->
-<!--
-<div class="main-header__search is-active" ng-if="vm.isSearch && vm.$state.current.name === 'mail.inbox'">
-    <div class="main-header__container">
-        <div class="main-header__left">
-            <button class="icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon padding--left"
-                    type="button"
-                    ng-click="vm.isSearch = false; vm.clearSearch();"></button>
-        </div>
-        <div class="main-header__right width--inh">
-            <form class="search-block widtn-inh search-block" ng-submit="vm.search()">
-                <input class="input input--no-border input--no-focus input--size_l width--all"
-                       type="text"
-                       placeholder="Поиск писем"
-                       ng-model="vm.searchForm.model.search">
-                <button class="search-block__icon-close icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s mrg__right"
-                        type="button"
-                        ng-click="vm.clearSearch()"></button>
-                <button class="search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right"
-                        type="submit"></button>
-            </form>
-        </div>
-        <!--<hr class="hr hr&#45;&#45;header hr&#45;&#45;yellow">-->
-<!--
-    </div>
-</div>
--->

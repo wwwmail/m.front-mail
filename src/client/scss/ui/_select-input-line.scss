@@ -11,6 +11,9 @@
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
 
+  &--compose {
+
+  }
 
   &:active, &:focus, &:hover{
     border-bottom-color: $yellow-yandex!important;

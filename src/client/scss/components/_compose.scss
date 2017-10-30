@@ -94,4 +94,17 @@
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
+
+  &__btn-additional {
+    margin-top: -15px;
+
+    padding-left: 30px;
+
+    height: 50px;
+
+    &:before {
+      top: auto;
+      left: 15px;
+    }
+  }
 }

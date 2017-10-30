@@ -1,6 +1,6 @@
 .main-header {
   position: fixed;
-  top:0;
+  top: 0;
   left: 0;
 
   display: block;
@@ -11,7 +11,23 @@
   background-color: $white-color;
   z-index: 2;
 
-  &__main{
+  &__left-button {
+    padding: 0 20px 0 0 !important;
+
+    height: 40px !important;
+
+    font-size: 20px !important;
+  }
+
+  &__right-button {
+    padding: 0 0 0 20px !important;
+
+    height: 40px !important;
+
+    font-size: 20px !important;
+  }
+
+  &__main {
     display: none;
     visibility: hidden;
     background-color: $white-color;
@@ -19,39 +35,38 @@
     z-index: 2;
   }
 
-  &__search{
+  &__search {
     display: none;
     visibility: hidden;
     //box-shadow: none!important;
     //background-color: #f6f5f3;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2)!important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .2) !important;
   }
 
-  &__massege-replay{
+  &__massege-replay {
     display: none;
     visibility: hidden;
   }
-  &__message-new{
+  &__message-new {
     display: none;
     visibility: hidden;
-    background-color:$white-color;
+    background-color: $white-color;
 
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2)!important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .2) !important;
   }
 
   &__main.is-active,
   &__search.is-active,
   &__massege-replay.is-active,
-  &__message-new.is-active{
+  &__message-new.is-active {
     height: 100%;
     min-height: inherit;
-
 
     display: block;
     visibility: visible;
   }
 
-  &__container{
+  &__container {
     position: relative;
 
     display: flex;
@@ -69,52 +84,51 @@
     //padding: 0 15px;
   }
 
-  &__left{
+  &__left {
     width: auto;
   }
 
-  &__center{
+  &__center {
     color: $black;
     width: auto;
   }
 
-  &__title-text{
+  &__title-text {
     font: 300 15px/1 $mainFont;
   }
 
-  &__count-letters{
+  &__count-letters {
     font: 100 15px/1 $mainFont;
     color: $yellow-yandex;
 
   }
 
-  &__right{
+  &__right {
     width: auto;
   }
 
-  &__icon{
+  &__icon {
     color: $header-icon-color;
     font: 300 13px/1 $mainFont;
     overflow: visible;
-    &:before{
+    &:before {
       font-size: 20px;
     }
-    &--close{
-      &:before{
-        font-size: 16px!important;
+    &--close {
+      &:before {
+        font-size: 16px !important;
       }
     }
   }
 
-  &--not-shadow{
-    box-shadow: none!important;
+  &--not-shadow {
+    box-shadow: none !important;
   }
 
   @media only screen and (max-width: 562px) {
-    &__container{
+    &__container {
       padding: 0 10px;
     }
   }
-
 }
 
