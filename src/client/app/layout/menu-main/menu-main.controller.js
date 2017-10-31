@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
+    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', '$state', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
 
     /* @ngInject */
-    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, mail, mailBox, tag, profile, CONFIG) {
+    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, $state, mail, mailBox, tag, profile, CONFIG) {
         var vm = this;
 
         vm.standartFolders = [
@@ -84,11 +84,14 @@
             getTag();
         });
 
+
         vm.openFolderCreatePopup = openFolderCreatePopup;
         vm.closeMenu = closeMenu;
         vm.setAuthProfile = setAuthProfile;
         vm.clearFolder = clearFolder;
         vm.goToDesktopVersion = goToDesktopVersion;
+        vm.logout = logout;
+
 
         activate();
 
@@ -210,6 +213,20 @@
             }).then(function () {
                 $scope.$emit('mail:sync');
             });
+        }
+
+        function logout() {
+            var profiles = profile.destroyStorageProfile($auth.user);
+
+            console.log('profiles', profiles);
+
+            if (profiles && profiles.length) {
+                setAuthProfile(profiles[0]);
+                return;
+            }
+
+            $auth.signOut();
+            $state.go('signIn');
         }
     }
 })();

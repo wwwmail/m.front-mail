@@ -689,7 +689,7 @@
   flex-flow: row nowrap;
   width: 100%;
   font: 300 18px/1 "HelveticaNeueCyr", sans-serif;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
 }
 .menu-main__item-sub {
   display: flex;
@@ -698,14 +698,14 @@
   flex-flow: row nowrap;
   width: 100%;
   font: 300 18px/1 "HelveticaNeueCyr", sans-serif;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
 }
 .menu-main__link {
   display: flex;
   align-items: baseline;
   width: 100%;
   font: 400 15px/1 "HelveticaNeueCyr", sans-serif;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
   padding: 8px 20px 8px 13px;
   cursor: pointer;
   text-overflow: ellipsis;
@@ -713,7 +713,7 @@
   overflow: hidden;
 }
 .menu-main__link:hover {
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
 }
 .menu-main__link:hover, .menu-main__link:active, .menu-main__link:focus {
   color: #000;
@@ -734,7 +734,7 @@
 .menu-main__count {
   margin: auto;
   text-align: center;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
   font-size: 14px;
   font-weight: bold;
 }
@@ -795,6 +795,34 @@
 .menu-main--additional {
   min-width: 100%;
   padding-left: 34px;
+}
+.menu-main__filter {
+  padding: 10px;
+}
+
+.menu-main-filter {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-evenly;
+}
+.menu-main-filter__item {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: #fff;
+  border-right: none;
+  text-align: center;
+}
+.menu-main-filter__item:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+}
+.menu-main-filter__item--active {
+  background: #ffdb4d !important;
+}
+.menu-main-filter__icon {
+  color: #000;
 }
 
 .main-header {
@@ -1012,7 +1040,7 @@
   width: 50px;
   height: 50px;
   background-color: #ffdb4d;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
   box-shadow: inset 0px 0px 12px -6px rgba(0, 0, 0, 0.37);
   z-index: 2;
 }
@@ -1100,9 +1128,9 @@
   position: absolute;
   top: calc(50% - 20px);
   right: -60px;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.6);
   background-color: #f3f5f7;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
   transform: rotate(-45deg);
 }
 .menu-main-layout__add-btn:hover, .menu-main-layout__add-btn:active {
@@ -1128,11 +1156,11 @@
 }
 .menu-main-layout__user-name {
   display: none;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
 }
 .menu-main-layout__user-mail {
   display: none;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
 }
 .menu-main-layout__item {
   flex: 1 0 auto;
@@ -1413,7 +1441,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
   z-index: 5;
   background: #f3f5f7;
 }

@@ -69,7 +69,8 @@
                 <div class="menu-main__item-content" ng-if="!folder.isSub && folder.name !== 'Archive'">
                     <a class="menu-main__link"
                        ng-click="vm.closeMenu();"
-                       ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined})">
+                       ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined})"
+                       ui-sref-active="menu-main__link--active">
                         <span class="{{ folder.icon }} menu-main__icon"></span>
                         <!--<span class="menu-main__title">{{ folder.caption }}</span>-->
                         <span class="menu-main__title">{{ folder.name | translate }}</span>
@@ -93,11 +94,13 @@
                 <div ng-if="folder.isOpen">
                     <div class="menu-main__item-content" ng-repeat="folderSub in vm.folders.items"
                          ng-if="folderSub.isSub && (folder.name === 'INBOX' || folder.name === 'Drafts')">
-                        <ul class="menu-main menu-main--additional" ng-if="(folderSub.name !== 'Templates' && folder.name === 'INBOX') || (folderSub.name === 'Templates' && folder.name === 'Drafts')">
+                        <ul class="menu-main menu-main--additional"
+                            ng-if="(folderSub.name !== 'Templates' && folder.name === 'INBOX') || (folderSub.name === 'Templates' && folder.name === 'Drafts')">
                             <li class="menu-main__item-sub">
                                 <a class="menu-main__link"
                                    ng-click="vm.closeMenu();"
-                                   ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})">
+                                   ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})"
+                                   ui-sref-active="menu-main__link--active">
                                     <span class="icon-folder-desk menu-main__icon"></span>
                                     <span class="menu-main__title">
                                         {{ folderSub.name | translate }}
@@ -114,44 +117,35 @@
             </li>
         </ul>
 
-        <hr class="hr hr--main-menu">
+        <!--<hr class="hr hr&#45;&#45;main-menu">-->
 
-        <ul class="menu-main">
-            <li class="menu-main__item">
-                <div class="menu-main__item-content">
-                    <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: 'flagged', tag_id: undefined})"
-                       ng-click="vm.closeMenu();">
-                        <span class="icon-icon-flag-light menu-main__icon"></span>
-                        <span class="menu-main__title">{{ 'IMPORTANT' | translate }}</span>
-                    </a>
-                    <div class="menu-main__additional-option"></div>
-                </div>
-            </li>
-            <li class="menu-main__item">
-                <div class="menu-main__item-content">
-                    <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: 'attach', tag_id: undefined})"
-                       ng-click="vm.closeMenu();">
-                        <span class="icon-icon-screpka menu-main__icon"></span>
-                        <span class="menu-main__title">{{ 'SEARCH_IS_ATTACH' | translate }}</span>
-                    </a>
-                </div>
-            </li>
-            <li class="menu-main__item">
-                <div class="menu-main__item-content">
-                    <a class="menu-main__link"
+        <div class="menu-main__filter">
+            <ul class="menu-main-filter">
+                <li class="menu-main-filter__item"
+                    ui-sref="mail.inbox({mbox: undefined, filter: 'attach', tag_id: undefined})"
+                    ui-sref-active="menu-main-filter__item--active"
+                    ng-click="vm.closeMenu();">
+                    <span class="icon-icon-screpka menu-main-filter__icon"></span>
+                </li>
+                <li class="menu-main-filter__item">
+                    <a class="menu-main-filter__link"
                        ui-sref="mail.inbox({mbox: undefined, filter: 'unseen', tag_id: undefined})"
+                       ui-sref-active="menu-main-filter__item--active"
                        ng-click="vm.closeMenu();">
-                        <span class="icon-icon-mail-light menu-main__icon"></span>
-                        <span class="menu-main__title">{{ 'UNREAD' | translate }}</span>
+                        <span class="icon-icon-mail-light menu-main-filter__icon"></span>
                     </a>
-                </div>
-            </li>
-        </ul>
+                </li>
+                <li class="menu-main-filter__item"
+                    ui-sref="mail.inbox({mbox: undefined, filter: 'flagged', tag_id: undefined})"
+                    ui-sref-active="menu-main-filter__item--active"
+                    ng-click="vm.closeMenu();">
+                    <span class="important-tags menu-main-filter__icon"></span>
+                </li>
+            </ul>
+        </div>
 
         <!-- -->
-        <hr class="hr hr--main-menu">
+        <!--<hr class="hr hr&#45;&#45;main-menu">-->
 
         <!-- -->
         <ul class="menu-main">
@@ -194,18 +188,28 @@
                     </a>
                 </div>
             </li>
+            <li class="menu-main__item">
+                <div class="menu-main__item-content">
+                    <a class="menu-main__link"
+                       ng-click="vm.logout()"
+                       target="_blank">
+                        <span class="icon-settings-desk menu-main__icon"></span>
+                        <span class="menu-main__title">{{ 'LOGOUT' | translate }}</span>
+                    </a>
+                </div>
+            </li>
         </ul>
     </div>
 
-    <div class="menu-main-layout__footer-menu">
-        <hr class="hr hr--main-menu">
-        <div class="flex align-items--cn mrg__left10 mrg__top10 mrg__bottom5">
-            <div class="flex flex--row-wrap align-items--cn ">
-                <div class="link link--gray"
+    <!--<div class="menu-main-layout__footer-menu">
+        <hr class="hr hr&#45;&#45;main-menu">
+        <div class="flex align-items&#45;&#45;cn mrg__left10 mrg__top10 mrg__bottom5">
+            <div class="flex flex&#45;&#45;row-wrap align-items&#45;&#45;cn ">
+                <div class="link link&#45;&#45;gray"
                      ng-click="vm.goToDesktopVersion('/mail/inbox?mbox=INBOX&version=desktop')">
                     {{ 'FULL' | translate }} |
                 </div>
-                <div class="font--normal">
+                <div class="font&#45;&#45;normal">
                     {{ 'MOBILE' | translate }} v 1.0
                 </div>
             </div>
@@ -214,7 +218,8 @@
                 <choice-language></choice-language>
             </div>
         </div>
-    </div>
+    </div>-->
+
     <div class="scrollables--y"></div>
 </div>
 

@@ -14,10 +14,10 @@
   &__item {
 
     &.is-sub-menu {
-
       .menu-main__item-sub .menu-main__count {
         //margin: auto 12px auto auto;
       }
+
       .menu-main__show-additional {
         display: inline-block;
 
@@ -196,6 +196,10 @@
   &--additional {
     min-width: 100%;
     padding-left: 34px;
+  }
+
+  &__filter {
+    padding: 10px;
   }
 }
 
