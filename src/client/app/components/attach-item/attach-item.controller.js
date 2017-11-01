@@ -18,6 +18,10 @@
             {
                 id: 2,
                 name: 'xlsx'
+            },
+            {
+                id: 3,
+                name: 'eml'
             }
         ];
 
@@ -80,7 +84,9 @@
             {name: 'xls'},
             {name: 'xlsx'},
             {name: 'vnd.openxmlformats-officedocument.spreadsheetml.sheet', assocId: 2},
-            {name: 'zip'}
+            {name: 'zip'},
+            {name: 'eml'},
+            {name: 'rfc822', assocId: 3}
         ];
 
         vm.fileFormat = null;

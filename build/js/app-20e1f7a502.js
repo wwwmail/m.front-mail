@@ -57,14 +57,6 @@
 })();
 
 (function() {
-  'use strict';
-
-  angular.module('app.layout', [
-    'app.core'
-  ]);
-})();
-
-(function() {
     'use strict';
 
     angular.module('app.directives', []);
@@ -76,12 +68,12 @@
   angular.module('app.components', []);
 })();
 
-(function () {
-    'use strict';
+(function() {
+  'use strict';
 
-    angular.module('marketing', [
-        'marketing.home'
-    ]);
+  angular.module('app.layout', [
+    'app.core'
+  ]);
 })();
 
 (function () {
@@ -93,26 +85,19 @@
         'mail.message'
     ]);
 })();
+(function () {
+    'use strict';
+
+    angular.module('marketing', [
+        'marketing.home'
+    ]);
+})();
+
 (function() {
   'use strict';
 
   angular.module('app.services', [
       'app.core'
-  ]);
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('blocks.logger', []);
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('blocks.router', [
-    'ui.router',
-    'blocks.logger'
   ]);
 })();
 
@@ -165,9 +150,15 @@
 (function() {
   'use strict';
 
-  angular.module('marketing.home', [
-    'app.core',
-    'app.components'
+  angular.module('blocks.logger', []);
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('blocks.router', [
+    'ui.router',
+    'blocks.logger'
   ]);
 })();
 
@@ -187,6 +178,15 @@
     'use strict';
 
     angular.module('mail.message', []);
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('marketing.home', [
+    'app.core',
+    'app.components'
+  ]);
 })();
 
 (function () {
@@ -2334,188 +2334,6 @@
     'use strict';
 
     angular
-        .module('blocks.logger')
-        .factory('logger', logger);
-
-    logger.$inject = ['$log', 'toastr'];
-
-    /* @ngInject */
-    function logger($log, toastr) {
-        var service = {
-            showToasts: true,
-            error: error,
-            info: info,
-            success: success,
-            warning: warning,
-
-            // straight to console; bypass toastr
-            log: $log.log
-        };
-
-        return service;
-        /////////////////////
-
-        function error(message, data, title) {
-            toastr.error(message, title);
-            $log.error('Error: ' + message, data);
-        }
-
-        function info(message, data, title) {
-            toastr.info(message, title);
-            $log.info('Info: ' + message, data);
-        }
-
-        function success(message, data, title) {
-            toastr.success(message, title);
-            $log.info('Success: ' + message, data);
-        }
-
-        function warning(message, data, title) {
-            toastr.warning(message, title);
-            $log.warn('Warning: ' + message, data);
-        }
-    }
-}());
-
-/* Help configure the state-base ui.router */
-(function () {
-    'use strict';
-
-    angular
-        .module('blocks.router')
-        .provider('routerHelper', routerHelperProvider);
-
-    routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
-    /* @ngInject */
-    function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
-        /* jshint validthis:true */
-        var config = {
-            docTitle: '',
-            resolveAlways: {}
-        };
-
-        // if (!(window.history && window.history.pushState)) {
-        //   window.location.hash = '/';
-        // }
-
-        $locationProvider.html5Mode(true);
-        $locationProvider.hashPrefix('!');
-
-        this.configure = function (cfg) {
-            angular.extend(config, cfg);
-        };
-
-        this.$get = RouterHelper;
-        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger', 'mailBox'];
-        /* @ngInject */
-        function RouterHelper($location, $rootScope, $state, $timeout, logger, mailBox) {
-            var handlingStateChangeError = false;
-            var hasOtherwise = false;
-            var stateCounts = {
-                errors: 0,
-                changes: 0
-            };
-
-            var service = {
-                configureStates: configureStates,
-                getStates: getStates,
-                stateCounts: stateCounts
-            };
-
-            init();
-
-            return service;
-
-            ///////////////
-
-            function configureStates(states, otherwisePath) {
-                states.forEach(function (state) {
-                    state.config.resolve =
-                        angular.extend(state.config.resolve || {}, config.resolveAlways);
-                    $stateProvider.state(state.state, state.config);
-                });
-                if (otherwisePath && !hasOtherwise) {
-                    hasOtherwise = true;
-                    $urlRouterProvider.otherwise(otherwisePath);
-                }
-            }
-
-            function handleRoutingErrors() {
-                // Route cancellation:
-                // On routing error, go to the dashboard.
-                // Provide an exit clause if it tries to do it twice.
-                $rootScope.$on('$stateChangeError',
-                    function (event, toState, toParams, fromState, fromParams, error) {
-                        if (handlingStateChangeError) {
-                            return;
-                        }
-                        stateCounts.errors++;
-                        handlingStateChangeError = true;
-                        var destination = (toState &&
-                            (toState.title || toState.name || toState.loadedTemplateUrl)) ||
-                            'unknown target';
-                        var msg = 'Error routing to ' + destination + '. ' +
-                            (error.data || '') + '. <br/>' + (error.statusText || '') +
-                            ': ' + (error.status || '');
-                        // logger.warning(msg, [toState]);
-                        $location.path('/');
-                    }
-                );
-            }
-
-            function init() {
-                handleRoutingErrors();
-                updateDocTitle();
-            }
-
-            function getStates() {
-                return $state.get();
-            }
-
-            function updateDocTitle() {
-                $rootScope.$on('$stateChangeSuccess',
-                    function (event, toState, toParams, fromState, fromParams) {
-                        document.body.scrollTop = document.documentElement.scrollTop = 0;
-
-                        stateCounts.changes++;
-                        handlingStateChangeError = false;
-
-                        console.log('toParams', toParams);
-
-                        $rootScope.isOpenMenu = false;
-
-                        if (toState.name === 'mail.inbox' || toState.name === 'mail.message') {
-                            if (!toParams.filter) {
-                                var folder = _.find(mailBox.getCacheList().items, {'name': toParams.mbox});
-                            }
-
-                            if (toParams.filter === 'unseen') {
-                                folder = {name: 'UNREAD'};
-                            }
-
-                            if (toParams.filter === 'attach') {
-                                folder = {name: 'SEARCH_IS_ATTACH'};
-                            }
-
-                            if (toParams.filter === 'flagged') {
-                                folder = {name: 'IMPORTANT'};
-                            }
-
-                            $rootScope.folder = folder;
-
-                            console.log('$rootScope.folder', $rootScope.folder);
-                        }
-                    }
-                );
-            }
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
         .module('auth.passwordReset')
         .controller('PasswordResetController', PasswordResetController);
 
@@ -3100,377 +2918,181 @@
     'use strict';
 
     angular
-        .module('app.layout')
-        .component('menuMain', {
-            bindings: {},
-            templateUrl: 'app/layout/menu-main/menu-main.html',
-            controller: 'MenuMainController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
+        .module('blocks.logger')
+        .factory('logger', logger);
 
-    angular
-        .module('app.layout')
-        .controller('MenuMainController', MenuMainController);
-
-    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', '$state', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
+    logger.$inject = ['$log', 'toastr'];
 
     /* @ngInject */
-    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, $state, mail, mailBox, tag, profile, CONFIG) {
-        var vm = this;
+    function logger($log, toastr) {
+        var service = {
+            showToasts: true,
+            error: error,
+            info: info,
+            success: success,
+            warning: warning,
 
-        vm.standartFolders = [
-            {
-                name: 'INBOX',
-                icon: 'icon-incoming-desk'
-            },
-            {
-                name: 'Drafts',
-                icon: 'icon-draft-desk'
-            },
-            {
-                name: 'Trash',
-                icon: 'icon-bin-desk'
-            },
-            {
-                name: 'Sent',
-                icon: 'icon-sent-desk'
-            },
-            {
-                name: 'Junk',
-                icon: 'icon-spam-desk'
-            },
-            {
-                name: 'Outbox',
-                icon: 'icon-strelka'
-            }
-        ];
-
-        vm.folders = {};
-
-        vm.tags = {
-            items: []
+            // straight to console; bypass toastr
+            log: $log.log
         };
 
-        vm.user = $auth.user;
+        return service;
+        /////////////////////
 
-        vm.profiles = [];
-
-        $scope.$on('mail:sync', function () {
-            getMailBox();
-        });
-
-        $scope.$on('folders:sync', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:update:success', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:create:success', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:destroy:success', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:sync', function () {
-            getMailBox();
-        });
-
-        $scope.$on('tag:update:success', function () {
-            getTag();
-        });
-
-        $scope.$on('tag:create:success', function () {
-            getTag();
-        });
-
-        $scope.$on('tag:destroy:success', function () {
-            getTag();
-        });
-
-
-        vm.openFolderCreatePopup = openFolderCreatePopup;
-        vm.closeMenu = closeMenu;
-        vm.setAuthProfile = setAuthProfile;
-        vm.clearFolder = clearFolder;
-        vm.goToDesktopVersion = goToDesktopVersion;
-        vm.logout = logout;
-
-
-        activate();
-
-        function activate() {
-            getMailBox();
-            getTag();
-            getProfiles();
-
-            vm.user = $auth.user;
-            vm.CONFIG = CONFIG;
+        function error(message, data, title) {
+            toastr.error(message, title);
+            $log.error('Error: ' + message, data);
         }
 
-        function goToDesktopVersion(target) {
-            var url = window.location.origin + target; //+ '&token=' + vm.user.access_token.split(' ')[1];
-            window.location.href = url;
+        function info(message, data, title) {
+            toastr.info(message, title);
+            $log.info('Info: ' + message, data);
         }
 
-        function getMailBox() {
-            mailBox.get().then(function (response) {
-                vm.folders = _.assign(vm.folders, response.data);
-                setIcons();
-                getMailBoxFormatted();
-            });
+        function success(message, data, title) {
+            toastr.success(message, title);
+            $log.info('Success: ' + message, data);
         }
 
-        function getMailBoxFormatted() {
-            _.forEach(vm.folders.items, function (folder) {
-                var isSub = true;
-
-                folder.isOpen = false;
-
-                _.forEach(vm.standartFolders, function (standartFolder) {
-                    if (folder.name == standartFolder.name) {
-                        isSub = false;
-                    }
-                });
-
-                if (isSub) {
-                    folder.isSub = true;
-                } else {
-                    folder.isSub = false;
-                }
-            });
-
-            sortFolder();
-        }
-
-        function sortFolder() {
-            vm.folders.items = _.sortBy(vm.folders.items, 'caption').reverse();
-            vm.folders.items = _.sortBy(vm.folders.items, [
-                {'name': 'INBOX'},
-                {'isSub': true},
-                {'name': 'Sent'},
-                {'name': 'Trash'},
-                {'name': 'Junk'},
-                {'name': 'Drafts'},
-                {'name': 'Outbox'}
-            ]).reverse();
-        }
-
-        function setIcons() {
-            _.forEach(vm.folders.items, function (item) {
-                _.forEach(vm.standartFolders, function (standartFolder) {
-                    if (item.name === standartFolder.name) {
-                        item.icon = standartFolder.icon;
-                    }
-                });
-            });
-        }
-
-        function openFolderCreatePopup() {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/folder-create/folder-create-popup.html',
-                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
-                    $scope.cancel = cancel;
-
-                    function cancel() {
-                        $uibModalInstance.dismiss('cancel');
-                    }
-                }],
-                // controllerAs: 'vm',
-                size: 'sm',
-                windowClass: 'popup popup--folder-create'
-            });
-        }
-
-        function getTag() {
-            tag.get().then(function (response) {
-                vm.tags.items = response.data;
-            });
-        }
-
-        function closeMenu() {
-            $rootScope.isOpenMenu = false;
-        }
-
-        function getProfiles() {
-            vm.profiles = profile.getStorageProfiles();
-        }
-
-        function setAuthProfile(profile) {
-            $auth.user.access_token = profile.access_token;
-
-            $timeout(function () {
-                $('#iframe--auth').on('load', function () {
-                    $timeout(function () {
-                        window.location.href = '/mail/inbox?mbox=INBOX';
-                    }, 250);
-                });
-            }, 250);
-        }
-
-        function clearFolder(e, folder) {
-            e.stopPropagation();
-            mail.deleteAll({}, {
-                mbox: folder.name,
-                connection_id: vm.user.profile.default_connection_id
-            }).then(function () {
-                $scope.$emit('mail:sync');
-            });
-        }
-
-        function logout() {
-            var profiles = profile.destroyStorageProfile($auth.user);
-
-            console.log('profiles', profiles);
-
-            if (profiles && profiles.length) {
-                setAuthProfile(profiles[0]);
-                return;
-            }
-
-            $auth.signOut();
-            $state.go('signIn');
+        function warning(message, data, title) {
+            toastr.warning(message, title);
+            $log.warn('Warning: ' + message, data);
         }
     }
-})();
+}());
 
+/* Help configure the state-base ui.router */
 (function () {
     'use strict';
 
     angular
-        .module('app.layout')
-        .component('header', {
-            bindings: {
-                folder: '='
-            },
-            templateUrl: 'app/layout/header/header.html',
-            controller: 'HeaderController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
+        .module('blocks.router')
+        .provider('routerHelper', routerHelperProvider);
 
-    angular
-        .module('app.layout')
-        .controller('HeaderController', HeaderController);
-
-    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'mail'];
-
+    routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
     /* @ngInject */
-    function HeaderController($rootScope, $scope, $state, $timeout, mail) {
-        var vm = this;
-
-        vm.searchForm = {
-            model: {}
+    function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
+        /* jshint validthis:true */
+        var config = {
+            docTitle: '',
+            resolveAlways: {}
         };
 
-        vm.currentFolder = {};
+        // if (!(window.history && window.history.pushState)) {
+        //   window.location.hash = '/';
+        // }
 
-        vm.notify = {};
+        $locationProvider.html5Mode(true);
+        $locationProvider.hashPrefix('!');
 
-        vm.openMenu = openMenu;
-        vm.closeMenu = closeMenu;
-        vm.clearSearch = clearSearch;
-        vm.search = search;
-        vm.send = send;
-        vm.closeCompose = closeCompose;
+        this.configure = function (cfg) {
+            angular.extend(config, cfg);
+        };
 
-        $scope.$watch('vm.$state.params.mbox', function () {
-            getCurrentFolder();
-        });
+        this.$get = RouterHelper;
+        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger', 'mailBox'];
+        /* @ngInject */
+        function RouterHelper($location, $rootScope, $state, $timeout, logger, mailBox) {
+            var handlingStateChangeError = false;
+            var hasOtherwise = false;
+            var stateCounts = {
+                errors: 0,
+                changes: 0
+            };
 
-        $scope.$on('notify:message', function (e, data) {
-            console.log('data', data);
-            vm.notify.isOpen = true;
+            var service = {
+                configureStates: configureStates,
+                getStates: getStates,
+                stateCounts: stateCounts
+            };
 
-            vm.message = data.message;
-            vm.folderMessage = data.folder;
+            init();
 
-            $timeout(function () {
-                vm.notify.isOpen = false;
-            }, 3000);
-        });
+            return service;
 
-        $scope.$on('mail:isSend', function (e, data) {
-            console.log('mail:isSend', data);
-            vm.isSend = data.isSend;
-        });
+            ///////////////
 
-        $scope.$on('mail.paginate', function (e, data) {
-            vm.paginate = data.paginate;
-        });
-
-        $scope.$watch('vm.searchForm.model.search', function (data, oldData) {
-            if (data === '') {
-                clearSearch();
-            }
-        });
-
-        ////
-
-        activate();
-
-        function activate() {
-            vm.$state = $state;
-            vm.paginate = mail.paginate;
-
-            console.log('vm.$state', vm.$state);
-
-            getCurrentFolder();
-        }
-
-        function openMenu() {
-            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
-        }
-
-        function closeMenu() {
-            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
-        }
-
-        function getCurrentFolder() {
-            if (vm.folder) {
-                _.forEach(vm.folder.data.items, function (folder) {
-                    if (folder.name === vm.$state.params.mbox) {
-                        vm.currentFolder = folder;
-                        console.log('vm.currentFolder', vm.currentFolder);
-                    }
+            function configureStates(states, otherwisePath) {
+                states.forEach(function (state) {
+                    state.config.resolve =
+                        angular.extend(state.config.resolve || {}, config.resolveAlways);
+                    $stateProvider.state(state.state, state.config);
                 });
-            }
-        }
-
-        function search() {
-            var data = {};
-
-            if (vm.searchForm.model.search) {
-                data.search = vm.searchForm.model.search;
+                if (otherwisePath && !hasOtherwise) {
+                    hasOtherwise = true;
+                    $urlRouterProvider.otherwise(otherwisePath);
+                }
             }
 
-            $rootScope.$broadcast('search:mailQuery', {
-                search: data
-            });
-        }
+            function handleRoutingErrors() {
+                // Route cancellation:
+                // On routing error, go to the dashboard.
+                // Provide an exit clause if it tries to do it twice.
+                $rootScope.$on('$stateChangeError',
+                    function (event, toState, toParams, fromState, fromParams, error) {
+                        if (handlingStateChangeError) {
+                            return;
+                        }
+                        stateCounts.errors++;
+                        handlingStateChangeError = true;
+                        var destination = (toState &&
+                            (toState.title || toState.name || toState.loadedTemplateUrl)) ||
+                            'unknown target';
+                        var msg = 'Error routing to ' + destination + '. ' +
+                            (error.data || '') + '. <br/>' + (error.statusText || '') +
+                            ': ' + (error.status || '');
+                        // logger.warning(msg, [toState]);
+                        $location.path('/');
+                    }
+                );
+            }
 
-        function clearSearch() {
-            vm.searchForm.model.search = '';
-            $rootScope.$broadcast('search:close');
-        }
+            function init() {
+                handleRoutingErrors();
+                updateDocTitle();
+            }
 
-        function send() {
-            $rootScope.$broadcast('mail:send');
-        }
+            function getStates() {
+                return $state.get();
+            }
 
-        function closeCompose() {
-            $rootScope.$broadcast('mail:compose:close');
-        }
+            function updateDocTitle() {
+                $rootScope.$on('$stateChangeSuccess',
+                    function (event, toState, toParams, fromState, fromParams) {
+                        document.body.scrollTop = document.documentElement.scrollTop = 0;
 
+                        stateCounts.changes++;
+                        handlingStateChangeError = false;
+
+                        console.log('toParams', toParams);
+
+                        $rootScope.isOpenMenu = false;
+
+                        if (toState.name === 'mail.inbox' || toState.name === 'mail.message') {
+                            if (!toParams.filter) {
+                                var folder = _.find(mailBox.getCacheList().items, {'name': toParams.mbox});
+                            }
+
+                            if (toParams.filter === 'unseen') {
+                                folder = {name: 'UNREAD'};
+                            }
+
+                            if (toParams.filter === 'attach') {
+                                folder = {name: 'SEARCH_IS_ATTACH'};
+                            }
+
+                            if (toParams.filter === 'flagged') {
+                                folder = {name: 'IMPORTANT'};
+                            }
+
+                            $rootScope.folder = folder;
+
+                            console.log('$rootScope.folder', $rootScope.folder);
+                        }
+                    }
+                );
+            }
+        }
     }
 })();
 
@@ -3512,6 +3134,72 @@
 
     angular
         .module('app.components')
+        .component('attachUpload', {
+            bindings: {
+                attachmentsData: '=',
+                message: '=',
+                isUploading: '='
+            },
+            templateUrl: 'app/components/attach-upload/attach-upload.html',
+            controller: 'AttachUploadController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('AttachUploadController', AttachUploadController);
+
+    AttachUploadController.$inject = ['$auth', '$state', 'CONFIG'];
+    /* @ngInject */
+    function AttachUploadController($auth, $state, CONFIG) {
+        var vm = this;
+
+        vm.getLink = getLink;
+        vm.remove = remove;
+
+        activate();
+
+        function activate() {
+            vm.user = $auth.user;
+            vm.$state = $state;
+        }
+
+        function getLink(attachment) {
+            var link = [
+                CONFIG.AttachUrl,
+                vm.message.model.number,
+                "?mbox=",
+                vm.message.model.mbox || 'Drafts',
+                // vm.$state.params.mbox ? vm.$state.params.mbox : 'Drafts',
+                "&part=attach&filename=",
+                attachment.fileName,
+                "&token=",
+                vm.user.access_token,
+                "&connection_id=",
+                vm.message.model.connection_id
+            ].join("");
+
+            console.log('link', link);
+
+            return link;
+        }
+
+        function remove(attachment) {
+            _.remove(vm.attachmentsData, function (item) {
+                return item === attachment;
+            });
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
         .component('attachItem', {
             bindings: {
                 attach: '=',
@@ -3542,6 +3230,10 @@
             {
                 id: 2,
                 name: 'xlsx'
+            },
+            {
+                id: 3,
+                name: 'eml'
             }
         ];
 
@@ -3604,7 +3296,9 @@
             {name: 'xls'},
             {name: 'xlsx'},
             {name: 'vnd.openxmlformats-officedocument.spreadsheetml.sheet', assocId: 2},
-            {name: 'zip'}
+            {name: 'zip'},
+            {name: 'eml'},
+            {name: 'rfc822', assocId: 3}
         ];
 
         vm.fileFormat = null;
@@ -3715,72 +3409,6 @@
                 return;
             }
             vm.emailLetter = vm.email.slice(0, 1);
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .component('attachUpload', {
-            bindings: {
-                attachmentsData: '=',
-                message: '=',
-                isUploading: '='
-            },
-            templateUrl: 'app/components/attach-upload/attach-upload.html',
-            controller: 'AttachUploadController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('AttachUploadController', AttachUploadController);
-
-    AttachUploadController.$inject = ['$auth', '$state', 'CONFIG'];
-    /* @ngInject */
-    function AttachUploadController($auth, $state, CONFIG) {
-        var vm = this;
-
-        vm.getLink = getLink;
-        vm.remove = remove;
-
-        activate();
-
-        function activate() {
-            vm.user = $auth.user;
-            vm.$state = $state;
-        }
-
-        function getLink(attachment) {
-            var link = [
-                CONFIG.AttachUrl,
-                vm.message.model.number,
-                "?mbox=",
-                vm.message.model.mbox || 'Drafts',
-                // vm.$state.params.mbox ? vm.$state.params.mbox : 'Drafts',
-                "&part=attach&filename=",
-                attachment.fileName,
-                "&token=",
-                vm.user.access_token,
-                "&connection_id=",
-                vm.message.model.connection_id
-            ].join("");
-
-            console.log('link', link);
-
-            return link;
-        }
-
-        function remove(attachment) {
-            _.remove(vm.attachmentsData, function (item) {
-                return item === attachment;
-            });
         }
     }
 })();
@@ -5825,17 +5453,132 @@
     'use strict';
 
     angular
-        .module('marketing.home')
-        .controller('HomeController', HomeController);
+        .module('app.layout')
+        .component('header', {
+            bindings: {
+                folder: '='
+            },
+            templateUrl: 'app/layout/header/header.html',
+            controller: 'HeaderController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
 
-    HomeController.$inject = [];
+    angular
+        .module('app.layout')
+        .controller('HeaderController', HeaderController);
+
+    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'mail'];
+
     /* @ngInject */
-    function HomeController() {
+    function HeaderController($rootScope, $scope, $state, $timeout, mail) {
         var vm = this;
+
+        vm.searchForm = {
+            model: {}
+        };
+
+        vm.currentFolder = {};
+
+        vm.notify = {};
+
+        vm.openMenu = openMenu;
+        vm.closeMenu = closeMenu;
+        vm.clearSearch = clearSearch;
+        vm.search = search;
+        vm.send = send;
+        vm.closeCompose = closeCompose;
+
+        $scope.$watch('vm.$state.params.mbox', function () {
+            getCurrentFolder();
+        });
+
+        $scope.$on('notify:message', function (e, data) {
+            console.log('data', data);
+            vm.notify.isOpen = true;
+
+            vm.message = data.message;
+            vm.folderMessage = data.folder;
+
+            $timeout(function () {
+                vm.notify.isOpen = false;
+            }, 3000);
+        });
+
+        $scope.$on('mail:isSend', function (e, data) {
+            console.log('mail:isSend', data);
+            vm.isSend = data.isSend;
+        });
+
+        $scope.$on('mail.paginate', function (e, data) {
+            vm.paginate = data.paginate;
+        });
+
+        $scope.$watch('vm.searchForm.model.search', function (data, oldData) {
+            if (data === '') {
+                clearSearch();
+            }
+        });
+
+        ////
 
         activate();
 
-        function activate() {}
+        function activate() {
+            vm.$state = $state;
+            vm.paginate = mail.paginate;
+
+            console.log('vm.$state', vm.$state);
+
+            getCurrentFolder();
+        }
+
+        function openMenu() {
+            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
+        }
+
+        function closeMenu() {
+            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
+        }
+
+        function getCurrentFolder() {
+            if (vm.folder) {
+                _.forEach(vm.folder.data.items, function (folder) {
+                    if (folder.name === vm.$state.params.mbox) {
+                        vm.currentFolder = folder;
+                        console.log('vm.currentFolder', vm.currentFolder);
+                    }
+                });
+            }
+        }
+
+        function search() {
+            var data = {};
+
+            if (vm.searchForm.model.search) {
+                data.search = vm.searchForm.model.search;
+            }
+
+            $rootScope.$broadcast('search:mailQuery', {
+                search: data
+            });
+        }
+
+        function clearSearch() {
+            vm.searchForm.model.search = '';
+            $rootScope.$broadcast('search:close');
+        }
+
+        function send() {
+            $rootScope.$broadcast('mail:send');
+        }
+
+        function closeCompose() {
+            $rootScope.$broadcast('mail:compose:close');
+        }
+
     }
 })();
 
@@ -5843,60 +5586,247 @@
     'use strict';
 
     angular
-        .module('marketing.home')
-        .run(appRun);
+        .module('app.layout')
+        .component('menuMain', {
+            bindings: {},
+            templateUrl: 'app/layout/menu-main/menu-main.html',
+            controller: 'MenuMainController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
 
-    appRun.$inject = ['routerHelper'];
+    angular
+        .module('app.layout')
+        .controller('MenuMainController', MenuMainController);
+
+    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', '$state', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
+
     /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
-    }
+    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, $state, mail, mailBox, tag, profile, CONFIG) {
+        var vm = this;
 
-    function getStates() {
-        return [
+        vm.standartFolders = [
             {
-                state: 'home',
-                config: {
-                    url: '/?version&token&page&compose&success',
-                    controller: 'HomeController',
-                    controllerAs: 'vm',
-                    onEnter: function ($auth, $state, $stateParams, $rootScope, profile) {
-                        console.log('profile', profile);
-
-                        var params = {};
-
-                        if ($stateParams.compose) {
-                            params.compose = $state.params.compose
-                        }
-
-                        if ($stateParams.page) {
-                            $state.go($stateParams.page, params);
-                            return;
-                        }
-
-                        if ($stateParams.token) {
-                            $auth.setAuthHeaders({
-                                "Authorization": 'Bearer ' + $stateParams.token
-                            });
-
-                            $auth.validateUser().then(function (response) {
-                                profile.addStorageProfile(response);
-                            });
-
-                            $state.go('mail.inbox', {mbox: 'INBOX'});
-
-                            return;
-                        }
-
-                        params.mbox = 'INBOX';
-
-                        $state.go('mail.inbox', params);
-                    }
-                }
+                name: 'INBOX',
+                icon: 'icon-incoming-desk'
+            },
+            {
+                name: 'Drafts',
+                icon: 'icon-draft-desk'
+            },
+            {
+                name: 'Trash',
+                icon: 'icon-bin-desk'
+            },
+            {
+                name: 'Sent',
+                icon: 'icon-sent-desk'
+            },
+            {
+                name: 'Junk',
+                icon: 'icon-spam-desk'
+            },
+            {
+                name: 'Outbox',
+                icon: 'icon-strelka'
             }
         ];
+
+        vm.folders = {};
+
+        vm.tags = {
+            items: []
+        };
+
+        vm.user = $auth.user;
+
+        vm.profiles = [];
+
+        $scope.$on('mail:sync', function () {
+            getMailBox();
+        });
+
+        $scope.$on('folders:sync', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:update:success', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:create:success', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:destroy:success', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:sync', function () {
+            getMailBox();
+        });
+
+        $scope.$on('tag:update:success', function () {
+            getTag();
+        });
+
+        $scope.$on('tag:create:success', function () {
+            getTag();
+        });
+
+        $scope.$on('tag:destroy:success', function () {
+            getTag();
+        });
+
+
+        vm.openFolderCreatePopup = openFolderCreatePopup;
+        vm.closeMenu = closeMenu;
+        vm.setAuthProfile = setAuthProfile;
+        vm.clearFolder = clearFolder;
+        vm.goToDesktopVersion = goToDesktopVersion;
+        vm.logout = logout;
+
+
+        activate();
+
+        function activate() {
+            getMailBox();
+            getTag();
+            getProfiles();
+
+            vm.user = $auth.user;
+            vm.CONFIG = CONFIG;
+        }
+
+        function goToDesktopVersion(target) {
+            var url = window.location.origin + target; //+ '&token=' + vm.user.access_token.split(' ')[1];
+            window.location.href = url;
+        }
+
+        function getMailBox() {
+            mailBox.get().then(function (response) {
+                vm.folders = _.assign(vm.folders, response.data);
+                setIcons();
+                getMailBoxFormatted();
+            });
+        }
+
+        function getMailBoxFormatted() {
+            _.forEach(vm.folders.items, function (folder) {
+                var isSub = true;
+
+                folder.isOpen = false;
+
+                _.forEach(vm.standartFolders, function (standartFolder) {
+                    if (folder.name == standartFolder.name) {
+                        isSub = false;
+                    }
+                });
+
+                if (isSub) {
+                    folder.isSub = true;
+                } else {
+                    folder.isSub = false;
+                }
+            });
+
+            sortFolder();
+        }
+
+        function sortFolder() {
+            vm.folders.items = _.sortBy(vm.folders.items, 'caption').reverse();
+            vm.folders.items = _.sortBy(vm.folders.items, [
+                {'name': 'INBOX'},
+                {'isSub': true},
+                {'name': 'Sent'},
+                {'name': 'Trash'},
+                {'name': 'Junk'},
+                {'name': 'Drafts'},
+                {'name': 'Outbox'}
+            ]).reverse();
+        }
+
+        function setIcons() {
+            _.forEach(vm.folders.items, function (item) {
+                _.forEach(vm.standartFolders, function (standartFolder) {
+                    if (item.name === standartFolder.name) {
+                        item.icon = standartFolder.icon;
+                    }
+                });
+            });
+        }
+
+        function openFolderCreatePopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/folder-create/folder-create-popup.html',
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+                    $scope.cancel = cancel;
+
+                    function cancel() {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+                }],
+                // controllerAs: 'vm',
+                size: 'sm',
+                windowClass: 'popup popup--folder-create'
+            });
+        }
+
+        function getTag() {
+            tag.get().then(function (response) {
+                vm.tags.items = response.data;
+            });
+        }
+
+        function closeMenu() {
+            $rootScope.isOpenMenu = false;
+        }
+
+        function getProfiles() {
+            vm.profiles = profile.getStorageProfiles();
+        }
+
+        function setAuthProfile(profile) {
+            $auth.user.access_token = profile.access_token;
+
+            $timeout(function () {
+                $('#iframe--auth').on('load', function () {
+                    $timeout(function () {
+                        window.location.href = '/mail/inbox?mbox=INBOX';
+                    }, 250);
+                });
+            }, 250);
+        }
+
+        function clearFolder(e, folder) {
+            e.stopPropagation();
+            mail.deleteAll({}, {
+                mbox: folder.name,
+                connection_id: vm.user.profile.default_connection_id
+            }).then(function () {
+                $scope.$emit('mail:sync');
+            });
+        }
+
+        function logout() {
+            var profiles = profile.destroyStorageProfile($auth.user);
+
+            console.log('profiles', profiles);
+
+            if (profiles && profiles.length) {
+                setAuthProfile(profiles[0]);
+                return;
+            }
+
+            $auth.signOut();
+            $state.go('signIn');
+        }
     }
 })();
+
 (function () {
     'use strict';
 
@@ -7044,6 +6974,82 @@
     }
 })();
 
+(function () {
+    'use strict';
+
+    angular
+        .module('marketing.home')
+        .controller('HomeController', HomeController);
+
+    HomeController.$inject = [];
+    /* @ngInject */
+    function HomeController() {
+        var vm = this;
+
+        activate();
+
+        function activate() {}
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('marketing.home')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper'];
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
+
+    function getStates() {
+        return [
+            {
+                state: 'home',
+                config: {
+                    url: '/?version&token&page&compose&success',
+                    controller: 'HomeController',
+                    controllerAs: 'vm',
+                    onEnter: function ($auth, $state, $stateParams, $rootScope, profile) {
+                        console.log('profile', profile);
+
+                        var params = {};
+
+                        if ($stateParams.compose) {
+                            params.compose = $state.params.compose
+                        }
+
+                        if ($stateParams.page) {
+                            $state.go($stateParams.page, params);
+                            return;
+                        }
+
+                        if ($stateParams.token) {
+                            $auth.setAuthHeaders({
+                                "Authorization": 'Bearer ' + $stateParams.token
+                            });
+
+                            $auth.validateUser().then(function (response) {
+                                profile.addStorageProfile(response);
+                            });
+
+                            $state.go('mail.inbox', {mbox: 'INBOX'});
+
+                            return;
+                        }
+
+                        params.mbox = 'INBOX';
+
+                        $state.go('mail.inbox', params);
+                    }
+                }
+            }
+        ];
+    }
+})();
 angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/auth/view.html','<div class="auth-layout"><ui-view></ui-view></div>');
 $templateCache.put('app/mail/mail.html','<section class="main-layout"><div class="main-layout__header"><header folder="vm.folder"></header><div class="main-layout__menu" ng-class="{\'main-layout__menu--is-active-menu\': isOpenMenu}"><div class="main-layout__menu-content"><menu-main></menu-main></div><button class="main-layout__menu-closer btn--not-events btn--not-style" type="button" ng-click="vm.closeMenu()"></button></div></div><div class="main-layout__inner" layout-height><div class="main-layout__content"><ui-view class="height--min-inh height--all"></ui-view></div></div></section><div class="menu-bottom-bg" ng-if="isMenuBottomOpen"></div>');
 $templateCache.put('app/auth/password-reset/password-reset.html','<div class="password-reset-layout"><div class="password-reset-layout__content"><div class="password-reset-layout__form"><div class="card card--black"><div class="auth-form"><div class="main-title-text color--white">{{ \'ACCESS_RECOVERY\' | translate }}</div><form class="form form--dark form--validation" name="userForm" ng-submit="vm.preRequestPasswordReset(userForm)" novalidate><!-- \u0412\u0430\u0448 \u043C\u0430\u0439\u043B--><div class="form__field-item form__field-item--flex-start mrg__bottom10"><div class="field-style"><label class="field-style__title font__size13">{{ \'AUTH_SPECIFY_LOGIN\' | translate }}</label><div class="field-style__group"><input class="input input--size_l input--up-shadow width--inh" type="text" name="username" ng-model="vm.userForm.model.username" placeholder="{{ \'INPUT_PLACEHOLDER_LOGIN_OR_EMAIL\' | translate }}" required><validation-errors ng-if="userForm.$submitted" data="userForm.username" server="vm.userForm.errors" messages="vm.userForm.validations.username"></validation-errors><!-- <div class="validation">\n                                         <div class="validation__message validation__message&#45;&#45;red">\n                                             \u042D\u0442\u043E \u0438\u043C\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F \u0443\u0436\u0435 \u0437\u0430\u043D\u044F\u0442\u043E. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435\n                                             \u0434\u0440\u0443\u0433\u043E\u0435\n                                         </div>\n                                     </div>--></div></div></div><div class="form__field-item form__field-item--flex-start mrg__top25"><div class="field-style"><button class="btn btn--size_l btn--yellow" type="submit">{{ \'BTN_FURTHER\' | translate }}</button></div></div></form></div></div></div><!-- \u0444\u0443\u0442\u0442\u0435\u0440 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438--><div class="footer footer__auth"><!-- \u041A\u043E\u043F\u0438\u0440\u0430\u0439\u0442--><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.{{ vm.CONFIG.domainZone }}\xBB Group a.s.</span></div><!-- \u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E--><div class="footer__menu"><div class="navigation"><div class="navigation__row"><div class="navigation__item"><!--<a class="navigation__link navigation__link&#45;&#45;footer-a" href="">\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B</a>--></div></div></div></div><!-- \u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043C\u0435\u043D\u044E \u0441 \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u044F\u0437\u044B\u043A\u0430--><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><!-- \u042F\u0437\u044B\u043A\u043E\u0432\u043E\u0435 \u043C\u0435\u043D\u044E--><choice-language></choice-language></div><!--<div class="navigation__item"><a class="navigation__link" href="">{{ \'CONTACTS\' | translate }}</a></div>--><!--<div class="navigation__item"><a class="navigation__link" href="">\u0420\u0435\u043A\u043B\u0430\u043C\u0430</a></div>--></div></div></div></div></div><div class="auth-layout__bg"></div></div>');
@@ -7052,12 +7058,13 @@ $templateCache.put('app/auth/sign-in/sign-in.html','<div class="auth-layout"><di
 $templateCache.put('app/auth/sign-temp/sign-temp.html','<div class="auth-layout"><div class="auth-layout__content"><div class="auth-layout__form"><div class="card"><div class="text-center" ng-if="vm.isTokenAuthLoading"><spinner is-global="false" is-open="true"></spinner></div><div class="auth-form" ng-if="!vm.isTokenAuthLoading"><div class="auth-form__logo mrg__bottom16"><a href="{{ vm.CONFIG.parentHost }}"><img class="img-responsive mrg__auto" src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-white.svg" style="width: 141px" logo-hover></a><hr class="hr hr--auth mrg__top16"></div><form class="form" name="userForm" ng-submit="vm.socialComplete(userForm)" novalidate><div class="form__field-item mrg__bottom10"><label class="font__size13">{{ \'SELECT_YOUR_NAME\' | translate : {name: \'mail.cz\'} }}</label><div class="field-style position"><span class="input-plash input-plash--top13 font__size13">@mail.{{ CONFIG.domainZone }}</span> <input class="input input--size_l input--up-shadow width--inh" type="text" name="username" placeholder="{{ \'INPUT_PLACEHOLDER_MAIL_NAME\' | translate }}" ng-model="vm.userForm.model.username" login-format required></div><validation-errors data="userForm.username" server="vm.userForm.errors" messages="vm.userForm.validations.username"></validation-errors></div><div class="form__field-item mrg__bottom10"><div class="field-style widtn--inh"><!--\u043D\u0430\u0448 \u0447\u0435\u043A\u0431\u043E\u043A\u0441 --><label class="checkbox-y__label checkbox-y--size15 checkbox-y checkbox-y--chek-top" for="isChecked"><input class="checkbox-y__input" id="isChecked" type="checkbox" name="agree" ng-model="vm.userForm.model.agree"><div class="checkbox-y__body"><span class="checkbox-y__icon"></span></div><span class="checkbox__text font__size12 color--silver" role="presentation">{{ \'AUTH_CHECKBOX_CONFORMING_1\' | translate }} <a class="link link-aith" href="{{ vm.CONFIG.parentHost }}/obchodni-podminky/" target="_blank">{{ \'AUTH_CHECKBOX_CONFORMING_2\' | translate }}</a></span></label><validation-errors data="userForm.agree" server="vm.userForm.errors" messages="vm.userForm.validations.agree"></validation-errors></div></div><hr class="hr hr--auth"><div class="form__field-item mrg__bottom10"><div class="field-style text-center"><button class="btn btn--size_l btn--yellow width--inh" type="submit" ng-if="!vm.userForm.isLoading">{{ \'BTN_SING_UP_NOW\' | translate }}</button><div ng-if="vm.userForm.isLoading"><spinner is-global="false" is-open="true"></spinner></div></div></div></form></div></div></div><!-- \u0444\u0443\u0442\u0442\u0435\u0440 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438--><div class="footer footer__auth"><!-- \u041A\u043E\u043F\u0438\u0440\u0430\u0439\u0442--><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.{{ vm.CONFIG.domainZone }}\xBB Group a.s.</span></div><!-- \u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E--><div class="footer__menu"><div class="navigation"><div class="navigation__row"><div class="navigation__item"><!--<a class="navigation__link navigation__link&#45;&#45;footer-a" href="">\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B</a>--></div></div></div></div><!-- \u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043C\u0435\u043D\u044E \u0441 \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u044F\u0437\u044B\u043A\u0430--><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><!-- \u042F\u0437\u044B\u043A\u043E\u0432\u043E\u0435 \u043C\u0435\u043D\u044E--><choice-language></choice-language></div><!--<div class="navigation__item">\n                            <a class="navigation__link" href="">\n                                {{ \'CONTACTS\' | translate }}\n                            </a>\n                        </div>--><!--<div class="navigation__item"><a class="navigation__link" href="">\u0420\u0435\u043A\u043B\u0430\u043C\u0430</a></div>--></div></div></div></div></div><div class="auth-layout__bg"></div></div>');
 $templateCache.put('app/auth/sign-up/sign-up.html','<div class="auth-layout"><div class="auth-layout__content"><div class="auth-layout__form auth-layout__form--wd388"><div class="card card--black"><div class="auth-form"><div class="auth-form__logo mrg__bottom16"><a href="{{ vm.CONFIG.parentHost }}"><img class="img-responsive mrg__auto" src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-white.svg" style="width: 141px" logo-hover></a><hr class="hr hr--auth mrg__top16"></div><form class="form form--dark form--validation" name="userForm" ng-submit="vm.signUp(userForm)" novalidate><!-- \u0418\u043C\u044F \u0438 \u0444\u0430\u043C\u0438\u043B\u0438\u044F --><div class="form__field-item mrg__bottom20 flex--inline"><div class="field-style mrg__right5"><input class="input input--size_l input--fc-sh-yellow width--inh" type="text" name="first_name" ng-model="vm.userForm.model.first_name" placeholder="{{ \'INPUT_PLACEHOLDER_NAME\' | translate }}"><validation-errors data="userForm.first_name" server="vm.userForm.errors" messages="vm.userForm.validations.first_name"></validation-errors></div><div class="field-style"><input class="input input--size_l input--fc-sh-yellow width--inh" type="text" name="last_name" ng-model="vm.userForm.model.last_name" placeholder="{{ \'INPUT_PLACEHOLDER_LAST_MANE\' | translate }}"><validation-errors data="userForm.last_name" server="vm.userForm.errors" messages="vm.userForm.validations.last_name"></validation-errors></div></div><!-- \u041B\u043E\u0433\u0438\u043D \u0432 \u0431\u0430\u0437\u0435 --><div class="form__field-item mrg__bottom10"><div class="field-style"><label class="field-style__title font__size13">{{ \'AUTH_CREATE_A_USER_NAME\' | translate }}</label><div class="field-style__group"><div class="width--inh position"><span class="input-plash input-plash--top13 font__size13">@mail.{{ CONFIG.domainZone }}</span> <input class="input input--size_l input--fc-sh-yellow width--inh" type="text" name="username" ng-model="vm.userForm.model.username" ng-change="vm.checkUserName()" placeholder="{{\'INPUT_PLACEHOLDER_MAIL_NAME\' | translate }}" login-format required></div><validation-errors data="userForm.username" server="vm.userForm.errors" messages="vm.userForm.validations.username"></validation-errors></div></div></div><!-- \u041F\u0430\u0440\u043E\u043B\u044C --><div class="m-input m-input--password form__field-item mrg__bottom6"><div class="field-style"><div class="m-input__body"><input class="m-input__element input input--size_l input--fc-sh-yellow" type="{{ vm.isPasswordShow ? \'text\' : \'password\' }}" name="password" ng-model="vm.userForm.model.password" placeholder="{{ \'INPUT_PLACEHOLDER_PASSWORD\' | translate }}" password-verify="{{ vm.userForm.model.passwordConf }}" required> <span class="password-eye m-input__password-icon" ng-class="{\'password-eye--show\': vm.isPasswordShow}" ng-click="vm.isPasswordShow = !vm.isPasswordShow"></span></div><validation-errors data="userForm.password" server="vm.userForm.errors" messages="vm.userForm.validations.password"></validation-errors></div><div class="mrg__top5 progress-bar--password" ng-password-strength="vm.userForm.model.password" strength="passStrength" inner-class="progress-bar progress-bar--password" inner-class-prefix="progress-bar-"></div></div><!-- \u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u043F\u0430\u0440\u043E\u043B\u044F --><div class="form__field-item mrg__bottom10"><div class="field-style"><input class="input input--size_l input--fc-sh-yellow width--inh" type="{{ vm.isPasswordShow ? \'text\' : \'password\' }}" name="passwordConf" ng-model="vm.userForm.model.passwordConf" placeholder="{{ \'INPUT_PLACEHOLDER_PASSWORD_CONFIRMATION\' | translate }}" password-verify="{{ vm.userForm.model.password }}" required><validation-errors data="userForm.passwordConf" server="vm.userForm.errors" messages="vm.userForm.validations.passwordConf"></validation-errors></div></div><!--\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441: \u0442\u0435\u043B\u0435\u0444\u043E\u043D--><div class="mrg__t10" ng-if="!vm.isAdditionalEmail"><!-- \u0421\u041C\u0421 \u0432\u0430\u043B\u0438\u0434\u0430\u0446\u0438\u044F --><label class="field-style__title font__size13">{{ \'ACTIVE_PHONE\' | translate }} <a class="pull-right link link--yellow" ng-click="vm.isAdditionalEmail = true">{{ \'NO_PHONE\' | translate }}</a></label><div class="form__field-item mrg__bottom25 flex flex--row-wrap"><div class="field-style mrg__right5 width--size177"><input class="input input--size_l input--fc-sh-yellow width--inh" type="text" name="phone" ng-model="vm.userForm.model.phone" ui-mask-placeholder ui-mask-placeholder-char="x" ui-mask="+999 999-999-999" ui-options="{allowInvalidValue: true, clearOnBlur: false}" required></div><div class="field-style width--inh width--max126"><button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button" ng-click="vm.sendCode()">{{ \'BTN_TO_GET_THE_CODE\' | translate }}</button></div><validation-errors data="userForm.phone" server="vm.userForm.errors" messages="vm.userForm.validations.phone"></validation-errors><span class="notific notific--auth" ng-if="vm.codeResult && vm.userForm.model.phone">{{ \'AUTH_NOTIFIC_PHONE_1\' | translate }} +{{ vm.userForm.model.phone }} {{ \'AUTH_NOTIFIC_PHONE_2\' | translate }}</span></div><!-- \u0421\u041C\u0421 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u043A\u043E\u0434\u0430 --><div class="form__field-item mrg__bottom20 mrg__top16" ng-if="vm.codeResult.code || vm.userForm.errors"><div class="width-inh flex--inline align-items--cn"><div class="field-style mrg__right5 width--size177"><input class="input input--size_l input--fc-sh-yellow width--inh" type="text" name="code" ng-model="vm.userForm.model.code" placeholder="{{ \'INPUT_PLACEHOLDER_ENTER_SMS_CODE\' | translate }}" required></div></div><div class="color--red">{{ vm.error.message }}</div><validation-errors data="userForm.code" server="vm.userForm.errors" messages="vm.userForm.validations.code"></validation-errors></div></div><!--\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441: email--><div class="mrg__t10" ng-if="vm.isAdditionalEmail"><label class="field-style__title font__size13">{{ \'ACTIVE_EMAIL\' | translate }} <a class="pull-right link link--yellow" ng-click="vm.isAdditionalEmail = false">{{ \'NO_EMAIL\' | translate }}</a></label><div class="form__field-item mrg__bottom25 flex flex--row-wrap"><div class="field-style mrg__right5"><input class="input input--size_l input--fc-sh-yellow width--inh" type="email" name="email" ng-model="vm.userForm.model.email" required></div><validation-errors data="userForm.email" server="vm.userForm.errors" messages="vm.userForm.validations.email"></validation-errors></div></div><!-- \u0421\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u0435 --><div class="form__field-item mrg__bottom10"><div class="field-style widtn--inh"><!--\u043D\u0430\u0448 \u0447\u0435\u043A\u0431\u043E\u043A\u0441 --><label class="checkbox-y__label checkbox-y--size15 checkbox-y checkbox-y--chek-top" for="isChecked"><input class="checkbox-y__input" id="isChecked" type="checkbox" name="agree" ng-model="vm.userForm.model.agree"><div class="checkbox-y__body"><span class="checkbox-y__icon"></span></div><span class="checkbox__text font font--size12 color--white" role="presentation">{{ \'AUTH_CHECKBOX_CONFORMING_1\' | translate }} <a class="link link--yellow" href="{{ vm.CONFIG.parentHost }}/obchodni-podminky/" target="_blank">{{ \'AUTH_CHECKBOX_CONFORMING_2\' | translate }}</a></span></label><validation-errors data="userForm.agree" server="vm.userForm.errors" messages="vm.userForm.validations.agree"></validation-errors></div></div><!-- \u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u0441\u044F --><div class="form__field-item mrg__bottom10"><hr class="hr hr--auth"><div class="field-style text-center"><button class="btn btn--size_l btn--yellow width--inh" type="submit" ng-if="!vm.userForm.isLoading">{{ \'BTN_SING_UP_NOW\' | translate }}</button><div ng-if="vm.userForm.isLoading"><spinner is-global="false" is-open="true"></spinner></div></div></div></form><button class="btn btn--size_l btn--link-style link--yellow" ui-sref="signIn">{{ \'SING_IN\' | translate }}</button><div class="text-center mrg__top20"><social-auth></social-auth></div></div></div></div><div class="footer footer__auth"><div class="footer__copyright"><span class="">\xA9 2001\u20142017 \xABMail.{{ CONFIG.domainZone }}\xBB Group a.s.</span></div><div class="footer__menu"><div class="navigation"><div class="navigation__row"><div class="navigation__item"><!--<a class="navigation__link navigation__link&#45;&#45;footer-a" href="">\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B</a>--></div></div></div></div><div class="footer__right-menu mrg__right"><div class="navigation"><div class="navigation__row"><div class="navigation__item position width--size28"><choice-language></choice-language></div><!--<div class="navigation__item">\n                            <a class="navigation__link" href="">\n                                {{ \'CONTACTS\' | translate }}\n                            </a>\n                        </div>--><!--<div class="navigation__item"><a class="navigation__link" href="">\u0420\u0435\u043A\u043B\u0430\u043C\u0430</a></div>--></div></div></div></div></div><div class="auth-layout__bg"></div></div>');
 $templateCache.put('app/core/errors/404.html','404');
-$templateCache.put('app/directives/message-textarea/message-textarea.html','<div></div>');
 $templateCache.put('app/layout/header/header.html','<div class="main-header"><!--\n        \u0443 \u043D\u0430\u0441 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F \u0440\u0430\u0437\u043D\u044B\u0439 \u0445\u0435\u0434\u0435\u0440 \u0434\u043B\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\n        \u0434\u043B\u044F \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438 \u043D\u0443\u0436\u043D\u043E\u0445\u043E \u0445\u0435\u0434\u0435\u0440\u0430 \u043F\u0440\u043E\u0441\u0442\u043E  \u043D\u0443\u0436\u043D\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u044F\u0442\u044C \u043A\u043B\u0430\u0441\u0441 is-active\n        \u043F\u0440\u0438 \u0443\u0441\u043B\u043E\u0432\u0438\u0438 \u043E\u0442\u043A\u0440\u0438\u0442\u0438\u044F \u043D\u0443\u0436\u043D\u043E\u0439 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438\n    --><!-- \u0425\u0435\u0434\u0435\u0440 \u0434\u043B\u044F \u0433\u043B\u0430\u0432\u043D\u043E\u0439 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438 --><div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === \'mail.inbox\'"><div class="main-header__container"><div class="main-header__left"><button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon padding--left" ng-click="vm.openMenu()"></button></div><div class="main-header__center"><span class="main-header__title-text">{{ vm.currentFolder.name | translate }}</span> <span class="main-header__count-letters">{{ vm.currentFolder.messagesCount || \'\' }}</span></div><div class="main-header__right"><button class="main-header__right-button search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right" type="button" set-focus="search-input" ng-click="vm.isSearch = true;"></button></div><hr class="hr hr--header hr--yellow"></div></div><!-- \u0425\u0435\u0434\u0435\u0440 \u0434\u043B\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438 \u043F\u043E\u0438\u0441\u043A\u0430--><div class="main-header__search is-active" ng-if="vm.isSearch && vm.$state.current.name === \'mail.inbox\'"><div class="main-header__container"><div class="main-header__right width--inh"><form class="search-block widtn-inh search-block" ng-submit="vm.search()"><button class="main-header__left-button search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon padding mrg__right" type="submit"></button> <input class="input input--no-border input--no-focus input--size_l width--all" id="search-input" type="text" placeholder="{{ \'SEARCH_FOR_LETTERS\' | translate }}" ng-model="vm.searchForm.model.search"></form></div><div class="main-header__left"><button class="main-header__right-button icon-cancel btn btn--not-style btn--size_xl btn--main-mobile-color" type="button" ng-click="vm.isSearch = false; vm.clearSearch();"></button></div></div></div><!-- \u0425\u0435\u0434\u0435\u0440 \u0434\u043B\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u0430 \u043F\u0438\u0441\u044C\u043C\u0430--><div class="main-header__massege-replay is-active" ng-if="vm.$state.current.name === \'mail.message\'"><div class="main-header__container"><div class="main-header__left"><button class="main-header__left-button icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn padding--left" type="button" ui-sref="mail.inbox({mbox: vm.$state.params.mbox})"><span class="font--arial font--size15 mrg__left5">{{ \'BACK\' | translate }}</span></button></div><div class="main-header__right"><button class="icon-arrow-up btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right_2" type="button" ng-if="vm.paginate.next" ui-sref="mail.message({id: vm.paginate.next.number, connection_id: vm.paginate.next.connection_id, mbox: vm.paginate.next.mbox})"></button> <button class="icon-arrow-down btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right" type="button" ng-if="vm.paginate.prev" ui-sref="mail.message({id: vm.paginate.prev.number, connection_id: vm.paginate.prev.connection_id, mbox: vm.paginate.prev.mbox})"></button></div><hr class="hr hr--header hr--yellow"></div></div><!-- \u0425\u0435\u0434\u0435\u0440 \u0434\u043B\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u044F \u043F\u0438\u0441\u044C\u043C\u0430--><!-- \u0425\u0435\u0434\u0435\u0440 \u0434\u043B\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u044F \u043F\u0438\u0441\u044C\u043C\u0430--><div class="main-header__message-new is-active" ng-if="vm.$state.current.name === \'mail.compose\'"><div class="main-header__container"><div class="main-header__left"><button class="main-header__left-button icon-cancel btn btn--not-style btn--main-mobile-color header__icon header__icon--close padding--hor12" ng-click="vm.closeCompose()"></button></div><div class="main-header__center"><span class="main-header__title-text font--size18 font--bold">{{ \'NEW_LETTER\' | translate }}</span></div><div class="main-header__right"><button class="main-header__right-button btn btn--not-style btn--mail-send header__icon mrg__right font--arial font--size15 padding--hor12 icon-send" type="button" ng-click="vm.send()" ng-disabled="!vm.isSend"></button></div></div></div><!-- \u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F \u0438 \u0441\u0442\u0430\u0442\u0443\u0441\u044B--><div class="pop-up-notification pop-up-notification--vg-style" ng-class="{\'is-show\': vm.notify.isOpen}"><div class="pop-up-notification__container"><span class="pop-up-notification__validate-icon"></span> <span class="pop-up-notification__notific" ng-bind-html="vm.message | translate:{folder: (vm.folderMessage.name | translate)}"></span> <button class="pop-up-notification__close btn--not-style icon-remove-thick btn--main-mobile-color" type="button"></button></div><hr class="hr hr--header hr--size-h1"></div></div>');
-$templateCache.put('app/layout/menu-main/menu-main.html','<div class="menu-main-layout scrollables"><div class="menu-main-layout__header"><img class="menu-main-layout__header__logo img-responsive" src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg"> <button class="menu-main-layout__button-close btn" type="button" ng-click="vm.closeMenu()"><span class="icon-double-arrow-left"></span></button></div><div class="menu-main-layout__user-info"><div class="menu-main-layout__user-info-container" scroll-left><div class="menu-main-layout__users-list"><div class="menu-main-layout__user-item" ng-repeat="profile in vm.profiles" ng-if="profile.profile.email !== vm.user.profile.email"><button class="menu-main-layout__avatar" ng-click="vm.setAuthProfile(profile)"><div class="avatar avatar--size53 avatar--second-style" ng-if="profile.profile.photo"><img class="avatar__image" media-url="profile.profile.photo" fallback-src="{{\'/images/avatar-personal.svg\'}}"></div><avatar-name class="avatar avatar--size53 avatar--second-style" ng-if="!profile.profile.photo" name="profile.profile.user_name" email="profile.profile.email"></avatar-name></button></div><div class="menu-main-layout__user-item menu-main-layout__user-item--active"><div class="menu-main-layout__avatar"><div class="avatar avatar--size53 avatar--second-style" ng-if="vm.user.profile.photo"><img class="avatar__image" media-url="vm.user.profile.photo" fallback-src="{{\'/images/avatar-personal.svg\'}}"></div><avatar-name class="avatar avatar--size53 avatar--second-style" ng-if="!vm.user.profile.photo" name="vm.user.profile.user_name" email="vm.user.profile.email"></avatar-name><button class="menu-main-layout__add-btn icon-cancel btn--circle btn--size_40 rotate--am90" type="button" ui-sref="signIn()"></button></div><span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span> <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span></div></div></div></div><!--\u043E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E --><div class="menu-main-layout__item"><ul class="menu-main"><li class="menu-main__item is-sub-menu" ng-hide="folder.name === \'Outbox\' && !folder.messagesCount" ng-class="{\'is-sub-menu--open\': folder.isOpen}" ng-repeat="folder in vm.folders.items"><div class="menu-main__item-content" ng-if="!folder.isSub && folder.name !== \'Archive\'"><a class="menu-main__link" ng-click="vm.closeMenu();" ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined})" ui-sref-active="menu-main__link--active"><span class="{{ folder.icon }} menu-main__icon"></span><!--<span class="menu-main__title">{{ folder.caption }}</span>--> <span class="menu-main__title">{{ folder.name | translate }}</span></a><div class="menu-main__additional-option"><button class="menu-main__clear-brush icon-brush btn--not-style font--size12" type="button" ng-class="{\'menu-main__link--gray\': !folder.messagesCount,\n                                    \'menu-main__clear-brush--active\': (folder.name === \'Junk\' || folder.name === \'Trash\') && folder.messagesCount\n                                }" ng-click="vm.clearFolder($event, folder);"></button> <span class="menu-main__count" ng-if="folder.messagesCount">{{ folder.unseen || \'\' }}</span> <button class="menu-main__show-additional icon-arrow-down btn--not-style" type="button" ng-if="folder.name === \'INBOX\' || folder.name === \'Drafts\'" ng-click="folder.isOpen = !folder.isOpen"></button></div></div><div ng-if="folder.isOpen"><div class="menu-main__item-content" ng-repeat="folderSub in vm.folders.items" ng-if="folderSub.isSub && (folder.name === \'INBOX\' || folder.name === \'Drafts\')"><ul class="menu-main menu-main--additional" ng-if="(folderSub.name !== \'Templates\' && folder.name === \'INBOX\') || (folderSub.name === \'Templates\' && folder.name === \'Drafts\')"><li class="menu-main__item-sub"><a class="menu-main__link" ng-click="vm.closeMenu();" ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})" ui-sref-active="menu-main__link--active"><span class="icon-folder-desk menu-main__icon"></span> <span class="menu-main__title">{{ folderSub.name | translate }}</span></a><div class="menu-main__additional-option"><span class="menu-main__count">{{ folderSub.unseen || \'\' }}</span></div></li></ul></div></div></li></ul><!--<hr class="hr hr&#45;&#45;main-menu">--><div class="menu-main__filter"><ul class="menu-main-filter"><li class="menu-main-filter__item" ui-sref="mail.inbox({mbox: undefined, filter: \'attach\', tag_id: undefined})" ui-sref-active="menu-main-filter__item--active" ng-click="vm.closeMenu();"><span class="icon-icon-screpka menu-main-filter__icon"></span></li><li class="menu-main-filter__item"><a class="menu-main-filter__link" ui-sref="mail.inbox({mbox: undefined, filter: \'unseen\', tag_id: undefined})" ui-sref-active="menu-main-filter__item--active" ng-click="vm.closeMenu();"><span class="icon-icon-mail-light menu-main-filter__icon"></span></a></li><li class="menu-main-filter__item" ui-sref="mail.inbox({mbox: undefined, filter: \'flagged\', tag_id: undefined})" ui-sref-active="menu-main-filter__item--active" ng-click="vm.closeMenu();"><span class="important-tags menu-main-filter__icon"></span></li></ul></div><!-- --><!--<hr class="hr hr&#45;&#45;main-menu">--><!-- --><ul class="menu-main"><li class="menu-main__item" ng-repeat="tag in vm.tags.items"><div class="menu-main__item-content"><a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})" ng-click="vm.closeMenu();"><span class="icon-tag-solid menu-main__icon menu-main__icon--select" style="color: {{ tag.bgcolor }}"></span> <span class="menu-main__title">{{ tag.tag_name }}</span></a></div></li><li class="menu-main__item"><div class="menu-main__item-content"><a class="menu-main__link" href><span class="icon-filter menu-main__icon"></span> <span class="menu-main__title">{{ \'FILTERS\' | translate }}</span></a><div class="menu-main__additional-option"><div class="radio-button"><input type="checkbox" name="fiter" class="radio-button__checkbox" id="filter-switch" checked="checked"><label class="radio-button__label" for="filter-switch"><span class="radio-button__inner"></span> <span class="radio-button__switch"></span></label></div></div></div></li><li class="menu-main__item"><div class="menu-main__item-content"><a class="menu-main__link" ng-click="vm.goToDesktopVersion(\'/settings/main?version=desktop\')" target="_blank"><span class="icon-settings-desk menu-main__icon"></span> <span class="menu-main__title">{{ \'SETTING\' | translate }}</span></a></div></li><li class="menu-main__item"><div class="menu-main__item-content"><a class="menu-main__link" ng-click="vm.logout()" target="_blank"><span class="icon-settings-desk menu-main__icon"></span> <span class="menu-main__title">{{ \'LOGOUT\' | translate }}</span></a></div></li></ul></div><!--<div class="menu-main-layout__footer-menu">\n        <hr class="hr hr&#45;&#45;main-menu">\n        <div class="flex align-items&#45;&#45;cn mrg__left10 mrg__top10 mrg__bottom5">\n            <div class="flex flex&#45;&#45;row-wrap align-items&#45;&#45;cn ">\n                <div class="link link&#45;&#45;gray"\n                     ng-click="vm.goToDesktopVersion(\'/mail/inbox?mbox=INBOX&version=desktop\')">\n                    {{ \'FULL\' | translate }} |\n                </div>\n                <div class="font&#45;&#45;normal">\n                    {{ \'MOBILE\' | translate }} v 1.0\n                </div>\n            </div>\n\n            <div class="menu-main-layout__footer-lang">\n                <choice-language></choice-language>\n            </div>\n        </div>\n    </div>--><div class="scrollables--y"></div></div>');
+$templateCache.put('app/layout/menu-main/menu-main.html','<div class="menu-main-layout scrollables"><div class="menu-main-layout__header"><img class="menu-main-layout__header__logo img-responsive" src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg"> <button class="menu-main-layout__button-close btn" type="button" ng-click="vm.closeMenu()"><span class="icon-double-arrow-left"></span></button></div><div class="menu-main-layout__user-info"><div class="menu-main-layout__user-info-container" scroll-left><div class="menu-main-layout__users-list"><div class="menu-main-layout__user-item" ng-repeat="profile in vm.profiles" ng-if="profile.profile.email !== vm.user.profile.email"><button class="menu-main-layout__avatar" ng-click="vm.setAuthProfile(profile)"><div class="avatar avatar--size53 avatar--second-style" ng-if="profile.profile.photo"><img class="avatar__image" media-url="profile.profile.photo" fallback-src="{{\'/images/avatar-personal.svg\'}}"></div><avatar-name class="avatar avatar--size53 avatar--second-style" ng-if="!profile.profile.photo" name="profile.profile.user_name" email="profile.profile.email"></avatar-name></button></div><div class="menu-main-layout__user-item menu-main-layout__user-item--active"><div class="menu-main-layout__avatar"><div class="avatar avatar--size53 avatar--second-style" ng-if="vm.user.profile.photo"><img class="avatar__image" media-url="vm.user.profile.photo" fallback-src="{{\'/images/avatar-personal.svg\'}}"></div><avatar-name class="avatar avatar--size53 avatar--second-style" ng-if="!vm.user.profile.photo" name="vm.user.profile.user_name" email="vm.user.profile.email"></avatar-name><button class="menu-main-layout__add-btn icon-cancel btn--circle btn--size_40 rotate--am90" type="button" ui-sref="signIn()"></button></div><span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span> <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span></div></div></div></div><!--\u043E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E --><div class="menu-main-layout__item"><ul class="menu-main"><li class="menu-main__item is-sub-menu" ng-hide="folder.name === \'Outbox\' && !folder.messagesCount" ng-class="{\'is-sub-menu--open\': folder.isOpen}" ng-repeat="folder in vm.folders.items"><div class="menu-main__item-content" ng-if="!folder.isSub && folder.name !== \'Archive\'"><a class="menu-main__link" ng-click="vm.closeMenu();" ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined})" ui-sref-active="menu-main__link--active"><span class="{{ folder.icon }} menu-main__icon"></span><!--<span class="menu-main__title">{{ folder.caption }}</span>--> <span class="menu-main__title">{{ folder.name | translate }}</span></a><div class="menu-main__additional-option"><button class="menu-main__clear-brush icon-brush btn--not-style font--size12" type="button" ng-class="{\'menu-main__link--gray\': !folder.messagesCount,\n                                    \'menu-main__clear-brush--active\': (folder.name === \'Junk\' || folder.name === \'Trash\') && folder.messagesCount\n                                }" ng-click="vm.clearFolder($event, folder);"></button> <span class="menu-main__count" ng-if="folder.messagesCount">{{ folder.unseen || \'\' }}</span> <button class="menu-main__show-additional icon-arrow-down btn--not-style" type="button" ng-if="folder.name === \'INBOX\' || folder.name === \'Drafts\'" ng-click="folder.isOpen = !folder.isOpen"></button></div></div><div ng-if="folder.isOpen"><div class="menu-main__item-content" ng-repeat="folderSub in vm.folders.items" ng-if="folderSub.isSub && (folder.name === \'INBOX\' || folder.name === \'Drafts\')"><ul class="menu-main menu-main--additional" ng-if="(folderSub.name !== \'Templates\' && folder.name === \'INBOX\') || (folderSub.name === \'Templates\' && folder.name === \'Drafts\')"><li class="menu-main__item-sub"><a class="menu-main__link" ng-click="vm.closeMenu();" ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})" ui-sref-active="menu-main__link--active"><span class="icon-folder-desk menu-main__icon"></span> <span class="menu-main__title">{{ folderSub.name | translate }}</span></a><div class="menu-main__additional-option"><span class="menu-main__count">{{ folderSub.unseen || \'\' }}</span></div></li></ul></div></div></li></ul><!--<hr class="hr hr&#45;&#45;main-menu">--><div class="menu-main__filter"><ul class="menu-main-filter"><li class="menu-main-filter__item" ui-sref="mail.inbox({mbox: undefined, filter: \'attach\', tag_id: undefined})" ui-sref-active="menu-main-filter__item--active" ng-click="vm.closeMenu();"><span class="icon-icon-screpka menu-main-filter__icon"></span></li><li class="menu-main-filter__item"><a class="menu-main-filter__link" ui-sref="mail.inbox({mbox: undefined, filter: \'unseen\', tag_id: undefined})" ui-sref-active="menu-main-filter__item--active" ng-click="vm.closeMenu();"><span class="icon-icon-mail-light menu-main-filter__icon"></span></a></li><li class="menu-main-filter__item" ui-sref="mail.inbox({mbox: undefined, filter: \'flagged\', tag_id: undefined})" ui-sref-active="menu-main-filter__item--active" ng-click="vm.closeMenu();"><span class="important-tags menu-main-filter__icon"></span></li></ul></div><!-- --><!--<hr class="hr hr&#45;&#45;main-menu">--><!-- --><ul class="menu-main"><li class="menu-main__item" ng-repeat="tag in vm.tags.items"><div class="menu-main__item-content"><a class="menu-main__link" ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})" ng-click="vm.closeMenu();"><span class="icon-tag-solid menu-main__icon menu-main__icon--select" style="color: {{ tag.bgcolor }}"></span> <span class="menu-main__title">{{ tag.tag_name }}</span></a></div></li><!--<li class="menu-main__item">\n                <div class="menu-main__item-content">\n                    <a class="menu-main__link" href>\n                        <span class="icon-filter menu-main__icon"></span>\n                        <span class="menu-main__title">{{ \'FILTERS\' | translate }}</span>\n                    </a>\n                    <div class="menu-main__additional-option">\n                        <div class="radio-button">\n                            <input type="checkbox" name="fiter" class="radio-button__checkbox" id="filter-switch"\n                                   checked>\n                            <label class="radio-button__label" for="filter-switch">\n                                <span class="radio-button__inner"></span>\n                                <span class="radio-button__switch"></span>\n                            </label>\n                        </div>\n                    </div>\n                </div>\n            </li>--><li class="menu-main__item"><div class="menu-main__item-content"><a class="menu-main__link" ng-click="vm.goToDesktopVersion(\'/settings/main?version=desktop\')" target="_blank"><span class="icon-settings-desk menu-main__icon"></span> <span class="menu-main__title">{{ \'SETTING\' | translate }}</span></a></div></li><li class="menu-main__item"><div class="menu-main__item-content"><a class="menu-main__link" ng-click="vm.logout()" target="_blank"><span class="icon-settings-desk menu-main__icon"></span> <span class="menu-main__title">{{ \'LOGOUT\' | translate }}</span></a></div></li></ul></div><!--<div class="menu-main-layout__footer-menu">\n        <hr class="hr hr&#45;&#45;main-menu">\n        <div class="flex align-items&#45;&#45;cn mrg__left10 mrg__top10 mrg__bottom5">\n            <div class="flex flex&#45;&#45;row-wrap align-items&#45;&#45;cn ">\n                <div class="link link&#45;&#45;gray"\n                     ng-click="vm.goToDesktopVersion(\'/mail/inbox?mbox=INBOX&version=desktop\')">\n                    {{ \'FULL\' | translate }} |\n                </div>\n                <div class="font&#45;&#45;normal">\n                    {{ \'MOBILE\' | translate }} v 1.0\n                </div>\n            </div>\n\n            <div class="menu-main-layout__footer-lang">\n                <choice-language></choice-language>\n            </div>\n        </div>\n    </div>--><div class="scrollables--y"></div></div>');
+$templateCache.put('app/directives/message-textarea/message-textarea.html','<div></div>');
 $templateCache.put('app/mail/compose/compose.html','<div class="compose"><form name="form"><div class="compose__container"><div class="compose__header"><div class="compose__from" ng-class="{\'is-show-features\': vm.isShowFeatures}"><div class="input-line flex align-items--cn"><ui-select ng-model="vm.sendForm.model.from_connection" class="select-input-line select-input-line--compose select-list select-list--size_l select-input-line--min-height select-list--no-border select-list--not-border-of-sides width-inh" theme="select2" search-enabled="false"><ui-select-match class="select-list__body select-list--size_l width--all" placeholder="{{ \'FROM_WHOM\' | translate }}"><div ng-if="$select.selected.user_name">{{ $select.selected.user_name }} ({{ $select.selected.email }})</div><div ng-if="!$select.selected.user_name">{{ $select.selected.email }}</div></ui-select-match><ui-select-choices repeat="connection.id as connection in vm.connections.items" ng-value="$select.selected.id"><div ng-bind="connection.email"></div></ui-select-choices></ui-select></div><div class="input-line input-line--full input-line--right-padding" ng-class="{\'is-active\': vm.sendForm.model.to.length}"><label class="input-line__label width--all"><contact-to-add-select class="width--all" placeholder="{{ \'TO\' | translate }}" addresses="vm.sendForm.model.to"></contact-to-add-select><button class="compose__btn-additional input-line__btn-more btn btn--not-style btn--light-hover font__size16" type="button" ng-click="vm.isShowFeatures = !vm.isShowFeatures">{{ \'IS_COPY\' | translate }}</button></label></div><div class="compose__from--add-features" ng-if="vm.isShowFeatures"><div class="input-line input-line--full" ng-class="{\'is-active\': vm.sendForm.model.toCopy.length}"><div class="input-line__label width--all"><contact-to-add-select class="width--all" placeholder="{{ \'IS_COPY\' | translate }}" addresses="vm.sendForm.model.toCopy" is-autofocus="true"></contact-to-add-select></div></div><div class="input-line input-line--full" ng-class="{\'is-active\': vm.sendForm.model.toCopyHidden.length}"><div class="input-line__label width--all"><contact-to-add-select class="width--all" placeholder="{{ \'IS_HIDDEN_COPY\' | translate }}" addresses="vm.sendForm.model.toCopyHidden"></contact-to-add-select></div></div></div><div class="compose__letter-subject"><div class="input-line input-line--full" ng-class="{\'is-active\': vm.sendForm.model.subject.length}"><label class="input-line__label width--all"><input class="input--compose-line input-line__input width--all" type="text" ng-model="vm.sendForm.model.subject" placeholder="{{ \'SUBJECT\' | translate }}"></label></div><button class="compose__btn-additional compose__btn-attach btn--attach btn btn--not-style btn--light-hover font--size16" type="button" type="file" multiple="multiple" accept="**/*" ngf-select="vm.upload($files, $invalidFiles)"><img src="/images/icon-screpka-plus.svg"></button></div></div><div class="compose__attachments-upload"><attach-upload attachments-data="vm.sendForm.model.attachmentsData" message="vm.sendForm" is-uploading="vm.isUploading"></attach-upload></div><div class="compose__content"><div class="compose__message" contenteditable="true" ng-model="vm.sendForm.model.body" ng-model-options="{ debounce: 250 }" required placeholder="{{ \'INPUT_PLACEHOLDER_ENTER_YOUR_MESSAGE\' | translate }}..." onclick="$(this).focus();"><div><br></div></div></div></div></div></form></div><menu-bottom is-open="vm.isMenuBottomOpen" on-save="vm.save()"></menu-bottom>');
 $templateCache.put('app/mail/inbox/inbox.html','<!--<inbox-header></inbox-header>--><!--<div class="search-result" ng-if="vm.isNoResult">\n    <strong>\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u044B \u043F\u043E\u0438\u0441\u043A\u0430 \xABinfo\xBB</strong>\n</div>--><search-mail ng-if="vm.messages.searchParams.search"></search-mail><div class="search-result search-result--active search-result--no-result" ng-if="vm.messages.params.search && !vm.messages.items.length"><div class="search-result__content"><span class="search-result__message-hint">{{ \'SEARCH_NO_RESULT\' | translate }}</span> <span class="search-result__message-hint"></span><div class="search-result__message-hint">{{ \'TRY_SEARCH\' | translate }} <a class="search-result__link">{{ \'ALL_MAIL\' | translate }}</a></div></div></div><!--vm.data._links.next--><div class="inbox-plash" ng-if="vm.messages.items.length && vm.$state.params.mbox === \'Junk\'"><div class="inbox-plash__message"><div class="main-plash__text">{{ \'SPAM_PLASH_TEXT_THIS_FOLDER_CONTAINS\' | translate }}</div><button class="btn btn--normal btn--not-events btn--size_s mrg__top8 font--size12 mrg__top5" type="button" ng-click="vm.clearFolder($event, {name: \'Junk\'})">{{ \'CLEAR_FOLDER\' | translate }}</button></div></div><div class="inbox-list"><div infinite-scroll="vm.paginate()" infinite-scroll-distance="1"><inbox-message-list messages="vm.messages"></inbox-message-list></div></div><div class="inbox-empty" ng-if="vm.messages.params.mbox && !vm.messages.params.search && !vm.messages.params.tag_id && !vm.messages.params.filter &&!vm.messages.items.length"><span class="inbox-empty__icon"></span> <span class="inbox-empty__notif">{{ \'EMPTY_FOLDER\' | translate }}</span> <span class="inbox-empty__text" ng-if="vm.messages.params.mbox !== \'INBOX\'">{{ \'GO_TO_FOLDER\' | translate }}<a class="inbox-empty__link" ui-sref="mail.inbox({mbox: \'INBOX\'})">\xAB{{ \'INBOX\' | translate }}\xBB</a></span></div><folder-layout messages="vm.messages"></folder-layout><inbox-footer messages="vm.messages"></inbox-footer>');
 $templateCache.put('app/mail/message/message.html','<div class="mail-message"><div class="mail-message__main-info"><!-- \u0425\u0435\u0434\u0435\u0440 \u0441\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F --><div class="mail-message__title wrapper-container">{{ vm.message.model.Subject }}</div><div class="mail-message__main-content wrapper-container"><div class="mail-message__info position--sticky wrapper-container wrapper-container--is-margin"><div class="info-sender width--all"><div class="info-sender__head flex--inline"><div class="info-sender__avatar flex"><div class="avatar avatar--settings avatar--size42 avatar--second-style"><avatar-name name="vm.message.model.from" email="vm.message.model.to[0].fromAddress"></avatar-name></div></div><div class="info-sender__title"><div class="info-sender__from-whom"><div class="info-sender__important-tags info-sender__important-tags--small-title important-tags--active" ng-if="vm.message.model.important"></div>{{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }} <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 padding--right_2 padding--left_2 mrg__left5" ng-class="{\'icon-arrow-down\': !vm.isOpenMessageInfo, \'icon-arrow-up\': vm.isOpenMessageInfo}" type="button" ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo"></button></div><div class="info-sender__date"><to-date date="vm.message.model.date.date"></to-date></div></div><div class="info-sender__right-menu mrg__right"><div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more" ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div><div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right" ng-if="vm.$state.params.mbox !== \'Trash\'" ng-click="vm.move({name: \'Trash\', caption: (\'Trash\' | translate)})"></div><div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right" ng-if="vm.$state.params.mbox === \'Trash\'" ng-click="vm.destroy({name: \'Trash\'})"></div><div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply padding--right" ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></div></div></div><!--\n                        \u0434\u043B\u044F \u0442\u043E\u0433\u043E \u0447\u0442\u043E\u0431\u044B \u043E\u0442\u043E\u0431\u0440\u0430\u0437\u0438\u0442\u044C \u0431\u043E\u043B\u0435 \u043F\u043E\u0434\u0440\u043E\u0431\u043D\u0443\u044E \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044E \u043F\u043E \u043F\u0438\u0441\u044C\u044E,\n                        \u043F\u0440\u0438 \u043D\u0430\u0436\u0430\u0442\u0438\u0438 \u043D\u0430 \u043A\u043D\u043E\u043F\u0443 \u0432\u043E\u0437\u043B\u0435 \u0438\u043C\u0435\u043D\u0438 \u043D\u0443\u0436\u043D\u043E \u043A\n                        info-sender__message-info \u0434\u043E\u0431\u0430\u0432\u0438\u0442\u044C is-active\n                        \u0430 info-sender__from-whom > button \u043D\u0443\u0436\u043D\u043E \u0437\u0430\u043C\u0435\u043D\u0438\u0442\u044C icon-arrow-down \u043D\u0430 icon-arrow-up\n                        \u043D\u0443 \u0438\u043B\u0438 \u0434\u043E\u0431\u0430\u0432\u0438\u0442\u044C btn--rotate\n                    --><div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo"><div class="info-sender__message-info-item to-whom"><span class="to-whom__title width--min60">{{ \'TO\' | translate }}</span><div class="to-round" ng-class="{\'to-round--active\': vm.isToEmail}"><div class="to-round__body"><div class="avatar avatar--settings avatar--size28 avatar--second-style"><avatar-name name="vm.message.model.to[0].name" email="vm.message.model.to[0].address"></avatar-name></div><div class="to-whom__mail-recipient" ng-click="vm.isToEmail = !vm.isToEmail">{{ vm.isToEmail ? (vm.message.model.to[0].address ? vm.message.model.to[0].address : vm.message.model.to[0].name) : (vm.message.model.to[0].name ? vm.message.model.to[0].name : vm.message.model.to[0].address) }}</div></div></div></div><div class="info-sender__message-info-item to-whom" ng-click="vm.isFromEmail = !vm.isFromEmail"><span class="to-whom__title width--min60">{{ \'FROM_WHOM_U\' | translate }}</span><div class="to-round" ng-class="{\'to-round--active\': vm.isFromEmail}"><div class="to-round__body"><div class="avatar avatar--settings avatar--size28 avatar--second-style"><avatar-name name="vm.message.model.from" email="vm.message.model.fromAddress"></avatar-name></div><div class="to-whom__mail-recipient">{{ vm.isFromEmail ? (vm.message.model.fromAddress ? vm.message.model.fromAddress : vm.message.model.from) : (vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress) }}</div></div></div></div><div class="info-sender__message-info-item to-whom"><span class="to-whom__title width--min60">{{ \'FOLDER\' | translate }}</span><div class="to-whom__folders"><div class="to-whom__folder">{{ vm.message.model.mbox | translate }}</div></div></div><div class="info-sender__message-info-item to-whom"><span class="to-whom__title width--min60">{{ \'TAGS\' | translate }}</span><div class="inbox-message__labels"><button class="info-sender__important-tags important-tags btn--not-style btn--not-events" ng-class="{\'important-tags--active\': vm.message.model.important}" type="button" ng-click="vm.setImportant()"></button><div class="inbox-message__label letter-tags letter-tags--poss-remove" style="background: {{ tag.bgcolor }}; color: {{ tag.color }}" ng-repeat="tag in vm.message.model.tags"><span class="letter-tags__name">{{ tag.tag_name }}</span> <button class="btn btn--not-style btn--circle letter-tags__icon" ng-click="vm.setUnTag(tag)"><span class="letter-tags__remove-icon icon-remove-thick"></span></button></div></div></div></div></div></div><!-- \u0410\u0442\u0442\u0430\u0447\u0438 --><div class="mail-message__mail-attachments"><div class="attachments"><div class="attachments__item" ng-repeat="attachment in vm.message.model.attachmentsData"><attach-item attach="attachment" message="vm.message.model"></attach-item></div></div></div><!-- \u0422\u0435\u043B\u043E \u0441\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F --><div class="mail-message__body"><div class="body-message"><!--\u0421\u0430\u043C\u043E \u0441\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435--><div class="body-message__content" ng-bind-html="vm.getTrustHtml(vm.message.model.body)"></div></div><div class="banner-block banner-block--size330x280"><ins class="adsbygoogle" style="display:inline-block;width:330px;height:280px" data-ad-client="a-pub-7169913763254428" data-ad-slot="6851262006"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!-- \u0411\u044B\u0441\u0442\u0440\u044B\u0439 \u043E\u0442\u0432\u0435\u0442--><div class="mail-message__reply"><form class="message-reply" name="sendForm" ng-submit="vm.send(sendForm)"><div class="message-reply__container"><div class="quick-reply"><button class="quick-reply__write btn btn--not-style icon-write"></button><div class="quick-reply__message"><div class="quick-reply__message-input" contenteditable="true" ng-model="vm.sendForm.model.body" required placeholder="{{ \'QUICK_RESPONSE\' | translate }}"></div></div><button class="quick-reply__send btn btn--not-style">{{ \'SEND_SHORT\' | translate }}</button></div></div></form></div></div><folder-layout messages="vm.messages"></folder-layout>');
+$templateCache.put('app/marketing/home/home.html','<h1>Welcome to <a ui-sref="mail.inbox({mbox: \'INBOX\'})">mail</a></h1>');
 $templateCache.put('app/components/attach-item/attach-item.html','<div class="attach-item"><div class="attach-item__body"><a ng-click="vm.openAttach()"><div class="attach-item__image" ng-if="vm.attach.mime === \'image/png\' || vm.attach.mime === \'image/jpeg\'" style="background-image: url(\'{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}\')"></div><div class="attach-item__image" ng-if="vm.attach.mime === \'image/svg+xml\'" style="background-image: url(\'{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&screen=true\')"></div><div class="attach-item__image" ng-if="vm.attach.mime === \'application/pdf\'" style="background-image: url(\'{{ vm.CONFIG.AttachUrl }}{{ vm.message.number }}?mbox={{ vm.message.mbox }}&part=attach&filename={{ vm.attach.fileName }}&token={{ vm.user.access_token }}&connection_id={{ vm.message.connection_id }}&preview=1\')"></div><div class="attach-item__image attach-item__image--file" style="background-image: url(images/attachments/{{ vm.fileFormat }}.png)"></div></a></div><div class="attach-item__name2">{{ vm.attach.title }}</div></div>');
 $templateCache.put('app/components/attach-upload/attach-upload.html','<div class="attach-upload"><div class="attach-upload__list"><div class="attach-upload__item" ng-repeat="attachment in vm.attachmentsData"><!--            <div class="attach-upload__image"\n                 ng-class="{\'attach-upload__image&#45;&#45;shadow\': attachment.mime === \'image/jpeg\' || attachment.mime === \'image/png\'}">\n                <img ng-src="{{ vm.getLink(attachment) }}"\n                     fallback-src="{{\'/images/upload-image.png\'}}"\n                     ng-if="attachment.mime === \'image/jpeg\' || attachment.mime === \'image/png\'">\n                <img src="/images/upload-file.png"\n                     ng-if="attachment.mime !== \'image/jpeg\' && attachment.mime !== \'image/png\'">\n            </div>--><div class="attach-upload__image" style="background-image: url(\'{{ vm.getLink(attachment) }}\')" ng-if="attachment.mime === \'image/jpeg\' || attachment.mime === \'image/png\'" ng-class="{\'attach-upload__image--shadow\': attachment.mime === \'image/jpeg\' || attachment.mime === \'image/png\'}"></div><div class="attach-upload__image" style="background-image: url(\'/images/upload-file.png\')" ng-if="attachment.mime !== \'image/jpeg\' && attachment.mime !== \'image/png\'"></div><div class="attach-upload__name">{{ attachment.mime.split(\'/\')[1]; }}</div><div class="attach-upload__links" ng-if="!vm.isUploading"><a class="attach-upload__delete icon-delete" href ng-click="vm.remove(attachment)"></a></div><div class="attach-upload__spinner"><spinner is-global="false" is-open="true" ng-if="vm.isUploading"></spinner></div></div></div></div>');
 $templateCache.put('app/components/avatar-name/avatar-name.html','<img class="avatar__image" src="/images/avatar-personal.svg" alt="" ng-if="!vm.firstLetter && !vm.emailLetter"><div class="avatar__symbol-image" ng-if="vm.firstLetter || vm.emailLetter"><div class="avatar__first-name">{{ vm.firstLetter ? vm.firstLetter : vm.emailLetter }}</div><div class="avatar__last-name" ng-if="vm.lastLetter">{{ vm.lastLetter }}</div></div>');
@@ -7086,5 +7093,4 @@ $templateCache.put('app/components/time-send/time-send.html','<div class="time-s
 $templateCache.put('app/components/to-date/to-date.html','<span>{{ vm.convertDate }}</span>');
 $templateCache.put('app/components/user-menu/user-menu-popover.html','<user-menu></user-menu>');
 $templateCache.put('app/components/user-menu/user-menu.html','<div class="user-menu"><div class="user-menu__body user-menu__body--bg-gray"><div class="user-menu__item"><a class="user-menu__link user-menu__link--red" href=""><div class="avatar avatar--size28"><img class="avatar__image" src="/images/avatar.png"></div><div class="user-menu__title">lovealldevelop@gmail.com</div></a></div><div class="user-menu__item"><a class="user-menu__link" href=""><svg xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" viewBox="0 0 28 28" class="dropdown-user-add-svg"><path d="M13.28,8 L14.72,8 L14.72,13.28 L20,13.28 L20,14.72 L14.72,14.72 L14.72,20 L13.28,20 L13.28,14.72 L8,14.72 L8,13.28 L13.28,13.28 L13.28,8 Z" id="+" fill-opacity="0.5"></path><path d="M28,14 C28,6.2680135 21.7319865,0 14,0 C6.2680135,0 0,6.2680135 0,14 C0,21.7319865 6.2680135,28 14,28 C21.7319865,28 28,21.7319865 28,14 Z M1,14 C1,6.82029825 6.82029825,1 14,1 C21.1797017,1 27,6.82029825 27,14 C27,21.1797017 21.1797017,27 14,27 C6.82029825,27 1,21.1797017 1,14 Z" id="Oval" fill-opacity="0.15"></path></svg><div class="user-menu__title">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F</div></a></div></div><div class="user-menu__body user-menu__body--no-mrg"><div class="user-menu__item"><a class="user-menu__link user-menu__link--hover-gray" href=""><div class="user-menu__title">\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0430\u043A\u0430\u0443\u043D\u0442\u043E\u043C</div></a></div><div class="user-menu__item"><a class="user-menu__link user-menu__link--hover-gray" href=""><div class="user-menu__title">\u041F\u043E\u043C\u043E\u0449\u044C</div></a></div><div class="user-menu__item"><a class="user-menu__link user-menu__link--hover-gray" href=""><div class="user-menu__title">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u044F\u0449\u0438\u043A</div></a></div><div class="user-menu__item"><a class="user-menu__link user-menu__link--hover-gray" href ng-click="vm.logout()"><div class="user-menu__title">\u0412\u044B\u0445\u043E\u0434</div></a></div></div></div>');
-$templateCache.put('app/components/validation-errors/validation-errors.html','<div class="validation"><div ng-messages="vm.data.$error" ng-if="vm.data.$invalid && vm.data.$submitted"><div class="validation__message validation__message--red" ng-message="{{ key }}" ng-repeat="(key, value) in vm.messages">{{ value | translate }}</div></div><div class="validation__message validation__message--red" ng-repeat="error in vm.server" ng-if="error.field == vm.data.$name">{{ error.message }}</div></div>');
-$templateCache.put('app/marketing/home/home.html','<h1>Welcome to <a ui-sref="mail.inbox({mbox: \'INBOX\'})">mail</a></h1>');}]);
+$templateCache.put('app/components/validation-errors/validation-errors.html','<div class="validation"><div ng-messages="vm.data.$error" ng-if="vm.data.$invalid && vm.data.$submitted"><div class="validation__message validation__message--red" ng-message="{{ key }}" ng-repeat="(key, value) in vm.messages">{{ value | translate }}</div></div><div class="validation__message validation__message--red" ng-repeat="error in vm.server" ng-if="error.field == vm.data.$name">{{ error.message }}</div></div>');}]);
