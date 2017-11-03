@@ -430,5 +430,6 @@
   "NO_PHONE": "Nemam telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nemam telefon",
   "PHONE_OR_EMAIL": "Telefon ili alternativni e-mail",
-  "SELECT_YOUR_NAME": "Smislite svoje korisničko ime"	
+  "SELECT_YOUR_NAME": "Smislite svoje korisničko ime",
+  "LOGOUT": "Izlaz"		
 }

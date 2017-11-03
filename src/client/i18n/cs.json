@@ -429,5 +429,6 @@
   "PHONE_OR_EMAIL": "Telefon nebo alternativní e-mail",
   "ENTER_MAIL_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš alternativní e-mail",
   "ENTER_PHONE_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš telefon",
-  "SELECT_YOUR_NAME": "Vymyslete svoje uživatelské jméno"
+  "SELECT_YOUR_NAME": "Vymyslete svoje uživatelské jméno",
+  "LOGOUT": "Odhlásit se"	
 }

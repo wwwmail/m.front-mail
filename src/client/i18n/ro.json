@@ -430,5 +430,6 @@
   "NO_PHONE": "Nu am telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nu am telefon",
   "PHONE_OR_EMAIL": "Telefonul sau e-mailul alternativ",
-  "SELECT_YOUR_NAME": "Concepeți numele dvs. utilizator"	
+  "SELECT_YOUR_NAME": "Concepeți numele dvs. utilizator",
+  "LOGOUT": "Deconectați-vă"		
 }			

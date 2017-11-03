@@ -429,5 +429,6 @@
 	"PHONE_OR_EMAIL": "Telefon ali alternativni e-naslov",
 	"ENTER_MAIL_CODE": "Za spremembo vašega gesla vnesite kodo, ki smo vam jo poslali na vaš alternativni e-naslov",
 	"ENTER_PHONE_CODE": "Za spremembo vašega gesla vnesite kodo, ki smo vam jo poslali na vaš telefon",
-	"SELECT_YOUR_NAME": "Izverite svoje uporabniško ime"
+	"SELECT_YOUR_NAME": "Izverite svoje uporabniško ime",
+	"LOGOUT": "Odjava"	
 }

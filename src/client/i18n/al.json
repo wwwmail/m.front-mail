@@ -430,5 +430,6 @@
   "NO_PHONE": "Nuk kam telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nuk kam telefon",
   "PHONE_OR_EMAIL": "Numri i telefonit ose emaili i dytë",
-  "SELECT_YOUR_NAME": "Mendoni për një emër"	
+  "SELECT_YOUR_NAME": "Mendoni për një emër",
+  "LOGOUT": "Largimi"		
 }			

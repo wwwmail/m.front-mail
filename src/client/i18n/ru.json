@@ -430,5 +430,6 @@
   "NO_PHONE": "Нет телефона",
   "PHONE_OR_ALTERNATE_EMAIL": "Нет телефона",
   "PHONE_OR_EMAIL": "Телефон или альтернативный e-mail",
-  "SELECT_YOUR_NAME": "Придумайте Ваше имя"
+  "SELECT_YOUR_NAME": "Придумайте Ваше имя",
+  "LOGOUT": "Выход"
 }
