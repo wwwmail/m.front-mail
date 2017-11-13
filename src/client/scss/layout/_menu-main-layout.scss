@@ -182,18 +182,20 @@
     color: $menu-text-color;
 
     transform: rotate(-45deg);
-    &:hover, &:active {
-      //background-color: rgba($yellow-yandex, .9);
-      color: rgba($menu-main-color, .9);
-    }
-    &:focus {
-      outline: none;
-    }
+
     &:before {
-      content: "";
+      //content: "";
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    &:hover, &:active {
+      color: rgba($menu-main-color, .9);
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 

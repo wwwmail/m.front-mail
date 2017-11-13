@@ -14,23 +14,23 @@
         vm.standartFolders = [
             {
                 name: 'INBOX',
-                icon: 'icon-incoming-desk'
+                icon: 'icon-inbox'
             },
             {
                 name: 'Drafts',
-                icon: 'icon-draft-desk'
+                icon: 'icon-draft'
             },
             {
                 name: 'Trash',
-                icon: 'icon-bin-desk'
+                icon: 'icon-basket'
             },
             {
                 name: 'Sent',
-                icon: 'icon-sent-desk'
+                icon: 'icon-sent'
             },
             {
                 name: 'Junk',
-                icon: 'icon-spam-desk'
+                icon: 'icon-spam'
             },
             {
                 name: 'Outbox',

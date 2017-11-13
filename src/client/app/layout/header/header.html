@@ -20,7 +20,7 @@
             </div>
 
             <div class="main-header__right">
-                <button class="main-header__right-button search-block__icon icon-lens btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
+                <button class="main-header__right-button search-block__icon icon-search btn btn--not-style btn--main-mobile-color header__icon mrg__right padding--right"
                         type="button"
                         set-focus="search-input"
                         ng-click="vm.isSearch = true;"></button>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="main-header__left">
-                <button class="main-header__right-button icon-cancel btn btn--not-style btn--size_xl btn--main-mobile-color"
+                <button class="main-header__right-button icon-close btn btn--not-style btn--size_xl btn--main-mobile-color"
                         type="button"
                         ng-click="vm.isSearch = false; vm.clearSearch();">
                 </button>
@@ -86,7 +86,7 @@
     <div class="main-header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-cancel btn btn--not-style btn--main-mobile-color header__icon header__icon--close padding--hor12"
+                <button class="main-header__left-button icon-close btn btn--not-style btn--main-mobile-color header__icon header__icon--close padding--hor12"
                         ng-click="vm.closeCompose()">
                 </button>
             </div>
@@ -96,7 +96,7 @@
             </div>
 
             <div class="main-header__right">
-                <button class="main-header__right-button btn btn--not-style btn--mail-send header__icon mrg__right font--arial font--size15 padding--hor12 icon-send"
+                <button class="main-header__right-button btn btn--not-style btn--mail-send header__icon mrg__right font--arial font--size15 padding--hor12 icon-send-mail"
                         type="button"
                         ng-click="vm.send()"
                         ng-disabled="!vm.isSend">

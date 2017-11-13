@@ -1,6 +1,6 @@
 <div class="popup__head">
     <span class="popup__head__title">{{ 'MESSAGE_ACTION' | translate }}</span>
-    <button class="icon-cancel btn btn--not-style btn--main-mobile-color btn--size_s"
+    <button class="icon-close btn btn--not-style btn--main-mobile-color btn--size_s"
             type="button"
             ng-click="vm.close()"></button>
     <hr class="hr hr--popup">
@@ -8,7 +8,7 @@
 
 <div class="popup__content scrollables">
     <div class="popup__item" ng-click="vm.goToAnswer()">
-        <span class="icon-reply popup__icon"></span>
+        <span class="icon-replied-on popup__icon"></span>
         <span class="popup__item__title">{{ 'REPLAY' | translate }}</span>
     </div>
 
@@ -19,7 +19,7 @@
 
     <div class="popup__item"
          ng-click="vm.goToFwd()">
-        <span class="icon-forward popup__icon"></span>
+        <span class="icon-send-on popup__icon"></span>
         <span class="popup__item__title">{{ 'FORWARD' | translate }}</span>
     </div>
 
@@ -38,18 +38,18 @@
     </div>
 
     <div class="popup__item" ng-click="vm.triggerSeen()">
-        <span class="icon-unread popup__icon"></span>
+        <span class="icon-email popup__icon"></span>
         <span class="popup__item__title" ng-if="!vm.message.seen">{{ 'READ' | translate }}</span>
         <span class="popup__item__title" ng-if="vm.message.seen">{{ 'NOT_READ' | translate }}</span>
     </div>
 
     <div class="popup__item" ng-click="vm.openLayoutFolder()">
-        <span class="icon-folder popup__icon"></span>
+        <span class="icon-folders popup__icon"></span>
         <span class="popup__item__title">{{ 'IN_FOLDER' | translate }}</span>
     </div>
 
     <div class="popup__item" ng-click="vm.openTagListPopup()">
-        <span class="icon-tag popup__icon"></span>
+        <span class="icon-markers popup__icon"></span>
         <span class="popup__item__title">{{ 'TAGS' | translate }}</span>
     </div>
 
@@ -78,7 +78,7 @@
         </div>-->
 
     <div class="popup__item" ng-click="vm.setImportant()">
-        <span class="icon-important-solid popup__icon color--semi-dark-red"></span>
+        <span class="icon-flagged_bg popup__icon color--semi-dark-red"></span>
         <span class="popup__item__title" ng-if="!vm.message.important">{{ 'IMPORTANT_ONE' | translate }}</span>
         <span class="popup__item__title" ng-if="vm.message.important">{{ 'NO_IMPORTANT_ONE' | translate }}</span>
     </div>

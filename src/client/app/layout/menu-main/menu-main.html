@@ -6,7 +6,7 @@
         <button class="menu-main-layout__button-close btn"
                 type="button"
                 ng-click="vm.closeMenu()">
-            <span class="icon-double-arrow-left"></span>
+            <span class="icon-back"></span>
         </button>
     </div>
 
@@ -47,7 +47,7 @@
                                      email="vm.user.profile.email">
                         </avatar-name>
 
-                        <button class="menu-main-layout__add-btn  icon-cancel btn--circle btn--size_40 rotate--am90"
+                        <button class="menu-main-layout__add-btn icon-close btn--circle btn--size_40 rotate--am90"
                                 type="button"
                                 ui-sref="signIn()">
                         </button>
@@ -101,7 +101,7 @@
                                    ng-click="vm.closeMenu();"
                                    ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})"
                                    ui-sref-active="menu-main__link--active">
-                                    <span class="icon-folder-desk menu-main__icon"></span>
+                                    <span class="icon-to-a-folder menu-main__icon"></span>
                                     <span class="menu-main__title">
                                         {{ folderSub.name | translate }}
                                     </span>
@@ -125,21 +125,21 @@
                     ui-sref="mail.inbox({mbox: undefined, filter: 'attach', tag_id: undefined})"
                     ui-sref-active="menu-main-filter__item--active"
                     ng-click="vm.closeMenu();">
-                    <span class="icon-icon-screpka menu-main-filter__icon"></span>
+                    <span class="icon-affix menu-main-filter__icon"></span>
                 </li>
                 <li class="menu-main-filter__item">
                     <a class="menu-main-filter__link"
                        ui-sref="mail.inbox({mbox: undefined, filter: 'unseen', tag_id: undefined})"
                        ui-sref-active="menu-main-filter__item--active"
                        ng-click="vm.closeMenu();">
-                        <span class="icon-icon-mail-light menu-main-filter__icon"></span>
+                        <span class="icon-email menu-main-filter__icon"></span>
                     </a>
                 </li>
                 <li class="menu-main-filter__item"
                     ui-sref="mail.inbox({mbox: undefined, filter: 'flagged', tag_id: undefined})"
                     ui-sref-active="menu-main-filter__item--active"
                     ng-click="vm.closeMenu();">
-                    <span class="important-tags menu-main-filter__icon"></span>
+                    <span class="icon-flagged menu-main-filter__icon"></span>
                 </li>
             </ul>
         </div>
@@ -154,7 +154,7 @@
                     <a class="menu-main__link"
                        ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})"
                        ng-click="vm.closeMenu();">
-                        <span class="icon-tag-solid menu-main__icon menu-main__icon--select"
+                        <span class="icon-marker-mobile-bg menu-main__icon menu-main__icon--select"
                               style="color: {{ tag.bgcolor }}"></span>
                         <span class="menu-main__title">{{ tag.tag_name }}</span>
                     </a>
@@ -183,7 +183,7 @@
                     <a class="menu-main__link"
                        ng-click="vm.goToDesktopVersion('/settings/main?version=desktop')"
                        target="_blank">
-                        <span class="icon-settings-desk menu-main__icon"></span>
+                        <span class="icon-settings menu-main__icon"></span>
                         <span class="menu-main__title">{{ 'SETTING' | translate }}</span>
                     </a>
                 </div>
@@ -193,7 +193,7 @@
                     <a class="menu-main__link"
                        ng-click="vm.logout()"
                        target="_blank">
-                        <span class="icon-settings-desk menu-main__icon"></span>
+                        <span class="icon-settings menu-main__icon"></span>
                         <span class="menu-main__title">{{ 'LOGOUT' | translate }}</span>
                     </a>
                 </div>

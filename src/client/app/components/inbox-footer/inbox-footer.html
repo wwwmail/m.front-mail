@@ -45,7 +45,7 @@
                         <span class="font--arial font--size14 mrg__top5">{{ 'NOT_SPAM' | translate }}</span>
                     </button>
 
-                    <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-unread font--size20 flex flex--column align-items--cn padding"
+                    <button class="inbox-footer__group-option-item btn btn--not-style btn--not-events icon-email font--size20 flex flex--column align-items--cn padding"
                             type="button" ng-click="vm.triggerSeen()">
                         <span class="font--arial font--size14 mrg__top5" ng-if="vm.isSeen">{{ 'NOT_READ' | translate }}</span>
                         <span class="font--arial font--size14 mrg__top5" ng-if="!vm.isSeen">{{ 'READ' | translate }}</span>
@@ -58,12 +58,12 @@
                     </button>
 
                     <!-- вторичные кнопки-->
-                    <button class="inbox-footer__group-option-item btn btn--not-style icon-folder font--size20 flex flex--column align-items--cn padding"
+                    <button class="inbox-footer__group-option-item btn btn--not-style icon-folders font--size20 flex flex--column align-items--cn padding"
                             type="button" ng-click="vm.openLayoutFolder()">
                         <span class="font--arial font--size14 mrg__top5">{{ 'IN_FOLDER' | translate }}</span>
                     </button>
 
-                    <button class="inbox-footer__group-option-item btn btn--not-style icon-tag font--size20 flex flex--column align-items--cn padding"
+                    <button class="inbox-footer__group-option-item btn btn--not-style icon-markers font--size20 flex flex--column align-items--cn padding"
                             type="openTagListPopup"
                             ng-click="vm.openTagListPopup()">
                         <span class=" font--arial font--size14 mrg__top5">{{ 'TAGS' | translate }}</span>

@@ -1,19 +1,14 @@
 .important-tags {
   position: relative;
 
+  font-family: 'icons-font' !important;
   color: $important-tags-color;
 
-  &:before {
-    content: "\e91e";
-    font-family: 'icomoon' !important;
-  }
+  @extend .icon-flagged;
 
   &--active {
-    color:$important-tags-active-color;
+    color: $important-tags-active-color;
 
-    &:before {
-      content: "\e91f";
-      font-family: 'icomoon' !important;
-    }
+    @extend .icon-flagged_bg;
   }
 }

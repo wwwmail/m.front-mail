@@ -20,7 +20,7 @@
 
                         <div class="info-sender__title">
                             <div class="info-sender__from-whom">
-                                <div class="info-sender__important-tags info-sender__important-tags--small-title important-tags--active"
+                                <div class="info-sender__important-tags info-sender__important-tags--small-title important-tags important-tags--active"
                                      ng-if="vm.message.model.important"></div>
                                 {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
                                 <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 padding--right_2 padding--left_2 mrg__left5"
@@ -44,7 +44,7 @@
                             <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
                                  ng-if="vm.$state.params.mbox === 'Trash'"
                                  ng-click="vm.destroy({name: 'Trash'})"></div>
-                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-reply padding--right"
+                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-replied-on padding--right"
                                  ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></div>
                         </div>
                     </div>
