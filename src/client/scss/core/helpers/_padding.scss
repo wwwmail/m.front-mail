@@ -1,0 +1,34 @@
+.padding{
+
+  padding: 0!important;
+  &--all_2{
+    padding: 2px;
+  }
+  &--left{
+    padding-left: 0!important;
+  }
+  &--right{
+    padding-right: 0!important;
+  }
+
+  &--rignt_2{
+    padding-right: 2px!important;
+  }
+
+  &--rignt_30{
+    padding-right: 30px!important;
+  }
+
+  &--left_2{
+    padding-left: 2px!important;
+  }
+
+  &--left_12{
+    padding-left: 12px!important;
+  }
+
+  &--hor12{
+    padding: 0 12px!important;
+  }
+
+}

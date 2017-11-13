@@ -3,11 +3,26 @@
 @import "compass/css3/transform";
 @import "compass/css3/box-shadow";
 @import "compass/css3";
+
+/*------------------------------------------- core*/
 @import 'core/mixins';
 @import 'core/vars';
 @import 'core/color';
 @import 'core/helper';
 @import 'core/fonts';
+
+/*------------------------------------------- helpers*/
+@import 'core/helpers/position';
+@import 'core/helpers/margin';
+@import 'core/helpers/padding';
+@import 'core/helpers/font';
+@import 'core/helpers/flex-box';
+
+/*------------------------------------------- icons*/
+@import 'icons/icons';
+@import "icons/icons-font";
+
+/*------------------------------------------- layout*/
 @import 'layout/layout';
 @import 'layout/menu-main';
 @import 'layout/menu-main-filter';
@@ -23,6 +38,8 @@
 @import 'layout/mail-message';
 @import "layout/password-reset-layout";
 @import "layout/folders-layout";
+
+/*------------------------------------------- ui*/
 @import 'ui/checked';
 @import 'ui/hr';
 @import 'ui/btn-y';
@@ -45,6 +62,8 @@
 @import "ui/radiobutton";
 @import "ui/select-list";
 @import "ui/m-input";
+
+/*------------------------------------------- components*/
 @import "components/search-block";
 @import "components/validation";
 @import 'components/avatar';
@@ -85,7 +104,6 @@
 @import "components/palette-list";
 @import "components/important-tags";
 @import "components/inbox-message-list";
-@import 'font-icons/icomoon';
 @import "components/tag-contact";
 @import "components/attach-upload";
 @import "components/attach-item";

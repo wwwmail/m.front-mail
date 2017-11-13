@@ -1,0 +1,97 @@
+.font {
+  &--helvetica{
+    font-family: $mainFont!important;
+
+  }
+  &--arial{
+    font-family: $mainThreeFont!important;
+  }
+
+  &--verdana{
+    font-family: $mainSecondFont!important;
+  }
+
+  &--size7 {
+    font-size: 7px !important;
+  }
+
+  &--size8 {
+    font-size: 8px !important;
+  }
+
+  &--size9 {
+    font-size: 9px !important;
+  }
+
+  &--size10 {
+    font-size: 10px !important;
+  }
+
+  &--size11 {
+    font-size: 11px !important;
+  }
+
+  &--size12 {
+    font-size: 12px !important;
+  }
+
+  &--size13 {
+    font-size: 13px !important;
+  }
+
+  &--size14 {
+    font-size: 14px !important;
+  }
+
+  &--size15 {
+    font-size: 15px !important;
+  }
+
+  &--size16 {
+    font-size: 16px !important;
+  }
+
+  &--size18 {
+    font-size: 18px !important;
+  }
+  &--size20 {
+    font-size: 20px !important;
+  }
+  &--size21 {
+    font-size: 21px !important;
+  }
+
+  &--center {
+    text-align: center!important;
+  }
+
+  &--right {
+    text-align: right!important;
+  }
+
+  &--left {
+    text-align: left!important;
+  }
+
+  &--bold {
+    font-weight: bold!important;
+  }
+
+  &--normal {
+    font-weight: normal!important;
+  }
+
+  &--weidth-Light{
+    font-weight: 300!important;
+  }
+
+  &--weidth-UltraLight{
+    font-weight: 200!important;
+
+  }
+
+  &--weidth-r{
+
+  }
+
+}
