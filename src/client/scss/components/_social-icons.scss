@@ -1,70 +1,89 @@
-.social-icons{
+.social-icons {
   display: inline-flex;
 
   width: 268px;
   justify-content: space-between;
   margin: auto;
 
-  &__icon{
-    position: relative ;
+  &__icon {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 45px;
     height: 45px;
 
+    font-size: 20px;
+    color: $white-color;
+
     border: none;
-    @include border-radius(50%);
+    border-radius: 50%;
 
-    background-size: 24px;
-    background-position: center center;
+    transition: all .4s;
 
-    &:hover{
+    &:hover {
       opacity: .8;
     }
 
+    &--s34 {
+      width: 34px;
+      height: 34px;
+
+      font-size: 18px;
+    }
+
+    &--border-yellow {
+      border: 2px solid transparent;
+
+      &:hover {
+        color: $white-color;
+
+        border-color: $yellow-yandex;
+
+        opacity: .9;
+      }
+    }
   }
 
-  &--vk-icon{
-    @extend .icon-soc-icon-vk;
+  &--vk {
     background-color: $vk;
   }
-  &--fb-icon{
-    @extend .icon-soc-icon-fb;
+  &--fb {
     background-color: $fb;
   }
-  &--tw-icon{
-    @extend .icon-soc-icon-tw;
+  &--tw {
     background-color: $tw;
   }
-  &--gp-icon{
-    @extend .icon-soc-icon-gp;
+  &--gp {
     background-color: $gp;
   }
+  &--ln {
+    background-color: $ln;
+  }
 
-  &--btn-tied{
-    &:before{
+  &--btn-tied {
+    &:before {
+      display: flex;
+      justify-content: center;
+
+      content: "×";
+
       position: absolute;
-      top:-1px;
+      top: -1px;
       right: -1px;
 
       width: 16px;
       height: 16px;
 
-      content: "×";
       color: $red-remove-color;
       font: 100 14px/1 sans-serif;
       text-align: center;
       margin: auto;
-      display: flex;
-      justify-content: center;
-
 
       @include border-radius(50%);
       background: #fff;
-
     }
-
   }
-
-
-
-
 }

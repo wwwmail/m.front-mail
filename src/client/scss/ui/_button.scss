@@ -286,6 +286,25 @@
   }
 }
 
+.view-pass {
+  padding: 0 8px;
+  opacity: .5;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:active {
+    background: transparent;
+  }
+
+  &--right-input {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
 .btn-arrow {
   position: absolute;
   right: 1px;

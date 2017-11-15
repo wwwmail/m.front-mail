@@ -9,7 +9,7 @@
     <div class="inbox-message__left">
         <label ng-click="$event.stopPropagation();">
             <div class="inbox-message__avatar">
-                <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg__auto">
+                <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg--auto">
                     <avatar-name name="vm.message.from"
                                  email="vm.message.fromAddress"
                                  ng-if="vm.$state.params.mbox !== 'Sent' && vm.$state.params.mbox !== 'Drafts'"></avatar-name>
@@ -50,12 +50,14 @@
                 {{ vm.message.to[0].address }}
             </div>
 
-            <div class="inbox-message__attach" ng-if="vm.message.attachments">
-                <span class="icon-affix"></span>
-            </div>
+            <div class="inbox-message__head-right">
+                <div class="inbox-message__attach" ng-if="vm.message.attachments">
+                    <span class="icon-affix"></span>
+                </div>
 
-            <div class="inbox-message__data">
-                <to-date date="vm.message.date.date" is-small="true"></to-date>
+                <div class="inbox-message__data">
+                    <to-date date="vm.message.date.date" is-small="true"></to-date>
+                </div>
             </div>
         </div>
 
@@ -72,14 +74,20 @@
                 <span class="letter-tags__name">{{ tag.tag_name }}</span>
 
                 <!--<span class="letter-tags__icon icon-label-message font&#45;&#45;size21" style="color: {{ tag.bgcolor }}"></span>-->
-
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 36" id="ico_label-message"  class="letter-tags__icon" >
-                    <!--<use xlink:href="#ico_label-message" style="fill: {{ tag.bgcolor }}"></use>-->
-                    <g >
-                        <path class="" style="fill: {{ tag.bgcolor }}" d="M29.7532378,33.5724399 C28.7839322,34.9145554 26.6584255,36 25.0035095,36 L2.99649048,36 C1.3504982,36 0,34.6535323 0,32.9925801 L0,3.00741988 C0,1.34553934 1.34157448,0 2.99649048,0 L25.0035095,0 C26.6495018,0 28.7849513,1.08685567 29.7532378,2.42756009 L39.2467622,15.5724399 C40.2160678,16.9145554 40.2150487,19.0868557 39.2467622,20.4275601 L29.7532378,33.5724399 L29.7532378,33.5724399 Z M26,14 C28.209139,14 30,15.790861 30,18 C30,20.209139 28.209139,22 26,22 C23.790861,22 22,20.209139 22,18 C22,15.790861 23.790861,14 26,14 L26,14 Z">
-                        </path>
-                    </g>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve" id="ico_label-message"  class="letter-tags__icon" >
+                <path class="" style="fill: {{ tag.bgcolor }}" d="M8.2,0H0v16h8.2c7.7,0,7.8-7.9,7.8-7.9C16,0.1,8.3,0,8.2,0z M8,5.8c1.2,0,2.2,1,2.2,2.2c0,1.2-1,2.2-2.2,2.2S5.8,9.2,5.8,8
+                    C5.8,6.8,6.8,5.8,8,5.8z"/>
                 </svg>
+
+
+                <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 36" id="ico_label-message"  class="letter-tags__icon" >-->
+                    <!--&lt;!&ndash;<use xlink:href="#ico_label-message" style="fill: {{ tag.bgcolor }}"></use>&ndash;&gt;-->
+                    <!--<g >-->
+                        <!--<path  d="M29.7532378,33.5724399 C28.7839322,34.9145554 26.6584255,36 25.0035095,36 L2.99649048,36 C1.3504982,36 0,34.6535323 0,32.9925801 L0,3.00741988 C0,1.34553934 1.34157448,0 2.99649048,0 L25.0035095,0 C26.6495018,0 28.7849513,1.08685567 29.7532378,2.42756009 L39.2467622,15.5724399 C40.2160678,16.9145554 40.2150487,19.0868557 39.2467622,20.4275601 L29.7532378,33.5724399 L29.7532378,33.5724399 Z M26,14 C28.209139,14 30,15.790861 30,18 C30,20.209139 28.209139,22 26,22 C23.790861,22 22,20.209139 22,18 C22,15.790861 23.790861,14 26,14 L26,14 Z">-->
+                        <!--</path>-->
+                    <!--</g>-->
+                <!--</svg>-->
             </div>
         </div>
     </div>

@@ -77,14 +77,37 @@
     border: none;
   }
 
+  &--focus-icon {
+    &:focus + .input-icon {
+      border-color: $yellow-yandex;
+    }
+  }
+
 }
 
 .input-plash {
   position: absolute;
   right: 7px;
+  z-index: 1;
 
   color: $sillver-input-plsah-color;
   line-height: 1;
+
+  &--box {
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 2px 10px;
+
+    text-align: center;
+
+    background-color: #eee;
+    border-left: 1px solid #ccc;
+  }
 
   &--top11 {
     top: calc(50% - (11px / 2));
@@ -110,6 +133,27 @@
   &--top18 {
     top: calc(50% - (18px / 2));
   }
+
+}
+
+.input-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  width: 32px;
+  height: 32px;
+
+  padding-right: 2px;
+
+  font-size: 16px;
+  color: $white-color;
+
+  border: 2px solid #596572;
+  border-right: none !important;
+
+  background-color: #596572;
 }
 
 .input-data-valide-test {

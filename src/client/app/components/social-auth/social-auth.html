@@ -1,24 +1,16 @@
 <div class="social-auth">
-    <div class="social-auth__row">
-        <div class="social-auth__item">
-            <a href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=facebook">
-                <img class="" src="/images/social/icon-32x32-fb.png">
-            </a>
-        </div>
-        <div class="social-auth__item">
-            <a href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=google">
-                <img class="" src="/images/social/icon-32x32-google.png">
-            </a>
-        </div>
-        <div class="social-auth__item">
-            <a href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=twitter">
-                <img class="" src="/images/social/icon-32x32-twitter.png">
-            </a>
-        </div>
-        <div class="social-auth__item">
-            <a href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=linkedin">
-                <img class="" src="/images/social/icon-32x32-linkedin.png">
-            </a>
-        </div>
+    <div class=" social-icons width--inh">
+        <a class="social-icons__icon social-icons__icon--s34 social-icons__icon--border-yellow social-icons--fb" href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=facebook">
+            <span class="icon-soc-fb"></span>
+        </a>
+        <a class="social-icons__icon social-icons__icon--s34 social-icons__icon--border-yellow social-icons--gp" href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=google">
+            <span class="icon-soc-g"></span>
+        </a>
+        <a class="social-icons__icon social-icons__icon--s34 social-icons__icon--border-yellow social-icons--tw" href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=twitter">
+            <span class="icon-soc-tw"></span>
+        </a>
+        <a class="social-icons__icon social-icons__icon--s34 social-icons__icon--border-yellow social-icons--ln" href="{{ vm.CONFIG.APIHost }}/auth/social?authclient=linkedin">
+            <span class="icon-soc-in"></span>
+        </a>
     </div>
 </div>

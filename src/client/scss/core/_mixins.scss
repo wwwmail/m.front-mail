@@ -24,3 +24,10 @@
     @content
   }
 }
+
+//Unification mixin for helpers width
+@mixin unify-sizer-modifier($selectorName, $property, $size) {
+  &--#{$selectorName} {
+    #{$property}: $size!important;
+  }
+}

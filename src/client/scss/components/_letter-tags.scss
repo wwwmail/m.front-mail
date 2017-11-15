@@ -24,18 +24,19 @@
     .letter-tags__icon{
 
       position: absolute;
-      top: 2px;
+      top: calc(50% - (14px/2));
+
       right: 3px;
 
-      height: 15px;
-      width: 15px;
+      height: 14px;
+      width: 14px;
 
       z-index: 3;
 
       margin-top: 0;
       padding: 0;
-
-      font-size: 6px;
+      //
+      //font-size: 6px;
 
       background: $white-color;
 

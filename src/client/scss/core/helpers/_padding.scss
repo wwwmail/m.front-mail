@@ -1,34 +1,21 @@
-.padding{
+.pdd {
+  @include unify-sizer-modifier(none, padding, 0);
 
-  padding: 0!important;
-  &--all_2{
-    padding: 2px;
-  }
-  &--left{
-    padding-left: 0!important;
-  }
-  &--right{
-    padding-right: 0!important;
-  }
+  /* --------------------------------------------------------------------  top */
+    @include unify-sizer-modifier(t0, padding-top, 0);
+    @include unify-sizer-modifier(t10, padding-top, 10px);
 
-  &--rignt_2{
-    padding-right: 2px!important;
-  }
+  /* -------------------------------------------------------------------- right */
+    @include unify-sizer-modifier(r0, padding-right, 0);
+    @include unify-sizer-modifier(r2, padding-right, 2px);
+    @include unify-sizer-modifier(r30, padding-right, 3px);
 
-  &--rignt_30{
-    padding-right: 30px!important;
-  }
+  /* -------------------------------------------------------------------- bottom */
+    @include unify-sizer-modifier(b0, padding-bottom, 0);
 
-  &--left_2{
-    padding-left: 2px!important;
-  }
-
-  &--left_12{
-    padding-left: 12px!important;
-  }
-
-  &--hor12{
-    padding: 0 12px!important;
-  }
-
+  /* -------------------------------------------------------------------- left */
+    @include unify-sizer-modifier(l0, padding-left, 0);
+    @include unify-sizer-modifier(l2, padding-left, 2px);
+    @include unify-sizer-modifier(l12, padding-left, 12px);
+    @include unify-sizer-modifier(l38, padding-left, 38px);
 }

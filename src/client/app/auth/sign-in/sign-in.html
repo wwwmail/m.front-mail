@@ -2,7 +2,6 @@
 
     <div class="auth-layout__content">
         <div class="auth-layout__form">
-
             <div class="card card--black">
                 <div class="text-center" ng-if="vm.isTokenAuthLoading">
                     <spinner is-global="false"
@@ -10,26 +9,35 @@
                 </div>
 
                 <div class="auth-form" ng-if="!vm.isTokenAuthLoading">
-                    <div class="auth-form__logo mrg__bottom16">
+                    <div class="auth-form__logo mrg--b16">
                         <a href="{{ vm.CONFIG.parentHost }}">
-                            <img class="img-responsive mrg__auto"
+                            <img class="img-responsive mrg--auto"
                                  src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-white.svg"
                                  style="width: 141px;"
                                  logo-hover>
                         </a>
-                        <hr class="hr hr--auth mrg__top16">
+                        <hr class="hr hr--auth mrg--t16">
                     </div>
-                    <form class="form form--dark form--validation" name="userForm" ng-submit="vm.login(userForm)" novalidate>
+
+                    <form class="form form--dark form--validation" name="userForm" ng-submit="vm.login(userForm) " novalidate>
                         <!-- логин -->
-                        <div class="form__field-item mrg__bottom10">
-                            <div class="field-style position">
-                                <span class="input-plash input-plash--top13 font__size13">@mail.{{ CONFIG.domainZone }}</span>
-                                <input class="input input--size_l input--up-shadow width--inh"
-                                       type="text"
-                                       placeholder="{{ 'INPUT_PLACEHOLDER_LOGIN' | translate }}"
-                                       ng-model="vm.userForm.model.username"
-                                       login-format
-                                       required>
+                        <div class="form__field-item mrg--b20">
+                            <div class="field-style field-style--light position">
+                                <div class="field-style__group field-style__focus">
+                                    <span class="input-plash input-plash--top13 font--size13">@mail.cz</span>
+
+                                    <input class="input input--size_l input--up-shadow input--focus-icon width--inh font--size12 pdd--l38 pdd--r70"
+                                           type="text"
+                                           placeholder="{{ 'INPUT_PLACEHOLDER_LOGIN' | translate }}"
+                                           ng-model="vm.userForm.model.username"
+                                           login-format
+                                           required>
+
+                                    <div class="input-icon flex">
+                                        <span class="icon-email mrg--auto"></span>
+                                    </div>
+                                </div>
+
                                 <validation-errors data="userForm.username"
                                                    messages="vm.userForm.validations.username">
                                 </validation-errors>
@@ -37,75 +45,89 @@
                         </div>
 
                         <!-- пароль -->
-                        <div class="form__field-item mrg__bottom10">
-                            <div class="field-style">
-                                <input class="input input--size_l input--up-shadow width--inh"
-                                       type="password"
-                                       ng-model="vm.userForm.model.password" required placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}">
+                        <div class="form__field-item mrg--b10">
+                            <div class="field-style field-style--light">
+                                <div class="field-style__group field-style__focus">
+                                    <input class="input input--size_l input--up-shadow input--focus-icon width--inh font--size12 pdd--l38"
+                                           type="{{ vm.isPasswordShow ? 'text' : 'password' }}"
+                                           ng-model="vm.userForm.model.password" required
+                                           placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}">
+
+                                    <div class="input-icon flex">
+                                        <span class="icon-password mrg--auto"></span>
+                                    </div>
+
+                                    <button class="btn btn--not-style btn--size_l font--size18 view-pass view-pass--right-input flex"
+                                            type="button"
+                                            ng-click="vm.isPasswordShow = !vm.isPasswordShow">
+                                        <span class="icon-show-password mrg--auto"
+                                              ng-class="{'icon-hide-password' : vm.isPasswordShow, 'icon-show-password' : !vm.isPasswordShow }"></span>
+                                    </button>
+                                </div>
                             </div>
                             <validation-errors data="userForm.password"
                                                messages="vm.userForm.validations.password">
                             </validation-errors>
                         </div>
 
-                        <!-- войти -->
-                        <div class="form__field-item mrg__bottom10">
-                            <div class="field-style text-center">
-                                <button class="btn btn--size_l btn--yellow width--inh" type="submit"
-                                        ng-if="!vm.userForm.isLoading">{{ 'SING_IN' | translate }}</button>
-                                <div ng-if="vm.userForm.isLoading">
-                                    <spinner is-global="false"
-                                             is-open="true"></spinner>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="validation mrg__bottom10" ng-if="vm.userForm.errors">
+                        <!-- Валидация-->
+                        <div class="validation validation--form-auth" ng-if="vm.userForm.errors">
                             <div class="validation__message validation__message--red">
                                 {{ vm.userForm.errors | translate }}
                             </div>
                         </div>
 
+                        <!-- войти -->
+                        <div class="form__field-item pdd--t10 mrg--b20">
+                            <div class="field-style field-style--light text-center">
+                                <button class="btn btn--size_l btn--yellow width--inh" type="submit"
+                                        ng-if="!vm.userForm.isLoading">{{ 'SING_IN' | translate }}
+                                </button>
+                                <div ng-if="vm.userForm.isLoading">
+                                    <spinner is-global="false"
+                                             is-open="true">
+                                    </spinner>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- запомнить / забыли-->
-                        <div class="form__field-item mrg__bottom10 flex flex--just-s-a">
+                        <div class="form__field-item mrg--b10 flex flex--just-s-a">
                             <div class="field-style widtn--inh">
                                 <!--наш чекбокс -->
                                 <label class="checkbox-y__label checkbox-y" for="isChecked">
                                     <input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked"
                                            ng-model="isChecked">
                                     <div class="checkbox-y__body">
-                                            <span class="checkbox-y__icon">
-                                            </span>
+                                        <span class="checkbox-y__icon">
+                                        </span>
                                     </div>
                                     <span class="checkbox__text color--white" role="presentation">
                                         {{'REMEMBER_ME' | translate }}
                                     </span>
                                 </label>
                             </div>
-                            <div class="field-style widtn--inh font__right">
-                                <a class="link link--yellow" ui-sref="passwordReset">{{ 'FORGOT_YOUR_PASSWORD' | translate }}</a>
+                            <div class="field-style widtn--inh font--right">
+                                <a class="link link--yellow" ui-sref="passwordReset">
+                                    {{ 'FORGOT_YOUR_PASSWORD' | translate }}
+                                </a>
                             </div>
                         </div>
-
-
                     </form>
 
                     <hr class="hr hr--auth ">
 
                     <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" ui-sref="signUp">{{ 'CHECK_IN' | translate }}</button>
 
-                    <div class="text-center mrg__top20">
+                    <div class="text-center mrg--t20">
                         <social-auth></social-auth>
                     </div>
-
                 </div>
             </div>
-
         </div>
 
         <!-- футтер на странице авторизации-->
         <div class="footer footer__auth">
-
             <!-- Копирайт-->
             <div class="footer__copyright">
                 <span class="">© 2001—2017 «Mail.{{ vm.CONFIG.domainZone }}» Group a.s.</span>
@@ -118,18 +140,16 @@
                         <div class="navigation__item">
                             <!--<a class="navigation__link navigation__link&#45;&#45;footer-a" href="">Контакты</a>-->
                         </div>
-
                     </div>
                 </div>
             </div>
 
             <!-- Дополнительное меню с выбором языка-->
-            <div class="footer__right-menu  mrg__right">
+            <div class="footer__right-menu  mrg--right">
 
                 <div class="navigation">
                     <div class="navigation__row">
                         <div class="navigation__item position width--size28">
-
                             <!-- Языковое меню-->
                             <choice-language></choice-language>
 
@@ -152,3 +172,213 @@
 </div>
 
 
+<!--<div class="auth-layout hide">-->
+    <!--<div class="auth-layout__content">-->
+        <!--<header-auth></header-auth>-->
+
+        <!--<div class="auth-layout__form">-->
+            <!--<div class="card card&#45;&#45;black">-->
+                <!--<div class="text-center" ng-if="vm.isTokenAuthLoading">-->
+                    <!--<spinner is-global="false"-->
+                             <!--is-open="true">-->
+                    <!--</spinner>-->
+                <!--</div>-->
+
+                <!--<div class="auth-form" ng-if="!vm.isTokenAuthLoading">-->
+                    <!--<div class="auth-form__logo mrg&#45;&#45;b16">-->
+                        <!--<a href="{{ vm.CONFIG.parentHost }}">-->
+                            <!--<img class="img-responsive mrg&#45;&#45;auto"-->
+                                 <!--src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-white.svg"-->
+                                 <!--style="width: 141px;"-->
+                                 <!--logo-hover>-->
+                        <!--</a>-->
+                        <!--<hr class="hr hr&#45;&#45;auth mrg&#45;&#45;t16">-->
+                    <!--</div>-->
+                    <!--<form class="form form&#45;&#45;dark form&#45;&#45;validation" name="userForm" ng-submit="vm.login(userForm)"-->
+                          <!--novalidate>-->
+                        <!--&lt;!&ndash; логин &ndash;&gt;-->
+                        <!--<div class="form__field-item mrg&#45;&#45;b20">-->
+                            <!--<div class="field-style field-style&#45;&#45;light position">-->
+                                <!--<div class="field-style__group field-style__focus">-->
+                                    <!--<span class="input-plash input-plash&#45;&#45;top13 font&#45;&#45;size13">@mail.cz</span>-->
+
+                                    <!--<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow input&#45;&#45;focus-icon width&#45;&#45;inh font&#45;&#45;size12 pdd&#45;&#45;l38 pdd&#45;&#45;r70"-->
+                                           <!--type="text"-->
+                                           <!--placeholder="{{ 'INPUT_PLACEHOLDER_LOGIN' | translate }}"-->
+                                           <!--ng-model="vm.userForm.model.username"-->
+                                           <!--login-format-->
+                                           <!--required>-->
+
+                                    <!--<div class="input-icon flex">-->
+                                        <!--<span class="icon-email mrg&#45;&#45;auto"></span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <!--<validation-errors data="userForm.username"-->
+                                                   <!--messages="vm.userForm.validations.username">-->
+                                <!--</validation-errors>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--&lt;!&ndash; пароль &ndash;&gt;-->
+                        <!--<div class="form__field-item mrg&#45;&#45;b10">-->
+                            <!--<div class="field-style field-style&#45;&#45;light">-->
+                                <!--<div class="field-style__group field-style__focus">-->
+                                    <!--<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow input&#45;&#45;focus-icon width&#45;&#45;inh font&#45;&#45;size12 pdd&#45;&#45;l38"-->
+                                           <!--type="{{ vm.isPasswordShow ? 'text' : 'password' }}"-->
+                                           <!--ng-model="vm.userForm.model.password" required-->
+                                           <!--placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}">-->
+
+                                    <!--<div class="input-icon flex">-->
+                                        <!--<span class="icon-password mrg&#45;&#45;auto"></span>-->
+                                    <!--</div>-->
+
+                                    <!--<button class="btn btn&#45;&#45;not-style btn&#45;&#45;size_l font&#45;&#45;size18 view-pass view-pass&#45;&#45;right-input flex"-->
+                                            <!--type="button"-->
+                                            <!--ng-click="vm.isPasswordShow = !vm.isPasswordShow">-->
+                                        <!--<span class="icon-show-password mrg&#45;&#45;auto"-->
+                                              <!--ng-class="{'icon-hide-password' : vm.isPasswordShow, 'icon-show-password' : !vm.isPasswordShow }"></span>-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<validation-errors data="userForm.password"-->
+                                               <!--messages="vm.userForm.validations.password">-->
+                            <!--</validation-errors>-->
+                        <!--</div>-->
+
+                        <!--&lt;!&ndash; Валидация&ndash;&gt;-->
+                        <!--<div class="validation validation&#45;&#45;form-auth" ng-if="vm.userForm.errors">-->
+                            <!--<div class="validation__message validation__message&#45;&#45;red">-->
+                                <!--{{ vm.userForm.errors | translate }}-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--&lt;!&ndash; войти &ndash;&gt;-->
+                        <!--<div class="form__field-item pdd&#45;&#45;t10 mrg&#45;&#45;b20">-->
+                            <!--<div class="field-style field-style&#45;&#45;light text-center">-->
+                                <!--<button class="btn btn&#45;&#45;size_l btn&#45;&#45;yellow width&#45;&#45;inh" type="submit"-->
+                                        <!--ng-if="!vm.userForm.isLoading">{{ 'SING_IN' | translate }}-->
+                                <!--</button>-->
+                                <!--<div ng-if="vm.userForm.isLoading">-->
+                                    <!--<spinner is-global="false"-->
+                                             <!--is-open="true">-->
+                                    <!--</spinner>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--&lt;!&ndash; запомнить / забыли&ndash;&gt;-->
+                        <!--<div class="form__field-item mrg&#45;&#45;b10 flex flex&#45;&#45;just-s-a">-->
+                            <!--<div class="field-style widtn&#45;&#45;inh">-->
+                                <!--&lt;!&ndash;наш чекбокс &ndash;&gt;-->
+                                <!--<label class="checkbox-y__label checkbox-y" for="isChecked">-->
+                                    <!--<input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked"-->
+                                           <!--ng-model="isChecked">-->
+                                    <!--<div class="checkbox-y__body">-->
+                                        <!--<span class="checkbox-y__icon">-->
+                                        <!--</span>-->
+                                    <!--</div>-->
+                                    <!--<span class="checkbox__text color&#45;&#45;white" role="presentation">-->
+                                        <!--{{'REMEMBER_ME' | translate }}-->
+                                    <!--</span>-->
+                                <!--</label>-->
+                            <!--</div>-->
+                            <!--<div class="field-style widtn&#45;&#45;inh font&#45;&#45;right">-->
+                                <!--<a class="link link&#45;&#45;yellow" ui-sref="passwordReset">-->
+                                    <!--{{ 'FORGOT_YOUR_PASSWORD' | translate }}-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</form>-->
+
+                    <!--<hr class="hr hr&#45;&#45;auth ">-->
+
+                    <!--<button class="btn btn&#45;&#45;size_l btn&#45;&#45;normal width&#45;&#45;inh btn&#45;&#45;s-gradient" ui-sref="signUp">{{-->
+                        <!--'CHECK_IN' | translate }}-->
+                    <!--</button>-->
+
+                    <!--<div class="text-center mrg&#45;&#45;t20">-->
+                        <!--<social-auth></social-auth>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--&lt;!&ndash; футтер на странице авторизации&ndash;&gt;-->
+        <!--<footer-auth></footer-auth>-->
+    <!--</div>-->
+
+    <!--<div class="auth-layout__bg"></div>-->
+<!--</div>-->
+
+<!--<form class="form form&#45;&#45;dark form&#45;&#45;validation" name="userForm" ng-submit="vm.login(userForm)" novalidate>-->
+    <!--&lt;!&ndash; логин &ndash;&gt;-->
+    <!--<div class="form__field-item mrg&#45;&#45;b10">-->
+        <!--<div class="field-style position">-->
+            <!--<span class="input-plash input-plash&#45;&#45;top13 font__size13">@mail.{{ CONFIG.domainZone }}</span>-->
+            <!--<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow width&#45;&#45;inh"-->
+                   <!--type="text"-->
+                   <!--placeholder="{{ 'INPUT_PLACEHOLDER_LOGIN' | translate }}"-->
+                   <!--ng-model="vm.userForm.model.username"-->
+                   <!--login-format-->
+                   <!--required>-->
+            <!--<validation-errors data="userForm.username"-->
+                               <!--messages="vm.userForm.validations.username">-->
+            <!--</validation-errors>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash; пароль &ndash;&gt;-->
+    <!--<div class="form__field-item mrg&#45;&#45;b10">-->
+        <!--<div class="field-style">-->
+            <!--<input class="input input&#45;&#45;size_l input&#45;&#45;up-shadow width&#45;&#45;inh"-->
+                   <!--type="password"-->
+                   <!--ng-model="vm.userForm.model.password" required placeholder="{{ 'INPUT_PLACEHOLDER_PASSWORD' | translate }}">-->
+        <!--</div>-->
+        <!--<validation-errors data="userForm.password"-->
+                           <!--messages="vm.userForm.validations.password">-->
+        <!--</validation-errors>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash; войти &ndash;&gt;-->
+    <!--<div class="form__field-item mrg&#45;&#45;b10">-->
+        <!--<div class="field-style text-center">-->
+            <!--<button class="btn btn&#45;&#45;size_l btn&#45;&#45;yellow width&#45;&#45;inh" type="submit"-->
+                    <!--ng-if="!vm.userForm.isLoading">{{ 'SING_IN' | translate }}</button>-->
+            <!--<div ng-if="vm.userForm.isLoading">-->
+                <!--<spinner is-global="false"-->
+                         <!--is-open="true"></spinner>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="validation mrg&#45;&#45;b10" ng-if="vm.userForm.errors">-->
+        <!--<div class="validation__message validation__message&#45;&#45;red">-->
+            <!--{{ vm.userForm.errors | translate }}-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash; запомнить / забыли&ndash;&gt;-->
+    <!--<div class="form__field-item mrg&#45;&#45;b10 flex flex&#45;&#45;just-s-a">-->
+        <!--<div class="field-style widtn&#45;&#45;inh">-->
+            <!--&lt;!&ndash;наш чекбокс &ndash;&gt;-->
+            <!--<label class="checkbox-y__label checkbox-y" for="isChecked">-->
+                <!--<input class="checkbox-y__input" id="isChecked" type="checkbox" name="isChecked"-->
+                       <!--ng-model="isChecked">-->
+                <!--<div class="checkbox-y__body">-->
+                                            <!--<span class="checkbox-y__icon">-->
+                                            <!--</span>-->
+                <!--</div>-->
+                <!--<span class="checkbox__text color&#45;&#45;white" role="presentation">-->
+                                        <!--{{'REMEMBER_ME' | translate }}-->
+                                    <!--</span>-->
+            <!--</label>-->
+        <!--</div>-->
+        <!--<div class="field-style widtn&#45;&#45;inh font__right">-->
+            <!--<a class="link link&#45;&#45;yellow" ui-sref="passwordReset">{{ 'FORGOT_YOUR_PASSWORD' | translate }}</a>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+<!--</form>-->

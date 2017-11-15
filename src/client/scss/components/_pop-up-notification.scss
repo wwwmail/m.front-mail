@@ -97,10 +97,11 @@
     //}
 
     .pop-up-notification__validate-icon {
-      &:before {
-        content: "\e908" !important;
-      }
+      //&:before {
+      //  content: "\e908" !important;
+      //}
 
+      //@extend .icon-check-box-mark;
     }
   }
 
@@ -108,11 +109,16 @@
     position: absolute;
     top: 4px;
     right: 4px;
-    font-size: 10px;
-    padding: 0;
+
     width: 14px;
     height: 14px;
+
+    font-size: 10px;
+
+    padding: 0;
+
     outline: none;
+
     &:focus {
       outline: none;
     }
@@ -132,66 +138,10 @@
     margin: auto 0;
 
     &:before {
-      content: "\e90c";
       color: $validtae-ok-green;
-      font-family: 'icomoon' !important;
-      speak: none;
-      line-height: 1;
-    }
-  }
-}
-
-/*     старый стиль
-
-.pop-up-notification{
-  position: relative;
-  z-index: -1;
-
-  overflow: hidden;
-  transform: translateY(-100%);
-  opacity: 0;
-  transition: transform .6s, opacity 1.2s;
-
-  background-color: #f6f5f3;
-
-  &__container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    max-width: 768px;
-
-    text-align: center;
-    padding: 16px 22px;
-    min-height: 64px;
-    margin: 0 auto;
-  }
-
-  &__notific {
-    line-height: 22px;
-    min-height: 22px;
-    word-wrap: break-word;
-    font-family: $mainFont, Helvetica;
-    font-size: 18px;
-    word-wrap: break-word;
-    color: rgba(0, 0, 0, .8);
-  }
-
-  &.is-show{
-    opacity: 1!important;
-    transform: translateY(0)!important;
-    transition: transform .6s;
-  }
-
-  &--error-message{
-    background: $main-error-bg-color!important;
-
-    .pop-up-notification__notific{
-      color: $white-color;
+      font-family: 'icons-font' !important;
     }
 
+    @extend .icon-check-box-mark;
   }
-
 }
-*/

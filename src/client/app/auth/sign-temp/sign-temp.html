@@ -11,17 +11,17 @@
                 </div>
 
                 <div class="auth-form" ng-if="!vm.isTokenAuthLoading">
-                    <div class="auth-form__logo mrg__bottom16">
+                    <div class="auth-form__logo mrg--b16">
                         <a href="{{ vm.CONFIG.parentHost }}">
-                            <img class="img-responsive mrg__auto"
+                            <img class="img-responsive mrg--auto"
                                  src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-white.svg"
                                  style="width: 141px;"
                                  logo-hover>
                         </a>
-                        <hr class="hr hr--auth mrg__top16">
+                        <hr class="hr hr--auth mrg--t16">
                     </div>
                     <form class="form" name="userForm" ng-submit="vm.socialComplete(userForm)" novalidate>
-                        <div class="form__field-item mrg__bottom10">
+                        <div class="form__field-item mrg--b10">
                             <label class="font__size13">
                                 {{ 'SELECT_YOUR_NAME' | translate : {name: 'mail.cz'} }}
                             </label>
@@ -41,7 +41,7 @@
                             </validation-errors>
                         </div>
 
-                        <div class="form__field-item mrg__bottom10">
+                        <div class="form__field-item mrg--b10">
                             <div class="field-style widtn--inh">
 
                                 <!--наш чекбокс -->
@@ -71,7 +71,7 @@
 
                         <hr class="hr hr--auth">
 
-                        <div class="form__field-item mrg__bottom10">
+                        <div class="form__field-item mrg--b10">
                             <div class="field-style text-center">
                                 <button class="btn btn--size_l btn--yellow width--inh"
                                         type="submit"
@@ -111,7 +111,7 @@
             </div>
 
             <!-- Дополнительное меню с выбором языка-->
-            <div class="footer__right-menu  mrg__right">
+            <div class="footer__right-menu  mrg--right">
 
                 <div class="navigation">
                     <div class="navigation__row">

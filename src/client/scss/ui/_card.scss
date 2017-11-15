@@ -1,12 +1,12 @@
 .card {
-  padding: 24px 40px;
+  padding: 20px 28px;
 
   background: #fff;
 
   box-shadow: $form-shadow;
 
   overflow: hidden;
-  margin: 25px 0;
+  //margin: 25px 0;
 
   @media only screen and (max-width: 568px) {
     padding: 24px 24px;
@@ -17,6 +17,6 @@
   }
 
   &--black {
-    background: rgba(0, 0, 0, .8);
+    background: rgba(0, 0, 0, .7);
   }
 }

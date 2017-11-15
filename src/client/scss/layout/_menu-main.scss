@@ -14,29 +14,24 @@
   &__item {
 
     &.is-sub-menu {
-      .menu-main__item-sub .menu-main__count {
-        //margin: auto 12px auto auto;
-      }
-
       .menu-main__show-additional {
         display: inline-block;
-
       }
+
       &--open {
         .menu-main__show-additional {
           transform: rotate(180deg);
           transition: transform .4s;
         }
+
         .menu-main--additional {
-          //background: rgba($yellow-lignt, .05);
           background-color: $menu-link-bg-active;
           transition: all 1s;
         }
       }
-
     }
-
   }
+
   &__item-content {
     display: flex;
     align-items: center;
@@ -47,11 +42,6 @@
 
     font: 300 18px/1 $mainFont;
     color: $menu-text-color;
-
-    //&:hover {
-    //  background: rgba($yellow-select-main-menu-color, .1);
-    //}
-
   }
 
   &__item-sub {
@@ -65,6 +55,9 @@
     font: 300 18px/1 $mainFont;
     color: $menu-text-color;
 
+    .menu-main__link {
+      padding-left: 3px!important;
+    }
   }
 
   &__link {
@@ -105,9 +98,14 @@
       }
     }
   }
+
   &__title {
     position: relative;
     top: -2px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: auto;
   }
 
   &__count {
@@ -132,15 +130,6 @@
     text-overflow: ellipsis;
     white-space: normal;
     overflow: hidden;
-
-    //&:hover, &:active {
-    //  background-color: rgba($yellow-yandex, .9);
-    //  color: $menu-main-color;
-    //
-    //  .menu-main__count{
-    //    color: $menu-main-color!important;
-    //  }
-    //}
   }
 
   &__show-additional {
@@ -166,7 +155,6 @@
     &--active {
       display: block;
     }
-
   }
 
   &__sub {

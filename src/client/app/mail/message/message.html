@@ -23,7 +23,7 @@
                                 <div class="info-sender__important-tags info-sender__important-tags--small-title important-tags important-tags--active"
                                      ng-if="vm.message.model.important"></div>
                                 {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
-                                <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 padding--right_2 padding--left_2 mrg__left5"
+                                <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 pdd--r2 pdd--l2 mrg--l5"
                                         ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
                                         type="button"
                                         ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo">
@@ -35,16 +35,16 @@
                             </div>
                         </div>
 
-                        <div class="info-sender__right-menu mrg__right">
+                        <div class="info-sender__right-menu mrg--right">
                             <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"
                                  ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div>
-                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
+                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red pdd--r0"
                                  ng-if="vm.$state.params.mbox !== 'Trash'"
                                  ng-click="vm.move({name: 'Trash', caption: ('Trash' | translate)})"></div>
-                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red padding--right"
+                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red pdd--r0"
                                  ng-if="vm.$state.params.mbox === 'Trash'"
                                  ng-click="vm.destroy({name: 'Trash'})"></div>
-                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-replied-on padding--right"
+                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-replied-on pdd--r0"
                                  ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></div>
                         </div>
                     </div>
@@ -116,12 +116,11 @@
                                     <span class="letter-tags__name">{{ tag.tag_name }}</span>
                                     <button class="btn btn--not-style btn--circle letter-tags__icon"
                                             ng-click="vm.setUnTag(tag)">
-                                        <span class="letter-tags__remove-icon icon-remove-thick"></span>
+                                        <span class="letter-tags__remove-icon icon-close"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -144,6 +143,7 @@
                     </div>
                 </div>
 
+                <!--
                 <div class="banner-block banner-block--size330x280">
                     <ins class="adsbygoogle"
                          style="display:inline-block;width:330px;height:280px"
@@ -153,11 +153,13 @@
                         (adsbygoogle = window.adsbygoogle || []).push({});
                     </script>
                 </div>
+                -->
             </div>
         </div>
     </div>
 
     <!-- Быстрый ответ-->
+    <!--
     <div class="mail-message__reply">
         <form class="message-reply" name="sendForm" ng-submit="vm.send(sendForm)">
             <div class="message-reply__container">
@@ -175,6 +177,22 @@
                 </div>
             </div>
         </form>
+    </div>
+    -->
+
+    <div class="mail-message__banner">
+        <div class="banner-block">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- My.mail.cz mobile -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-7169913763254428"
+                 data-ad-slot="4963234726"
+                 data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
     </div>
 </div>
 

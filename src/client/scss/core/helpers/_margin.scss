@@ -1,147 +1,40 @@
 .mrg {
-  &__none {
-    margin: 0 !important;
-  }
-  &__auto {
-    margin: auto !important;
-  }
+    @include unify-sizer-modifier(none, margin, 0);
+    @include unify-sizer-modifier(auto, margin, auto);
 
-  &__right {
-    margin: auto 0 auto auto !important;
-  }
-  &__left {
-    margin: auto auto auto 0 !important;
-  }
-  &__top {
-    margin: 0 auto auto auto !important;
-  }
+    @include unify-sizer-modifier(right ,margin , auto 0 auto auto);
+    @include unify-sizer-modifier(left, margin, auto auto auto 0);
+    @include unify-sizer-modifier(top, margin, 0 auto auto auto);
+    @include unify-sizer-modifier(bottom, margin, auto auto 0 auto);
 
-  &__bottom {
-    margin: auto auto 0 auto !important;
-  }
+    @include unify-sizer-modifier(5, margin, 5px);
 
-  &__left5 {
-    margin-left: 3px !important;
-  }
+  /* --------------------------------------------------------------------  top */
+    @include unify-sizer-modifier(t5, margin-top, 5px);
+    @include unify-sizer-modifier(t10, margin-top, 10px);
+    @include unify-sizer-modifier(t15, margin-top, 15px);
+    @include unify-sizer-modifier(t16, margin-top, 16px);
+    @include unify-sizer-modifier(t20, margin-top, 20px);
+    @include unify-sizer-modifier(t25, margin-top, 25px);
+    @include unify-sizer-modifier(t30, margin-top, 30px);
+    @include unify-sizer-modifier(t40, margin-top, 40px);
 
-  &__left5 {
-    margin-left: 5px !important;
-  }
+  /* -------------------------------------------------------------------- right */
+    @include unify-sizer-modifier(r5, margin-right, 5px);
+    @include unify-sizer-modifier(r7, margin-right, 7px);
+    @include unify-sizer-modifier(r10, margin-right, 10px);
+    @include unify-sizer-modifier(r16, margin-right, 16px);
+    @include unify-sizer-modifier(r20, margin-right, 20px);
 
-  &__left10 {
-    margin-left: 10px !important;
-  }
+  /* -------------------------------------------------------------------- bottom */
+    @include unify-sizer-modifier(b6, margin-bottom, 6px);
+    @include unify-sizer-modifier(b10, margin-bottom, 10px);
+    @include unify-sizer-modifier(b16, margin-bottom, 16px);
+    @include unify-sizer-modifier(b20, margin-bottom, 20px);
+    @include unify-sizer-modifier(b25, margin-bottom, 25px);
+    @include unify-sizer-modifier(b30, margin-bottom, 30px);
 
-  &__left14{
-    margin-left: 14px !important;
-  }
-
-  &__left50 {
-    margin-left: 50px !important;
-  }
-
-  &__right10 {
-    margin-right: 10px !important;
-  }
-
-  &__right14 {
-    margin-right: 14px !important;
-  }
-
-  &__top5 {
-    margin-top: 5px !important;
-  }
-
-  &__top7 {
-    margin-top: 7px !important;
-  }
-
-  &__top10 {
-    margin-top: 10px !important;
-  }
-
-  &__top15 {
-    margin-top: 15px !important;
-  }
-
-  &__top16 {
-    margin-top: 16px !important;
-  }
-
-  &__top20 {
-    margin-top: 20px !important;
-  }
-
-  &__top25 {
-    margin-top: 25px !important;
-  }
-
-  &__top30 {
-    margin-top: 30px !important;
-  }
-
-  &__top40 {
-    margin-top: 40px !important;
-  }
-
-  &__right5 {
-    margin-right: 5px !important;
-  }
-
-  &__right7 {
-    margin-right: 5px !important;
-  }
-
-  &__right16 {
-    margin-right: 18px !important;
-  }
-
-  &__right18 {
-    margin-right: 18px !important;
-  }
-
-  &__right30 {
-    margin-right: 18px !important;
-  }
-
-  &__bottom0 {
-    margin-bottom: 0px !important;
-  }
-
-  &__bottom4 {
-    margin-bottom: 4px !important;
-  }
-
-  &__bottom5 {
-    margin-bottom: 5px !important;
-  }
-
-  &__bottom6 {
-    margin-bottom: 6px !important;
-  }
-
-  &__bottom10 {
-    margin-bottom: 10px !important;
-  }
-
-  &__bottom16 {
-    margin-bottom: 16px !important;
-  }
-
-  &__bottom20 {
-    margin-bottom: 20px !important;
-  }
-
-  &__bottom25 {
-    margin-bottom: 25px !important;
-  }
-
-  &__bottom30 {
-    margin-bottom: 30px !important;
-  }
-
-  &__bottom45 {
-    margin-bottom: 45px !important;
-  }
-
+  /* -------------------------------------------------------------------- left */
+    @include unify-sizer-modifier(l5, margin-left, 5px);
+    @include unify-sizer-modifier(l10, margin-left, 10px);
 }

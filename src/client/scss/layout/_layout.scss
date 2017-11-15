@@ -30,7 +30,6 @@
 
   &__menu {
     position: fixed;
-    //display: none;
     visibility: hidden;
     top: 0;
     right: 0;
@@ -42,8 +41,8 @@
     background-color: rgba($black, 0);
     overflow: hidden;
     transition: all 1s;
+
     &--is-active-menu{
-      //display: block;
       visibility: visible;
 
       background-color: rgba($black, .54);
@@ -71,7 +70,7 @@
 
     width: 100%;
     max-width: 478px;
-    //overflow: hidden;
+
 
     transform: translate3d(-120%, 0px, 0px);
     transition: transform 500ms ease-in-out;
@@ -135,34 +134,28 @@
     padding: 0 20px;
   }
 
-  @media only screen and (max-width: 768px) {
-
-  }
-  @media only screen and (max-width: 640px) {
-
-
-  }
   @media only screen and (max-width: 562px) {
     &__content{
       padding: 0 10px;
     }
+
     &__menu-content{
-      max-width: 60%!important;
+      max-width: calc(100% / 1.61803399)!important;
     }
+
     &__menu-closer{
-      left: 60%!important;
+      left: calc(100% / 1.61803399)!important;
     }
   }
+
   @media only screen and (max-width: 320px) {
     &__menu-content{
       max-width: 100%!important;
     }
+
     .menu-main-layout__button-close {
       right: 7px;
     }
-  }
-  @media only screen and (max-width: 320px) {
-
   }
 }
 

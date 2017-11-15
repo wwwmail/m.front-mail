@@ -3,7 +3,7 @@
     <div class="menu-main-layout__header">
         <img class="menu-main-layout__header__logo img-responsive"
              src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg">
-        <button class="menu-main-layout__button-close btn"
+        <button class="menu-main-layout__button-close btn font--size20"
                 type="button"
                 ng-click="vm.closeMenu()">
             <span class="icon-back"></span>
@@ -47,12 +47,12 @@
                                      email="vm.user.profile.email">
                         </avatar-name>
 
-                        <button class="menu-main-layout__add-btn icon-close btn--circle btn--size_40 rotate--am90"
+                        <button class="menu-main-layout__add-btn icon-close btn--circle btn--size_40 rotate--am90 font--size13"
                                 type="button"
                                 ui-sref="signIn()">
                         </button>
                     </div>
-                    <span class="menu-main-layout__user-name mrg__top10">{{ vm.user.profile.username }}</span>
+                    <span class="menu-main-layout__user-name mrg--t10">{{ vm.user.profile.username }}</span>
                     <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                         <span class="menu-main__title">{{ folder.name | translate }}</span>
                     </a>
                     <div class="menu-main__additional-option">
-                        <button class="menu-main__clear-brush icon-brush btn--not-style font--size12"
+                        <button class="menu-main__clear-brush icon-clear btn--not-style font--size12"
                                 type="button"
                                 ng-class="{'menu-main__link--gray': !folder.messagesCount,
                                     'menu-main__clear-brush--active': (folder.name === 'Junk' || folder.name === 'Trash') && folder.messagesCount
@@ -101,7 +101,8 @@
                                    ng-click="vm.closeMenu();"
                                    ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})"
                                    ui-sref-active="menu-main__link--active">
-                                    <span class="icon-to-a-folder menu-main__icon"></span>
+                                    <span class="menu-main__icon"
+                                          ng-class="{'icon-template': folderSub.name === 'Templates', 'icon-archive': folderSub.name !== 'Templates'}"></span>
                                     <span class="menu-main__title">
                                         {{ folderSub.name | translate }}
                                     </span>
@@ -127,14 +128,14 @@
                     ng-click="vm.closeMenu();">
                     <span class="icon-affix menu-main-filter__icon"></span>
                 </li>
-                <li class="menu-main-filter__item">
-                    <a class="menu-main-filter__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: 'unseen', tag_id: undefined})"
-                       ui-sref-active="menu-main-filter__item--active"
-                       ng-click="vm.closeMenu();">
-                        <span class="icon-email menu-main-filter__icon"></span>
-                    </a>
+
+                <li class="menu-main-filter__item"
+                    ui-sref="mail.inbox({mbox: undefined, filter: 'unseen', tag_id: undefined})"
+                    ui-sref-active="menu-main-filter__item--active"
+                    ng-click="vm.closeMenu();">
+                    <span class="icon-email menu-main-filter__icon"></span>
                 </li>
+
                 <li class="menu-main-filter__item"
                     ui-sref="mail.inbox({mbox: undefined, filter: 'flagged', tag_id: undefined})"
                     ui-sref-active="menu-main-filter__item--active"
@@ -203,7 +204,7 @@
 
     <!--<div class="menu-main-layout__footer-menu">
         <hr class="hr hr&#45;&#45;main-menu">
-        <div class="flex align-items&#45;&#45;cn mrg__left10 mrg__top10 mrg__bottom5">
+        <div class="flex align-items&#45;&#45;cn mrg--l10 mrg--t10 mrg--b20">
             <div class="flex flex&#45;&#45;row-wrap align-items&#45;&#45;cn ">
                 <div class="link link&#45;&#45;gray"
                      ng-click="vm.goToDesktopVersion('/mail/inbox?mbox=INBOX&version=desktop')">
