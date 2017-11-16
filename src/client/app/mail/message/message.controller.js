@@ -5,9 +5,9 @@
         .module('mail.message')
         .controller('MessageController', MessageController);
 
-    MessageController.$inject = ['mail', '$scope', '$state', '$sce', '$auth', 'message', 'tag', '$rootScope', '$uibModal'];
+    MessageController.$inject = ['mail', '$scope', '$state', '$sce', '$auth', '$stateParams', 'message', 'tag', '$rootScope', '$uibModal'];
     /* @ngInject */
-    function MessageController(mail, $scope, $state, $sce, $auth, message, tag, $rootScope,  $uibModal) {
+    function MessageController(mail, $scope, $state, $sce, $auth, $stateParams, message, tag, $rootScope, $uibModal) {
         var vm = this;
 
         vm.message = {};
@@ -21,6 +21,7 @@
         };
 
         vm.isSendTextOpen = false;
+
         vm.isFromOpen = false;
 
         vm.isCloseBanner = true;
@@ -33,16 +34,13 @@
         vm.move = move;
         vm.destroy = destroy;
         vm.openMessageMenu = openMessageMenu;
+        vm.resolveImage = resolveImage;
 
         $scope.$on('tag:message:add:success', function (e, data) {
-            // console.log('data', data);
-            // vm.message.model.tags.push(data.tag);
             getTags();
         });
 
         $scope.$on('tag:message:delete:success', function (e, data) {
-            // console.log('data', data);
-            // vm.message.model.tags.push(data.tag);
             getTags();
         });
 
@@ -88,7 +86,6 @@
             ids.push(vm.message.model.number);
 
             tag.deleteTagFromMessages({}, {
-                // ids: ids,
                 messages: [vm.message.model],
                 tag_id: item.id
             }).then(function (response) {
@@ -104,23 +101,6 @@
         function getTrustHtml(html) {
             return $sce.trustAsHtml(html);
         }
-
-        // function send(form) {
-        //     if (form.$invalid) return;
-        //
-        //     var data = {
-        //         to: vm.message.model.fromAddress,
-        //         body: vm.sendForm.model.body
-        //     };
-        //
-        //     data.cmd = 'send';
-        //     mail.post({}, data).then(function (response) {
-        //         console.log('response', response);
-        //         if (response.success) {
-        //             $state.go('mail.inbox', {mbox: 'INBOX'});
-        //         }
-        //     });
-        // }
 
         function send(form) {
             copyReMessage();
@@ -282,6 +262,18 @@
 
                 mail.setPaginate(vm.paginate);
             })
+        }
+
+        function resolveImage() {
+            mail.getById({
+                id: $stateParams.id,
+                mbox: $stateParams.mbox,
+                connection_id: $stateParams.connection_id,
+                part: 'headnhtml',
+                foreignImages: 1
+            }).then(function (response) {
+                vm.message.model = response.data;
+            });
         }
     }
 })();
