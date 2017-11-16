@@ -271,6 +271,33 @@
   font-weight: 100;
   font-style: italic;
 }
+a {
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: all .2s;
+  outline: none;
+}
+a:hover, a:focus, a:active {
+  color: #000;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+button {
+  padding: 0;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
+  outline: none;
+}
+
 /*------------------------------------------- helpers*/
 .position {
   position: relative !important;
@@ -1916,17 +1943,6 @@
   flex: 1 0 auto;
   height: auto;
 }
-.mail-message__main-info:before {
-  content: "";
-  position: absolute;
-  top: auto;
-  right: -100vw;
-  left: -100vw;
-  bottom: 0;
-  z-index: -1;
-  height: 10px;
-  background: #f6f5f3;
-}
 .mail-message__main-content {
   background: #fff;
 }
@@ -1943,6 +1959,27 @@
   min-height: 40px;
   max-height: 120px;
   background: #ffffff;
+  border-top: 1px solid rgba(255, 204, 0, 0.4);
+}
+.mail-message__banner--closed {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  box-shadow: 0px 0px 25px -4px rgba(255, 204, 0, 0.11);
+}
+.mail-message__button-close {
+  position: absolute;
+  top: -11px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  font-size: 11px;
+  color: #808080;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 7px 1px rgba(255, 235, 160, 0.81);
 }
 .mail-message__info {
   position: relative;
@@ -5588,7 +5625,7 @@
 
 .choice-language {
   position: absolute;
-  bottom: -13px;
+  bottom: -9px;
   display: flex;
   flex-flow: column;
   padding: 0;
@@ -6369,16 +6406,16 @@
   height: 100%;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.7);
   z-index: 1000;
 }
 .menu-bottom__container {
   width: 280px;
   height: 200px;
-  padding: 16px;
+  padding: 20px;
   margin: auto;
-  border-radius: 3px;
   background-color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25) !important;
 }
 .menu-bottom__caption {
   text-align: center;

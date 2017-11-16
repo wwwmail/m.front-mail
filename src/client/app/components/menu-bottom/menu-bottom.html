@@ -1,10 +1,10 @@
 <div class="menu-bottom" ng-if="vm.isOpen">
-    <div class="menu-bottom__container">
+    <div class="menu-bottom__container flex flex--column">
         <div class="menu-bottom__caption">
             {{ 'SAVE_CHANGES' | translate }}?
         </div>
 
-        <div class="">
+        <div class="mrg--auto">
             <button class="btn btn--size_l btn--yellow mrg--b10 width--all"
                     ng-click="vm.isOpen = false"
                     ui-sref="mail.inbox({mbox: 'INBOX'})">

@@ -180,7 +180,12 @@
     </div>
     -->
 
-    <div class="mail-message__banner">
+    <div class="mail-message__banner mail-message__banner--closed" ng-if="vm.isCloseBanner">
+        <button class="mail-message__button-close flex"
+                type="button"
+                ng-click="vm.isCloseBanner = false">
+            <span class="icon-close mrg--auto"></span>
+        </button>
         <div class="banner-block">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- My.mail.cz mobile -->

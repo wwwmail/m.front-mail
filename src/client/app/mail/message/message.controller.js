@@ -23,6 +23,8 @@
         vm.isSendTextOpen = false;
         vm.isFromOpen = false;
 
+        vm.isCloseBanner = true;
+
         vm.getDate = getDate;
         vm.getTrustHtml = getTrustHtml;
         vm.setUnTag = setUnTag;
