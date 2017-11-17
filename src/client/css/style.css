@@ -1117,6 +1117,14 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   content: "\e974";
 }
 
+.icon-affix-plus:before {
+  content: "\e975";
+}
+
+.icon-draft-line:before {
+  content: "\e976";
+}
+
 /*------------------------------------------- layout*/
 .main-layout {
   position: relative;
