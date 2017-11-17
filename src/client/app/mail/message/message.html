@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="info-sender__right-menu mrg--right">
-                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-more"
+                            <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-mobile-menu-h"
                                  ng-click="vm.openMessageMenu(); $event.stopPropagation();"></div>
                             <div class="btn btn--not-events btn--not-style btn--size_20 btn--main-mobile-color icon-delete color--light-red pdd--r0"
                                  ng-if="vm.$state.params.mbox !== 'Trash'"
@@ -195,14 +195,15 @@
                 ng-click="vm.isCloseBanner = false">
             <span class="icon-close mrg--auto"></span>
         </button>
+
         <div class="banner-block">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- My.mail.cz mobile -->
             <ins class="adsbygoogle"
-                 style="display:block"
+                 style="display:block; width:100%; height:120px"
                  data-ad-client="ca-pub-7169913763254428"
-                 data-ad-slot="4963234726"
-                 data-ad-format="auto"></ins>
+                 data-ad-slot="4963234726">
+            </ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
