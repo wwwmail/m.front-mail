@@ -430,5 +430,7 @@
   "ENTER_MAIL_CODE": "To change your password, please enter the code you have received to your alternate email",
   "ENTER_PHONE_CODE": "To change your password, please enter the code you have received to your phone number",
   "SELECT_YOUR_NAME": "Choose your user name",
-  "LOGOUT": "Log out"	
+  "LOGOUT": "Log out",
+  "SHOW_IMAGES": "Upload external images.",
+  "SHOW_IMAGES_2": "For security reasons, we did not upload external images."
 }

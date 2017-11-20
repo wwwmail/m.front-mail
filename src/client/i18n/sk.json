@@ -1,4 +1,4 @@
-{ 
+{
   "INPUT_PLACEHOLDER_NAME": "Meno",
   "INPUT_PLACEHOLDER_LAST_MANE": "Priezvisko",
   "INPUT_PLACEHOLDER_MAIL_NAME": "Email",
@@ -430,5 +430,7 @@
   "ENTER_MAIL_CODE": "Ak chcete zmeniť heslo, zadajte kód, ktorý sme vám poslali do alternatívneho e-mailu:",
   "ENTER_PHONE_CODE": "Ak chcete zmeniť heslo, zadajte kód, ktorý sme vám poslali do telefónu",
   "SELECT_YOUR_NAME": "Vytvorte svoje prihlasovacie meno",
-  "LOGOUT": "Odhlásiť sa"	
+  "LOGOUT": "Odhlásiť sa",
+  "SHOW_IMAGES": "Nahrajte externé obrázky.",
+  "SHOW_IMAGES_2": "Z bezpečnostných dôvodov sme neodovzdali externé obrázky."
 } 

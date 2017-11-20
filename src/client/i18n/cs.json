@@ -430,5 +430,7 @@
   "ENTER_MAIL_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš alternativní e-mail",
   "ENTER_PHONE_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš telefon",
   "SELECT_YOUR_NAME": "Vymyslete svoje uživatelské jméno",
-  "LOGOUT": "Odhlásit se"	
+  "LOGOUT": "Odhlásit se",
+  "SHOW_IMAGES": "Načíst externí obrázky.",
+  "SHOW_IMAGES_2": "Z důvodu bezpečnosti jsme nenačetli externí obrázky obsažené v tomto e-mailu."
 }
