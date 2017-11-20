@@ -18,7 +18,7 @@
 
         function link(scope, element, attrs) {
             scope.$watch(attrs['mediaUrl'], function() {
-                var mediaUrl = CONFIG.MediaUrl + scope.$eval(attrs.mediaUrl);
+                var mediaUrl = scope.$eval(attrs.mediaUrl);
                 element.attr('src', mediaUrl);
             });
         }
