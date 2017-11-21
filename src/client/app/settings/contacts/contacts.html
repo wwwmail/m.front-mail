@@ -1,0 +1,39 @@
+<div class="main-container" >
+    <div class="main-container__body">
+        <div class="main-layout__bread-crumbs mrg--b15">
+
+            <div class="bread-crumbs font-sizer--bigger-20">
+                <a class="bread-crumbs__item" ui-sref="mail.inbox({mbox: 'INBOX'})">{{ 'MAIL' | translate }}</a>
+                <a class="bread-crumbs__item" ui-sref="settings.main">{{ 'ALL_SETTING' | translate }}</a>
+                <a class="bread-crumbs__item bread-crumbs--active">{{ 'SETTINGS_CONTACTS' | translate }}</a>
+            </div>
+
+        </div>
+
+        <article class="layout-settings">
+
+            <section class="layout-settings__col mrg__left">
+
+                <div class="mrg--b20">
+                    <button class="btn-y btn-y--border"
+                            type="button"
+                            ng-click="vm.openContactImportFilePopup()">
+                        {{ 'BTN_LOAD_CONTACT_0F_FILE' | translate }}
+                    </button>
+
+                    <button class="btn-y btn-y--border"
+                            type="button"
+                            ng-click="vm.openContactExportFilePopup()">{{ 'BTN_SAVE_CONTACT_IN_FILE' | translate }}
+                    </button>
+                </div>
+
+                <!-- Контакты -->
+                <contact-group></contact-group>
+
+            </section>
+
+        </article>
+    </div>
+
+    <aside-right class="aside-right--settings aside-right--left-line-hide"></aside-right>
+</div>

@@ -7,9 +7,9 @@
         'app.components',
         'app.directives',
         'app.layout',
+        'settings',
         'marketing',
         'auth',
         'mail'
-        // 'settings'
     ]);
 })();

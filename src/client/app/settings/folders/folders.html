@@ -1,0 +1,22 @@
+<div class="main-container" >
+    <div class="main-container__body">
+        <div class="main-layout__bread-crumbs mrg--b15">
+            <div class="bread-crumbs font-sizer--bigger-18">
+                <a class="bread-crumbs__item" ui-sref="mail.inbox({mbox: 'INBOX'})">{{ 'MAIL' | translate }}</a>
+                <a class="bread-crumbs__item" ui-sref="settings.main">{{ 'ALL_SETTING' | translate }}</a>
+                <a class="bread-crumbs__item bread-crumbs--active" >{{ 'FOLDERS' | translate }}</a>
+            </div>
+        </div>
+
+        <article class="layout-settings">
+            <section class="layout-settings__col mrg__left">
+
+                <!-- Папки -->
+                <folder-settings></folder-settings>
+
+            </section>
+        </article>
+    </div>
+
+    <aside-right class="aside-right--settings aside-right--left-line-hide"></aside-right>
+</div>
