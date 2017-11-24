@@ -1,11 +1,6 @@
 <div class="main-header">
 
-    <!--
-        у нас используется разный хедер для страниц
-        для активации нужнохо хедера просто  нужно добавлять класс is-active
-        при условии открития нужной страници
-    -->
-
+    <!-- -->
     <!-- Хедер для главной страници -->
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'mail.inbox'">
         <div class="main-header__container">
@@ -81,8 +76,6 @@
     </div>
 
     <!-- Хедер для страници создания письма-->
-
-    <!-- Хедер для страници создания письма-->
     <div class="main-header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">
         <div class="main-header__container">
             <div class="main-header__left">
@@ -102,6 +95,140 @@
                         ng-disabled="!vm.isSend">
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Хедер для страниц  настроек -->
+    <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.main'">
+        <div class="main-header__container">
+            <div class="main-header__left">
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                        ng-click="vm.openSettingsMenu()"></button>
+            </div>
+
+            <div class="main-header__center">
+                <span class="main-header__title-text">{{ 'MANAGE_ACCOUNT' | translate }}</span>
+            </div>
+
+            <div class="main-header__right">
+                <button class="main-header__right-button btn btn--not-style btn--main-mobile-color mrg--right"
+                        disabled></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
+    <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.folders'">
+        <div class="main-header__container">
+            <div class="main-header__left">
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                        ng-click="vm.openSettingsMenu()"></button>
+            </div>
+
+            <div class="main-header__center">
+                <span class="main-header__title-text">{{ 'FOLDERS' | translate }}</span>
+            </div>
+
+            <div class="main-header__right">
+                <button class="main-header__right-button btn btn--not-style btn--main-mobile-color mrg--right"
+                        disabled></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
+    <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.tags'">
+        <div class="main-header__container">
+            <div class="main-header__left">
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                        ng-click="vm.openSettingsMenu()"></button>
+            </div>
+
+            <div class="main-header__center">
+                <span class="main-header__title-text">{{ 'TAGS' | translate }}</span>
+            </div>
+
+            <div class="main-header__right">
+                <button class="main-header__right-button btn btn--not-style btn--main-mobile-color mrg--right"
+                        disabled></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
+    <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.rules'">
+        <div class="main-header__container">
+            <div class="main-header__left">
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                        ng-click="vm.openSettingsMenu()"></button>
+            </div>
+
+            <div class="main-header__center">
+                <span class="main-header__title-text">{{ 'PROCESSING_RULES' | translate }}</span>
+            </div>
+
+            <div class="main-header__right">
+                <button class="main-header__right-button btn btn--not-style btn--main-mobile-color mrg--right"
+                        disabled></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
+    <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.ruleAdd'">
+        <div class="main-header__container">
+            <div class="main-header__left">
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                        ng-click="vm.openSettingsMenu()"></button>
+            </div>
+
+            <div class="main-header__center">
+                <span class="main-header__title-text">{{ 'CREATE_RULE' | translate }}</span>
+            </div>
+
+            <div class="main-header__right">
+                <button class="main-header__right-button btn btn--not-style btn--main-mobile-color mrg--right"
+                        disabled></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
+    <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.accounts'">
+        <div class="main-header__container">
+            <div class="main-header__left">
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                        ng-click="vm.openSettingsMenu()"></button>
+            </div>
+
+            <div class="main-header__center">
+                <span class="main-header__title-text">{{ 'MAILS_FROM_OTHER_BOXES' | translate }}</span>
+            </div>
+
+            <div class="main-header__right">
+                <button class="main-header__right-button btn btn--not-style btn--main-mobile-color mrg--right"
+                        disabled></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
+        </div>
+    </div>
+
+    <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.contacts'">
+        <div class="main-header__container">
+            <div class="main-header__left">
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                        ng-click="vm.openSettingsMenu()"></button>
+            </div>
+
+            <div class="main-header__center">
+                <span class="main-header__title-text">{{ 'SETTINGS_CONTACTS' | translate }}</span>
+            </div>
+
+            <div class="main-header__right">
+                <button class="main-header__right-button btn btn--not-style btn--main-mobile-color mrg--right"
+                        disabled></button>
+            </div>
+            <hr class="hr hr--header hr--yellow">
         </div>
     </div>
 

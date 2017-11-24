@@ -104,6 +104,7 @@
                         console.log('toParams', toParams);
 
                         $rootScope.isOpenMenu = false;
+                        $rootScope.isOpenSettingsMenu = false;
 
                         if (toState.name === 'mail.inbox' || toState.name === 'mail.message') {
                             if (!toParams.filter) {

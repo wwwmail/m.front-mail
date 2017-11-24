@@ -126,6 +126,7 @@
     position: relative;
     z-index: 5;
   }
+
   &__footer {
     margin-top: 50px;
   }
@@ -134,17 +135,23 @@
     padding: 0 20px;
   }
 
+  &--settings {
+    .main-layout__menu-content {
+      min-width: 250px;
+    }
+  }
+
   @media only screen and (max-width: 562px) {
     &__content{
       padding: 0 10px;
     }
 
     &__menu-content{
-      max-width: calc(100% / 1.61803399)!important;
+      max-width: 250px;
     }
 
     &__menu-closer{
-      left: calc(100% / 1.61803399)!important;
+      left: 250px;
     }
   }
 

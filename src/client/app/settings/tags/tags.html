@@ -1,20 +1,41 @@
-<div class="main-container">
-    <div class="main-container__body">
-        <div class="main-layout__bread-crumbs mrg--b15">
-            <div class="bread-crumbs font-sizer--bigger-18">
-                <a class="bread-crumbs__item" ui-sref="mail.inbox({mbox: 'INBOX'})">{{ 'MAIL' | translate }}</a>
-                <a class="bread-crumbs__item" ui-sref="settings.main">{{ 'ALL_SETTING' | translate }}</a>
-                <a class="bread-crumbs__item bread-crumbs--active">{{ 'TAGS' | translate }}</a>
-            </div>
-        </div>
-
-        <article class="layout-settings">
-            <section class="layout-settings__col mrg__left">
-                <!-- Страница настроек метки -->
-                <tag-settings></tag-settings>
-            </section>
-        </article>
+<div class="settings-tags">
+    <div class="settings-tags__header">
+        <button class="btn btn--size_m btn--yellow"
+                ng-click="vm.openTagCreatePopup()">
+            {{ 'CREATE_TAG' | translate }}
+        </button>
     </div>
 
-    <aside-right class="aside-right--settings aside-right--left-line-hide"></aside-right>
+    <div class="settings-tags__list">
+        <div class="settings-tags__item" ng-repeat="tag in vm.tags.items">
+            <div class="settings-tags__item-content"
+                 ng-class="{'tags-settings__item--active': tag.isSelected}"
+                 ng-click="vm.select(tag)">
+
+                <div class="settings-tags__item-content-left">
+                    <div class="settings-tags__color-tag" style="background-color: {{ tag.bgcolor }}"></div>
+                    <div class="settings-tags__caption">{{ tag.tag_name }}</div>
+                    <div class="settings-tags__counter">(25)</div>
+                </div>
+
+                <div class="settings-tags__item-content-right">
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
+                            ng-click="vm.openTagEditPopup()"
+                            ng-disabled="!vm.selected">
+                        <span class="icon-edit-pen"></span>
+                    </button>
+
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver">
+                        <span class="icon-clear"></span>
+                    </button>
+
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
+                            ng-disabled="!vm.selected"
+                            ng-click="vm.destroy()">
+                        <span class="icon-delete"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

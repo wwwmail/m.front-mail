@@ -18,6 +18,8 @@
                 config: {
                     url: '/settings',
                     templateUrl: 'app/settings/settings.html',
+                    controller: 'SettingsController',
+                    controllerAs: 'vm',
                     resolve: {
                         auth: function ($auth, $state) {
                             return $auth.validateUser().catch(function () {

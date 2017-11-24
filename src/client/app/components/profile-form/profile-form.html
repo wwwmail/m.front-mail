@@ -1,0 +1,20 @@
+<form class="form" name="form" ng-submit="vm.save(form)">
+    <div class="personal-info__user-name">
+        <div class="personal-info__user-info-title main-title-text font--size16 font--bold">
+            {{ 'YOUR_NAME' | translate }}
+        </div>
+
+        <div class="flex">
+            <div class="width--all mrg--r10">
+                <input class="input input--size_m width--inh font--size14"
+                       type="text"
+                       placeholder="{{ 'INPUT_PLACEHOLDER_YOUR_NAME' | translate }}"
+                       ng-model="vm.profileForm.user_name"/>
+                <!--<span class="notific mrg&#45;&#45;t5 font&#45;&#45;size15">{{ 'YOUR_LOGIN_NOT_CHANGED' | translate }}</span>-->
+            </div>
+            <button class="btn btn--size_m btn--y-gradient btn--border-dark float--right"
+                    type="submit">{{ 'SAVE' | translate }}
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,47 @@
+<div class="avatar-upload">
+    <div class="avatar-upload__header">
+        <span class="avatar-upload__title">{{ 'PROFILE_PORTRAIT' | translate }}</span>
+    </div>
+    <div class="avatar-upload__body">
+        <div class="col-xs-6">
+            <div class="flex just-content--center mrg--r10">
+                <div class="avatar-upload__crop"
+                     ngf-drop ngf-pattern="image/*"
+                     ng-if="vm.avatar.picFile"
+                     style="width:283px;height:283px;">
+                    <img-crop image="vm.avatar.picFile | ngfDataUrl"
+                              result-image="vm.avatar.croppedDataUrl"
+                              ng-init="vm.avatar.croppedDataUrl=''">
+                    </img-crop>
+                </div>
+                <img class="avatar-upload__default img-responsive"
+                     style="width:260px;height:260px;"
+                     src="/images/avatar-300.png"
+                     ng-if="!vm.avatar.picFile">
+            </div>
+        </div>
+        <div class="col-xs-6 flex flex--colum just-content--center">
+            <button class="btn btn--size_l btn--normal"
+                    ngf-select
+                    accept="image/*"
+                    ng-model="vm.avatar.picFile">{{ 'AVATAR_LOAD_IMAGE' | translate }}
+            </button>
+            <p class="font--size12 color--gray mrg--t10">
+                {{ 'AVATAR_UPLOAD_TEXT_NOTYF' | translate }}
+            </p>
+        </div>
+        <!--<hr class="hr hr&#45;&#45;bottom">-->
+    </div>
+
+
+    <div class="avatar-upload__footer">
+        <button class="btn btn--size_l btn--normal pull-left" ng-click="vm.close()">{{ 'CANCEL' | translate }}</button>
+
+        <button class="btn btn--size_l btn--yellow pull-right"
+                type="button"
+                ng-click="vm.upload(vm.avatar.croppedDataUrl, vm.avatar.picFile.name)">{{ 'SAVE' | translate }}
+        </button>
+    </div>
+
+
+</div>

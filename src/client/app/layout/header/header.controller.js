@@ -21,6 +21,9 @@
 
         vm.openMenu = openMenu;
         vm.closeMenu = closeMenu;
+        vm.openSettingsMenu = openSettingsMenu;
+        vm.closeSettingsMenu = closeSettingsMenu;
+
         vm.clearSearch = clearSearch;
         vm.search = search;
         vm.send = send;
@@ -76,6 +79,14 @@
 
         function closeMenu() {
             $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
+        }
+
+        function openSettingsMenu() {
+            $rootScope.isOpenSettingsMenu = !$rootScope.isOpenSettingsMenu;
+        }
+
+        function closeSettingsMenu() {
+            $rootScope.isOpenSettingsMenu = !$rootScope.isOpenSettingsMenu;
         }
 
         function getCurrentFolder() {

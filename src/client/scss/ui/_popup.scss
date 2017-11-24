@@ -1,9 +1,9 @@
 .popup {
-  display: flex!important;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 
-  background: rgba($white-color, .7);
+  background: rgba($black, .5);
 
   position: fixed;
   top: 0;
@@ -14,19 +14,22 @@
   z-index: 100;
 
   padding: 10px 0;
-  .modal-dialog{
-    width: 288px!important;
+
+  .modal-dialog {
+    width: 288px !important;
     margin: auto;
   }
-  .modal-content {
-    @include border-radius(0!important);
 
-    box-shadow: 0 0 12px rgba(0,0,0,.25)!important;
-    border: none!important;
+  .modal-content {
+    @include border-radius(0 !important);
+
+    box-shadow: 0 0 12px rgba(0, 0, 0, .25) !important;
+    border: none !important;
 
     //padding: 10px 0 0;
   }
-  &__container{
+
+  &__container {
     position: relative;
 
     display: flex;
@@ -46,31 +49,28 @@
 
   }
 
-  &__head{
+  &__head {
     position: relative;
 
     display: flex;
-    justify-content: center ;
+    justify-content: center;
     align-items: center;
 
     min-height: 52px;
     width: 100%;
 
-
-
     color: $textBlack;
     font: 100 16px/1 $mainThreeFont;
 
-    &__title{
+    &-title {
       margin: auto;
-      //padding-left: 28px;
+
       padding: 20px 0 20px 28px;
       font: 300 20px/1 "HelveticaNeueCyr", sans-serif;
     }
-
   }
 
-  &__content{
+  &__content {
     width: 100%;
 
     padding: 0 25px;
@@ -79,7 +79,7 @@
     overflow: auto;
   }
 
-  &__footer{
+  &__footer {
     position: relative;
 
     width: 100%;
@@ -87,7 +87,7 @@
 
   }
 
-  &__item{
+  &__item {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -97,22 +97,21 @@
     color: $textBlack;
     font: 300 20px/1 $mainFont;
 
-    &__title{
+    &__title {
       margin-top: 4px;
 
-      &--mrg-left{
+      &--mrg-left {
         margin-left: 35px;
         margin-right: auto;
       }
     }
-    &__tick{
+    &__tick {
       position: relative;
       width: 25px;
       height: 25px;
       margin-right: 0;
 
-
-      &:before{
+      &:before {
         content: "";
 
         display: none;
@@ -131,9 +130,9 @@
         transform: rotate(45deg);
       }
 
-      &.is-selected{
+      &.is-selected {
 
-        &:before{
+        &:before {
           display: block;
         }
 
@@ -142,11 +141,11 @@
     }
   }
 
-  &__icon{
+  &__icon {
     font-size: 21px;
     padding-right: 14px;
 
-    &--not-size{
+    &--not-size {
       position: relative;
       top: -9px;
       left: -5px;
@@ -158,15 +157,15 @@
     }
   }
 
-  &__icon-close{
+  &__icon-close {
     position: absolute;
     right: 0;
     top: 15px;
     font-size: 15px;
   }
 
-  &--tags{
-    .popup__content{
+  &--tags {
+    .popup__content {
       max-height: calc(80vh - 80px);
     }
   }
@@ -182,7 +181,6 @@
       width: 432px;
     }
   }
-
 
   &__close {
     @include border-radius(50%);
@@ -218,6 +216,6 @@
   }
 }
 
-.modal-backdrop{
-  background-color: transparent!important;
+.modal-backdrop {
+  background-color: transparent !important;
 }

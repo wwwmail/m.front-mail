@@ -1,0 +1,19 @@
+.settings-main {
+  &__block {
+    position: relative;
+    padding: 20px 10px;
+
+    &:after {
+      content: '';
+
+      position: absolute;
+      right: -100vw;
+      bottom: 0;
+      left: -100vw;
+
+      height: 1px;
+
+      background-color: #f2f2f2;
+    }
+  }
+}

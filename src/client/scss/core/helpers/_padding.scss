@@ -1,5 +1,10 @@
 .pdd {
   @include unify-sizer-modifier(none, padding, 0);
+  @include unify-sizer-modifier(10, padding, 10px);
+  @include unify-sizer-modifier(14, padding, 14px);
+  @include unify-sizer-modifier(16, padding, 16px);
+  @include unify-sizer-modifier(18, padding, 18px);
+  @include unify-sizer-modifier(20, padding, 20px);
 
   /* --------------------------------------------------------------------  top */
     @include unify-sizer-modifier(t0, padding-top, 0);
