@@ -79,7 +79,7 @@
     <div class="main-header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-close btn btn--not-style btn--main-mobile-color header__icon header__icon--close pdd--hor12"
+                <button class="main-header__left-button icon-close btn btn--not-style btn--main-mobile-color header__icon header__icon--close"
                         ng-click="vm.closeCompose()">
                 </button>
             </div>
@@ -89,7 +89,7 @@
             </div>
 
             <div class="main-header__right">
-                <button class="main-header__right-button btn btn--not-style btn--mail-send header__icon mrg--right font--arial font--size15 pdd--hor12 icon-send-mail"
+                <button class="main-header__right-button main-header__right-button--size22 btn btn--not-style btn--mail-send header__icon mrg--right font--arial icon-send-mail"
                         type="button"
                         ng-click="vm.send()"
                         ng-disabled="!vm.isSend">
