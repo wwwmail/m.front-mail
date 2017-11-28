@@ -304,30 +304,31 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 /*------------------------------------------- helpers*/
-.position {
-  position: relative !important;
-}
-.position--abs {
-  position: absolute !important;
-}
-.position--fix {
-  position: fixed !important;
-}
-.position--stat {
+.pos {
   position: static !important;
 }
-.position--sticky {
+.pos--rel {
+  position: relative !important;
+}
+.pos--fix {
+  position: fixed !important;
+}
+.pos--abs {
+  position: absolute !important;
+}
+.pos--stc {
   position: sticky !important;
+}
+.pos--int {
+  position: initial !important;
 }
 
 .mrg {
+  margin: 0 !important;
   /* --------------------------------------------------------------------  top */
   /* -------------------------------------------------------------------- right */
   /* -------------------------------------------------------------------- bottom */
   /* -------------------------------------------------------------------- left */
-}
-.mrg--none {
-  margin: 0 !important;
 }
 .mrg--auto {
   margin: auto !important;
@@ -433,13 +434,11 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .pdd {
+  padding: 0 !important;
   /* --------------------------------------------------------------------  top */
   /* -------------------------------------------------------------------- right */
   /* -------------------------------------------------------------------- bottom */
   /* -------------------------------------------------------------------- left */
-}
-.pdd--none {
-  padding: 0 !important;
 }
 .pdd--10 {
   padding: 10px !important;
@@ -1492,7 +1491,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .menu-main-filter__item {
   display: inherit;
   align-items: center;
-  justify-content: inherit;
+  justify-content: center;
   width: 100%;
   height: 28px;
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -1508,6 +1507,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .menu-main-filter__icon {
   color: #000;
+  margin: auto;
 }
 
 .main-header {
@@ -1909,6 +1909,12 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .menu-settings__link--open:before {
   content: "";
 }
+.menu-settings__link-choose-element {
+  display: flex;
+  align-items: center;
+  padding: 3px 10px;
+  background-color: #ffffff;
+}
 .menu-settings__counter {
   float: right;
 }
@@ -2008,20 +2014,24 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .mail-message {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
-  padding-bottom: 3px;
+  max-height: calc(100vh - 48px);
+  margin-right: -22px;
+  margin-left: -22px;
+}
+.mail-message__container {
+  position: relative;
+  display: inherit;
+  flex-direction: inherit;
+  overflow: auto;
 }
 .mail-message__main-info {
   position: relative;
   flex: 1 0 auto;
   height: auto;
+  padding: 0 22px;
+  overflow-x: hidden;
 }
 .mail-message__main-content {
   background: #fff;
@@ -2031,15 +2041,10 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   flex: 0 0 auto;
 }
 .mail-message__banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex: 0 0 auto;
   width: 100%;
-  min-height: 0;
-  max-height: 200px;
+  height: 200px;
   background: #ffffff;
-  border-top: 1px solid rgba(255, 204, 0, 0.4);
 }
 .mail-message__banner--closed {
   position: fixed;
@@ -2063,9 +2068,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .mail-message__info {
   position: relative;
-  top: 48px;
-  left: 0;
-  right: 0;
+  top: 0;
   z-index: 5;
   height: 72px;
   background: #fff;
@@ -2111,23 +2114,21 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   align-items: center;
   padding: 16px;
 }
-
-.wrapper-container {
-  padding-left: 22px;
-  padding-right: 22px;
-}
-.wrapper-container--is-margin {
-  margin-right: -22px;
-  margin-left: -22px;
-}
 @media only screen and (max-width: 562px) {
-  .wrapper-container {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  .wrapper-container--is-margin {
+  .mail-message {
     margin-right: -10px;
     margin-left: -10px;
+  }
+  .mail-message__main-info {
+    padding: 0 10px;
+  }
+}
+.mail-message__images-resolve {
+  margin: 0 -22px;
+}
+@media only screen and (max-width: 562px) {
+  .mail-message__images-resolve {
+    margin: 0 -10px;
   }
 }
 
@@ -2862,13 +2863,10 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   height: 40px;
   font-size: 16px;
 }
-.btn--size_20x20 {
+.btn--size_20 {
   width: 20px;
   height: 20px;
-}
-.btn--size_20x20 {
-  width: 20px;
-  height: 20px;
+  font-size: 16px;
 }
 .btn--size_28 {
   width: 28px;
@@ -2893,6 +2891,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .btn--mail-send {
   color: #07c;
+}
+.btn--mail-control {
+  font-size: 18px;
 }
 
 .ok-validates {
@@ -6044,8 +6045,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .body-message__content {
   position: relative;
-  min-width: 280px;
-  margin: 16px 0;
+  margin: 16px 0 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -6977,17 +6977,21 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .banner-block {
-  width: 100%;
-  min-height: 40px;
-  max-height: 120px;
-  height: auto;
+  width: 330px;
+  height: 200px;
+  margin: auto;
 }
 
 .images-resolve {
-  padding: 12px;
+  padding: 12px 22px;
   background: #fff4c9;
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd;
+}
+@media only screen and (max-width: 562px) {
+  .images-resolve {
+    padding: 12px 10px;
+  }
 }
 
 .avatar-upload__header {

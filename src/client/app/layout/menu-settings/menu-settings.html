@@ -48,21 +48,20 @@
 
         <div class="menu-settings__list">
             <div class="menu-settings__item">
-                <div class="menu-settings__link menu-settings__link--not-decoration flex" href>
+                <div class="menu-settings__link menu-settings__link--not-decoration flex mrg--r5" href>
                     {{ 'LANGUAGE' | translate }}:
-                    <div class="dis--inb position">
-                        <div class="menu-settings__link-choose-element flex align-items--cn"
-                             uib-popover-template="'app/components/lang-list/lang-list-popover.html'"
-                             popover-class="popover--choose-lang"
-                             popover-placement="bottom"
-                             popover-animation="true"
-                             popover-trigger="'outsideClick'"
-                             popover-is-open="vm.isOpenLangList">
 
-                            <img class="width--size20" src="images/country/{{ vm.useLang.icon }}">
+                    <div class="menu-settings__link-choose-element flex align-items--cn dis--inb pos--rel"
+                         uib-popover-template="'app/components/lang-list/lang-list-popover.html'"
+                         popover-class="popover--choose-lang"
+                         popover-placement="bottom"
+                         popover-animation="true"
+                         popover-trigger="'outsideClick'"
+                         popover-is-open="vm.isOpenLangList">
 
-                            <div class="mrg--l5">{{ vm.useLang.lang | translate }}</div>
-                        </div>
+                        <img class="width--size20" src="images/country/{{ vm.useLang.icon }}">
+
+                        <div class="mrg--l5">{{ vm.useLang.lang | translate }}</div>
                     </div>
                 </div>
             </div>
@@ -70,7 +69,7 @@
             <div class="menu-settings__item mrg--t20">
                 <div class="menu-settings__link menu-settings__link--timezone menu-settings__link--not-decoration">
                     {{ 'CLOCK' | translate }}:
-                    <div class="dis--inb position">
+                    <div class="dis--inb pos--rel">
                         <div class="menu-settings__link-choose-element flex align-items--cn"
                              uib-popover-template="'app/components/timezone-list/timezone-list-popover.html'"
                              popover-class="popover--choose-time-zone"
