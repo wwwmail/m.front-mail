@@ -99,7 +99,7 @@
                 <button class="main-header__right-button btn btn--not-style btn--mail-send header__icon mrg--right font--arial font--size15 pdd--hor12 icon-send-mail"
                         type="button"
                         ng-click="vm.send()"
-                        ng-disabled="!vm.isSend">
+                        ng-disabled="!vm.isSend || vm.isUploading">
                 </button>
             </div>
         </div>

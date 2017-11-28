@@ -312,11 +312,16 @@
 
             vm.isUploading = true;
 
+            $rootScope.$broadcast('mail:isUploading', {isUploading: vm.isUploading});
+
             mail.upload({
                 id: $state.params.id,
                 mbox: $state.params.mbox
             }, {}, files).then(function (response) {
                 vm.isUploading = false;
+
+                $rootScope.$broadcast('mail:isUploading', {isUploading: vm.isUploading});
+
                 vm.sendForm.id = response.data.data;
                 vm.sendForm.model.number = vm.sendForm.id;
 

@@ -47,6 +47,11 @@
             vm.isSend = data.isSend;
         });
 
+        $scope.$on('mail:isUploading', function (e, data) {
+            console.log('mail:isUploading', data);
+            vm.isUploading = data.isUploading;
+        });
+
         $scope.$on('mail.paginate', function (e, data) {
             vm.paginate = data.paginate;
         });

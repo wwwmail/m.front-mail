@@ -26,7 +26,6 @@
                 vm.message.model.number,
                 "?mbox=",
                 vm.message.model.mbox || 'Drafts',
-                // vm.$state.params.mbox ? vm.$state.params.mbox : 'Drafts',
                 "&part=attach&filename=",
                 attachment.fileName,
                 "&token=",
