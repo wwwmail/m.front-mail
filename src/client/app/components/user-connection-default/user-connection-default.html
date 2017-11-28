@@ -2,51 +2,6 @@
     <p class="user-connection-default__title font--size16 font--bold">
         <strong>{{ 'SEND_MAIL_IS_ADDRESS' | translate }}</strong>
     </p>
-
-    <div class="user-connection-default__item" ng-repeat="connection in vm.connections.items">
-        <div class="radiobutton-y" ng-class="{'radiobutton-y--bold': connection === vm.connections.selected}">
-            <label class="radiobutton-y__label">
-                <div class="radiobutton-y__radio">
-                    <input class="radiobutton-y__input"
-                           name="connection"
-                           type="radio"
-                           ng-change="vm.update(connection)"
-                           ng-model="vm.connections.selected"
-                           ng-value="connection">
-                    <div class="radiobutton-y__round">
-                        <div class="radiobutton-y__inside"></div>
-                    </div>
-                </div>
-                <div class="radiobutton-y__text">
-                    {{ connection.email }}
-                </div>
-            </label>
-        </div>
-    </div>
-
-
-    <div class="user-connection-default__item" ng-repeat="connection in vm.connections.items">
-        <div class="radiobutton-y" ng-class="{'radiobutton-y--bold': connection === vm.connections.selected}">
-            <label class="radiobutton-y__label">
-                <div class="radiobutton-y__radio">
-                    <input class="radiobutton-y__input"
-                           name="connection"
-                           type="radio"
-                           ng-change="vm.update(connection)"
-                           ng-model="vm.connections.selected"
-                           ng-value="connection">
-                    <div class="radiobutton-y__round">
-                        <div class="radiobutton-y__inside"></div>
-                    </div>
-                </div>
-                <div class="radiobutton-y__text">
-                    {{ connection.email }}
-                </div>
-            </label>
-        </div>
-    </div>
-
-
     <div class="user-connection-default__item" ng-repeat="connection in vm.connections.items">
         <div class="radiobutton-y" ng-class="{'radiobutton-y--bold': connection === vm.connections.selected}">
             <label class="radiobutton-y__label">

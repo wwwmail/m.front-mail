@@ -1,4 +1,4 @@
-.settings-tags {
+.settings-contacts {
   &__header {
     position: relative;
 
@@ -30,12 +30,7 @@
   }
 
   &__caption {
-    //max-width: 46%;
-
     font-size: 14px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
   }
 
   &__counter {
@@ -83,18 +78,5 @@
   &__item-content-right {
     display: inherit;
     align-items: inherit;
-  }
-
-  &__color-tag {
-    width: 24px;
-    min-width: 24px;
-    height: 24px;
-    min-height: 24px;
-
-    margin-right: 10px;
-
-    background-color: $silver-btn-color;
-
-    border-radius: 3px;
   }
 }

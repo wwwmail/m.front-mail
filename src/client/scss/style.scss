@@ -39,9 +39,12 @@
 @import 'layout/mail-message';
 @import "layout/password-reset-layout";
 @import "layout/folders-layout";
+//@import "layout/settings-contacts";
 @import "layout/settings-folders";
 @import "layout/settings-main";
 @import "layout/settings-tags";
+@import "layout/settings-rules";
+@import "layout/settings-rule-add";
 
 /*------------------------------------------- ui*/
 @import 'ui/checked';
@@ -125,6 +128,8 @@
 @import "components/banner-block";
 @import "components/images-resolve";
 @import "components/avatar-upload";
+@import "components/lang-list";
+@import "components/timezone-list";
 
 body {
   width: 100%;

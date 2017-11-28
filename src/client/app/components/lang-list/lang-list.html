@@ -1,0 +1,9 @@
+<div class="lang-list lang-list--auto-height">
+    <div class="lang-list__links">
+        <a class="lang-list__link" href ng-repeat="lang in vm.lang.items"
+           ng-click="vm.selectLang(lang)">
+            <img class="lang-list__country" src="images/country/{{ lang.icon }}">
+            <span class="lang-list__name">{{ lang.lang | translate }}</span>
+        </a>
+    </div>
+</div>

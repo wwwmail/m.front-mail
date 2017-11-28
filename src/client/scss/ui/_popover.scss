@@ -65,4 +65,30 @@
       max-width: 432px;
     }
   }
+
+  &--choose-lang {
+    //box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 10px 20px -5px rgba(0, 0, 0, .4);
+    left: calc(100% - 67px) !important;
+
+    .popover-content {
+      padding: 0;
+    }
+
+    .popover-inner {
+      //max-width: 130;
+    }
+  }
+
+  &--choose-time-zone {
+    //box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 10px 20px -5px rgba(0, 0, 0, .4);
+    left: calc(100% - (232px / 2)) !important;
+
+    .popover-content {
+      padding: 0;
+    }
+
+    .popover-inner {
+      max-width: 250px;
+    }
+  }
 }

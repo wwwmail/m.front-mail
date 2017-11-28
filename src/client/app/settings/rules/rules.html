@@ -1,135 +1,59 @@
-<div class="main-container" >
-    <div class="main-container__body">
-        <div class="main-layout__bread-crumbs mrg--b15">
-            <div class="bread-crumbs font-sizer--bigger-18">
-                <a class="bread-crumbs__item" ui-sref="mail.inbox({mbox: 'INBOX'})">{{ 'MAIL' | translate }}</a>
-                <a class="bread-crumbs__item" ui-sref="settings.main">{{ 'ALL_SETTING' | translate }}</a>
-                <a class="bread-crumbs__item bread-crumbs--active" href="#">{{ 'PROCESSING_RULES' | translate }}</a>
-            </div>
+<div class="settings-rule">
+    <div class="settings-rule__header">
+        <button class="btn btn--size_m btn--yellow"
+                ui-sref="settings.ruleAdd">{{ 'CREATE_RULE' | translate }}
+        </button>
+
+        <div class="settings-rule__message font--size14 ">
+            {{ 'RULES_MESSAGE_IS_HELP_RULES_WE' | translate }}.
         </div>
-
-        <article class="layout-settings">
-            <section class="layout-settings__row mrg__left">
-
-                <div class="rules-settings">
-                    <div class="rules-settings__head">
-
-                        <div class="rules-settings__left">
-
-                            <div class="rules-settings__notific notific--layout">
-                                {{ 'RULES_MESSAGE_IS_HELP_RULES_WE' | translate }}.
-                            </div>
-
-                            <div class="width--inh mrg--t15">
-                                <button class="btn btn--yellow mrg--b4 btn--size_sm"
-                                        ui-sref="settings.ruleAdd">{{ 'CREATE_RULE' | translate }}
-                                </button>
-                            </div>
-                        </div>
-                        <!--
-                         <div class="rules-settings__right">
-
-                            <div class="rules-settings__notific mrg--b10">{{ 'RULES_MESSAGE_IS_HELP_RULES_WE_CREATE' | translate }}:</div>
-                            <div class="rules-settings__nav">
-                                <a class="rules-settings__nav-item" href="">{{ 'RULES_MESSAGE_IS_HELP_RULES_WE_MOVE' | translate }},</a>
-                                <a class="rules-settings__nav-item" href="">{{ 'RULES_MESSAGE_IS_HELP_RULES_WE_SELECTED' | translate }},</a>
-                                <a class="rules-settings__nav-item" href="">{{ 'RULES_MESSAGE_IS_HELP_RULES_WE_DELETE' | translate }}.</a>
-                            </div>
-                        </div>
-                        -->
-                    </div>
-
-                    <!-- Правила -->
-                    <div class="rules-settings__rules mrg--t25">
-
-                        <div class="rules-settings__rules--title notific--layout-light">{{ 'YOUR_CREATED_RULES' | translate }}</div>
-
-                        <!-- Список правил-->
-                        <!-- Правило 1-->
-                        <form class="rules-settings__rule" ng-repeat="sieve in vm.sieve.items">
-                            <div class="rules-settings__rule__postpone mrg--r16"></div>
-                            <div class="rules-settings__rule__description">
-                                <span class="rules-settings__rule__name">{{ sieve.name }}</span>
-                                <!--<span class="rules-settings__rule__descript">{{ 'RULES_IF_WHOM_OR_COPY' | translate }} “mail@gmail.com”</span>-->
-                            </div>
-                            <div class="rules-settings__rule__option-icons">
-
-                                <!-- Переключатель -->
-                                <div class="radiobutton mrg--r16">
-                                    <div class="radiobutton radiobutton__switch radiobutton--size72x28">
-                                        <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                               ng-checked="{{ sieve.enable }}"
-                                               ng-value="0"
-                                               ng-model="sieve.enable"
-                                               ng-change="vm.enableTrigger(sieve)">
-                                        <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                               ng-checked="{{ sieve.enable }}"
-                                               ng-value="1"
-                                               ng-model="sieve.enable"
-                                               ng-change="vm.enableTrigger(sieve)">
-                                        <span class="radiobutton__switch__on-off" data-checked="{{ 'ON' | translate }}" data-unchecked="{{ 'OF' | translate }}"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Редактирование записи -->
-                                <button class="btn-group__btn btn btn--not-style btn--size_s width--size28 btn__icon--opahover mrg--r10 pdd"
-                                        ui-sref="settings.ruleAdd({id: sieve.id})">
-                                    <span class="icon-edit-pen"></span>
-                                </button>
-
-                                <!-- Удалить правило -->
-                                <button class="btn-group__btn btn btn--not-style btn--size_s width--size28 btn__icon--opahover mrg--r16 pdd"
-                                        ng-click="vm.remove(sieve)">
-                                    <span class="icon-basket"></span>
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                    <!-- Cписки черный/белый -->
-                    <div class="rules-settings__bl-wh-list">
-
-                <span class="rules-settings__notific width--all mrg--t25">
-                    {{ 'RULES_WE_MANAGE_MAILS' | translate }}.</span>
-
-                        <!-- Черный список-->
-                        <div class="rules-settings__bl-wh-content rules-settings__bl-wh-content--black">
-                            <black-list></black-list>
-                        </div>
-
-                        <!-- Белый список-->
-                        <div class="rules-settings__bl-wh-content rules-settings__bl-wh-content--white mrg--t10">
-                            <white-list></white-list>
-
-                            <!--<div class="rules-settings__bl-wh-content__title">Белый список</div>-->
-
-                            <!--<span class="rules-settings__bl-wh-content__text">Вся почта с адресов, занесённых в белый список, не будет попадать в папку <b>-->
-                            <!--<a class="rules-settings__bl-wh-content__link" href="">«Спам»</a></b></span>-->
-
-                            <!--<div class="form__field-item mrg__bottom0">-->
-                            <!--<div class="field-style flex&#45;&#45;inline ">-->
-
-                            <!--<input class="input input&#45;&#45;size_xs input&#45;&#45;up-shadow width&#45;&#45;inh input&#45;&#45;bg-white mrg__right7"-->
-                            <!--type="text"-->
-                            <!--name="rules"-->
-                            <!--placeholder="Укажите e-mail адрес"-->
-                            <!--required>-->
-                            <!--<button class="btn btn&#45;&#45;normal btn&#45;&#45;size_xs width&#45;&#45;size150">Добавить</button>-->
-
-                            <!--</div>-->
-                            <!--</div>-->
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-        </article>
     </div>
 
-    <aside-right class="aside-right--settings aside-right--left-line-hide"></aside-right>
+    <div class="settings-rule__title">
+        {{ 'YOUR_CREATED_RULES' | translate }}.
+    </div>
+
+    <!-- Список правил-->
+    <form class="settings-rule__list" ng-repeat="sieve in vm.sieve.items">
+        <div class="settings-rule__item">
+
+            <div class="settings-rule__name">
+                {{ sieve.name }}
+            </div>
+
+            <div class="flex align-items--cn">
+
+                <!-- Переключатель -->
+                <div class="radio-switch radio-switch--size-s">
+                    <input class="radio-switch__input" type="radio" name="toggle"
+                           ng-checked="{{ sieve.enable }}"
+                           ng-value="0"
+                           ng-model="sieve.enable"
+                           ng-change="vm.enableTrigger(sieve)">
+
+                    <input class="radio-switch__input" type="radio" name="toggle"
+                           ng-checked="{{ sieve.enable }}"
+                           ng-value="1"
+                           ng-model="sieve.enable"
+                           ng-change="vm.enableTrigger(sieve)">
+
+                    <span class="radio-switch__on-off" data-checked="{{ 'ON' | translate }}"
+                          data-unchecked="{{ 'OF' | translate }}"></span>
+                </div>
+
+                <!-- Редактирование записи -->
+                <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
+                        ui-sref="settings.ruleAdd({id: sieve.id})">
+                    <span class="icon-edit-pen"></span>
+                </button>
+
+                <!-- Удалить правило -->
+                <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
+                        ng-click="vm.remove(sieve)">
+                    <span class="icon-delete"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+
 </div>
