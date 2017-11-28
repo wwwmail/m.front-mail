@@ -1,0 +1,25 @@
+<section class="main-layout">
+    <div class="main-layout__header">
+
+        <header folder="vm.folder"></header>
+
+        <!-- Меню настроек-->
+        <div class="main-layout__menu main-layout__menu--settings"
+             ng-class="{'main-layout__menu--is-active-menu': isOpenSettingsMenu}">
+            <div class="main-layout__menu-content">
+                <menu-settings></menu-settings>
+            </div>
+
+            <button class="main-layout__menu-closer btn--not-events btn--not-style"
+                    type="button"
+                    ng-click="vm.closeSettingsMenu()">
+            </button>
+        </div>
+    </div>
+
+    <div class="main-layout__inner" layout-height>
+        <div class="main-layout__content">
+            <ui-view class="height--min-inh height--all"></ui-view>
+        </div>
+    </div>
+</section>

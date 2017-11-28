@@ -1,11 +1,23 @@
 .palette-list {
-  display: flex;
+  display: block;
+
+  max-width: 208px;
+
+  &:after {
+    @include clear;
+  }
 
   &__item {
     position: relative;
 
-    width: 19px;
-    height: 19px;
+    float: left;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
 
     margin: 0 2px 2px 0;
 
@@ -15,10 +27,7 @@
   &__icon {
     position: absolute;
 
-    top: 2px;
-    left: 1px;
-
     color: #fff;
-    font-size: 16px;
+    font-size: 18px;
   }
 }

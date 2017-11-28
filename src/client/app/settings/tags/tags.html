@@ -1,0 +1,41 @@
+<div class="settings-tags">
+    <div class="settings-tags__header">
+        <button class="btn btn--size_m btn--yellow"
+                ng-click="vm.openTagCreatePopup()">
+            {{ 'CREATE_TAG' | translate }}
+        </button>
+    </div>
+
+    <div class="settings-tags__list">
+        <div class="settings-tags__item" ng-repeat="tag in vm.tags.items">
+            <div class="settings-tags__item-content"
+                 ng-class="{'tags-settings__item--active': tag.isSelected}"
+                 ng-click="vm.select(tag)">
+
+                <div class="settings-tags__item-content-left">
+                    <div class="settings-tags__color-tag" style="background-color: {{ tag.bgcolor }}"></div>
+                    <div class="settings-tags__caption">{{ tag.tag_name }}</div>
+                    <div class="settings-tags__counter">(25)</div>
+                </div>
+
+                <div class="settings-tags__item-content-right">
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
+                            ng-click="vm.openTagEditPopup()"
+                            ng-disabled="!vm.selected">
+                        <span class="icon-edit-pen"></span>
+                    </button>
+
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver">
+                        <span class="icon-clear"></span>
+                    </button>
+
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
+                            ng-disabled="!vm.selected"
+                            ng-click="vm.destroy()">
+                        <span class="icon-delete"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

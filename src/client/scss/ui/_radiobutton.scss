@@ -330,3 +330,58 @@
   }
 
 }
+
+.radiobutton-y {
+  display: inline-block;
+
+  &--bold {
+    .radiobutton-y__text {
+      font-weight: bold;
+    }
+  }
+
+  &__label {
+    display: flex;
+
+    align-items: center;
+  }
+
+  &__radio {
+    margin-right: 5px;
+  }
+
+  &__round {
+    @include border-radius(50%);
+
+    width: 14px;
+    height: 14px;
+
+    border: 1px solid #c3c4c9 !important;
+  }
+
+  &__input {
+    display: none;
+
+    &:checked {
+      + .radiobutton-y__round {
+        box-shadow: inset 0 90px #ffeba0;
+
+        &:after {
+          content: "";
+
+          display: block;
+
+          @include border-radius(50%);
+
+          margin: 3px;
+
+          width: 6px;
+          height: 6px;
+
+          background: #000;
+        }
+      }
+    }
+  }
+}
+

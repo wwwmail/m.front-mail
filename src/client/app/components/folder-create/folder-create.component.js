@@ -5,7 +5,7 @@
         .module('app.components')
         .component('folderCreate', {
             bindings: {
-                onClose: '&'
+                onСlose: '&'
             },
             templateUrl: 'app/components/folder-create/folder-create.html',
             controller: 'FolderCreateController',

@@ -1,26 +1,23 @@
 .menu-settings {
-  @include no-list;
+  flex: 1 0 auto;
 
-  display: block;
+  @include no-list;
 
   &__icon {
     margin-right: 8px;
   }
 
-  &__item {
-
-  }
-
   &__link {
     display: block;
 
-    padding: 0 20px;
+    padding: 0 14px;
 
     color: #000;
-    font-size: 13px;
+    font-size: 16px;
     font-family: Arial, sans-serif;
+    line-height: 20px;
 
-    line-height: 26px;
+    margin: 14px 0;
 
     &:hover {
       background: rgba(0, 0, 0, .1);
@@ -31,24 +28,30 @@
     }
 
     &--active {
-      color: #fff;
+      color: #000 !important;
+      font-weight: bold;
 
-      background: #8ea4d3 !important;
+      //background: rgba(0, 0, 0, .06) !important;
+      box-shadow: inset 4px 0 black !important;
     }
 
     &--open {
       &:before {
         content: "";
-
       }
     }
   }
 
-  &__sub {
-    .menu-main__link {
-      padding-left: 70px;
-    }
+  &__link-choose-element {
+    display: flex;
+    align-items: center;
+
+    padding: 3px 10px;
+
+    background-color: $white-color;
+    //border: 1px solid $border-color;
   }
+
 
   &__counter {
     float: right;

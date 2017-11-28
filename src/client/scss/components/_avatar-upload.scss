@@ -1,0 +1,45 @@
+.avatar-upload {
+  &__header{
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    height: 64px;
+
+    padding: 0 38px;
+
+    color: $textBlack ;
+    font: bold 18px/1 $mainFont;
+    border-bottom: 1px solid $hr-main-color;
+
+  }
+
+  &__body {
+    position: relative;
+
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-around;
+
+    flex-flow: row wrap;
+    border-bottom: 1px solid $hr-main-color;
+
+
+  }
+
+  &__footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 64px;
+
+  }
+
+  &__crop, &__default{
+    width: 200px!important;
+    height: 200px!important;
+  }
+}

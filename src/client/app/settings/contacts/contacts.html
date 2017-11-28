@@ -1,0 +1,36 @@
+<div class="settings-contacts">
+    <div class="settings-contacts__header">
+        <button class="btn btn--size_m btn--yellow"
+                ng-click="vm.openContactGroupCreatePopup()">
+            {{ 'CREATE_GROUP' | translate }}
+        </button>
+    </div>
+
+    <div class="settings-contacts__list">
+        <div class="settings-contacts__item" ng-repeat="contact in vm.contactGroup.items">
+            <div class="settings-contacts__item-content"
+                 ng-class="{'tags-settings__item--active': tag.isSelected}"
+                 ng-click="vm.select(tag)">
+
+                <div class="settings-contacts__item-content-left">
+                    <div class="settings-contacts__caption">{{ contact.name }}</div>
+                    <div class="settings-contacts__counter">{{ vm.contactGroup.items.length }}</div>
+                </div>
+
+                <div class="settings-contacts__item-content-right">
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
+                            ng-click="vm.openContactGroupEditPopup()"ng-click="vm.openContactGroupEditPopup()"
+                            ng-disabled="!vm.selected">
+                        <span class="icon-edit-pen"></span>
+                    </button>
+
+                    <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
+                            ng-disabled="!vm.selected"
+                            ng-click="vm.destroy()">
+                        <span class="icon-delete"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

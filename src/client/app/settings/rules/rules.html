@@ -1,0 +1,59 @@
+<div class="settings-rule">
+    <div class="settings-rule__header">
+        <button class="btn btn--size_m btn--yellow"
+                ui-sref="settings.ruleAdd">{{ 'CREATE_RULE' | translate }}
+        </button>
+
+        <div class="settings-rule__message font--size14 ">
+            {{ 'RULES_MESSAGE_IS_HELP_RULES_WE' | translate }}.
+        </div>
+    </div>
+
+    <div class="settings-rule__title">
+        {{ 'YOUR_CREATED_RULES' | translate }}.
+    </div>
+
+    <!-- Список правил-->
+    <form class="settings-rule__list" ng-repeat="sieve in vm.sieve.items">
+        <div class="settings-rule__item">
+
+            <div class="settings-rule__name">
+                {{ sieve.name }}
+            </div>
+
+            <div class="flex align-items--cn">
+
+                <!-- Переключатель -->
+                <div class="radio-switch radio-switch--size-s">
+                    <input class="radio-switch__input" type="radio" name="toggle"
+                           ng-checked="{{ sieve.enable }}"
+                           ng-value="0"
+                           ng-model="sieve.enable"
+                           ng-change="vm.enableTrigger(sieve)">
+
+                    <input class="radio-switch__input" type="radio" name="toggle"
+                           ng-checked="{{ sieve.enable }}"
+                           ng-value="1"
+                           ng-model="sieve.enable"
+                           ng-change="vm.enableTrigger(sieve)">
+
+                    <span class="radio-switch__on-off" data-checked="{{ 'ON' | translate }}"
+                          data-unchecked="{{ 'OF' | translate }}"></span>
+                </div>
+
+                <!-- Редактирование записи -->
+                <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
+                        ui-sref="settings.ruleAdd({id: sieve.id})">
+                    <span class="icon-edit-pen"></span>
+                </button>
+
+                <!-- Удалить правило -->
+                <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
+                        ng-click="vm.remove(sieve)">
+                    <span class="icon-delete"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>

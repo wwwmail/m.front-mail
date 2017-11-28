@@ -1,0 +1,381 @@
+<div class="settings-rule-add">
+    <form class="form"
+          name="sieveForm"
+          ng-submit="vm.sieveForm.model.id ? vm.update(sieveForm) : vm.add(sieveForm)"
+          form-server-errors="vm.sieveForm.errors"
+          novalidate>
+
+        <div class="rule-add__item mrg--b20 ">
+            <div class="field-style flex--inline just-content--sp-btw align-items--cn mrg--b8">
+                <span class="rule-add__name">{{ 'NAME' | translate }}</span>
+                <input class="input input--size_xs width--size527 input--bg-white input--fc-sh-yellow font--size14"
+                       ng-class="{'input--error': sieveForm.name.$invalid}"
+                       type="text"
+                       name="name"
+                       placeholder="{{ 'INPUT_PLACEHOLDER_NAME_RULE' | translate }}"
+                       ng-model="vm.sieveForm.model.name"
+                       server-error required>
+            </div>
+
+            <div class="field-style flex--inline just-content--sp-btw align-items--cn mrg--b8">
+                <span class="rule-add__name">{{ 'IS_APPLY' | translate }}</span>
+                <div class="flex--inline just-content--sp-btw align-items--cn width--all width--max527">
+                    <ui-select ng-model="vm.sieveForm.model.spam_accept"
+                               class="select-list select-list--size_xs select-list--not-border-of-sides mrg__right6 font--size14"
+                               ng-class="{'select-list--error': sieveForm.spam_accept.$invalid}"
+                               theme="select2"
+                               name="spam_accept"
+                               search-enabled="false"
+                               server-error
+                               ng-required="true">
+                        <ui-select-match class="select-list__body select-list--size_xs width--inh font--size14"
+                                         placeholder="{{ 'RULE_ADD_SELECT_FOR_ALL_LETTERS' | translate }}">
+                            {{ $select.selected.name | translate }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item.value as item in vm.spamAccept.list"
+                                           value="{{ $select.selected.value }}">
+                            <div ng-bind-html="item.name | translate"></div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                    <ui-select ng-model="vm.sieveForm.model.attachment_accept"
+                               class="select-list select-list--size_xs select-list--not-border-of-sides font--size14"
+                               ng-class="{'select-list--error': sieveForm.attachment_accept.$invalid}"
+                               theme="select2"
+                               name="attachment_accept"
+                               search-enabled="false"
+                               server-error
+                               ng-required="true">
+                        <ui-select-match
+                                class="select-list__body select-list--size_xs width--inh font--size14"
+                                placeholder="{{ 'RULE_ADD_SELECT_IS_ATTACH_0R_NOT' | translate }}">
+                            {{ $select.selected.name | translate }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item.value as item in vm.attachmentAccept.list"
+                                           value="{{ $select.selected.value }}">
+                            <div ng-bind-html="item.name | translate"></div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="rule-add__item mrg--b20">
+            <div class="rule-add__item-title font--size15">{{ 'IF' | translate }}</div>
+
+            <div class="rule-add__condition">
+                <div class="rule-add__condition-item" ng-repeat="rule in vm.sieveForm.model.sieveRules">
+                    <div class="field-style flex--inline just-content--sp-btw align-items--cn mrg--b8">
+
+                        <ui-select ng-model="rule.type"
+                                   class="select-list select-list--if-less300 select-list--size_xs select-list--not-border-of-sides mrg__right6 width--size80 font--size14"
+                                   ng-class="{'select-list--error': sieveForm.type_{{$index}}.$invalid}"
+                                   theme="select2"
+                                   name="type_{{$index}}"
+                                   search-enabled="false"
+                                   server-error
+                                   ng-required="true">
+                            <ui-select-match
+                                    class="select-list__body select-list--size_xs width--inh font--size14"
+                                    placeholder="{{ 'FROM_WHOM_U' | translate }}">
+                                {{ $select.selected.name | translate }}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item.value as item in vm.sieveRules.list"
+                                               value="{{ $select.selected.value }}">
+                                <div ng-bind-html="item.name | translate"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <ui-select ng-model="rule.compare_type"
+                                   class="select-list select-list--if-less200 select-list--size_xs select-list--not-border-of-sides width--size108 mrg__right6 font--size14"
+                                   ng-class="{'select-list--error': sieveForm.compare_type_{{$index}}.$invalid}"
+                                   theme="select2"
+                                   name="compare_type_{{$index}}"
+                                   search-enabled="false"
+                                   server-error
+                                   ng-required="true">
+                            <ui-select-match
+                                    class="select-list__body select-list--size_xs width--inh font--size14"
+                                    placeholder="{{ 'RULE_ADD_SELECT_IS_COINCIDES' | translate }}">
+                                {{ $select.selected.name | translate }}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item.value as item in vm.compareTypes.list"
+                                               value="{{ $select.selected.value }}">
+                                <div ng-bind-html="item.name | translate"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <input class="input input--size_xs width--inh input--bg-white input--fc-sh-yellow font--size14"
+                               ng-class="{'input--error': sieveForm.value_{{$index}}.$invalid}"
+                               type="text"
+                               name="value_{{$index}}"
+                               ng-model="rule.value"
+                               placeholder="{{ 'INPUT_PLACEHOLDER_NAME_RULE' | translate }}"
+                               required>
+                    </div>
+                    <button class="rule-add__condition-remove btn btn--not-style btn--not-events btn--remove icon-close"
+                            type="button"
+                            ng-click="vm.removeRule(rule)"></button>
+                </div>
+            </div>
+
+            <button class="btn btn--normal btn--size_xs width--size150 border--cl-bl-silver font--size13"
+                    type="button"
+                    ng-click="vm.addRule()">
+                {{ 'ADD_CONDITION' | translate }}
+            </button>
+        </div>
+
+        <div class="rule-add__item mrg--b20">
+            <div class="rule-add__item-title font--size15">{{ 'RUN_ACTION' | translate }}</div>
+            <div class="field-style flex--inline align-items--cn mrg--b6">
+                <label class="checkbox-y__label checkbox-y width--min190">
+                    <input class="checkbox-y__input" type="checkbox"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="{ 'type': 'delete' }"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+                        <span class="checkbox-y__icon"></span>
+                    </div>
+                    <span class="checkbox__text" role="presentation">
+                                        {{ 'DELETE' | translate }}
+                                    </span>
+                </label>
+            </div>
+
+            <div class="field-style flex--inline align-items--cn mrg--b6">
+                <label class="checkbox-y__label checkbox-y width--min190">
+                    <input class="checkbox-y__input" type="checkbox"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="{ 'type': 'read' }"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+                                <span class="checkbox-y__icon">
+                                </span>
+                    </div>
+                    <span class="checkbox__text" role="presentation">
+                                {{ 'MARK_AS_READ' | translate }}
+                            </span>
+                </label>
+            </div>
+
+            <div class="field-style flex--inline align-items--cn mrg--b6">
+                <label class="checkbox-y__label checkbox-y width--min190">
+                    <input class="checkbox-y__input" type="checkbox"
+                           ng-model="vm.isFolder"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="vm.sieveActions.move"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+                                <span class="checkbox-y__icon">
+                                </span>
+                    </div>
+                    <span class="checkbox__text " role="presentation">
+                                {{ 'PUT_IN_FOLDER' | translate }}
+                            </span>
+                </label>
+                <ui-select ng-model="vm.sieveActions.move.value"
+                           class="select-list select-list--if-less200 select-list--size_xs select-list--not-border-of-sides mrg__right6 width--aut width--max126 font--size14"
+                           ng-class="{'select-list--error': sieveForm.move.$invalid}"
+                           name="move"
+                           theme="select2"
+                           ng-disabled="!vm.isFolder"
+                           search-enabled="false"
+                           ng-required="true">
+                    <ui-select-match
+                            class="select-list__body select-list--size_xs width--inh font--size14"
+                            placeholder="{{ 'CHOOSE' | translate }}">
+                        {{ $select.selected.name | translate }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.name as item in vm.folders.items"
+                                       value="{{ $select.selected.name }}">
+                        <div ng-bind-html="item.name | translate"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <!--
+
+            <div class="field-style flex--inline align-items--cn mrg--b6">
+                <label class="checkbox-y__label checkbox-y width--min190">
+                    <input class="checkbox-y__input" type="checkbox"
+                           ng-model="vm.isFlag"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="vm.sieveActions.flag"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+                        <span class="checkbox-y__icon">
+                        </span>
+                    </div>
+                    <span class="checkbox__text" role="presentation">
+                        {{ 'SET_TAG' | translate }}
+                    </span>
+                </label>
+                <ui-select ng-model="vm.sieveActions.flag.value"
+                           class="select-list select-list--if-less200 select-list--size_xs select-list--not-border-of-sides mrg__right6 width--aut width--max126 font--size14"
+                           theme="select2"
+                           title="Choose a person"
+                           ng-disabled="!vm.isFlag"
+                           search-enabled="false">
+                    <ui-select-match
+                            class="select-list__body select-list--size_xs width--inh font--size14"
+                            placeholder="{{ 'CHOOSE' | translate }}">
+                        {{ $select.selected.tag_name }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.tag_name as item in vm.tags.items"
+                                       value="{{ $select.selected.tag_name }}">
+                        <div ng-bind-html="item.tag_name"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            -->
+
+            <div class="rule-add__notif">
+                {{ 'RULE_ADD_MESSAGE_WHEN_ACTIVE_RULE' | translate }}.
+            </div>
+
+            <div class="field-style flex--inline align-items--st mrg--b6">
+                <label class="align-items-st checkbox-y__label checkbox-y width--min190">
+                    <input class="checkbox-y__input"
+                           type="checkbox"
+                           ng-model="vm.isResend"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="vm.sieveActions.resend"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+                        <span class="checkbox-y__icon"></span>
+                    </div>
+                    <span class="checkbox__text" role="presentation">
+                                {{ 'FORWARD_TO' | translate }}
+                            </span>
+                </label>
+                <div class="width--inh">
+                    <input class="input input--size_xs width--inh input--bg-white input--fc-sh-yellow font--size14 font--arial"
+                           ng-class="{'input--error': sieveForm.resend.$invalid}"
+                           name="resend"
+                           type="text"
+                           placeholder="{{ 'FORWARD_TO' | translate }}"
+                           ng-model="vm.sieveActions.resend.value"
+                           ng-disabled="!vm.isResend"
+                           required>
+                    <label class="checkbox-y__label checkbox-y width--inh">
+                        <!--data-checklist-model="vm.sieveForm.model.sieveActions"
+                        data-checklist-value="vm.sieveActions.option"
+                        ng-disabled="!vm.isResend"
+                        checklist-comparator=".type"-->
+                        <input class="checkbox-y__input"
+                               type="checkbox"
+                               ng-model="vm.sieveActions.resend.option">
+                        <div class="checkbox-y__body">
+                            <span class="checkbox-y__icon"></span>
+                        </div>
+                        <span class="checkbox__text " role="presentation">
+                                    {{ 'RULE_ADD_MESSAGE_SAVE_COPY' | translate }}
+                            </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="field-style flex--inline align-items--cn mrg--b6">
+                <label class="align-items-st checkbox-y__label checkbox-y width--min190">
+                    <input class="checkbox-y__input"
+                           type="checkbox"
+                           ng-model="vm.isNotify"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="vm.sieveActions.notify"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+                        <span class="checkbox-y__icon"></span>
+                    </div>
+                    <span class="checkbox__text " role="presentation">
+                                {{ 'RULE_ADD_MESSAGE_NOTIFY_BY_EMAIL' | translate }}
+                            </span>
+                </label>
+                <input class="input input--size_xs width--inh input--bg-white input--fc-sh-yellow font--size14 font--arial"
+                       ng-class="{'input--error': sieveForm.notify.$invalid}"
+                       type="text"
+                       name="notify"
+                       ng-model="vm.sieveActions.notify.value"
+                       ng-disabled="!vm.isNotify"
+                       placeholder="{{ 'RULE_ADD_MESSAGE_NOTIFY_BY_EMAIL' | translate }}"
+                       required>
+            </div>
+
+            <div class="field-style align-items--cn mrg--b6">
+                <label class="align-items-st checkbox-y__label checkbox-y width--inh">
+                    <input class="checkbox-y__input"
+                           type="checkbox"
+                           ng-model="vm.isAnswer"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="vm.sieveActions.answer"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+                        <span class="checkbox-y__icon"></span>
+                    </div>
+                    <span class="checkbox__text " role="presentation">
+                                {{ 'RULE_ADD_MESSAGE_REPLY_TEXT' | translate }}
+                            </span>
+                </label>
+                <textarea class="rule-add__field-text textarea textarea--not-resize textarea--normal width--inh font--size13 mrg--t5"
+                          ng-class="{'textarea--error': sieveForm.answer.$invalid}"
+                          name="answer"
+                          cols="10"
+                          rows="10"
+                          placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_MESSAGE_TEXT' | translate }}"
+                          ng-model="vm.sieveActions.answer.value"
+                          ng-disabled="!vm.isAnswer"
+                          required>
+                        </textarea>
+            </div>
+
+            <div class="field-style  align-items--cn mrg--b6">
+                <label class="align-items-st checkbox-y__label checkbox-y width--inh">
+                    <input class="checkbox-y__input" type="checkbox"
+                           data-checklist-model="vm.sieveForm.model.sieveActions"
+                           data-checklist-value="{ 'type': 'stop' }"
+                           checklist-comparator=".type">
+                    <div class="checkbox-y__body">
+
+                        <span class="checkbox-y__icon"></span>
+                    </div>
+                    <span class="checkbox__text " role="presentation">
+                                {{ 'RULE_ADD_MESSAGE_DONOT_NOT_APPLY_RULE' | translate }}
+                            </span>
+                </label>
+
+            </div>
+
+            <div class="field-style mrg--b6">
+                <!--<div class="rule-add__notif mer">{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES' | translate }} <a-->
+                <!--href="">{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES_1' | translate }}</a>,-->
+                <!--{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES_2' | translate }}-->
+                <!--</div>-->
+                <div class="flex--inline align-items--cn mrg--t15">
+                    <button class="btn btn--yellow btn--size_sm mrg__right10"
+                            type="submit"
+                            ng-if="!vm.sieveForm.model.id">
+                        {{ 'CREATE_RULE' | translate }}
+                    </button>
+                    <button class="btn btn--yellow btn--size_sm mrg__right10"
+                            type="submit"
+                            ng-if="vm.sieveForm.model.id">
+                        {{ 'BTN_SAVE_CHANGE' | translate }}
+                    </button>
+                    <!--<button class="btn btn&#45;&#45;normal btn&#45;&#45;size_sm mrg__right10"-->
+                    <!--type="button">-->
+                    <!--{{ 'BTN_APPLY_TO_EXISTING_EMAILS' | translate }}-->
+                    <!--</button>-->
+                    <button class="btn btn--size_sm btn--link-style mrg__none mrg--l10"
+                            type="button"
+                            ui-sref="settings.rules">
+                        {{ 'BTN_CANCEL' | translate }}
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>

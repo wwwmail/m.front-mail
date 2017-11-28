@@ -1,5 +1,4 @@
 /* Colors Variables ********************************************************************/
-
 $black: #000;
 $textBlack: #000;
 
@@ -16,6 +15,9 @@ $storage-text-color: #595959;
 $inpus-compose-text: #b3b3b8;
 
 $yellow-select-main-menu-color: #e7cb42;
+
+$radio-button-round-on-color: #339933;
+$radio-button-round-off-color: #d7d7d7;
 
 $hr-main-menu-color: #656c7b;
 $user-mail-main-menu-color: #a3a7b0;
@@ -122,6 +124,16 @@ $yellow-normal-light: #ffdb4d;
 $yellow-lignt: #fee481;
 $yellow-hard-light: #ffeba0;
 
+
+/*
+*/
+
+$mail-yellow-color: #f4dd4b;
+$mail-yellow-dark-color: #d0b50d;
+/*
+
+*/
+
 $signature-pred-publick: f7f6f4;
 
 $auth-footer-color: #352e40;
@@ -173,6 +185,8 @@ $radio-btn-border-gradient: linear-gradient(to bottom, #bfbaac 0%,#e5e1d0 99%);
 $radio-btn-gradient: linear-gradient(to bottom, #099502 0%, #d0ffd4 99%);
 
 $btn-gradient: linear-gradient(to bottom, #fefefe 0%,#efefef 100%);
+
+$button-gradient: linear-gradient(to bottom, #fefefe 0%, $mail-yellow-color 100%);
 
 /* Font variable ********************************************************************/
 $mainFont: 'HelveticaNeueCyr' , sans-serif;

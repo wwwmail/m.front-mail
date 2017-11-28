@@ -40,17 +40,17 @@
 
     background-color: rgba($black, 0);
     overflow: hidden;
-    transition: all 1s;
+    transition: all .4s;
 
     &--is-active-menu{
       visibility: visible;
 
       background-color: rgba($black, .54);
-      transition: transform 2s, background-color 2s;
+      transition: transform 1s, background-color 2s;
 
       .main-layout__menu-content{
         transform: translate3d(0px, 0px, 0px);
-        transition: transform 500ms ease-in-out;
+        transition: transform .4s ease-in-out;
       }
       .main-layout__menu-closer{
         display: block;
@@ -126,6 +126,7 @@
     position: relative;
     z-index: 5;
   }
+
   &__footer {
     margin-top: 50px;
   }
@@ -134,17 +135,23 @@
     padding: 0 20px;
   }
 
+  &--settings {
+    .main-layout__menu-content {
+      min-width: 250px;
+    }
+  }
+
   @media only screen and (max-width: 562px) {
     &__content{
       padding: 0 10px;
     }
 
     &__menu-content{
-      max-width: calc(100% / 1.61803399)!important;
+      max-width: 250px;
     }
 
     &__menu-closer{
-      left: calc(100% / 1.61803399)!important;
+      left: 250px;
     }
   }
 

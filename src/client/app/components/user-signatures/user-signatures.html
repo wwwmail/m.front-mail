@@ -1,0 +1,109 @@
+<div class="user-signatures">
+    <div class="user-signatures__title main-title-text">{{ 'YOUR_SIGNATURE' | translate }}</div>
+
+    <div class="user-signatures__edit-text">
+        <div message-textarea
+             is-sign="true"
+             ng-model="vm.signatureForm.model.sign"
+             message-textarea-html="vm.signatureForm.model.sign">
+        </div>
+    </div>
+
+    <div class="user-signatures__connection mrg--t10 mrg--b20">
+        <div class="checkbox-y checkbox-y--size14 text--no-wrap mrg--r10">
+            <label class="checkbox-y__label">
+                <input class="checkbox-y__input ng-untouched ng-valid ng-not-empty ng-dirty ng-valid-parse"
+                       type="checkbox"
+                       ng-model="vm.signatureForm.model.isSignConnected">
+                <div class="checkbox-y__body">
+                    <span class="checkbox-y__icon"></span>
+                </div>
+                <div class="checkbox-y__text">
+                    {{ 'BIND_TO_ADDRESS' | translate }}
+                </div>
+            </label>
+        </div>
+
+        <ui-select ng-model="vm.signatureForm.model.connection_id"
+                   class="select-list select-list--size_l select-list--auto-width"
+                   theme="select2"
+                   search-enabled="false">
+            <ui-select-match class="select-list__body select-list--size_l ">
+                {{ $select.selected.email }}
+            </ui-select-match>
+            <ui-select-choices repeat="connection.id as connection in vm.connections.items"
+                               ng-value="$select.selected.id">
+                <div ng-bind="connection.email"></div>
+            </ui-select-choices>
+        </ui-select>
+
+        <button class="btn btn--normal btn--s-gray btn--size_l mrg--l15"
+                ng-click="vm.add()">{{ 'ADD_SIGNATURE' | translate }}
+        </button>
+    </div>
+
+    <div class="" ng-if="vm.signatures.items.length">
+        <div class="mrg--b20" ng-repeat="signature in vm.signatures.items">
+            <div class="user-signatures__view" ng-if="!signature.isEdit">
+                <div class="user-signatures__buttons">
+                    <button class="btn--not-style mrg--r2" ng-click="vm.edit(signature)">
+                        <span class="icon-edit-pen"></span>
+                    </button>
+                    <button class="btn--not-style" ng-click="vm.destroy(signature)">
+                        <span class="icon-delete"></span>
+                    </button>
+                </div>
+                <div class="user-signatures__text">
+                    <span ng-bind-html="vm.getTrustHtml(signature.sign);"></span>
+                </div>
+                <span class="user-signatures__connection-email">
+                        {{ vm.getEmailBySign(signature) }}
+                    </span>
+            </div>
+            <div ng-if="signature.isEdit">
+                <div class="user-signatures__edit-text">
+                    <div message-textarea
+                         params="{}"
+                         is-sign="true"
+                         message-textarea-html="signature.sign"
+                         ng-model="signature.sign">
+                    </div>
+                </div>
+                <div class="mrg--t10 user-signatures__connection">
+                    <div class="checkbox-y checkbox-y--size14 mrg--r5">
+                        <label class="checkbox-y__label">
+                            <input class="checkbox-y__input ng-untouched ng-valid ng-not-empty ng-dirty ng-valid-parse"
+                                   type="checkbox"
+                                   ng-model="signature.isSignConnected">
+                            <div class="checkbox-y__body">
+                                <span class="checkbox-y__icon"></span>
+                            </div>
+                            <div class="checkbox-y__text">
+                                {{ 'BIND_TO_ADDRESS' | translate }}
+                            </div>
+                        </label>
+                    </div>
+
+                    <ui-select ng-model="signature.connection_id"
+                               class="select-list select-list--size_l"
+                               theme="select2"
+                               search-enabled="false">
+                        <ui-select-match class="select-list__body select-list--size_l">
+                            {{ $select.selected.email }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="connection.id as connection in vm.connections.items"
+                                           ng-value="$select.selected.id">
+                            <div ng-bind="connection.email"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="mrg--t10">
+                    <button class="btn btn--normal btn--size_s"
+                            ng-click="vm.save(signature)">
+                        {{ 'UPDATE_SIGNATURE' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

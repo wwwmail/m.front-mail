@@ -5,58 +5,35 @@
         .module('app.components')
         .controller('FolderCreateController', FolderCreateController);
 
-    FolderCreateController.$inject = [];
+    FolderCreateController.$inject = ['mailBox'];
     /* @ngInject */
-    function FolderCreateController() {
+    function FolderCreateController(mailBox) {
         var vm = this;
 
-        vm.tags = {};
-
-        vm.palette = {
-            items: [
-                {
-                    active: true,
-                    color: '#f44336'
-                },
-                {
-                    active: false,
-                    color: '#e91e63'
-                },
-                {
-                    active: false,
-                    color: '#ffc107'
-                },
-                {
-                    active: false,
-                    color: '#ffeb3b'
-                },
-                {
-                    active: false,
-                    color: '#4caf50'
-                },
-                {
-                    active: false,
-                    color: '#2196f3'
-                },
-                {
-                    active: false,
-                    color: '#3f51b5'
-                },
-                {
-                    active: false,
-                    color: '#9c27b0'
-                },
-                {
-                    active: false,
-                    color: '#607d8e'
-                },
-                {
-                    active: false,
-                    color: '#9e9e9e'
-                }
-            ]
+        vm.form = {
+            model: {}
         };
 
-        // vm.onClose
+        vm.create = create;
+        vm.close = close;
+
+        activate();
+
+        function activate() {
+            console.log('cancel()', vm);
+        }
+
+        function create(form) {
+            if (form.$invalid) return;
+
+            mailBox.create({}, vm.form.model).then(function (response) {
+                console.log('response', response);
+                close();
+            });
+        }
+
+        function close() {
+            vm.onСlose();
+        }
     }
 })();

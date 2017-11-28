@@ -1,59 +1,50 @@
 .mail-message {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  min-height: calc(100vh - 50px);
-
   display: flex;
   flex-direction: column;
 
-  padding-bottom: 3px;
+  max-height: calc(100vh - 48px);
 
-  &__main-info{
+  &__container {
     position: relative;
-    flex: 1 0 auto;
-    height: auto;
-    //
-    //&:before{
-    //  content: "";
-    //
-    //  position: absolute;
-    //  top: auto;
-    //  right: -100vw;
-    //  left: -100vw;
-    //  bottom: 0;
-    //  z-index: -1;
-    //
-    //  height: 10px;
-    //
-    //  background: #f6f5f3;
-    //}
+
+    //min-height: calc(100vh - 50px);
+    display: inherit;
+    flex-direction: inherit;
+
+    //padding-bottom: 3px;
+
+    overflow: auto;
   }
 
-  &__main-content{
+  &__main-info {
+    position: relative;
+
+    flex: 1 0 auto;
+    height: auto;
+
+    padding: 0 22px;
+
+    overflow-x: hidden;;
+  }
+
+  &__main-content {
     background: #fff;
   }
 
-  &__reply{
+  &__reply {
     background: $white-color;
     flex: 0 0 auto;
   }
 
-  &__banner{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &__banner {
     flex: 0 0 auto;
 
     width: 100%;
-    min-height: 40px;
-    max-height: 120px;
+    height: 200px;
 
     background: $white-color;
-    border-top: 1px solid rgba($yellow-yandex, .4);
+    //border-top: 1px solid rgba($yellow-yandex, .004);
+    //box-shadow: 0px -3px 3px 0px rgba(0,0,0,0.1);
 
     &--closed {
       position: fixed;
@@ -83,30 +74,30 @@
     box-shadow: 0px 0px 7px 1px rgba($yellow-hard-light, 0.81);
   }
 
-  &__info{
+  &__info {
     position: relative;
-    top: 48px;
-    left: 0;
-    right: 0;
+    top: 0;
+    //left: 0;
+    //right: 0;
     z-index: 5;
 
     height: 72px;
 
     background: #fff;
-    transform: translate3d(0,0,0);
+    transform: translate3d(0, 0, 0);
 
     display: flex;
     align-items: center;
   }
 
-  &__body{
+  &__body {
     position: relative;
     //flex: 1 0 auto;
     margin-bottom: 10px;
     z-index: 1;
   }
 
-  &__mail-attachments{
+  &__mail-attachments {
     position: relative;
     z-index: 1;
     padding: 10px 0 0;
@@ -130,7 +121,7 @@
     color: $mail-message-title-color;
     background-color: #f6f5f3;
 
-    &:after{
+    &:after {
       content: "";
 
       position: absolute;
@@ -146,7 +137,7 @@
       background-color: #f6f5f3;
     }
   }
-  &__footer{
+  &__footer {
     display: flex;
     align-items: center;
 
@@ -154,30 +145,53 @@
   }
 
   @media only screen and (max-width: 562px) {
-    &__header-container, &__reply-container{
+    &__header-container, &__reply-container {
       //padding: 0 10px;
     }
   }
 
-}
-
-
-.wrapper-container{
-  padding-left: 22px;
-  padding-right: 22px;
-
-  &--is-margin{
-    margin-right: -22px;
-    margin-left: -22px;
-  }
+  margin-right: -22px;
+  margin-left: -22px;
 
   @media only screen and (max-width: 562px) {
-    padding-left: 10px;
-    padding-right: 10px;
+    margin-right: -10px;
+    margin-left: -10px;
 
-    &--is-margin{
-      margin-right: -10px;
-      margin-left: -10px;
+    &__main-info {
+      padding: 0 10px;
+    }
+
+  }
+
+  &__images-resolve {
+    margin: 0 -22px;
+
+    //@media only screen and (max-width: 668px) {
+    //
+    //}
+    @media only screen and (max-width: 562px) {
+      margin: 0 -10px;
     }
   }
+
 }
+
+//.wrapper-container {
+//  padding-left: 22px;
+//  padding-right: 22px;
+//
+//  //&--is-margin {
+//  //  margin-right: -22px;
+//  //  margin-left: -22px;
+//  //}
+//
+//  @media only screen and (max-width: 667px) {
+//    padding-left: 10px;
+//    padding-right: 10px;
+//
+//    &--is-margin {
+//      //margin-right: -10px;
+//      //margin-left: -10px;
+//    }
+//  }
+//}

@@ -1,0 +1,33 @@
+<div class="popup__head">
+    <span class="popup__head-title">{{ 'RENAME_FOLDER' | translate }}</span>
+    <button class="icon-close btn btn--not-style btn--main-mobile-color btn--size_s"
+            type="button"
+            ng-click="vm.close()"></button>
+    <hr class="hr hr--popup">
+</div>
+
+<form name="form" ng-submit="vm.update(form)" novalidate>
+
+    <div class="popup__content pdd--20">
+        <!--<div class="mrg&#45;&#45;b6">-->
+            <!--<span>{{ 'NAME' | translate }}</span>-->
+        <!--</div>-->
+        <div>
+            <input class="input input--size_l width--all font--center"
+                   name="mboxnew"
+                   ng-model="vm.form.model.mboxnew"
+                   type="text"
+                   autofocus="true"
+                   ng-maxlength="20"
+                   required
+                   placeholder="{{ 'NAME' | translate }}">
+            <!--<a class="link link&#45;&#45;dotted link&#45;&#45;violet font--size13" href="">Вложить в другую папку</a>-->
+        </div>
+    </div>
+
+    <div class="popup__footer">
+        <button class="btn btn--yellow btn--no-radius width--all height--min-inh font--size20" type="submit">
+            {{ 'SAVE' | translate }}
+        </button>
+    </div>
+</form>

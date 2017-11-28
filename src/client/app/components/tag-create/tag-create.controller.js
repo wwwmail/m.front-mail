@@ -5,56 +5,70 @@
         .module('app.components')
         .controller('TagCreateController', TagCreateController);
 
-    TagCreateController.$inject = [];
+    TagCreateController.$inject = ['$rootScope', '$timeout', 'tag', 'list'];
     /* @ngInject */
-    function TagCreateController() {
+    function TagCreateController($rootScope, $timeout, tag, list) {
         var vm = this;
 
-        vm.tags = {};
+        vm.paletteForm = {
+            model: {
+                color: '#fff'
+            }
+        };
 
         vm.palette = {
-            items: [
-                {
-                    active: true,
-                    color: '#f44336'
-                },
-                {
-                    active: false,
-                    color: '#e91e63'
-                },
-                {
-                    active: false,
-                    color: '#ffc107'
-                },
-                {
-                    active: false,
-                    color: '#ffeb3b'
-                },
-                {
-                    active: false,
-                    color: '#4caf50'
-                },
-                {
-                    active: false,
-                    color: '#2196f3'
-                },
-                {
-                    active: false,
-                    color: '#3f51b5'
-                },
-                {
-                    active: false,
-                    color: '#9c27b0'
-                },
-                {
-                    active: false,
-                    color: '#607d8e'
-                },
-                {
-                    active: false,
-                    color: '#9e9e9e'
-                }
-            ]
+            items: []
         };
+
+        vm.create = create;
+        vm.select = select;
+        vm.close = close;
+
+        ////
+
+        activate();
+
+        function activate() {
+            getColors();
+        }
+
+        function getColors() {
+            _.forEach(list.getColors(), function (color, i) {
+                vm.palette.items.push({
+                    active: false,
+                    color: color
+                });
+            });
+
+            select(vm.palette.items[0]);
+        }
+
+        function select(palette) {
+            $timeout(function () {
+                vm.palette.selected = palette;
+                vm.paletteForm.model.bgcolor = palette.color;
+            });
+        }
+
+        function create(form) {
+            if (form.$invalid || vm.paletteForm.isLoading) return;
+
+            vm.paletteForm.isLoading = true;
+            tag.create({}, vm.paletteForm.model).then(function (response) {
+                if (vm.messages) {
+                    tag.setTag(response.data, vm.messages, {sync: true}).then(function () {
+                        vm.paletteForm.isLoading = false;
+                        $rootScope.$broadcast('mail:sync');
+                        close();
+                    });
+                } else {
+                    close();
+                }
+            });
+        }
+
+        function close() {
+            vm.onClose();
+        }
     }
 })();

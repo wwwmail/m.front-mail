@@ -12,7 +12,7 @@
             {
                 lang: 'sq',
                 ico: 'sq-AL',
-                icon: 'al.svg',
+                icon: 'sq.svg',
                 caption: 'Албанский'
             },
             {

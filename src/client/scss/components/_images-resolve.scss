@@ -1,8 +1,12 @@
 .images-resolve {
-  padding: 12px;
+  padding: 12px 22px;
 
   background: #fff4c9;
 
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd;
+
+  @media only screen and (max-width: 562px) {
+    padding: 12px 10px;
+  }
 }

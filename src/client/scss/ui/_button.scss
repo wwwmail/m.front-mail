@@ -9,9 +9,7 @@
   text-align: center;
   cursor: pointer;
 
-  &:hover {
-    //background-color: $yellow-hard-light;
-  }
+  border-radius: 0;
 
   &:focus {
     outline: none !important;
@@ -30,6 +28,10 @@
   &--act--y-shw:active {
     background: $yellow-yandex;
     box-shadow: $button-shadow;
+  }
+
+  &--border-dark {
+    border: 1px solid $mail-yellow-dark-color;
   }
 
   &--red {
@@ -53,6 +55,7 @@
     background-color: $yellow-normal-light;
     color: $black;
     border-color: $yellow-yandex;
+
     &:hover {
       background-color: $yellow-yandex;
       border-color: $yellow-yandex;
@@ -62,7 +65,6 @@
       background-color: $yellow-yandex;
       border-color: $yellow-yandex;
       color: $black;
-
     }
   }
 
@@ -96,8 +98,6 @@
     border-radius: 0 !important;
 
     padding: 0;
-    height: inherit;
-    border-radius: 0;
 
     width: auto !important;
     height: auto !important;
@@ -125,7 +125,7 @@
 
   &--normal {
     border: 1px solid $avatar-border-color;
-    border-radius: 3px;
+    border-radius: 0;
     outline: none;
     box-shadow: none;
     background-color: $white-color;
@@ -155,7 +155,10 @@
 
   &--s-gradient {
     background: $btn-gradient;
+  }
 
+  &--y-gradient {
+    background: $button-gradient;
   }
 
   &--attach {
@@ -202,6 +205,7 @@
     font-size: 15px;
     line-height: 18px;
   }
+
   &--size_xl {
     height: 32px;
     font-size: 16px;
@@ -220,14 +224,10 @@
     font-size: 16px;
   }
 
-  &--size_20x20 {
+  &--size_20 {
     width: 20px;
     height: 20px;
-  }
-
-  &--size_20x20 {
-    width: 20px;
-    height: 20px;
+    font-size: 16px;
   }
 
   &--size_28 {
@@ -257,13 +257,11 @@
 
   &--mail-send {
     color: #07c;
-
-    //background-color: $main-logo-orange;
-    &:hover, &:active, &:focus {
-      //color: $white-color;
-    }
   }
 
+  &--mail-control{
+    font-size: 18px;
+  }
 }
 
 .ok-validates {

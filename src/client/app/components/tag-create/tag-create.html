@@ -1,29 +1,45 @@
-<div class="tag-create">
-    <div class="tag-create__title">Создаем тэг</div>
-
-    <div class="mrg--t15">
-        <form novalidate>
-            <div class="tag-create__input mrg--t15">
-                <div class="mrg--r10">
-                    <span class="font--size13">Название</span>
-                </div>
-                <div>
-                    <input class="input input--size_s width--inh input--fc-sh-yellow" type="text" required/>
-                </div>
-            </div>
-
-            <div class="palette-list tag-create__palette mrg--t30">
-                <div class="palette-list__item"
-                     style="background-color: {{ palette.color }}"
-                     ng-repeat="palette in vm.palette.items track by $index">
-                    <span class="palette-list__icon icon-mark" ng-if="palette.active"></span>
-                </div>
-            </div>
-
-            <div class="tag-create__btn mrg--t40">
-                <button class="btn-y btn-y--border" type="submit">Создать тэг</button>
-                <button class="btn-y btn-y--border">Отменить</button>
-            </div>
-        </form>
-    </div>
+<div class="popup__head">
+    <span class="popup__head-title">{{ 'CREATE_LABEL' | translate }}</span>
+    <button class="icon-close btn btn--not-style btn--main-mobile-color btn--size_s"
+            type="button"
+            ng-click="vm.close()"></button>
+    <hr class="hr hr--popup">
 </div>
+
+<form name="paletteForm" ng-submit="vm.create(paletteForm)" novalidate>
+
+    <div class="popup__content pdd--20">
+
+        <div>
+            <input class="input input--size_l width--all font--center"
+                   type="text"
+                   name="tag_name"
+                   ng-model="vm.paletteForm.model.tag_name"
+                   autofocus="true"
+                   ng-maxlength="20"
+                   required
+                   placeholder="{{ 'NAME' | translate }}"/>
+        </div>
+
+        <div class="palette-list tag-create__palette">
+            <input type="hidden"
+                   name="palette"
+                   ng-model="vm.paletteForm.model.bgcolor"
+                   required>
+
+            <div class="palette-list__item"
+                 style="background-color: {{ palette.color }}"
+                 ng-repeat="palette in vm.palette.items track by $index"
+                 ng-click="vm.select(palette)">
+                <span class="palette-list__icon icon-check-box-mark"
+                      ng-if="palette.color === vm.palette.selected.color"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup__footer">
+        <button class="btn btn--yellow btn--no-radius width--all height--min-inh font--size20" type="submit">
+            {{ 'CREATE_TAG' | translate }}
+        </button>
+    </div>
+</form>

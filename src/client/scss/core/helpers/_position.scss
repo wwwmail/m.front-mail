@@ -1,19 +1,23 @@
-.position{
-  position: relative!important;
+.pos {
+  position: static !important;
 
-  &--abs{
-    position: absolute!important;
+  &--rel {
+    position: relative !important;
   }
 
-  &--fix{
-    position: fixed!important;
+  &--fix {
+    position: fixed !important;
   }
 
-  &--stat{
-    position: static!important;
+  &--abs {
+    position: absolute !important;
   }
 
-  &--sticky {
-    position: sticky!important;
+  &--stc {
+    position: sticky !important;
+  }
+
+  &--int {
+    position: initial !important;
   }
 }
