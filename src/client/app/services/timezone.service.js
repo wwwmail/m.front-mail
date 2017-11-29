@@ -31,8 +31,12 @@
         }
 
         function getCurrent() {
-            console.log('getCurrent', _.result(_.find(timezoneList, {'value': $auth.user.profile.timezone}), 'text'));
-            return _.result(_.find(timezoneList, {'value': $auth.user.profile.timezone}), 'text');
+            var e = _.find(timezoneList, function(o) {
+                return _.some(o.utc, function(utc) {
+                    return utc === $auth.user.profile.timezone;
+                });
+            });
+            return  e.text;
         }
 
         return {
@@ -43,4 +47,3 @@
     }
 
 })();
-

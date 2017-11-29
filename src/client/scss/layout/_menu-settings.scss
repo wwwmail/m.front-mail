@@ -20,7 +20,7 @@
     margin: 14px 0;
 
     &:hover {
-      background: rgba(0, 0, 0, .1);
+      //background: rgba(0, 0, 0, .1);
     }
 
     &--gray {
@@ -40,18 +40,30 @@
         content: "";
       }
     }
+
+    &--mx238{
+      max-width: 238px;
+    }
   }
 
   &__link-choose-element {
+    position: absolute;
+    top: -5px;
+
     display: flex;
     align-items: center;
 
-    padding: 3px 10px;
+    width: inherit;
+    max-width: 160px;
+    height: 32px;
+
+    padding: 3px 8px 3px 10px;
+
+    font-size: 14px;
 
     background-color: $white-color;
-    //border: 1px solid $border-color;
+    border: 1px solid #ccc;
   }
-
 
   &__counter {
     float: right;

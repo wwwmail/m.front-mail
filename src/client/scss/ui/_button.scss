@@ -33,6 +33,9 @@
   &--border-dark {
     border: 1px solid $mail-yellow-dark-color;
   }
+  &--border-silver {
+    border: 1px solid #ccc;
+  }
 
   &--red {
     background-color: $red-btn-color;

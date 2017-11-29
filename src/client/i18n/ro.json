@@ -443,5 +443,9 @@
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Dacă doriți să înlăturați directorul",
   "DELETE_WITH_LETTERS": "Ștergeți literele",
-  "DELETING_FOLDER_MSG": "În directorul {{ folder }} {{ messageCount }} literele. Scrisorile vor fi înlăturate împreună cu directoarele."
+  "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametrii serverului dumneavoastră poștal",
+  "SERVER": "Server",
+  "PORT": "Port",
+  "DELETING_FOLDER_MSG": "În directorul {{ folder }} {{ messageCount }} literele. Scrisorile vor fi înlăturate împreună cu directoarele.",
+  "BANNER_BLOCK_CAPTION": "Publicitate"
 }			

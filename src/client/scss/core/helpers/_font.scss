@@ -87,11 +87,25 @@
 
   &--weidth-UltraLight{
     font-weight: 200!important;
+  }
+}
 
+.text {
+  &--underline {
+    text-decoration: underline;
   }
 
-  &--weidth-r{
-
+  &--no-wrap {
+    white-space: nowrap;
   }
 
+  &--dots {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.line-height {
+  line-height: 1!important;
 }

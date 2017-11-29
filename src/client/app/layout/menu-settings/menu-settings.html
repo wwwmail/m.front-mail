@@ -34,8 +34,8 @@
                     {{ 'MAILS_FROM_OTHER_BOXES' | translate }}</a>
             </div>
             <!--<div class="menu-settings__item">-->
-                <!--<a class="menu-settings__link" ui-sref="settings.contacts" ui-sref-active="menu-settings__link&#45;&#45;active">-->
-                    <!--{{ 'SETTINGS_CONTACTS' | translate }}</a>-->
+            <!--<a class="menu-settings__link" ui-sref="settings.contacts" ui-sref-active="menu-settings__link&#45;&#45;active">-->
+            <!--{{ 'SETTINGS_CONTACTS' | translate }}</a>-->
             <!--</div>-->
         </div>
 
@@ -48,36 +48,46 @@
 
         <div class="menu-settings__list">
             <div class="menu-settings__item">
-                <div class="menu-settings__link menu-settings__link--not-decoration flex mrg--r5" href>
-                    {{ 'LANGUAGE' | translate }}:
+                <div class="menu-settings__link menu-settings__link--mx238 menu-settings__link--not-decoration flex mrg--r5"
+                     href>
+                    <span class="mrg--r18">{{ 'LANGUAGE' | translate }}:</span>
+                    <div class="pos--rel width--all">
+                        <div class="menu-settings__link-choose-element"
+                             uib-popover-template="'app/components/lang-list/lang-list-popover.html'"
+                             popover-class="popover--choose-lang popover--no-arrow"
+                             popover-placement="bottom"
+                             popover-animation="true"
+                             popover-trigger="'outsideClick'"
+                             popover-is-open="vm.isOpenLangList">
 
-                    <div class="menu-settings__link-choose-element flex align-items--cn dis--inb pos--rel"
-                         uib-popover-template="'app/components/lang-list/lang-list-popover.html'"
-                         popover-class="popover--choose-lang"
-                         popover-placement="bottom"
-                         popover-animation="true"
-                         popover-trigger="'outsideClick'"
-                         popover-is-open="vm.isOpenLangList">
+                            <img class="width--size20" src="images/country/{{ vm.useLang.icon }}">
 
-                        <img class="width--size20" src="images/country/{{ vm.useLang.icon }}">
+                            <span class="mrg--l10">{{ vm.useLang.lang | translate }}</span>
 
-                        <div class="mrg--l5">{{ vm.useLang.lang | translate }}</div>
+                            <span class="icon-arrow-down mrg--f-right font--size12"
+                                  ng-class="{'icon-arrow-up': vm.isOpenLangList, 'icon-arrow-down': !vm.isOpenLangList }">
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="menu-settings__item mrg--t20">
-                <div class="menu-settings__link menu-settings__link--timezone menu-settings__link--not-decoration">
-                    {{ 'CLOCK' | translate }}:
-                    <div class="dis--inb pos--rel">
-                        <div class="menu-settings__link-choose-element flex align-items--cn"
+                <div class="menu-settings__link menu-settings__link--mx238 menu-settings__link--not-decoration flex mrg--r5">
+                    <span class="mrg--r18">{{ 'CLOCK' | translate }}:</span>
+                    <div class="pos--rel width--all">
+                        <div class="menu-settings__link-choose-element"
                              uib-popover-template="'app/components/timezone-list/timezone-list-popover.html'"
-                             popover-class="popover--choose-time-zone"
+                             popover-class="popover--choose-time-zone popover--no-arrow"
                              popover-placement="bottom"
                              popover-animation="true"
                              popover-trigger="'outsideClick'"
                              popover-is-open="vm.isOpen">
-                            <span class="dis--inb width--max150 text--dots">{{ vm.getTimezoneName(vm.user.profile.timezone) }}</span>
+
+                            <span class="text--dots">{{ vm.getTimezoneName(vm.user.profile.timezone) }}</span>
+
+                            <span class="icon-arrow-down mrg--f-right font--size12"
+                                  ng-class="{'icon-arrow-up': vm.isOpen, 'icon-arrow-down': !vm.isOpen }"></span>
                         </div>
                     </div>
                 </div>

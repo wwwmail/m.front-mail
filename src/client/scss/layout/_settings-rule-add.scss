@@ -1,48 +1,61 @@
 .settings-rule-add {
-  &__item {
-    position: relative;
-  }
-
-  &__item-title {
-    font: bold 13px/1 $mainFont;
-    margin-bottom: 11px;
-  }
-
-  &__notif {
-    font: normal 13px/1 $mainFont;
-    margin: 16px 0 8px;
-  }
-
-  &__field-text {
-    height: auto !important;
-    min-height: 40px;
-    max-height: 60px;
-  }
-
-  &__condition {
-    margin-bottom: 5px;
-  }
-
-  &__condition-item {
+  &__section {
     position: relative;
 
+    padding: 20px 10px;
+
+    &:after {
+      content: '';
+
+      position: absolute;
+      right: -100vw;
+      bottom: 0;
+      left: -100vw;
+
+      height: 1px;
+
+      background-color: #f2f2f2;
+    }
   }
+  &__item{
+    font-size: 16px;
+    margin: 0;
 
-  &__condition-remove {
-    position: absolute;
-    color: $red-btn-color;
-    font-size: 10px;
-    top: 7px;
-    right: -32px;
+    &--border {
+      padding-bottom: 14px;
 
-    &:hover {
-      opacity: .7;
-      transition: all .3s;
-      color: $red-btn-color;
     }
   }
 
-  &__name {
-    min-width: 84px;
+  &__conditions {
+    &-item {
+      padding: 20px 0 14px;
+      border-top: 1px solid #f2f2f2;
+
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
   }
+
+  &__caption{
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  &__label {
+    margin: 0 0 10px;
+  }
+
+ &__info {
+    color: $blue;
+   font-size: 14px;
+   line-height: 1.1;
+  }
+
+  &__textarea {
+    width: 100%;
+    height: 200px;
+  }
+
 }

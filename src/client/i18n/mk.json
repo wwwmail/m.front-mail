@@ -443,5 +443,9 @@
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Сакате да ја избришете папката",
   "DELETE_WITH_LETTERS": "Отстрани букви",
+  "BANNER_BLOCK_CAPTION": "Реклама",
+  "PARAMETERS_OF_YOUR_MAIL_SERVER": "Параметри на вашиот поштенски сервер",
+  "SERVER": "Сервер",
+  "PORT": "Порт",
   "DELETING_FOLDER_MSG": "Во папката {{ folder }} {{ messageCount }} букви. Пораките ќе бидат избришани заедно со папката."
 }

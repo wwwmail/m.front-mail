@@ -14,6 +14,9 @@ $storage-text-color: #595959;
 
 $inpus-compose-text: #b3b3b8;
 
+$compose-header-color: #f7f7f7;
+$compose-border-color: #d1d1d1;
+
 $yellow-select-main-menu-color: #e7cb42;
 
 $radio-button-round-on-color: #339933;
@@ -134,7 +137,7 @@ $mail-yellow-dark-color: #d0b50d;
 
 */
 
-$signature-pred-publick: f7f6f4;
+$signature-pred-publick: #f7f6f4;
 
 $auth-footer-color: #352e40;
 $auth-sms-bg-color: #ebebeb;
@@ -162,7 +165,7 @@ $avatar-border-color: $main-border-color;
 $quick-reply-border-color: $main-border-color;
 
 /* Shadow variable *******************************************************************/
-$signature-shadow: 0px 4px 7px 0px rgba(0, 0, 0, 0.35);
+$signature-shadow: 0 5px 12px 0 rgba(0, 0, 0, 0.26);
 $input-insert-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.15);
 $form-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.35);
 $button-shadow: 0px 0px 2px 0px rgba(255, 219, 77, 0.6);

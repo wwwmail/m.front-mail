@@ -443,5 +443,9 @@
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Želite li odstraniti fasciklu",
   "DELETE_WITH_LETTERS": "Obriši slova",
+  "BANNER_BLOCK_CAPTION": "Advertisement",
+  "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg poštanskog servera",
+  "SERVER": "Server",
+  "PORT": "Port",
   "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messagecount }} slova.  Poruke će biti obrisane zajedno sa mapom"
 }
