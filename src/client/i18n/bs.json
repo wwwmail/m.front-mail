@@ -444,5 +444,6 @@
   "DELETING_FOLDER": "Želite odstraniti direktorij",
   "DELETE_WITH_LETTERS": "Izbriši slova",
   "BANNER_BLOCK_CAPTION": "Advertisement",
+  "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg e-mail servera",
   "DELETING_FOLDER_MSG": "U direktoriju {{ folder }} {{ messageCount }} slova. Poruke će biti izbrisane zajedno sa direktorijima."
 }

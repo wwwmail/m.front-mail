@@ -443,5 +443,6 @@
   "DELETING_FOLDER": "Chcete-li odstranit složku",
   "DELETE_WITH_LETTERS": "Odebrat písmena",
   "BANNER_BLOCK_CAPTION": "Reklama",
+  "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametry Vašeho poštovního serveru",
   "DELETING_FOLDER_MSG": "Ve složce {{ folder }} {{ messageCount }} písmena. Dopisy budou odstraněny spolu s složky."
 }

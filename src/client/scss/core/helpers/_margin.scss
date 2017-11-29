@@ -35,6 +35,8 @@
   /* -------------------------------------------------------------------- bottom */
     @include unify-sizer-modifier(b0, margin-bottom, 0);
     @include unify-sizer-modifier(b6, margin-bottom, 6px);
+
+    @include unify-sizer-modifier(b9, margin-bottom, 9px);
     @include unify-sizer-modifier(b10, margin-bottom, 10px);
     @include unify-sizer-modifier(b16, margin-bottom, 16px);
     @include unify-sizer-modifier(b20, margin-bottom, 20px);

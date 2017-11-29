@@ -443,5 +443,6 @@
   "DELETING_FOLDER": "Chcete odstrániť priečinok?",
   "DELETE_WITH_LETTERS": "Odstrániť priečinok",
   "BANNER_BLOCK_CAPTION": "Reklama",
+  "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametry Vašeho poštovního serveru",
   "DELETING_FOLDER_MSG": "V priečinku {{ folder }} {{ messageCount }} správy. Správy budú odstranené spolu s priečinkom."
 } 

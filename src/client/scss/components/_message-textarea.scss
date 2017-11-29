@@ -1,31 +1,169 @@
 .message-textarea {
   .note-editor {
     border: none;
+    box-shadow: none !important;
   }
 
   .note-frame {
+    position: relative;
+
     border: none;
   }
 
   .note-toolbar {
-    border: none;
+    //position: sticky;
+    //top: 0;
+    //left: 0;
+    //z-index: 3;
 
-    background: none;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+
+    height: 33px;
+
+    width: 500px;
+
+    background: #fff;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding: 0 5px;
   }
 
   .note-statusbar {
     margin-top: 25px;
+    display: none !important;
 
     height: 2px;
 
-    background-color: #ffdb4d !important;
+    background-color: transparent !important;
   }
 
   .summernote__resize {
     margin-top: -20px;
 
     float: right;
+    background-color: transparent;
 
-    cursor: se-resize;
+    //cursor: se-resize;
+    opacity: 0 !important;
   }
+
+  .note-btn-group {
+    @include border-radius(0);
+    border: none;
+    margin-top: 0 !important;
+  }
+
+  .note-mybutton {
+    margin-left: 6px !important;
+    padding-left: 10px;
+    border-left: 1px solid rgba(127, 127, 127, 0.3);
+
+  }
+  .note-mybutton-btn {
+    //border-radius: 0!important;
+    padding: 0 6px !important;
+
+    &:hover {
+      color: $textBlack;
+    }
+
+    &--active {
+      background-color: $yellow-lignt;
+    }
+  }
+
+  .note-recent-color {
+    background-color: rgb(255, 255, 255);
+  }
+
+  .note-btn {
+    @include border-radius(2px);
+
+    border: none;
+
+    min-width: 20px;
+    height: 20px;
+
+    padding: 0;
+
+    box-shadow: none;
+
+    font-size: 14px;
+
+    color: rgba(0, 0, 0, .5);
+
+    &.active {
+      background: #ffeba0;
+    }
+
+    .note-btn-italic {
+      font-size: 10px;
+    }
+
+    &.dropdown-toggle {
+      //width: auto;
+      width: 42px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .icon-arrow-down {
+      font-size: 9px;
+    }
+    //.icon-bold {
+    //  font-size: 12px;
+    //  &:before {
+    //    content: "\e95c" !important;
+    //  }
+    //}
+    //.icon-italic {
+    //  font-size: 11px;
+    //  &:before {
+    //    content: "\e95a" !important;
+    //  }
+    //}
+    //
+    //.icon-underlay {
+    //  font-size: 12px;
+    //  &:before {
+    //    content: "\e95b" !important;
+    //  }
+    //}
+  }
+
+  .panel-body {
+    min-height: 107px !important;
+  }
+
+  &__note-editing-area--translate {
+    display: flex;
+    flex-flow: row nowrap;
+
+    .note-editable {
+      width: 100%;
+      min-width: 50%;
+
+      border-right: 1px solid $compose-border-color;
+    }
+
+    .note-editing-area-translate {
+      width: 100%;
+
+      padding: 14px;
+    }
+  }
+}
+
+// убираем всплывашки подсказок в компоненте редактора
+.tooltip {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.link-dialog {
+  z-index: 2000;
 }

@@ -1,18 +1,41 @@
 .user-signatures {
+
+
   &__edit-text{
-    display: inline-block;
-    height: 142px;
+    min-height: 142px;
 
     border: 1px solid $avatar-border-color;
+
   }
 
   &__view{
-    display: inline-block;
-    height: 142px;
+    position: relative;
+
+    min-height: 142px;
+
+    padding: 20px;
 
     background-color: $signature-pred-publick;
     box-shadow: $signature-shadow;
   }
 
+  &__connection {
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+    justify-content: space-between;
+  }
+
+  &__buttons {
+    position: absolute;
+    top: 7px;
+    right: 14px;
+
+    button {
+      font-size: 15px;
+      padding: 0;
+    }
+
+  }
 }
 

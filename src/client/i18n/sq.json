@@ -444,5 +444,6 @@
   "DELETING_FOLDER": "Nëse keni dëshirë të fshini dosjen",
   "DELETE_WITH_LETTERS": "Të fshini shkronjat",
   "BANNER_BLOCK_CAPTION": "Reklamë",
+  "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametrat e serverit Tuaj të emailit",
   "DELETING_FOLDER_MSG": "Në dosjen {{ folder }} {{ messageCount }} shkronjat.  Letrat do të fshihen së bashku me skedarët."
 }			

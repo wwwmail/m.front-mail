@@ -45,6 +45,7 @@
 @import "layout/settings-tags";
 @import "layout/settings-rules";
 @import "layout/settings-rule-add";
+@import "layout/settings-accounts";
 
 /*------------------------------------------- ui*/
 @import 'ui/checked';
@@ -130,6 +131,7 @@
 @import "components/avatar-upload";
 @import "components/lang-list";
 @import "components/timezone-list";
+@import "components/message-textarea";
 
 body {
   width: 100%;

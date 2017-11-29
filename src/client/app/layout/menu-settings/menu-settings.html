@@ -62,7 +62,7 @@
 
                             <img class="width--size20" src="images/country/{{ vm.useLang.icon }}">
 
-                            <span class="mrg--l8">{{ vm.useLang.lang | translate }}</span>
+                            <span class="mrg--l10">{{ vm.useLang.lang | translate }}</span>
 
                             <span class="icon-arrow-down mrg--f-right font--size12"
                                   ng-class="{'icon-arrow-up': vm.isOpenLangList, 'icon-arrow-down': !vm.isOpenLangList }">
@@ -84,7 +84,7 @@
                              popover-trigger="'outsideClick'"
                              popover-is-open="vm.isOpen">
 
-                            <span class="mrg--l8 text--dots">{{ vm.getTimezoneName(vm.user.profile.timezone) }}</span>
+                            <span class="text--dots">{{ vm.getTimezoneName(vm.user.profile.timezone) }}</span>
 
                             <span class="icon-arrow-down mrg--f-right font--size12"
                                   ng-class="{'icon-arrow-up': vm.isOpen, 'icon-arrow-down': !vm.isOpen }"></span>

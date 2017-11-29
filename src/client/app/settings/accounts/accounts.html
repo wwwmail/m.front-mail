@@ -1,204 +1,159 @@
-<div class="main-container" >
-    <div class="main-container__body">
-        <div class="main-layout__bread-crumbs mrg--b15">
-            <div class="bread-crumbs font-sizer--bigger-18">
-                <a class="bread-crumbs__item" ui-sref="mail.inbox({mbox: 'INBOX'})">{{ 'MAIL' | translate }}</a>
-                <a class="bread-crumbs__item" ui-sref="settings.main">{{ 'ALL_SETTING' | translate }}</a>
-                <a class="bread-crumbs__item bread-crumbs--active">{{ 'MAILS_FROM_OTHER_BOXES' | translate }}</a>
-            </div>
+<div class="settings-accounts">
+    <!-- Верхняя часть-->
+    <div class="settings-accounts__header">
+        <div class="settings-accounts__message">
+            {{ 'SETTINGS_ACCOUNTS_MESSAGE_OTHER_MAILS' | translate }}.
         </div>
-
-        <article class="layout-settings">
-            <section class="layout-settings__row mrg__left">
-                <!-- Почта с других ящиков -->
-                <div class="accounts-settings">
-                    <!-- Верхняя часть-->
-                    <div class="accounts-settings__head">
-                        <div class="accounts-settings__notific notific--layout">
-                            {{ 'SETTINGS_ACCOUNTS_MESSAGE_OTHER_MAILS' | translate }}.
-                        </div>
-                    </div>
-
-                    <!-- Основная часть-->
-                    <div class="accounts-settings__content">
-                        <div class="accounts-settings__list mrg--t20" ng-if="vm.accounts.items.length">
-                            <div class="accounts-settings__title">{{ 'CONNECTED_BOXES' | translate }}</div>
-                            <div class="accounts-settings__items">
-
-                                <div class="accounts-settings__item" ng-repeat="account in vm.accounts.items">
-                                    <span class="accounts-settings__item--name-mail">{{ account.email }}</span>
-                                    <form class="option-icons just-content--f-en">
-                                        <div class="radiobutton mrg--r16">
-                                            <div class="radiobutton radiobutton__switch radiobutton--size72x28">
-                                                <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                                       ng-checked="{{ account.enable }}"
-                                                       ng-value="0"
-                                                       ng-model="account.enable"
-                                                       ng-change="vm.enableTrigger(account)">
-                                                <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                                       ng-checked="{{ account.enable }}"
-                                                       ng-value="1"
-                                                       ng-model="account.enable"
-                                                       ng-change="vm.enableTrigger(account)">
-                                                <span class="radiobutton__switch__on-off" data-checked="{{ 'ON' | translate }}"
-                                                      data-unchecked="{{ 'OF' | translate }}"></span>
-                                            </div>
-                                        </div>
-                                        <button class="btn btn--not-style btn__icon--opahover"
-                                                type="button"
-                                                ng-click="vm.destroy(account)">
-                                            <span class="icon-basket"></span>
-                                        </button>
-                                    </form>
-                                </div>
-
-                                <!--  Аккаунт 1-->
-                                <!-- <span class="accounts-settings__item&#45;&#45;name-mail">{{ account.email }}</span>
-                                 <form class="option-icons just-content&#45;&#45;f-en">
-                                     &lt;!&ndash; Переключатель &ndash;&gt;
-                                     <div class="radiobutton mrg--r16">
-                                         <div class="radiobutton radiobutton__switch radiobutton&#45;&#45;size72x28">
-                                             <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                                    ng-checked="{{ account.enable }}"
-                                                    ng-value="0"
-                                                    ng-model="account.enable"
-                                                    ng-change="vm.enableTrigger(account)">
-                                             <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                                    ng-checked="{{ account.enable }}"
-                                                    ng-value="1"
-                                                    ng-model="account.enable"
-                                                    ng-change="vm.enableTrigger(account)">
-                                             <span class="radiobutton__switch__on-off"></span>
-                                         </div>
-                                     </div>
-                                     &lt;!&ndash; Редактирование записи &ndash;&gt;
-                                     &lt;!&ndash;<button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;edit"&ndash;&gt;
-                                     &lt;!&ndash;type="button"></button>&ndash;&gt;
-                                     &lt;!&ndash; Удалить &ndash;&gt;
-                                     <button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;remove"
-                                             type="button"
-                                             ng-click="vm.destroy(account)"></button>
-                                 </form>-->
-                            </div>
-                        </div>
-
-                        <div class="notific--layout-light mrg--t20" ng-if="vm.isConnected">
-                            {{ 'CONNECTED_SUCCESS_COLLECTION_OF_MAILS' | translate }}.
-                        </div>
-                    </div>
-
-                    <form name="accountForm" ng-submit="vm.create(accountForm)">
-                        <div>
-                            <div class="accounts-settings__pick-up-mail font-sizer--bigger-15">
-
-                                <div class="accounts-settings__title">{{ 'COLLECTION_OF_MAIL' | translate }}</div>
-
-                                <div class="form__field-item form__field-item--flex-start mrg--b10">
-                                    <!-- Имя почты-->
-                                    <div class="field-style flex--inline align-items--cn just-content--f-st mrg--b8">
-                                        <label class="accounts-settings__label field-style__title">{{ 'MAIL' | translate
-                                            }}</label>
-                                        <input class="input input--size_s input--y-focus width--size295"
-                                               type="email"
-                                               name="email"
-                                               ng-model="vm.accountForm.model.email"
-                                               ng-blur="vm.getConf(accountForm)"
-                                               placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_EMAIL' | translate }}"
-                                               required>
-                                    </div>
-
-                                    <!-- Пароль-->
-                                    <div class="field-style flex--inline align-items--cn just-content--f-st mrg--b8">
-                                        <label class="accounts-settings__label field-style__title">{{
-                                            'INPUT_PLACEHOLDER_PASSWORD' | translate }}</label>
-                                        <input class="input input--size_s input--y-focus width--size295"
-                                               type="password"
-                                               name="password"
-                                               ng-model="vm.accountForm.model.password"
-                                               placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_PASSWORD' | translate }}"
-                                               required>
-                                    </div>
-
-                                    <div ng-if="!vm.accountsConf.selected && !vm.accountsConf.isFirst && vm.accountForm.model.email && vm.accountForm.model.password">
-                                        <div class="accounts-settings__title">{{ 'PARAMETERS_OF_YOUR_MAIL_SERVER' | translate
-                                            }}
-                                        </div>
-
-                                        <!-- протокол
-                                        <div class="field-style flex--inline align-items--cn just-content--f-st mrg--b8">
-                                            <label class="accounts-settings__label field-style__title">Протокол</label>
-                                            <ui-select ng-model=""
-                                                       class="select-list select-list--size_s select-list--not-border-of-sides mrg__left width--aut width--max126 "
-                                                       theme="select2"
-                                                       ng-disabled=""
-                                                       search-enabled="POP3">
-                                                <ui-select-match
-                                                        class="select-list__body select-list--size_xs width--inh"
-                                                        placeholder="POP3">
-                                                    {{ $select.selected.caption }}
-                                                </ui-select-match>
-                                                <ui-select-choices repeat="item.name as item in vm.folders.items"
-                                                                   value="{{ }}">
-                                                    <div ng-bind-html=""></div>
-                                                    <div ng-bind-html=""></div>
-                                                </ui-select-choices>
-                                            </ui-select>
-                                        </div>
-                                        -->
-
-                                        <div class="field-style flex--inline align-items--cn just-content--f-st mrg--b8">
-                                            <label class="accounts-settings__label field-style__title">{{
-                                                'INPUT_PLACEHOLDER_LOGIN' | translate }}</label>
-                                            <input class="input input--size_s input--y-focus  width--size295"
-                                                   type="text"
-                                                   name="login"
-                                                   ng-model="vm.accountForm.model.login"
-                                                   login-format
-                                                   placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_LOGIN' | translate }}"
-                                                   required>
-                                        </div>
-
-                                        <div class="field-style flex--inline align-items--cn just-content--f-st mrg--b8">
-                                            <label class="accounts-settings__label field-style__title">{{ 'SERVER' | translate
-                                                }}</label>
-                                            <input class="input input--size_s input--y-focus width--size295"
-                                                   type="text"
-                                                   name="server"
-                                                   ng-model="vm.accountForm.model.server"
-                                                   placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_SERVER_ADDRESS' | translate }}"
-                                                   required>
-                                        </div>
-
-                                        <div class="field-style flex--inline align-items--cn just-content--f-st mrg--b8">
-                                            <label class="accounts-settings__label field-style__title">{{ 'PORT' | translate
-                                                }}</label>
-                                            <input class="input input--size_s input--y-focus width--size295"
-                                                   type="text"
-                                                   name="port"
-                                                   ng-model="vm.accountForm.model.port"
-                                                   placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_PORT' | translate }}"
-                                                   required>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="color--red font--size13" ng-if="vm.error.message">
-                                    {{ 'WRONG_LOGIN_OF_PASSWORD' | translate }}
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="accounts-settings__footer">
-                            <button class="btn btn--yellow width--auto btn--size_sm">{{ 'ENABLED_COLLECTOR' | translate }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-        </article>
     </div>
 
-    <aside-right class="aside-right--settings aside-right--left-line-hide"></aside-right>
+
+    <form name="accountForm" ng-submit="vm.create(accountForm)">
+
+        <div class="settings-accounts__content">
+
+            <div class="settings-accounts__caption">{{ 'COLLECTION_OF_MAIL' | translate }}</div>
+
+            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+                <label class="settings-accounts__label">{{ 'MAIL' | translate }}</label>
+                <input class="input input--size_l width--all"
+                       type="email"
+                       name="email"
+                       ng-model="vm.accountForm.model.email"
+                       ng-blur="vm.getConf(accountForm)"
+                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_EMAIL' | translate }}"
+                       required>
+            </div>
+
+            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+                <label class="settings-accounts__label">{{
+                    'INPUT_PLACEHOLDER_PASSWORD' | translate }}</label>
+                <input class="input input--size_l width--all"
+                       type="password"
+                       name="password"
+                       ng-model="vm.accountForm.model.password"
+                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_PASSWORD' | translate }}"
+                       required>
+            </div>
+
+            <div class="settings-accounts__caption">{{ 'PARAMETERS_OF_YOUR_MAIL_SERVER' | translate }}</div>
+
+            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+                <label class="settings-accounts__label">{{
+                    'INPUT_PLACEHOLDER_LOGIN' | translate }}</label>
+                <input class="input input--size_l width--all"
+                       type="text"
+                       name="login"
+                       ng-model="vm.accountForm.model.login"
+                       login-format
+                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_LOGIN' | translate }}"
+                       required>
+            </div>
+
+            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+                <label class="settings-accounts__label">{{ 'SERVER' | translate }}</label>
+                <input class="input input--size_l width--all"
+                       type="text"
+                       name="server"
+                       ng-model="vm.accountForm.model.server"
+                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_SERVER_ADDRESS' | translate }}"
+                       required>
+            </div>
+
+            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+                <label class="settings-accounts__label">{{ 'PORT' | translate }}</label>
+                <input class="input input--size_l width--all"
+                       type="text"
+                       name="port"
+                       ng-model="vm.accountForm.model.port"
+                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_PORT' | translate }}"
+                       required>
+            </div>
+
+
+            <div class="settings-accounts__verification-message">
+                <!--
+                ng-if="vm.error.message"
+                -->
+                {{ 'WRONG_LOGIN_OF_PASSWORD' | translate }}
+            </div>
+
+        </div>
+
+        <div class="settings-accounts__footer">
+            <button class="btn btn--size_m btn--y-gradient btn--border-dark"
+                    type="submit">
+                {{ 'ENABLED_COLLECTOR' | translate }}
+            </button>
+        </div>
+    </form>
+
 </div>
+
+
+<!--&lt;!&ndash; Основная часть&ndash;&gt;-->
+<!--<div class="settings-accounts__content">-->
+<!--<div class="accounts-settings__list mrg&#45;&#45;t20" ng-if="vm.accounts.items.length">-->
+<!--<div class="accounts-settings__title">{{ 'CONNECTED_BOXES' | translate }}</div>-->
+<!--<div class="accounts-settings__items">-->
+
+<!--<div class="accounts-settings__item" ng-repeat="account in vm.accounts.items">-->
+<!--<span class="accounts-settings__item&#45;&#45;name-mail">{{ account.email }}</span>-->
+<!--<form class="option-icons just-content&#45;&#45;f-en">-->
+<!--<div class="radiobutton mrg&#45;&#45;r16">-->
+<!--<div class="radiobutton radiobutton__switch radiobutton&#45;&#45;size72x28">-->
+<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
+<!--ng-checked="{{ account.enable }}"-->
+<!--ng-value="0"-->
+<!--ng-model="account.enable"-->
+<!--ng-change="vm.enableTrigger(account)">-->
+<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
+<!--ng-checked="{{ account.enable }}"-->
+<!--ng-value="1"-->
+<!--ng-model="account.enable"-->
+<!--ng-change="vm.enableTrigger(account)">-->
+<!--<span class="radiobutton__switch__on-off" data-checked="{{ 'ON' | translate }}"-->
+<!--data-unchecked="{{ 'OF' | translate }}"></span>-->
+<!--</div>-->
+<!--</div>-->
+<!--<button class="btn btn&#45;&#45;not-style btn__icon&#45;&#45;opahover"-->
+<!--type="button"-->
+<!--ng-click="vm.destroy(account)">-->
+<!--<span class="icon-basket"></span>-->
+<!--</button>-->
+<!--</form>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;  Аккаунт 1&ndash;&gt;-->
+<!--&lt;!&ndash; <span class="accounts-settings__item&#45;&#45;name-mail">{{ account.email }}</span>-->
+<!--<form class="option-icons just-content&#45;&#45;f-en">-->
+<!--&lt;!&ndash; Переключатель &ndash;&gt;-->
+<!--<div class="radiobutton mrg&#45;&#45;r16">-->
+<!--<div class="radiobutton radiobutton__switch radiobutton&#45;&#45;size72x28">-->
+<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
+<!--ng-checked="{{ account.enable }}"-->
+<!--ng-value="0"-->
+<!--ng-model="account.enable"-->
+<!--ng-change="vm.enableTrigger(account)">-->
+<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
+<!--ng-checked="{{ account.enable }}"-->
+<!--ng-value="1"-->
+<!--ng-model="account.enable"-->
+<!--ng-change="vm.enableTrigger(account)">-->
+<!--<span class="radiobutton__switch__on-off"></span>-->
+<!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash; Редактирование записи &ndash;&gt;-->
+<!--&lt;!&ndash;<button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;edit"&ndash;&gt;-->
+<!--&lt;!&ndash;type="button"></button>&ndash;&gt;-->
+<!--&lt;!&ndash; Удалить &ndash;&gt;-->
+<!--<button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;remove"-->
+<!--type="button"-->
+<!--ng-click="vm.destroy(account)"></button>-->
+<!--</form>&ndash;&gt;-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="notific&#45;&#45;layout-light mrg&#45;&#45;t20" ng-if="vm.isConnected">-->
+<!--{{ 'CONNECTED_SUCCESS_COLLECTION_OF_MAILS' | translate }}.-->
+<!--</div>-->
+<!--</div>-->
