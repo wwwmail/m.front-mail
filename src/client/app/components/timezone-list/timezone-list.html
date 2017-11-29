@@ -1,0 +1,8 @@
+<div class="timezone-list timezone-list--height150">
+    <div class="timezone-list__links">
+        <a class="timezone-list__link" href ng-repeat="timezone in vm.timezoneList"
+           ng-click="vm.setTimezone(timezone)">
+            <span class="timezone-list__name">{{ timezone.text }}</span>
+        </a>
+    </div>
+</div>

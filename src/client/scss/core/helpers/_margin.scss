@@ -3,10 +3,10 @@
     //@include unify-sizer-modifier(none, margin, 0);
     @include unify-sizer-modifier(auto, margin, auto);
 
-    @include unify-sizer-modifier(right ,margin , auto 0 auto auto);
-    @include unify-sizer-modifier(left, margin, auto auto auto 0);
-    @include unify-sizer-modifier(top, margin, 0 auto auto auto);
-    @include unify-sizer-modifier(bottom, margin, auto auto 0 auto);
+    @include unify-sizer-modifier(f-right ,margin , auto 0 auto auto);
+    @include unify-sizer-modifier(f-left, margin, auto auto auto 0);
+    @include unify-sizer-modifier(f-top, margin, 0 auto auto auto);
+    @include unify-sizer-modifier(f-bottom, margin, auto auto 0 auto);
 
     @include unify-sizer-modifier(5, margin, 5px);
 
@@ -29,6 +29,7 @@
     @include unify-sizer-modifier(r7, margin-right, 7px);
     @include unify-sizer-modifier(r10, margin-right, 10px);
     @include unify-sizer-modifier(r16, margin-right, 16px);
+    @include unify-sizer-modifier(r18, margin-right, 18px);
     @include unify-sizer-modifier(r20, margin-right, 20px);
 
   /* -------------------------------------------------------------------- bottom */
@@ -43,6 +44,7 @@
   /* -------------------------------------------------------------------- left */
     @include unify-sizer-modifier(l0, margin-left, 0);
     @include unify-sizer-modifier(l5, margin-left, 5px);
+    @include unify-sizer-modifier(l8, margin-left, 8px);
     @include unify-sizer-modifier(l10, margin-left, 10px);
     @include unify-sizer-modifier(l20, margin-left, 20px);
 }

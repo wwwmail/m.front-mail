@@ -442,5 +442,6 @@
   "SHOW_IMAGES_2": "З міркувань безпеки ми не завантажили зовнішні зображення.",
   "DELETING_FOLDER": "Видалення папки",
   "DELETE_WITH_LETTERS": "Видалити з листами",
+  "BANNER_BLOCK_CAPTION": "Реклама",
   "DELETING_FOLDER_MSG": "В папці {{ folder }} {{ messageCount }} листи. Листи будуть видалені разом з папкою."
 }

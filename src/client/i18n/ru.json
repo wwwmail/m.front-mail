@@ -443,5 +443,6 @@
   "SHOW_IMAGES_2": "По соображениям безопасности мы не загрузили внешние изображения.",
   "DELETING_FOLDER": "Удаление папки",
   "DELETE_WITH_LETTERS": "Удалить с письмами",
+  "BANNER_BLOCK_CAPTION": "Реклама",
   "DELETING_FOLDER_MSG": "В папке {{ folder }} {{ messageCount }} письма. Письма будут удалены вместе с папкой."
 }

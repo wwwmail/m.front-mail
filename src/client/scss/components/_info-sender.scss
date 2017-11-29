@@ -3,10 +3,9 @@
 
   margin: 10px 0;
 
-  //overflow: hidden;
   z-index: 0;
 
-  &__head{
+  &__head {
     position: relative;
     z-index: 2;
 
@@ -14,7 +13,6 @@
     width: 100%;
 
     background: $white-color;
-
   }
 
   &__avatar {
@@ -48,19 +46,20 @@
     margin-top: 2px;
   }
 
-  &__right-menu{
+  &__right-menu {
     display: flex;
     flex-wrap: nowrap;
   }
 
-  &__title{
+  &__title {
     display: flex;
     flex-flow: column;
   }
 
-  &__message-info{
+  &__message-info {
     display: flex;
     flex-flow: column;
+
     position: absolute;
     top: 45px;
     left: 0;
@@ -74,57 +73,53 @@
 
     visibility: hidden;
 
-    transform: translate3d(0,-100%,0);
+    transform: translate3d(0, -100%, 0);
     transition: all 5s;
-    //overflow: hidden!important;
-    //overflow-y: auto;
 
-    &:before{
+    &:before, &:after {
       content: '';
 
       position: absolute;
-      left: -30vw;
+      left: -22px;
+      right: -22px;
 
-      width: 1000vw;
       height: 100%;
-      box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.2);
 
       background: $white-color;
-      //box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
+
+      @media only screen and (max-width: 562px) {
+        left: -10px;
+        right: -10px;
+      }
+    }
+
+    &:before {
       z-index: 1;
+
+      box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.2);
     }
-    &:after{
-      content: '';
 
-      position: absolute;
-      top: -25px ;
-      left: -32vw;
-
-      width: 1000vw;
-      height: 100%;
-
-      background: $white-color;
+    &:after {
+      top: -25px;
       z-index: 2;
-
     }
 
-
-    &.is-active{
+    &.is-active {
       height: auto;
       padding: 10px 10px 10px 54px;
 
       visibility: visible;
-      transform: translate3d(0,0,0);
+      transform: translate3d(0, 0, 0);
 
     }
 
   }
-  &__message-info-item{
+  &__message-info-item {
     margin: 6px 0;
     z-index: 3;
   }
 
-  &__important-tags{
+  &__important-tags {
     display: flex;
     align-items: center;
     margin-right: 10px;
@@ -132,38 +127,22 @@
     border: none;
     background: none;
 
-
-    &--small-title{
+    &--small-title {
       display: inline-flex;
       margin-right: 4px;
       padding: 0;
       font-size: 12px;
     }
-    &.is-hide{
-      display: none!important;
+    &.is-hide {
+      display: none !important;
     }
   }
 
-  @media only screen and (max-width: 768px) {
-
-  }
-  @media only screen and (max-width: 640px) {
-
-  }
   @media only screen and (max-width: 562px) {
-    &__right-menu{
-      .icon-reply{
+    &__right-menu {
+      .icon-reply {
         display: none;
       }
-
     }
-
-
-  }
-  @media only screen and (max-width: 360px) {
-  }
-
-  @media only screen and (max-width: 320px) {
-
   }
 }

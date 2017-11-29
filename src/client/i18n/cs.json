@@ -442,5 +442,6 @@
   "SHOW_IMAGES_2": "Z důvodu bezpečnosti jsme nenačetli externí obrázky obsažené v tomto e-mailu.",
   "DELETING_FOLDER": "Chcete-li odstranit složku",
   "DELETE_WITH_LETTERS": "Odebrat písmena",
+  "BANNER_BLOCK_CAPTION": "Reklama",
   "DELETING_FOLDER_MSG": "Ve složce {{ folder }} {{ messageCount }} písmena. Dopisy budou odstraněny spolu s složky."
 }

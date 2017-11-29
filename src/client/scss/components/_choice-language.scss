@@ -1,6 +1,6 @@
 .choice-language {
   position: absolute;
-  bottom: -9px;
+  bottom: -13px;
   display: flex;
   flex-flow: column;
   padding: 0;
@@ -27,12 +27,22 @@
         width: 200%;
       }
     }
+    &:first-child {
+      .choice-language__country {
+        margin-top: 6px;
+      }
+    }
+
+    &:last-child{
+      .choice-language__country {
+        margin-bottom: 8px;
+      }
+    }
 
   }
 
   &__country {
     width: 20px;
-    //padding: 5px;
     margin: 3px;
   }
 
@@ -41,7 +51,7 @@
   }
 
   &--open {
-    background: rgba($textBlack, 0.4);
+    background: $yellow-normal-light;
     box-shadow: $button-shadow;
 
     .choice-language__link {

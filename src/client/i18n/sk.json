@@ -442,5 +442,6 @@
   "SHOW_IMAGES_2": "Z bezpečnostných dôvodov sme neodovzdali externé obrázky.",
   "DELETING_FOLDER": "Chcete odstrániť priečinok?",
   "DELETE_WITH_LETTERS": "Odstrániť priečinok",
+  "BANNER_BLOCK_CAPTION": "Reklama",
   "DELETING_FOLDER_MSG": "V priečinku {{ folder }} {{ messageCount }} správy. Správy budú odstranené spolu s priečinkom."
 } 

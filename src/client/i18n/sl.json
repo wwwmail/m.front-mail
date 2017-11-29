@@ -442,5 +442,6 @@
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Ali želite mapo odstraniti",
   "DELETE_WITH_LETTERS": "Odvzemi črke",
+  "BANNER_BLOCK_CAPTION": "Oglas",
   "DELETING_FOLDER_MSG": "V mapi {{ folder }} {{ messageCount }} črke. Pisma bodo odstranjena skupaj z mapami."
 }

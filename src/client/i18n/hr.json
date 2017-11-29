@@ -443,5 +443,6 @@
   "SHOW_IMAGES_2": "",
   "DELETING_FOLDER": "Želite li odstraniti mapu",
   "DELETE_WITH_LETTERS": "Obriši slova",
+  "BANNER_BLOCK_CAPTION": "Oglas",
   "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messageCount }} slova. Biti će izbrisane poruke zajedno sa mapom"
 }

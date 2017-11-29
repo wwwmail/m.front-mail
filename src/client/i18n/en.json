@@ -442,5 +442,6 @@
   "SHOW_IMAGES_2": "For security reasons, we did not upload external images.",
   "DELETING_FOLDER": "To delete a folder",
   "DELETE_WITH_LETTERS": "Delete letters",
+  "BANNER_BLOCK_CAPTION": "Advertising",
   "DELETING_FOLDER_MSG": "In the {{ folder }} {{ messageCount }} letters. Letters will be removed along with the folders."
 }
