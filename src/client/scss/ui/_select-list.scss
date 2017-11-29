@@ -196,6 +196,17 @@
       width: 136% !important;
     }
   }
+
+  &--settings-rule{
+
+    .select-list__body, .select2-drop {
+      width: 130px !important;
+    }
+
+    .select2-results .select2-result-label {
+      padding: 8px 8px 6px!important;
+    }
+  }
   &--if-less200 {
     .select2-drop {
       width: 200% !important;

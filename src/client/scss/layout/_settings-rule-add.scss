@@ -24,7 +24,17 @@
     &--border {
       padding-bottom: 14px;
 
-      border-bottom: 1px solid #f2f2f2;
+    }
+  }
+
+  &__conditions {
+    &-item {
+      padding: 20px 0 14px;
+      border-top: 1px solid #f2f2f2;
+
+      &:last-child {
+        padding-bottom: 0;
+      }
     }
   }
 
@@ -35,6 +45,17 @@
 
   &__label {
     margin: 0 0 10px;
+  }
+
+ &__info {
+    color: $blue;
+   font-size: 14px;
+   line-height: 1.1;
+  }
+
+  &__textarea {
+    width: 100%;
+    height: 200px;
   }
 
 }
