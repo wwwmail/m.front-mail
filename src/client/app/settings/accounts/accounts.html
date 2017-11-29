@@ -6,16 +6,14 @@
         </div>
     </div>
 
-
     <form name="accountForm" ng-submit="vm.create(accountForm)">
 
         <div class="settings-accounts__content">
-
             <div class="settings-accounts__caption">{{ 'COLLECTION_OF_MAIL' | translate }}</div>
 
-            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
                 <label class="settings-accounts__label">{{ 'MAIL' | translate }}</label>
-                <input class="input input--size_l width--all"
+                <input class="input input--size_m width--all"
                        type="email"
                        name="email"
                        ng-model="vm.accountForm.model.email"
@@ -24,10 +22,10 @@
                        required>
             </div>
 
-            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
                 <label class="settings-accounts__label">{{
                     'INPUT_PLACEHOLDER_PASSWORD' | translate }}</label>
-                <input class="input input--size_l width--all"
+                <input class="input input--size_m width--all"
                        type="password"
                        name="password"
                        ng-model="vm.accountForm.model.password"
@@ -37,10 +35,10 @@
 
             <div class="settings-accounts__caption">{{ 'PARAMETERS_OF_YOUR_MAIL_SERVER' | translate }}</div>
 
-            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
                 <label class="settings-accounts__label">{{
                     'INPUT_PLACEHOLDER_LOGIN' | translate }}</label>
-                <input class="input input--size_l width--all"
+                <input class="input input--size_m width--all"
                        type="text"
                        name="login"
                        ng-model="vm.accountForm.model.login"
@@ -49,9 +47,9 @@
                        required>
             </div>
 
-            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
                 <label class="settings-accounts__label">{{ 'SERVER' | translate }}</label>
-                <input class="input input--size_l width--all"
+                <input class="input input--size_m width--all"
                        type="text"
                        name="server"
                        ng-model="vm.accountForm.model.server"
@@ -59,9 +57,9 @@
                        required>
             </div>
 
-            <div class="flex--inline align-items--cn just-content--f-st mrg--b9">
+            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
                 <label class="settings-accounts__label">{{ 'PORT' | translate }}</label>
-                <input class="input input--size_l width--all"
+                <input class="input input--size_m width--all"
                        type="text"
                        name="port"
                        ng-model="vm.accountForm.model.port"
@@ -69,14 +67,10 @@
                        required>
             </div>
 
-
-            <div class="settings-accounts__verification-message">
-                <!--
-                ng-if="vm.error.message"
-                -->
+            <div class="settings-accounts__verification-message"
+                 ng-if="vm.error.message">
                 {{ 'WRONG_LOGIN_OF_PASSWORD' | translate }}
             </div>
-
         </div>
 
         <div class="settings-accounts__footer">
@@ -86,74 +80,4 @@
             </button>
         </div>
     </form>
-
 </div>
-
-
-<!--&lt;!&ndash; Основная часть&ndash;&gt;-->
-<!--<div class="settings-accounts__content">-->
-<!--<div class="accounts-settings__list mrg&#45;&#45;t20" ng-if="vm.accounts.items.length">-->
-<!--<div class="accounts-settings__title">{{ 'CONNECTED_BOXES' | translate }}</div>-->
-<!--<div class="accounts-settings__items">-->
-
-<!--<div class="accounts-settings__item" ng-repeat="account in vm.accounts.items">-->
-<!--<span class="accounts-settings__item&#45;&#45;name-mail">{{ account.email }}</span>-->
-<!--<form class="option-icons just-content&#45;&#45;f-en">-->
-<!--<div class="radiobutton mrg&#45;&#45;r16">-->
-<!--<div class="radiobutton radiobutton__switch radiobutton&#45;&#45;size72x28">-->
-<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
-<!--ng-checked="{{ account.enable }}"-->
-<!--ng-value="0"-->
-<!--ng-model="account.enable"-->
-<!--ng-change="vm.enableTrigger(account)">-->
-<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
-<!--ng-checked="{{ account.enable }}"-->
-<!--ng-value="1"-->
-<!--ng-model="account.enable"-->
-<!--ng-change="vm.enableTrigger(account)">-->
-<!--<span class="radiobutton__switch__on-off" data-checked="{{ 'ON' | translate }}"-->
-<!--data-unchecked="{{ 'OF' | translate }}"></span>-->
-<!--</div>-->
-<!--</div>-->
-<!--<button class="btn btn&#45;&#45;not-style btn__icon&#45;&#45;opahover"-->
-<!--type="button"-->
-<!--ng-click="vm.destroy(account)">-->
-<!--<span class="icon-basket"></span>-->
-<!--</button>-->
-<!--</form>-->
-<!--</div>-->
-
-<!--&lt;!&ndash;  Аккаунт 1&ndash;&gt;-->
-<!--&lt;!&ndash; <span class="accounts-settings__item&#45;&#45;name-mail">{{ account.email }}</span>-->
-<!--<form class="option-icons just-content&#45;&#45;f-en">-->
-<!--&lt;!&ndash; Переключатель &ndash;&gt;-->
-<!--<div class="radiobutton mrg&#45;&#45;r16">-->
-<!--<div class="radiobutton radiobutton__switch radiobutton&#45;&#45;size72x28">-->
-<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
-<!--ng-checked="{{ account.enable }}"-->
-<!--ng-value="0"-->
-<!--ng-model="account.enable"-->
-<!--ng-change="vm.enableTrigger(account)">-->
-<!--<input class="radiobutton__switch__input" type="radio" name="toggle"-->
-<!--ng-checked="{{ account.enable }}"-->
-<!--ng-value="1"-->
-<!--ng-model="account.enable"-->
-<!--ng-change="vm.enableTrigger(account)">-->
-<!--<span class="radiobutton__switch__on-off"></span>-->
-<!--</div>-->
-<!--</div>-->
-<!--&lt;!&ndash; Редактирование записи &ndash;&gt;-->
-<!--&lt;!&ndash;<button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;edit"&ndash;&gt;-->
-<!--&lt;!&ndash;type="button"></button>&ndash;&gt;-->
-<!--&lt;!&ndash; Удалить &ndash;&gt;-->
-<!--<button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;remove"-->
-<!--type="button"-->
-<!--ng-click="vm.destroy(account)"></button>-->
-<!--</form>&ndash;&gt;-->
-<!--</div>-->
-<!--</div>-->
-
-<!--<div class="notific&#45;&#45;layout-light mrg&#45;&#45;t20" ng-if="vm.isConnected">-->
-<!--{{ 'CONNECTED_SUCCESS_COLLECTION_OF_MAILS' | translate }}.-->
-<!--</div>-->
-<!--</div>-->

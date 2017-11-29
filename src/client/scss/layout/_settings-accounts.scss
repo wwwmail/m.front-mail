@@ -1,6 +1,5 @@
 .settings-accounts {
-  &__header {
-  }
+  padding: 0 10px;
 
   &__message {
     margin-top: 34px;
@@ -9,14 +8,10 @@
     line-height: 1.14;
   }
 
-  &__content{
-
-  }
-
   &__footer {
     position: relative;
 
-    padding: 20px;
+    padding: 20px 0;
 
     &:after {
     content: '';

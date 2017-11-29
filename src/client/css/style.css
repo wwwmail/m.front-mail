@@ -408,6 +408,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .mrg--b6 {
   margin-bottom: 6px !important;
 }
+.mrg--b8 {
+  margin-bottom: 8px !important;
+}
 .mrg--b9 {
   margin-bottom: 9px !important;
 }
@@ -2406,44 +2409,38 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   font-weight: bold;
 }
 
-.settings-rule-add__item {
+.settings-rule-add__section {
   position: relative;
+  padding: 20px 10px;
 }
-.settings-rule-add__item-title {
-  font: bold 13px/1 "HelveticaNeueCyr", sans-serif;
-  margin-bottom: 11px;
-}
-.settings-rule-add__notif {
-  font: normal 13px/1 "HelveticaNeueCyr", sans-serif;
-  margin: 16px 0 8px;
-}
-.settings-rule-add__field-text {
-  height: auto !important;
-  min-height: 40px;
-  max-height: 60px;
-}
-.settings-rule-add__condition {
-  margin-bottom: 5px;
-}
-.settings-rule-add__condition-item {
-  position: relative;
-}
-.settings-rule-add__condition-remove {
+.settings-rule-add__section:after {
+  content: '';
   position: absolute;
-  color: #cc0000;
-  font-size: 10px;
-  top: 7px;
-  right: -32px;
+  right: -100vw;
+  bottom: 0;
+  left: -100vw;
+  height: 1px;
+  background-color: #f2f2f2;
 }
-.settings-rule-add__condition-remove:hover {
-  opacity: .7;
-  transition: all .3s;
-  color: #cc0000;
+.settings-rule-add__item {
+  font-size: 16px;
+  margin: 0;
 }
-.settings-rule-add__name {
-  min-width: 84px;
+.settings-rule-add__item--border {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f2f2f2;
+}
+.settings-rule-add__caption {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.settings-rule-add__label {
+  margin: 0 0 10px;
 }
 
+.settings-accounts {
+  padding: 0 10px;
+}
 .settings-accounts__message {
   margin-top: 34px;
   font-size: 14px;
@@ -2451,7 +2448,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .settings-accounts__footer {
   position: relative;
-  padding: 20px;
+  padding: 20px 0;
 }
 .settings-accounts__footer:after {
   content: '';
@@ -2766,6 +2763,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .btn--border-dark {
   border: 1px solid #d0b50d;
+}
+.btn--border-silver {
+  border: 1px solid #ccc;
 }
 .btn--red {
   background-color: #cc0000;
@@ -4608,7 +4608,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .select-list__body.select2-choice {
   display: flex;
   align-items: center;
-  padding: 0;
   overflow: hidden;
   position: relative;
   height: 32px !important;
@@ -4616,7 +4615,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   white-space: nowrap;
   color: #000;
   text-decoration: none;
-  border-radius: 2px;
+  border-radius: 0;
   background-clip: padding-box;
   user-select: none;
   background-color: #ffffff;
@@ -4759,12 +4758,12 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .select-list--size_m {
   height: 30px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 16px;
 }
 .select-list--size_m .select-list__body.select2-choice {
   height: 30px !important;
-  font-size: 15px !important;
+  font-size: 14px !important;
   line-height: 16px !important;
 }
 .select-list--size_l {

@@ -46,8 +46,6 @@
       display: flex;
       align-items: center;
 
-      padding: 0;
-
       overflow: hidden;
       position: relative;
 
@@ -57,8 +55,10 @@
       white-space: nowrap;
       color: $textBlack;
       text-decoration: none;
-      border-radius: 2px;
+
+      border-radius: 0;
       background-clip: padding-box;
+
       user-select: none;
       background-color: $white-color;
 
@@ -100,13 +100,7 @@
 
 
     border-top-style: solid!important;
-    //border-top-color: rgba($button-border-color, .6)!important ;
     border-top: 2px solid $yellow-yandex !important;
-
-    //margin: 0 -30px 0!important;
-
-
-    //margin:  0 auto!important;
 
     border-radius: 2px!important;
     box-shadow: none!important;
@@ -273,12 +267,12 @@
 
   &--size_m {
     height: 30px;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 16px;
 
     .select-list__body.select2-choice{
       height: 30px!important;
-      font-size: 15px!important;
+      font-size: 14px!important;
       line-height: 16px!important;
     }
   }

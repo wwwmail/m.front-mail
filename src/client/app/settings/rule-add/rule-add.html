@@ -5,10 +5,10 @@
           form-server-errors="vm.sieveForm.errors"
           novalidate>
 
-        <div class="rule-add__item mrg--b20 ">
-            <div class="field-style flex--inline just-content--sp-btw align-items--cn mrg--b8">
-                <span class="rule-add__name">{{ 'NAME' | translate }}</span>
-                <input class="input input--size_xs width--size527 input--bg-white input--fc-sh-yellow font--size14"
+        <div class="settings-rule-add__section">
+            <div class="settings-rule-add__item">
+                <span class="settings-rule-add__label">{{ 'NAME' | translate }}</span>
+                <input class="input input--size_m width--all"
                        ng-class="{'input--error': sieveForm.name.$invalid}"
                        type="text"
                        name="name"
@@ -16,104 +16,117 @@
                        ng-model="vm.sieveForm.model.name"
                        server-error required>
             </div>
+        </div>
 
-            <div class="field-style flex--inline just-content--sp-btw align-items--cn mrg--b8">
-                <span class="rule-add__name">{{ 'IS_APPLY' | translate }}</span>
-                <div class="flex--inline just-content--sp-btw align-items--cn width--all width--max527">
-                    <ui-select ng-model="vm.sieveForm.model.spam_accept"
-                               class="select-list select-list--size_xs select-list--not-border-of-sides mrg__right6 font--size14"
-                               ng-class="{'select-list--error': sieveForm.spam_accept.$invalid}"
-                               theme="select2"
-                               name="spam_accept"
-                               search-enabled="false"
-                               server-error
-                               ng-required="true">
-                        <ui-select-match class="select-list__body select-list--size_xs width--inh font--size14"
-                                         placeholder="{{ 'RULE_ADD_SELECT_FOR_ALL_LETTERS' | translate }}">
-                            {{ $select.selected.name | translate }}
-                        </ui-select-match>
-                        <ui-select-choices repeat="item.value as item in vm.spamAccept.list"
-                                           value="{{ $select.selected.value }}">
-                            <div ng-bind-html="item.name | translate"></div>
-                        </ui-select-choices>
-                    </ui-select>
+        <div class="settings-rule-add__section">
+            <div class="settings-rule-add__item">
+                <span class="settings-rule-add__label">{{ 'IS_APPLY' | translate }}</span>
 
-                    <ui-select ng-model="vm.sieveForm.model.attachment_accept"
-                               class="select-list select-list--size_xs select-list--not-border-of-sides font--size14"
-                               ng-class="{'select-list--error': sieveForm.attachment_accept.$invalid}"
-                               theme="select2"
-                               name="attachment_accept"
-                               search-enabled="false"
-                               server-error
-                               ng-required="true">
-                        <ui-select-match
-                                class="select-list__body select-list--size_xs width--inh font--size14"
-                                placeholder="{{ 'RULE_ADD_SELECT_IS_ATTACH_0R_NOT' | translate }}">
-                            {{ $select.selected.name | translate }}
-                        </ui-select-match>
-                        <ui-select-choices repeat="item.value as item in vm.attachmentAccept.list"
-                                           value="{{ $select.selected.value }}">
-                            <div ng-bind-html="item.name | translate"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                <ui-select ng-model="vm.sieveForm.model.spam_accept"
+                           class="select-list select-list--size_m select-list--not-border-of-sides mrg--b8"
+                           ng-class="{'select-list--error': sieveForm.spam_accept.$invalid}"
+                           theme="select2"
+                           name="spam_accept"
+                           search-enabled="false"
+                           server-error
+                           ng-required="true">
+                    <ui-select-match class="select-list__body select-list--size_m width--all"
+                                     placeholder="{{ 'RULE_ADD_SELECT_FOR_ALL_LETTERS' | translate }}">
+                        {{ $select.selected.name | translate }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in vm.spamAccept.list"
+                                       value="{{ $select.selected.value }}">
+                        <div ng-bind-html="item.name | translate"></div>
+                    </ui-select-choices>
+                </ui-select>
 
-                </div>
+                <ui-select ng-model="vm.sieveForm.model.attachment_accept"
+                           class="select-list select-list--size_m select-list--not-border-of-sides"
+                           ng-class="{'select-list--error': sieveForm.attachment_accept.$invalid}"
+                           theme="select2"
+                           name="attachment_accept"
+                           search-enabled="false"
+                           server-error
+                           ng-required="true">
+                    <ui-select-match
+                            class="select-list__body select-list--size_m width--all"
+                            placeholder="{{ 'RULE_ADD_SELECT_IS_ATTACH_0R_NOT' | translate }}">
+                        {{ $select.selected.name | translate }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in vm.attachmentAccept.list"
+                                       value="{{ $select.selected.value }}">
+                        <div ng-bind-html="item.name | translate"></div>
+                    </ui-select-choices>
+                </ui-select>
 
             </div>
         </div>
 
-        <div class="rule-add__item mrg--b20">
-            <div class="rule-add__item-title font--size15">{{ 'IF' | translate }}</div>
+        <div class="settings-rule-add__section">
+            <div class="settings-rule-add__item settings-rule-add__item--border">
+                <div class="settings-rule-add__caption">{{ 'IF' | translate }}</div>
 
+                <button class="btn btn--size_m btn--s-gradient btn--border-silver"
+                        type="button"
+                        ng-click="vm.addRule()">
+                    {{ 'ADD_CONDITION' | translate }}
+                </button>
+            </div>
+
+            <div class="settings-rule-add__item settings-rule-add__item--border">
+
+                <ui-select ng-model="rule.type"
+                           class="select-list select-list--size_m select-list--not-border-of-sides mrg--b8"
+                           ng-class="{'select-list--error': sieveForm.type_{{$index}}.$invalid}"
+                           theme="select2"
+                           name="type_{{$index}}"
+                           search-enabled="false"
+                           server-error
+                           ng-required="true">
+
+                    <ui-select-match class="select-list__body select-list--size_m width--all"
+                                     placeholder="{{ 'FROM_WHOM_U' | translate }}">
+                        {{ $select.selected.name | translate }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in vm.sieveRules.list"
+                                       value="{{ $select.selected.value }}">
+                        <div ng-bind-html="item.name | translate"></div>
+                    </ui-select-choices>
+                </ui-select>
+
+                <ui-select ng-model="rule.compare_type"
+                           class="select-list select-list--size_m select-list--not-border-of-sides mrg--b8"
+                           ng-class="{'select-list--error': sieveForm.compare_type_{{$index}}.$invalid}"
+                           theme="select2"
+                           name="compare_type_{{$index}}"
+                           search-enabled="false"
+                           server-error
+                           ng-required="true">
+                    <ui-select-match class="select-list__body select-list--size_m width--all"
+                                     placeholder="{{ 'RULE_ADD_SELECT_IS_COINCIDES' | translate }}">
+                        {{ $select.selected.name | translate }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in vm.compareTypes.list"
+                                       value="{{ $select.selected.value }}">
+                        <div ng-bind-html="item.name | translate"></div>
+                    </ui-select-choices>
+                </ui-select>
+
+                <input class="input input--size_m width--all"
+                       ng-class="{'input--error': sieveForm.value_{{$index}}.$invalid}"
+                       type="text"
+                       name="value_{{$index}}"
+                       ng-model="rule.value"
+                       placeholder="{{ 'INPUT_PLACEHOLDER_NAME_RULE' | translate }}"
+                       required>
+            </div>
+        </div>
+
+        <div class="rule-add__item mrg--b20">
             <div class="rule-add__condition">
                 <div class="rule-add__condition-item" ng-repeat="rule in vm.sieveForm.model.sieveRules">
                     <div class="field-style flex--inline just-content--sp-btw align-items--cn mrg--b8">
 
-                        <ui-select ng-model="rule.type"
-                                   class="select-list select-list--if-less300 select-list--size_xs select-list--not-border-of-sides mrg__right6 width--size80 font--size14"
-                                   ng-class="{'select-list--error': sieveForm.type_{{$index}}.$invalid}"
-                                   theme="select2"
-                                   name="type_{{$index}}"
-                                   search-enabled="false"
-                                   server-error
-                                   ng-required="true">
-                            <ui-select-match
-                                    class="select-list__body select-list--size_xs width--inh font--size14"
-                                    placeholder="{{ 'FROM_WHOM_U' | translate }}">
-                                {{ $select.selected.name | translate }}
-                            </ui-select-match>
-                            <ui-select-choices repeat="item.value as item in vm.sieveRules.list"
-                                               value="{{ $select.selected.value }}">
-                                <div ng-bind-html="item.name | translate"></div>
-                            </ui-select-choices>
-                        </ui-select>
-
-                        <ui-select ng-model="rule.compare_type"
-                                   class="select-list select-list--if-less200 select-list--size_xs select-list--not-border-of-sides width--size108 mrg__right6 font--size14"
-                                   ng-class="{'select-list--error': sieveForm.compare_type_{{$index}}.$invalid}"
-                                   theme="select2"
-                                   name="compare_type_{{$index}}"
-                                   search-enabled="false"
-                                   server-error
-                                   ng-required="true">
-                            <ui-select-match
-                                    class="select-list__body select-list--size_xs width--inh font--size14"
-                                    placeholder="{{ 'RULE_ADD_SELECT_IS_COINCIDES' | translate }}">
-                                {{ $select.selected.name | translate }}
-                            </ui-select-match>
-                            <ui-select-choices repeat="item.value as item in vm.compareTypes.list"
-                                               value="{{ $select.selected.value }}">
-                                <div ng-bind-html="item.name | translate"></div>
-                            </ui-select-choices>
-                        </ui-select>
-
-                        <input class="input input--size_xs width--inh input--bg-white input--fc-sh-yellow font--size14"
-                               ng-class="{'input--error': sieveForm.value_{{$index}}.$invalid}"
-                               type="text"
-                               name="value_{{$index}}"
-                               ng-model="rule.value"
-                               placeholder="{{ 'INPUT_PLACEHOLDER_NAME_RULE' | translate }}"
-                               required>
                     </div>
                     <button class="rule-add__condition-remove btn btn--not-style btn--not-events btn--remove icon-close"
                             type="button"
@@ -121,11 +134,6 @@
                 </div>
             </div>
 
-            <button class="btn btn--normal btn--size_xs width--size150 border--cl-bl-silver font--size13"
-                    type="button"
-                    ng-click="vm.addRule()">
-                {{ 'ADD_CONDITION' | translate }}
-            </button>
         </div>
 
         <div class="rule-add__item mrg--b20">
@@ -230,7 +238,6 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-            -->
 
             <div class="rule-add__notif">
                 {{ 'RULE_ADD_MESSAGE_WHEN_ACTIVE_RULE' | translate }}.
@@ -261,10 +268,10 @@
                            ng-disabled="!vm.isResend"
                            required>
                     <label class="checkbox-y__label checkbox-y width--inh">
-                        <!--data-checklist-model="vm.sieveForm.model.sieveActions"
+                        data-checklist-model="vm.sieveForm.model.sieveActions"
                         data-checklist-value="vm.sieveActions.option"
                         ng-disabled="!vm.isResend"
-                        checklist-comparator=".type"-->
+                        checklist-comparator=".type"
                         <input class="checkbox-y__input"
                                type="checkbox"
                                ng-model="vm.sieveActions.resend.option">
@@ -348,10 +355,10 @@
             </div>
 
             <div class="field-style mrg--b6">
-                <!--<div class="rule-add__notif mer">{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES' | translate }} <a-->
-                <!--href="">{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES_1' | translate }}</a>,-->
-                <!--{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES_2' | translate }}-->
-                <!--</div>-->
+                <div class="rule-add__notif mer">{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES' | translate }} <a
+                href="">{{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES_1' | translate }}</a>,
+                {{ 'RULE_ADD_MESSAGE_VIEW_LIST_RULES_2' | translate }}
+                </div>
                 <div class="flex--inline align-items--cn mrg--t15">
                     <button class="btn btn--yellow btn--size_sm mrg__right10"
                             type="submit"
@@ -363,10 +370,10 @@
                             ng-if="vm.sieveForm.model.id">
                         {{ 'BTN_SAVE_CHANGE' | translate }}
                     </button>
-                    <!--<button class="btn btn&#45;&#45;normal btn&#45;&#45;size_sm mrg__right10"-->
-                    <!--type="button">-->
-                    <!--{{ 'BTN_APPLY_TO_EXISTING_EMAILS' | translate }}-->
-                    <!--</button>-->
+                    <button class="btn btn--normal btn--size_sm mrg__right10"
+                    type="button">
+                    {{ 'BTN_APPLY_TO_EXISTING_EMAILS' | translate }}
+                    </button>
                     <button class="btn btn--size_sm btn--link-style mrg__none mrg--l10"
                             type="button"
                             ui-sref="settings.rules">
@@ -375,7 +382,7 @@
                 </div>
             </div>
 
-        </div>
+        </div>-->
 
     </form>
 </div>
