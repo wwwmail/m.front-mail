@@ -444,5 +444,7 @@
   "DELETE_WITH_LETTERS": "Odebrat písmena",
   "BANNER_BLOCK_CAPTION": "Reklama",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametry Vašeho poštovního serveru",
+  "SERVER": "Server",
+  "PORT": "Port",
   "DELETING_FOLDER_MSG": "Ve složce {{ folder }} {{ messageCount }} písmena. Dopisy budou odstraněny spolu s složky."
 }

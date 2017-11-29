@@ -445,5 +445,7 @@
   "DELETE_WITH_LETTERS": "Obriši slova",
   "BANNER_BLOCK_CAPTION": "Oglas",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri vaše mejl mape",
+  "SERVER": "Server",
+  "PORT": "Pristup",
   "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messageCount }} slova. Biti će izbrisane poruke zajedno sa mapom"
 }

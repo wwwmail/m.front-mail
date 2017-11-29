@@ -444,5 +444,7 @@
   "DELETE_WITH_LETTERS": "Odstrániť priečinok",
   "BANNER_BLOCK_CAPTION": "Reklama",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametry Vašeho poštovního serveru",
+  "SERVER": "Server",
+  "PORT": "Port",
   "DELETING_FOLDER_MSG": "V priečinku {{ folder }} {{ messageCount }} správy. Správy budú odstranené spolu s priečinkom."
 } 

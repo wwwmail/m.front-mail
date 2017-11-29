@@ -444,5 +444,7 @@
   "DELETE_WITH_LETTERS": "Odvzemi črke",
   "BANNER_BLOCK_CAPTION": "Oglas",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri vašega poštnega strežnika",
+  "SERVER": "Strežnik",
+  "PORT": "Vrata",
   "DELETING_FOLDER_MSG": "V mapi {{ folder }} {{ messageCount }} črke. Pisma bodo odstranjena skupaj z mapami."
 }

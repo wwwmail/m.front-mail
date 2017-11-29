@@ -443,6 +443,8 @@
   "DELETING_FOLDER": "To delete a folder",
   "DELETE_WITH_LETTERS": "Delete letters",
   "BANNER_BLOCK_CAPTION": "Advertising",
+  "SERVER": "Server",
+  "PORT": "Port",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parameters of your mail server",
   "DELETING_FOLDER_MSG": "In the {{ folder }} {{ messageCount }} letters. Letters will be removed along with the folders."
 }

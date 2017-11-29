@@ -445,5 +445,7 @@
   "DELETE_WITH_LETTERS": "Удалить с письмами",
   "BANNER_BLOCK_CAPTION": "Реклама",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Параметры вашего почтового сервера",
+  "SERVER": "Сервер",
+  "PORT": "Порт",
   "DELETING_FOLDER_MSG": "В папке {{ folder }} {{ messageCount }} письма. Письма будут удалены вместе с папкой."
 }
