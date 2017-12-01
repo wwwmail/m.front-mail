@@ -37,12 +37,18 @@
 </div>
 
 <div class="inbox-empty"
-     ng-if="vm.messages.params.mbox && !vm.messages.params.search && !vm.messages.params.tag_id && !vm.messages.params.filter &&!vm.messages.items.length">
+     ng-if="vm.messages.params.mbox && !vm.messages.params.search && !vm.messages.items.length ||
+            (vm.messages.params.filter === 'unseen' || vm.messages.params.filter === 'attach' ||
+            vm.messages.params.filter === 'flagged' || vm.messages.params.tag_id) && !vm.messages.items.length">
     <span class="inbox-empty__icon"></span>
     <span class="inbox-empty__notif">{{ 'EMPTY_FOLDER' | translate }}</span>
-    <span class="inbox-empty__text" ng-if="vm.messages.params.mbox !== 'INBOX'">{{ 'GO_TO_FOLDER' | translate }}<a
-            class="inbox-empty__link"
-            ui-sref="mail.inbox({mbox: 'INBOX'})">«{{ 'INBOX' | translate }}»</a></span>
+    <span class="inbox-empty__text" ng-if="vm.messages.params.mbox !== 'INBOX'">
+        {{ 'GO_TO_FOLDER' | translate }}
+        <a class="inbox-empty__link"
+           ui-sref="mail.inbox({mbox: 'INBOX'})">
+            «{{ 'INBOX' | translate }}»
+        </a>
+    </span>
 </div>
 
 <folder-layout messages="vm.messages"></folder-layout>
