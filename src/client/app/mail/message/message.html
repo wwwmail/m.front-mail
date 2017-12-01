@@ -6,7 +6,6 @@
             <div class="mail-message__plash"></div>
         </div>
 
-
         <div class="mail-message__head-info pos--stc">
             <div class="info-sender width--all">
                 <div class="info-sender__head flex--inline">
@@ -193,15 +192,17 @@
     </div>
 
     <!-- Реклама-->
-    <div class="mail-message__banner mrg--f-bottom" ng-if="vm.isCloseBanner">
+    <div class="mail-message__banner mrg--f-bottom">
         <div class="banner-block banner-block--view-caption"
              banner-block-caption=" {{ 'BANNER_BLOCK_CAPTION' | translate }}">
-
-            <button class="banner-block__button-close flex"
-                    type="button"
-                    ng-click="vm.isCloseBanner = false">
-                <span class="icon-close mrg--auto"></span>
-            </button>
+            <!--
+            ng-if="vm.isCloseBanner"
+            -->
+            <!--<button class="banner-block__button-close flex"-->
+            <!--type="button"-->
+            <!--ng-click="vm.isCloseBanner = false">-->
+            <!--<span class="icon-close mrg&#45;&#45;auto"></span>-->
+            <!--</button>-->
 
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- my.mail.cz in email -->
@@ -218,4 +219,3 @@
 </div>
 
 <folder-layout messages="vm.messages"></folder-layout>
-
