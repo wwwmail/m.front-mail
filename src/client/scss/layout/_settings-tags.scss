@@ -1,16 +1,14 @@
 .settings-tags {
   &__header {
     position: relative;
-
     padding: 20px 10px;
 
     &:after {
       content: '';
 
       position: absolute;
-      right: -100vw;
       bottom: 0;
-      left: -100vw;
+      @extend .wrap-content--psevdo;
 
       height: 1px;
 
@@ -19,19 +17,19 @@
   }
 
   &__list {
-    display: flex;
-    flex-flow: column;
+    @extend .main-flex;
+    @extend .main-flex-flow-col;
 
     width: 100%;
 
     &--sub {
-      padding: 0 0 0 17px;
+      .settings-folders__item-content {
+        padding-left: 25px;
+      }
     }
   }
 
   &__caption {
-    //max-width: 46%;
-
     font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -46,7 +44,7 @@
   &__item-content {
     position: relative;
 
-    display: flex;
+    @extend .main-flex;
     justify-content: space-between;
     align-items: center;
 
@@ -61,9 +59,8 @@
       content: '';
 
       position: absolute;
-      right: -100vw;
       bottom: 0;
-      left: -100vw;
+      @extend .wrap-content--psevdo;
 
       height: 1px;
 

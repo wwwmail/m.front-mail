@@ -8,8 +8,8 @@
   &__icon {
     position: relative;
 
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     justify-content: center;
 
     width: 45px;
@@ -65,7 +65,7 @@
 
   &--btn-tied {
     &:before {
-      display: flex;
+      @extend .main-flex;
       justify-content: center;
 
       content: "×";

@@ -1,8 +1,8 @@
 .select-list {
   position: relative;
 
-  display: flex;
-  flex-flow: column;
+  @extend .main-flex;
+  @extend .main-flex-flow-col;
   align-items: center;
   justify-content: center;
 
@@ -43,7 +43,7 @@
       border: transparent!important;
     }
     &.select2-choice {
-      display: flex;
+      @extend .main-flex;
       align-items: center;
 
       overflow: hidden;
@@ -164,7 +164,7 @@
       width: 28px;
       //width: 100%;
       height: 100%;
-      display: flex;
+      @extend .main-flex;
 
       justify-content: center;
       align-items: center;
@@ -358,7 +358,7 @@
     }
 
     &.select2-choice {
-      display: flex;
+      @extend .main-flex;
       align-items: center;
 
       padding: 0 0 0 8px;

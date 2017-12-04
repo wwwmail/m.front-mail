@@ -17,9 +17,8 @@
     content: '';
 
     position: absolute;
-    right: -100vw;
     bottom: 0;
-    left: -100vw;
+    @extend .wrap-content--psevdo;
 
     height: 1px;
 

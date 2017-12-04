@@ -4,8 +4,8 @@
   &__row {
     margin: 4px 0;
 
-    display: flex;
-    flex-flow: row;
+    @extend .main-flex;
+    @extend .main-flex-flow-row;
     justify-content: space-between;
   }
 

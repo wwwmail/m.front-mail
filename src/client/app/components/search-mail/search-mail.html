@@ -1,5 +1,5 @@
-<div>
-    <div class="search-result__header">
+<div class="search-mail wrap-content">
+    <div class="search-mail__header">
         <div class="radiobutton main-switch radiobutton--size_sm width--all">
             <input class="main-switch__input"
                    type="radio"
@@ -8,6 +8,7 @@
                    ng-value="'ALL'"
                    ng-model="vm.folders.selected.name">
             <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">{{ 'ALL_MAIL2' | translate }}</span>
+
             <input class="main-switch__input"
                    type="radio"
                    name="folder"
@@ -16,7 +17,8 @@
                    ng-model="vm.folders.selected.name">
             <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">{{ 'INBOX' | translate }}</span>
         </div>
-        <button class="search-result__button-filter btn btn--not-style btn--size_sm btn--main-mobile-color font--size18 pdd--r0"
+
+        <button class="search-mail__button-filter btn btn--not-style btn--size_sm btn--main-mobile-color font--size18 pdd--r0"
                 type="button"
                 ng-click="vm.isOpenFilters = !vm.isOpenFilters">
             <span class="icon-filter"></span>

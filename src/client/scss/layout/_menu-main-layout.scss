@@ -1,6 +1,7 @@
 .menu-main-layout {
-  display: flex;
-  flex-direction: column;
+  @extend .main-flex;
+  @extend .main-flex-flow-col;
+
   height: 100%;
   box-sizing: border-box;
 
@@ -28,7 +29,7 @@
     top: 22px;
     right: -24px;
 
-    display: flex;
+    @extend .main-flex;
     justify-content: center;
     align-items: center;
 
@@ -162,7 +163,7 @@
 
     &:before {
       //content: "";
-      display: flex;
+      @extend .main-flex;
       justify-content: center;
       align-items: center;
     }
@@ -175,7 +176,7 @@
   &__avatar {
     position: relative;
 
-    display: flex;
+    @extend .main-flex;
     align-items: center;
     justify-content: center;
 
@@ -202,7 +203,7 @@
   }
 
   &__footer {
-    display: flex;
+    @extend .main-flex;
     align-items: center;
     height: 38px;
 

@@ -1,7 +1,7 @@
 .menu-main-filter {
   @include no-list;
 
-  display: flex;
+  @extend .main-flex;
 
   justify-content: space-evenly;
 

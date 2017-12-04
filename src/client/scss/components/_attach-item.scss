@@ -1,5 +1,5 @@
 .attach-item {
-  width: 100px;
+  width: 96px;
 
   &__body {
     position: relative;
@@ -14,25 +14,20 @@
 
   &__name {
     position: absolute;
-
     top: 10px;
     left: 10px;
 
     font: bold 12px/1.1 $mainFont;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @extend .main-text-dots;
   }
 
   &__name2 {
-    height: 36px;
+    max-height: 36px;
 
     text-align: center;
-
-    font-size: 13px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 12px;
+    @extend .main-text-dots;
   }
 
   &__image {
@@ -46,7 +41,7 @@
 
     z-index: 1;
 
-    width: 45px;
+    width: 100%;
     height: 56px;
 
     background-size: cover;
@@ -55,7 +50,7 @@
     &--file {
       border: none;
 
-      width: 50px;
+      width: 100%;
       height: 65px;
 
       z-index: 2;
@@ -74,7 +69,7 @@
 
     display: inline-flex;
     justify-content: center;
-    align-items: center;
+    @extend .main-align-items-center;
 
 
     bottom: 10px;
@@ -134,7 +129,7 @@
 
     background: rgba(0, 0, 0, .75);
 
-    display: flex;
+    @extend .main-flex;
     justify-content: center;
     align-content: center;
 
@@ -157,7 +152,7 @@
     }
 
     .attach-item__buttons {
-      display: flex;
+      @extend .main-flex;
     }
   }
 }

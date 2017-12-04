@@ -81,7 +81,7 @@
   }
 
   &--flex {
-    display: flex;
+    @extend .main-flex;
   }
 
   .input {

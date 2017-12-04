@@ -1,6 +1,6 @@
 .to-whom {
   display: inline-flex;
-  align-items: center;
+  @extend .main-align-items-center;
 
   &__title {
     font: 300 14px/1 $mainFont;
@@ -20,7 +20,7 @@
   }
 
   &__folders {
-    display: flex;
+    @extend .main-flex;
     flex-wrap: wrap;
 
     font: 300 14px/1.4 $mainFont;
@@ -33,6 +33,7 @@
   @media only screen and (max-width: 380px) {
     &__mail-recipient{
       max-width: 160px;
+
       overflow: hidden;
       text-overflow: ellipsis;
     }

@@ -20,8 +20,8 @@
   }
 
   &__connection {
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     flex-flow: row wrap;
     justify-content: space-between;
   }

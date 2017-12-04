@@ -10,7 +10,7 @@
   min-height: 40px;
   max-height: 120px;
 
-  display: flex;
+  @extend .main-flex;
   align-items: flex-end;
 
   box-sizing: content-box;
@@ -24,9 +24,8 @@
 
     position: absolute;
     top: 0;
-    right: -100vw;
     bottom: 0;
-    left: -100vw;
+    @extend .wrap-content--psevdo;
 
     background: $white-color;
 
@@ -35,8 +34,8 @@
   &__container{
     position: relative;
 
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
 
     justify-content: space-between;
     background: $white-color;

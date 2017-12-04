@@ -2,8 +2,8 @@
   &__header{
     position: relative;
 
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     justify-content: flex-start;
 
     height: 64px;
@@ -20,7 +20,7 @@
     position: relative;
 
     padding: 20px 30px;
-    display: flex;
+    @extend .main-flex;
     justify-content: space-around;
 
     flex-flow: row wrap;
@@ -30,11 +30,12 @@
   }
 
   &__footer{
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     justify-content: space-between;
-    padding: 0 20px;
+
     height: 64px;
+    padding: 0 20px;
 
   }
 

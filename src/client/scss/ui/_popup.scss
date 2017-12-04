@@ -32,8 +32,8 @@
   &__container {
     position: relative;
 
-    display: flex;
-    flex-flow: column;
+    @extend .main-flex;
+    @extend .main-flex-flow-col;
 
     align-items: center;
     -webkit-box-orient: vertical;
@@ -52,7 +52,7 @@
   &__head {
     position: relative;
 
-    display: flex;
+    @extend .main-flex;
     justify-content: center;
     align-items: center;
 
@@ -88,7 +88,7 @@
   }
 
   &__item {
-    display: flex;
+    @extend .main-flex;
     align-items: center;
     justify-content: flex-start;
 

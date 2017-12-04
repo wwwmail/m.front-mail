@@ -1,8 +1,8 @@
 .attachments {
-  display: flex;
+  @extend .main-flex;
   flex-flow: row wrap;
 
   &__item {
-    margin: 6px 6px 6px 0;
+    margin: 6px 3px 6px;
   }
 }

@@ -1,7 +1,7 @@
 .inbox-empty{
 
-  display: flex;
-  flex-flow: column;
+  @extend .main-flex;
+  @extend .main-flex-flow-col;
   justify-content: center;
   font: normal 16px/1 $mainFont;
 

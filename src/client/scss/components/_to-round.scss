@@ -8,8 +8,8 @@
   &__body {
     border-radius: 26px;
 
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
 
     padding-right: 10px;
   }

@@ -9,7 +9,7 @@
     position: relative;
     z-index: 2;
 
-    align-items: center;
+    @extend .main-align-items-center;
     width: 100%;
 
     background: $white-color;
@@ -24,7 +24,7 @@
     color: $silver-mail-message-title-color;
 
     font: 100 11px/1 $mainFont;
-    align-items: center;
+    @extend .main-align-items-center;
 
   }
 
@@ -47,18 +47,18 @@
   }
 
   &__right-menu {
-    display: flex;
+    @extend .main-flex;
     flex-wrap: nowrap;
   }
 
   &__title {
-    display: flex;
-    flex-flow: column;
+    @extend .main-flex;
+    @extend .main-flex-flow-col;
   }
 
   &__message-info {
-    display: flex;
-    flex-flow: column;
+    @extend .main-flex;
+    @extend .main-flex-flow-col;
 
     position: absolute;
     top: 45px;
@@ -120,8 +120,8 @@
   }
 
   &__important-tags {
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     margin-right: 10px;
     padding: 1px 1px 1px 0;
     border: none;
