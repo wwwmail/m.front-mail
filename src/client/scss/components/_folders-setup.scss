@@ -5,7 +5,7 @@
     margin: 4px 0;
 
     @extend .main-flex;
-    flex-flow: row;
+    @extend .main-flex-flow-row;
     justify-content: space-between;
   }
 

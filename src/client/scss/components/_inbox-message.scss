@@ -20,7 +20,7 @@
 
   &__left {
     @extend .main-flex;
-    flex-flow: column;
+    @extend .main-flex-flow-col;
     @extend .main-align-items-center;
 
     max-width: 67px;

@@ -20,7 +20,7 @@
     position: relative;
 
     @extend .main-flex;
-    flex-direction: column;
+    @extend .main-flex-flow-col;
 
     width: 100%;
 
@@ -39,7 +39,7 @@
     min-height: 40px;
 
     @extend .main-flex;
-    flex-flow: row;
+    @extend .main-flex-flow-row;
     justify-content: space-between;
     align-items: center;
 

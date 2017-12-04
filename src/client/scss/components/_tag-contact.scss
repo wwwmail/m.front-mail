@@ -43,7 +43,7 @@
 
   &__info {
     @extend .main-flex;
-    flex-flow: column;
+    @extend .main-flex-flow-col;
   }
 
 }

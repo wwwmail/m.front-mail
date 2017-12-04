@@ -300,10 +300,10 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .main-flex, .menu-main__item-content, .menu-main__item-sub, .menu-main__link, .menu-main__additional-option, .menu-main-filter, .footer__row, .navigation__row, .menu-main-layout, .menu-main-layout__button-close, .menu-main-layout__add-btn:before, .menu-main-layout__avatar, .menu-main-layout__footer, .menu-settings__link-choose-element, .auth-layout__content, .password-reset-layout__content, .mail-message, .mail-message__footer, .folder-layout, .folder-layout__container, .folder-layout__header, .folder-layout__footer, .folder-layout__item, .settings-folders__list, .settings-folders__item-content, .settings-tags__list, .settings-tags__item-content, .settings-rules__list, .settings-rules__item-content, .btn-y--image-icon, .field-style--flex, .input-plash--box, .popup__container, .popup__head, .popup__item, .input-line, .input-line__label, .radio-switch, .tags-input .tags .tag-item, .main-switch, .main-switch__btn, .radiobutton-y__label, .select-list, .select-list__body.select2-choice, .select-list__body > .select2-arrow:after, .select-list-new__body.select2-choice, .search-block, .avatar__symbol-image, .folders-setup__row, .inbox-header__row, .inbox-message, .inbox-message__left, .inbox-message__center, .inbox-message__right, .inbox-message__head, .inbox-message__head-right, .inbox-message__text, .inbox-message__labels, .inbox-footer__content, .inbox-footer__group-option-content, .date-sort, .user-signatures__connection, .social-icons__icon, .social-icons--btn-tied:before, .search-mail, .user-menu__link, .search-result, .letter-tags, .message-textarea__note-editing-area--translate, .compose-from, .quick-reply, .to-whom__folders, .info-sender__right-menu, .info-sender__title, .info-sender__message-info, .info-sender__important-tags, .time-send__planing, .choice-language, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact__name, .tag-contact__info, .attach-upload__list, .attach-upload__name, .attach-item__button, .attach-item:hover .attach-item__buttons, .attachments, .inbox-empty, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply, .message-reply__container, .search-filters__date-sort, .menu-bottom, .social-auth__row, .to-round__body, .avatar-upload__header, .avatar-upload__body, .avatar-upload__footer {
   display: flex;
 }
-.main-flex-flow-col, .mail-message, .mail-message__main-content, .search-mail, .search-result {
+.main-flex-flow-col, .menu-main-layout, .auth-layout__content, .password-reset-layout__content, .mail-message, .mail-message__main-content, .folder-layout__container, .settings-folders__list, .settings-tags__list, .settings-rules__list, .popup__container, .select-list, .inbox-message__left, .search-mail, .search-result, .info-sender__title, .info-sender__message-info, .choice-language, .tag-contact__info, .inbox-empty {
   flex-flow: column;
 }
-.main-flex-flow-row {
+.main-flex-flow-row, .folder-layout__header, .folders-setup__row, .date-sort {
   flex-flow: row;
 }
 .main-align-items-center, .mail-message__head-info, .search-block, .avatar__symbol-image, .inbox-message, .inbox-message__left, .inbox-message__right, .inbox-message__head-right, .inbox-footer__group-option-content, .user-signatures__connection, .social-icons__icon, .user-menu__link, .letter-tags, .message-textarea .note-toolbar, .compose-from, .to-whom, .info-sender__head, .info-sender__to-whom, .info-sender__important-tags, .time-send__planing, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact, .tag-contact__name, .attach-upload__name, .attach-item__type, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply__container, .to-round__body, .avatar-upload__header, .avatar-upload__footer {
@@ -1785,7 +1785,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .menu-main-layout {
-  flex-direction: column;
   height: 100%;
   box-sizing: border-box;
   background: #f3f5f7;
@@ -2032,7 +2031,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .auth-layout__content, .password-reset-layout__content {
   position: relative;
   justify-content: center;
-  flex-flow: column;
   flex: 1 0 auto;
   width: 100%;
   min-height: 100%;
@@ -2194,7 +2192,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .folder-layout__container {
   position: relative;
-  flex-direction: column;
   width: 100%;
   max-width: 768px;
   min-height: 100%;
@@ -2204,7 +2201,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .folder-layout__header {
   position: relative;
   min-height: 40px;
-  flex-flow: row;
   justify-content: space-between;
   align-items: center;
   font: 400 16px/1 "HelveticaNeueCyr", sans-serif;
@@ -2253,7 +2249,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #f2f2f2;
 }
 .settings-folders__list {
-  flex-flow: column;
   width: 100%;
 }
 .settings-folders__list--sub .settings-folders__item-content {
@@ -2317,7 +2312,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #f2f2f2;
 }
 .settings-tags__list {
-  flex-flow: column;
   width: 100%;
 }
 .settings-tags__list--sub .settings-folders__item-content {
@@ -2381,7 +2375,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #f2f2f2;
 }
 .settings-rules__list {
-  flex-flow: column;
   width: 100%;
 }
 .settings-rules__list--sub .settings-folders__item-content {
@@ -3231,7 +3224,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .popup__container {
   position: relative;
-  flex-flow: column;
   align-items: center;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -4405,7 +4397,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .select-list {
   position: relative;
-  flex-flow: column;
   align-items: center;
   justify-content: center;
   width: inherit;
@@ -5106,7 +5097,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .folders-setup__row {
   margin: 4px 0;
-  flex-flow: row;
   justify-content: space-between;
 }
 .folders-setup__link {
@@ -5185,7 +5175,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background: rgba(0, 0, 0, 0.03);
 }
 .inbox-message__left {
-  flex-flow: column;
   max-width: 67px;
   padding: 12px;
   height: 91px;
@@ -5407,7 +5396,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .date-sort {
-  flex-flow: row;
   justify-content: flex-start;
   font-family: Arial, sans-serif;
   font-size: 13px;
@@ -6125,11 +6113,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .info-sender__right-menu {
   flex-wrap: nowrap;
 }
-.info-sender__title {
-  flex-flow: column;
-}
 .info-sender__message-info {
-  flex-flow: column;
   position: absolute;
   top: 45px;
   left: 0;
@@ -6233,7 +6217,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .choice-language {
   position: absolute;
   bottom: -13px;
-  flex-flow: column;
   padding: 0;
   border-radius: 3px;
   overflow: hidden;
@@ -6478,9 +6461,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .tag-contact__phone {
   color: #595959;
-}
-.tag-contact__info {
-  flex-flow: column;
 }
 
 .attach-upload__list {
@@ -6740,7 +6720,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .inbox-empty {
-  flex-flow: column;
   justify-content: center;
   font: normal 16px/1 "HelveticaNeueCyr", sans-serif;
 }

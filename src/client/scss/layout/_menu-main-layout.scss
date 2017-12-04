@@ -1,6 +1,7 @@
 .menu-main-layout {
   @extend .main-flex;
-  flex-direction: column;
+  @extend .main-flex-flow-col;
+
   height: 100%;
   box-sizing: border-box;
 

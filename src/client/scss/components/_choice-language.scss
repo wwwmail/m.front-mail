@@ -1,8 +1,10 @@
 .choice-language {
   position: absolute;
   bottom: -13px;
+
   @extend .main-flex;
-  flex-flow: column;
+  @extend .main-flex-flow-col;
+
   padding: 0;
   border-radius: 3px;
   overflow: hidden;

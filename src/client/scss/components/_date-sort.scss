@@ -1,6 +1,6 @@
 .date-sort {
   @extend .main-flex;
-  flex-flow: row;
+  @extend .main-flex-flow-row;
   justify-content: flex-start;
 
   font-family: Arial, sans-serif;
