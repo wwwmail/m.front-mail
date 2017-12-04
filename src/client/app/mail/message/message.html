@@ -1,221 +1,221 @@
 <div class="mail-message">
-    <div class="mail-message__container">
-        <!-- Хедер сообщения -->
-        <div class="mail-message__title-message" ng-if="vm.message.model.Subject ">
-            <span>{{ vm.message.model.Subject }}</span>
-            <div class="mail-message__plash"></div>
-        </div>
+    <!-- Хедер сообщения -->
+    <div class="mail-message__title-message" ng-if="vm.message.model.Subject">
+        <span>{{ vm.message.model.Subject }}</span>
+        <div class="mail-message__plash"></div>
+    </div>
 
-        <div class="mail-message__head-info pos--stc">
-            <div class="info-sender width--all">
-                <div class="info-sender__head flex--inline">
-                    <div class="info-sender__avatar flex">
-                        <div class="avatar avatar--settings avatar--size42 avatar--second-style">
-                            <avatar-name name="vm.message.model.from"
-                                         email="vm.message.model.to[0].fromAddress">
-                            </avatar-name>
-                        </div>
+    <!-- Элементы управления-->
+    <!-- message-header-sticky offset-top="48"  sticky-class="mail-message__head-info--sticky"-->
+    <div class="mail-message__head-info mail-message__head-info--sticky wrap-content">
+        <div class="info-sender width--all">
+            <div class="info-sender__head flex--inline">
+                <div class="info-sender__avatar flex">
+                    <div class="avatar avatar--settings avatar--size42 avatar--second-style">
+                        <avatar-name name="vm.message.model.from"
+                                     email="vm.message.model.to[0].fromAddress">
+                        </avatar-name>
+                    </div>
+                </div>
+
+                <div class="info-sender__title">
+                    <div class="info-sender__from-whom">
+                        <div class="info-sender__important-tags info-sender__important-tags--small-title important-tags important-tags--active"
+                             ng-if="vm.message.model.important"></div>
+                        {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
+                        <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 pdd--r2 pdd--l2 mrg--l5"
+                                ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
+                                type="button"
+                                ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo">
+                        </button>
                     </div>
 
-                    <div class="info-sender__title">
-                        <div class="info-sender__from-whom">
-                            <div class="info-sender__important-tags info-sender__important-tags--small-title important-tags important-tags--active"
-                                 ng-if="vm.message.model.important"></div>
-                            {{ vm.message.model.from ? vm.message.model.from : vm.message.model.fromAddress }}
-                            <button class="btn btn--not-style btn--not-events btn--main-mobile-color font--size12 pdd--r2 pdd--l2 mrg--l5"
-                                    ng-class="{'icon-arrow-down': !vm.isOpenMessageInfo, 'icon-arrow-up': vm.isOpenMessageInfo}"
-                                    type="button"
-                                    ng-click="vm.isOpenMessageInfo = !vm.isOpenMessageInfo">
+                    <div class="info-sender__date">
+                        <to-date date="vm.message.model.date.date"></to-date>
+                    </div>
+                </div>
+
+                <div class="info-sender__right-menu mrg--f-right">
+                    <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-mobile-menu-h"
+                            type="button"
+                            ng-click="vm.openMessageMenu(); $event.stopPropagation();"></button>
+
+                    <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-delete color--light-red pdd"
+                            type="button"
+                            ng-if="vm.$state.params.mbox !== 'Trash'"
+                            ng-click="vm.move({name: 'Trash', caption: ('Trash' | translate)})"></button>
+
+                    <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-delete color--light-red pdd"
+                            type="button"
+                            ng-if="vm.$state.params.mbox === 'Trash'"
+                            ng-click="vm.destroy({name: 'Trash'})"></button>
+
+                    <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-replied-old pdd--r0"
+                            type="button"
+                            ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></button>
+                </div>
+            </div>
+
+            <div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo">
+                <div class="info-sender__message-info-item to-whom">
+                    <span class="to-whom__title width--min60">{{ 'TO' | translate }}</span>
+                    <div class="to-round" ng-class="{'to-round--active': vm.isToEmail}">
+                        <div class="to-round__body">
+                            <div class="avatar avatar--settings avatar--size28 avatar--second-style">
+                                <avatar-name name="vm.message.model.to[0].name"
+                                             email="vm.message.model.to[0].address">
+                                </avatar-name>
+                            </div>
+                            <div class="to-whom__mail-recipient" ng-click="vm.isToEmail = !vm.isToEmail">
+                                {{ vm.isToEmail ? (vm.message.model.to[0].address ?
+                                vm.message.model.to[0].address : vm.message.model.to[0].name) :
+                                (vm.message.model.to[0].name ? vm.message.model.to[0].name :
+                                vm.message.model.to[0].address) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-sender__message-info-item to-whom"
+                     ng-click="vm.isFromEmail = !vm.isFromEmail">
+                    <span class="to-whom__title width--min60">{{ 'FROM_WHOM_U' | translate }}</span>
+                    <div class="to-round" ng-class="{'to-round--active': vm.isFromEmail}">
+                        <div class="to-round__body">
+                            <div class="avatar avatar--settings avatar--size28 avatar--second-style">
+                                <avatar-name name="vm.message.model.from"
+                                             email="vm.message.model.fromAddress">
+                                </avatar-name>
+                            </div>
+                            <div class="to-whom__mail-recipient">
+                                {{ vm.isFromEmail ? (vm.message.model.fromAddress ?
+                                vm.message.model.fromAddress
+                                :
+                                vm.message.model.from) : (vm.message.model.from ? vm.message.model.from :
+                                vm.message.model.fromAddress) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-sender__message-info-item to-whom">
+                    <span class="to-whom__title width--min60">{{ 'FOLDER' | translate }}</span>
+                    <div class="to-whom__folders">
+                        <div class="to-whom__folder">{{ vm.message.model.mbox | translate }}</div>
+                    </div>
+                </div>
+
+                <div class="info-sender__message-info-item to-whom">
+                    <span class="to-whom__title width--min60">{{ 'TAGS' | translate }}</span>
+                    <div class="inbox-message__labels">
+                        <button class="info-sender__important-tags important-tags btn--not-style btn--not-events "
+                                ng-class="{'important-tags--active': vm.message.model.important}"
+                                type="button"
+                                ng-click="vm.setImportant()"></button>
+                        <div class="inbox-message__label letter-tags letter-tags--poss-remove"
+                             style="background: {{ tag.bgcolor }}; color: {{ tag.color }}"
+                             ng-repeat="tag in vm.message.model.tags">
+                            <span class="letter-tags__name">{{ tag.tag_name }}</span>
+                            <button class="btn btn--not-style btn--circle letter-tags__icon"
+                                    ng-click="vm.setUnTag(tag)">
+                                <span class="letter-tags__remove-icon icon-close"></span>
                             </button>
                         </div>
-
-                        <div class="info-sender__date">
-                            <to-date date="vm.message.model.date.date"></to-date>
-                        </div>
-                    </div>
-
-                    <div class="info-sender__right-menu mrg--f-right">
-                        <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-mobile-menu-h"
-                                type="button"
-                                ng-click="vm.openMessageMenu(); $event.stopPropagation();"></button>
-
-                        <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-delete color--light-red pdd"
-                                type="button"
-                                ng-if="vm.$state.params.mbox !== 'Trash'"
-                                ng-click="vm.move({name: 'Trash', caption: ('Trash' | translate)})"></button>
-
-                        <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-delete color--light-red pdd"
-                                type="button"
-                                ng-if="vm.$state.params.mbox === 'Trash'"
-                                ng-click="vm.destroy({name: 'Trash'})"></button>
-
-                        <button class="btn btn--not-events btn--not-style btn--mail-control btn--main-mobile-color icon-replied-old pdd--r0"
-                                type="button"
-                                ui-sref="mail.compose({mbox: vm.message.model.mbox, id: vm.message.model.number, connection_id: vm.message.model.connection_id})"></button>
-                    </div>
-                </div>
-
-                <div class="info-sender__message-info is-active" ng-if="vm.isOpenMessageInfo">
-                    <div class="info-sender__message-info-item to-whom">
-                        <span class="to-whom__title width--min60">{{ 'TO' | translate }}</span>
-                        <div class="to-round" ng-class="{'to-round--active': vm.isToEmail}">
-                            <div class="to-round__body">
-                                <div class="avatar avatar--settings avatar--size28 avatar--second-style">
-                                    <avatar-name name="vm.message.model.to[0].name"
-                                                 email="vm.message.model.to[0].address">
-                                    </avatar-name>
-                                </div>
-                                <div class="to-whom__mail-recipient" ng-click="vm.isToEmail = !vm.isToEmail">
-                                    {{ vm.isToEmail ? (vm.message.model.to[0].address ?
-                                    vm.message.model.to[0].address : vm.message.model.to[0].name) :
-                                    (vm.message.model.to[0].name ? vm.message.model.to[0].name :
-                                    vm.message.model.to[0].address) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-sender__message-info-item to-whom"
-                         ng-click="vm.isFromEmail = !vm.isFromEmail">
-                        <span class="to-whom__title width--min60">{{ 'FROM_WHOM_U' | translate }}</span>
-                        <div class="to-round" ng-class="{'to-round--active': vm.isFromEmail}">
-                            <div class="to-round__body">
-                                <div class="avatar avatar--settings avatar--size28 avatar--second-style">
-                                    <avatar-name name="vm.message.model.from"
-                                                 email="vm.message.model.fromAddress">
-                                    </avatar-name>
-                                </div>
-                                <div class="to-whom__mail-recipient">
-                                    {{ vm.isFromEmail ? (vm.message.model.fromAddress ?
-                                    vm.message.model.fromAddress
-                                    :
-                                    vm.message.model.from) : (vm.message.model.from ? vm.message.model.from :
-                                    vm.message.model.fromAddress) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-sender__message-info-item to-whom">
-                        <span class="to-whom__title width--min60">{{ 'FOLDER' | translate }}</span>
-                        <div class="to-whom__folders">
-                            <div class="to-whom__folder">{{ vm.message.model.mbox | translate }}</div>
-                        </div>
-                    </div>
-
-                    <div class="info-sender__message-info-item to-whom">
-                        <span class="to-whom__title width--min60">{{ 'TAGS' | translate }}</span>
-                        <div class="inbox-message__labels">
-                            <button class="info-sender__important-tags important-tags btn--not-style btn--not-events "
-                                    ng-class="{'important-tags--active': vm.message.model.important}"
-                                    type="button"
-                                    ng-click="vm.setImportant()"></button>
-                            <div class="inbox-message__label letter-tags letter-tags--poss-remove"
-                                 style="background: {{ tag.bgcolor }}; color: {{ tag.color }}"
-                                 ng-repeat="tag in vm.message.model.tags">
-                                <span class="letter-tags__name">{{ tag.tag_name }}</span>
-                                <button class="btn btn--not-style btn--circle letter-tags__icon"
-                                        ng-click="vm.setUnTag(tag)">
-                                    <span class="letter-tags__remove-icon icon-close"></span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="mail-message__main-content">
-            <div class="mail-message__images-resolve pointer"
-                 ng-if="vm.message.model.hasForeignImages && !vm.message.model.showForeignImages"
-                 ng-click="vm.resolveImage()">
-                <div class="images-resolve">
-                    <span class="icon-draft"></span>
-                    <strong>{{ 'SHOW_IMAGES' | translate }}</strong>
-                    {{ 'SHOW_IMAGES_2' | translate }}
+    <div class="mail-message__main-content">
+        <!-- Сообщение -->
+        <div class="mail-message__images-resolve"
+             ng-if="vm.message.model.hasForeignImages && !vm.message.model.showForeignImages"
+             ng-click="vm.resolveImage()">
+            <div class="images-resolve">
+                <span class="icon-draft"></span>
+                <strong>{{ 'SHOW_IMAGES' | translate }}</strong>
+                {{ 'SHOW_IMAGES_2' | translate }}
+            </div>
+        </div>
+
+        <!-- Аттачи -->
+        <div class="mail-message__mail-attachments">
+            <div class="attachments">
+                <div class="attachments__item" ng-repeat="attachment in vm.message.model.attachmentsData">
+                    <attach-item attach="attachment" message="vm.message.model"></attach-item>
                 </div>
             </div>
+        </div>
 
-            <!-- Аттачи -->
-            <div class="mail-message__mail-attachments">
-                <div class="attachments">
-                    <div class="attachments__item" ng-repeat="attachment in vm.message.model.attachmentsData">
-                        <attach-item attach="attachment" message="vm.message.model"></attach-item>
-                    </div>
+        <!-- Тело сообщения -->
+        <div class="mail-message__body">
+            <div class="body-message">
+                <!--Само сообщение-->
+                <div class="body-message__content"
+                     ng-bind-html="vm.getTrustHtml(vm.message.model.body)">
                 </div>
             </div>
+        </div>
 
-            <!-- Тело сообщения -->
-            <div class="mail-message__body">
-                <div class="body-message">
-                    <!--Само сообщение-->
-                    <div class="body-message__content"
-                         ng-bind-html="vm.getTrustHtml(vm.message.model.body)">
-                    </div>
-                </div>
-
+        <!-- Реклама-->
+        <div class="mail-message__banner mrg--f-bottom">
+            <div class="banner-block banner-block--view-caption"
+                 banner-block-caption=" {{ 'BANNER_BLOCK_CAPTION' | translate }}">
                 <!--
-                <div class="banner-block banner-block--size330x280">
-                    <ins class="adsbygoogle"
-                         style="display:inline-block;width:330px;height:280px"
-                         data-ad-client="a-pub-7169913763254428"
-                         data-ad-slot="6851262006"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                </div>
+                ng-if="vm.isCloseBanner"
                 -->
+                <!--<button class="banner-block__button-close flex"-->
+                <!--type="button"-->
+                <!--ng-click="vm.isCloseBanner = false">-->
+                <!--<span class="icon-close mrg&#45;&#45;auto"></span>-->
+                <!--</button>-->
+
+                <!--<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>-->
+                <!--&lt;!&ndash; My.mail.cz mobile &ndash;&gt;-->
+                <!--<ins class="adsbygoogle"-->
+                <!--style="display:block; width:330px; height:200px"-->
+                <!--data-ad-client="ca-pub-7169913763254428"-->
+                <!--data-ad-slot="4963234726">-->
+                <!--</ins>-->
+                <!--<script>-->
+                <!--(adsbygoogle = window.adsbygoogle || []).push({});-->
+                <!--</script>-->
+
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- My.mail.cz mobile -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7169913763254428"
+                     data-ad-slot="4963234726"
+                     data-ad-format="auto"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
             </div>
         </div>
+    </div>
 
-        <!-- Быстрый ответ-->
-        <!--
-        <div class="mail-message__reply">
-            <form class="message-reply" name="sendForm" ng-submit="vm.send(sendForm)">
-                <div class="message-reply__container">
-                    <div class="quick-reply">
-                        <button class="quick-reply__write btn btn--not-style icon-write"></button>
-                        <div class="quick-reply__message">
-                            <div class="quick-reply__message-input"
-                                 contenteditable="true"
-                                 ng-model="vm.sendForm.model.body"
-                                 required
-                                 placeholder="{{ 'QUICK_RESPONSE' | translate }}">
-                            </div>
+    <!-- Быстрый ответ-->
+    <!--
+    <div class="mail-message__reply">
+        <form class="message-reply" name="sendForm" ng-submit="vm.send(sendForm)">
+            <div class="message-reply__container">
+                <div class="quick-reply">
+                    <button class="quick-reply__write btn btn--not-style icon-write"></button>
+                    <div class="quick-reply__message">
+                        <div class="quick-reply__message-input"
+                             contenteditable="true"
+                             ng-model="vm.sendForm.model.body"
+                             required
+                             placeholder="{{ 'QUICK_RESPONSE' | translate }}">
                         </div>
-                        <button class="quick-reply__send btn btn--not-style">{{ 'SEND_SHORT' | translate }}</button>
                     </div>
+                    <button class="quick-reply__send btn btn--not-style">{{ 'SEND_SHORT' | translate }}</button>
                 </div>
-            </form>
-        </div>
-        -->
+            </div>
+        </form>
     </div>
-
-    <!-- Реклама-->
-    <div class="mail-message__banner mrg--f-bottom">
-        <div class="banner-block banner-block--view-caption"
-             banner-block-caption=" {{ 'BANNER_BLOCK_CAPTION' | translate }}">
-            <!--
-            ng-if="vm.isCloseBanner"
-            -->
-            <!--<button class="banner-block__button-close flex"-->
-            <!--type="button"-->
-            <!--ng-click="vm.isCloseBanner = false">-->
-            <!--<span class="icon-close mrg&#45;&#45;auto"></span>-->
-            <!--</button>-->
-
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- My.mail.cz mobile -->
-            <ins class="adsbygoogle"
-                 style="display:block; width:330px; height:200px"
-                 data-ad-client="ca-pub-7169913763254428"
-                 data-ad-slot="4963234726">
-            </ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </div>
+    -->
 </div>
 
 <folder-layout messages="vm.messages"></folder-layout>

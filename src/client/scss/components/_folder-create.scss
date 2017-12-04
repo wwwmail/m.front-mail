@@ -6,7 +6,7 @@
   }
 
   &__input {
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
   }
 }

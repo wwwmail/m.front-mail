@@ -12,8 +12,8 @@
   background-color: #f6f5f3;
 
   &__container{
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     justify-content: flex-start;
 
     width: 100%;
@@ -82,8 +82,9 @@
       text-align: left;
       z-index: 10;
       padding-left: 8px;
-      display: flex;
-      align-items: center;
+
+      @extend .main-flex;
+      @extend .main-align-items-center;
 
     }
 

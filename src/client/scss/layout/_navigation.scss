@@ -1,6 +1,6 @@
 .navigation {
   &__row {
-    display: flex;
+    @extend .main-flex;
     flex-direction: row
   }
 

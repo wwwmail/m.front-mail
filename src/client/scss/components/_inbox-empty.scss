@@ -1,6 +1,6 @@
 .inbox-empty{
 
-  display: flex;
+  @extend .main-flex;
   flex-flow: column;
   justify-content: center;
   font: normal 16px/1 $mainFont;

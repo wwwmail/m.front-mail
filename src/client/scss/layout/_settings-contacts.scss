@@ -8,9 +8,8 @@
       content: '';
 
       position: absolute;
-      right: -100vw;
       bottom: 0;
-      left: -100vw;
+      @extend .wrap-content--psevdo;
 
       height: 1px;
 
@@ -19,7 +18,7 @@
   }
 
   &__list {
-    display: flex;
+    @extend .main-flex;
     flex-flow: column;
 
     width: 100%;
@@ -41,7 +40,7 @@
   &__item-content {
     position: relative;
 
-    display: flex;
+    @extend .main-flex;
     justify-content: space-between;
     align-items: center;
 
@@ -56,9 +55,8 @@
       content: '';
 
       position: absolute;
-      right: -100vw;
       bottom: 0;
-      left: -100vw;
+      @extend .wrap-content--psevdo;
 
       height: 1px;
 

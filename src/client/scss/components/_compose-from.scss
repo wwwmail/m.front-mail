@@ -1,7 +1,7 @@
 .compose-from {
-  display: flex;
+  @extend .main-flex;
   justify-content: flex-start;
-  align-items: center;
+  @extend .main-align-items-center;
 
   &__item {
     margin-left: 5px;

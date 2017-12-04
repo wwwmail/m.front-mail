@@ -16,6 +16,7 @@
         };
         return directive;
 
+
         function link(scope, element, attrs) {
             $timeout(function () {
                 console.log('el', $(element).height());
@@ -23,5 +24,4 @@
             }, 50);
         }
     }
-
 })();

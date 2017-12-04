@@ -1,7 +1,7 @@
 .inbox-message {
-  display: flex;
+  @extend .main-flex;
   flex-flow: row nowrap;
-  align-items: center;
+  @extend .main-align-items-center;
   justify-content: space-between;
 
   position: relative;
@@ -19,9 +19,9 @@
   }
 
   &__left {
-    display: flex;
+    @extend .main-flex;
     flex-flow: column;
-    align-items: center;
+    @extend .main-align-items-center;
 
     max-width: 67px;
 
@@ -31,7 +31,7 @@
   }
 
   &__center {
-    display: flex;
+    @extend .main-flex;
     flex-flow: column nowrap;
     align-items: flex-start;
 
@@ -40,14 +40,12 @@
     padding: 10px 0 8px;
     margin: 0 0 auto;
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    @extend .main-text-dots;
   }
 
   &__right {
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
 
     padding: 5px;
 
@@ -70,9 +68,10 @@
   }
 
   &__head {
-    display: flex;
+    @extend .main-flex;
     justify-content: space-between;
 
+    width: 100%;
     color: $inbox-head-text-color;
   }
 
@@ -81,8 +80,8 @@
     top: 8px;
     right: 19px;
 
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
 
     @media (min-width: 500px) {
       right: 24px;
@@ -93,9 +92,12 @@
   }
 
   &__name {
+    max-width: calc(100% - 80px);
     margin: 0 auto 3px 0;
 
     font-size: 16px;
+
+    @extend .main-text-dots;
   }
 
   &__data {
@@ -108,7 +110,7 @@
   }
 
   &__text {
-    display: flex;
+    @extend .main-flex;
     flex-flow: column wrap;
     justify-content: flex-start;
 
@@ -125,20 +127,18 @@
 
     color: $inbox-head-text-color;
     line-height: 1.3;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+
+    @extend .main-text-dots;
   }
 
   &__message {
     display: inline-block;
 
-    //max-width : 50%;
     flex-shrink: 1;
 
     max-height: 48px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+    @extend .main-text-dots;
 
     margin: auto 0;
 
@@ -148,10 +148,6 @@
     div {
       white-space: normal !important;
     }
-
-    //overflow:hidden;
-    //text-overflow: ellipsis;
-    //white-space: nowrap;
   }
 
   &__check-message {
@@ -189,7 +185,7 @@
   }
 
   &__labels {
-    display: flex;
+    @extend .main-flex;
     flex-flow: row wrap;
     justify-content: flex-start;
 

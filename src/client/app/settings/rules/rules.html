@@ -1,23 +1,23 @@
-<div class="settings-rule">
-    <div class="settings-rule__header">
+<div class="settings-rules">
+    <div class="settings-rules__header">
         <button class="btn btn--size_m btn--yellow"
                 ui-sref="settings.ruleAdd">{{ 'CREATE_RULE' | translate }}
         </button>
 
-        <div class="settings-rule__message font--size14">
+        <div class="settings-rules__message font--size14">
             {{ 'RULES_MESSAGE_IS_HELP_RULES_WE' | translate }}.
         </div>
     </div>
 
-    <div class="settings-rule__title">
+    <div class="settings-rules__title">
         {{ 'YOUR_CREATED_RULES' | translate }}.
     </div>
 
     <!-- Список правил-->
-    <form class="settings-rule__list" ng-repeat="sieve in vm.sieve.items">
-        <div class="settings-rule__item">
+    <form class="settings-rules__list" ng-repeat="sieve in vm.sieve.items">
+        <div class="settings-rules__item">
 
-            <div class="settings-rule__name">
+            <div class="settings-rules__name">
                 {{ sieve.name }}
             </div>
 

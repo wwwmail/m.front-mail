@@ -1,7 +1,7 @@
 .radio-switch {
   position: relative;
 
-  display: flex;
+  @extend .main-flex;
   align-items: center;
 
   width: 68px;

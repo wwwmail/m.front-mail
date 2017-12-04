@@ -1,50 +1,61 @@
 .mail-message {
-  display: flex;
-  flex-direction: column;
+  @extend .main-flex;
+  @extend .main-flex-flow-col;
 
-  min-height: calc(100vh - 48px);
-  max-height: calc(100vh - 48px);
 
-  &__container {
-    position: relative;
+  //height: 100%;
+  min-height: calc(100% - 48px);
+  //min-height: inherit;
 
-    //flex: 1 0 auto;
-
-    //min-height: calc(100vh - 50px);
-    display: inherit;
-    flex-direction: inherit;
-
-    overflow: auto;
-  }
+  position: absolute;
+  top: 48px;
+  right: 0;
+  left: 0;
 
   &__head-info {
     position: relative;
     top: 0;
     z-index: 5;
 
-    display: flex;
-    align-items: center;
+    display: inherit;
+    @extend .main-align-items-center;
+
+    flex: 0 0 auto;
 
     min-height: 72px;
 
-    padding: 0 22px;
-
     background: #fff;
-    transform: translate3d(0, 0, 0);
+
+    &--sticky {
+      position: sticky;
+      top: 48px !important;
+    }
   }
 
   &__main-content {
     position: relative;
 
+    display: inherit;
+    //flex-flow: inherit;
+    @extend .main-flex-flow-col;
     flex: 1 0 auto;
-    height: auto;
 
-    padding: 0 22px;
+    height: inherit;
 
     background: #fff;
 
-    overflow-x: hidden;;
+    @extend .wrap-content;
+  }
 
+  &__body {
+    position: relative;
+    z-index: 1;
+
+    flex: 1 0 auto;
+
+    margin-bottom: 10px;
+
+    height: auto;
   }
 
   &__reply {
@@ -53,7 +64,7 @@
   }
 
   &__banner {
-    flex: 0 0 auto;
+    //flex: 0 0 auto;
 
     width: 100%;
     height: max-content;
@@ -67,16 +78,10 @@
     }
   }
 
-  &__body {
-    position: relative;
-    //flex: 1 0 auto;
-    margin-bottom: 10px;
-    z-index: 1;
-  }
-
   &__mail-attachments {
     position: relative;
     z-index: 1;
+
     padding: 10px 0 0;
   }
 
@@ -114,30 +119,13 @@
   }
 
   &__footer {
-    display: flex;
+    @extend .main-flex;
     align-items: center;
 
     padding: 16px;
   }
 
-  margin-right: -22px;
-  margin-left: -22px;
-
-  @media only screen and (max-width: 562px) {
-    margin-right: -10px;
-    margin-left: -10px;
-
-    &__main-content, &__head-info {
-      padding: 0 10px;
-    }
-
-  }
-
   &__images-resolve {
-    margin: 0 -22px;
-
-    @media only screen and (max-width: 562px) {
-      margin: 0 -10px;
-    }
+    @extend .wrap-content--sub;
   }
 }

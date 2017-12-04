@@ -52,10 +52,11 @@
     bottom: 0;
     left: 0;
 
-    display: flex;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     justify-content: center;
     align-content: center;
-    align-items: center;
+
     //background:  $avatar-bg-symbol-color;
 
     color: $avatar-symbol-color;

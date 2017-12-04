@@ -1,9 +1,9 @@
 .letter-tags {
   position: relative;
 
-  display: flex;
+  @extend .main-flex;
   justify-content: space-between;
-  align-items: center;
+  @extend .main-align-items-center;
 
   border-radius: 3px 0 0 3px;
 
@@ -69,8 +69,6 @@
 
     z-index: -1;
     margin-top: 0;
-    //display: flex;
-    //font-size: 90.517899%;
   }
 
   &--red{

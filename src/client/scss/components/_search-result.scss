@@ -1,10 +1,11 @@
 .search-result {
-  //padding: 15px 22px;
   position: relative;
-  display: flex;
-  flex-flow: column;
-  background: #f8f8f8;
   height: 100%;
+
+  @extend .main-flex;
+  @extend  .main-flex-flow-col;
+
+  background: #f8f8f8;
 
   transition: all .6s;
 
@@ -22,15 +23,6 @@
     }
   }
 
-
-  &__header{
-    position: relative;
-    display:flex;
-    justify-content: space-between;
-    padding: 16px 0 8px;
-    background-color: $white-color;
-    z-index: 2;
-  }
   &__filters{
     height: 0;
     margin: 0 auto;
@@ -38,6 +30,7 @@
     transition: transform .8s, height .6s;
     transform: translateY(-245px);
   }
+
   &__content{
     margin: auto;
 

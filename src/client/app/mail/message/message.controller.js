@@ -46,6 +46,8 @@
 
         activate();
 
+        /////
+
         function activate() {
             vm.$state = $state;
             vm.user = $auth.user;

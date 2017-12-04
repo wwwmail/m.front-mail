@@ -1,19 +1,14 @@
 .inbox-message-list {
   position: relative;
+  overflow: hidden;
+
+  transition: all .2s ease-in;
+
   &--indentation {
     padding-bottom: 55px !important;
   }
 
   &__spinner {
-    //margin-top: 10px;
-    //position: absolute;
-
-    //left: calc(50% - (120px / 2));
-
-    //bottom: 0;
-    padding: 20px;
-
-
     text-align: center;
   }
 }

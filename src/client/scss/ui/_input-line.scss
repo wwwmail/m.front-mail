@@ -10,7 +10,7 @@
 .input-line {
   position: relative;
 
-  display: flex;
+  @extend .main-flex;
 
   color: $textBlack;
   font-weight: 100;
@@ -59,7 +59,7 @@
   &__label {
     position: relative;
 
-    display: flex;
+    @extend .main-flex;
     align-items: flex-end;
 
     margin: 0;

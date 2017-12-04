@@ -5,8 +5,8 @@
   overflow: hidden;
   box-sizing: border-box;
 
-  display: flex;
-  align-items: center;
+  @extend .main-flex;
+  @extend .main-align-items-center;
   height: 40px;
 
   //&:active, &:hover{
@@ -54,7 +54,7 @@
   box-sizing: border-box;
 
   display: flex;
-  align-items: center;
+ @extend .main-align-items-center;
   height: 40px;
 
   &:active, &:hover{

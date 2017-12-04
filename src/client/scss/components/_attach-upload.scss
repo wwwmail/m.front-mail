@@ -1,6 +1,6 @@
 .attach-upload {
   &__list {
-    display: flex;
+    @extend .main-flex;
     flex-flow: row wrap;
     justify-content: flex-start;
   }
@@ -67,12 +67,10 @@
     color: $white-color;
     font: bold 10px/1 $mainSecondFont;
     text-transform: uppercase;
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @extend .main-text-dots;
 
     background: $red-btn-color;
   }

@@ -5,7 +5,7 @@
   right: 0;
   bottom: 0;
 
-  display: flex;
+  @extend .main-flex;
   align-items: center;
   justify-content: center;
 
@@ -19,7 +19,7 @@
   &__container{
     position: relative;
 
-    display: flex;
+    @extend .main-flex;
     flex-direction: column;
 
     width: 100%;
@@ -38,7 +38,7 @@
 
     min-height: 40px;
 
-    display: flex;
+    @extend .main-flex;
     flex-flow: row;
     justify-content: space-between;
     align-items: center;
@@ -51,7 +51,7 @@
   &__footer{
     position: relative;
 
-    display: flex;
+    @extend .main-flex;
     align-items: center;
     flex: 0 0 auto;
 
@@ -75,7 +75,7 @@
 
   }
   &__item{
-    display: flex;
+    @extend .main-flex;
     align-items: center;
 
     padding: 6px 20px;

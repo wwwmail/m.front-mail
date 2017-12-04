@@ -10,8 +10,8 @@
 
     float: left;
 
-    display: flex;
-    align-items: center;
+    @extend .main-flex;
+    @extend .main-align-items-center;
     justify-content: center;
 
     width: 28px;

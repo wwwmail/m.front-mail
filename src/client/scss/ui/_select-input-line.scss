@@ -2,31 +2,25 @@
   width: 100% !important;
 
   background: transparent;
-  box-shadow: none!important;
+  box-shadow: none !important;
 
   padding: 0 30px !important;
 
-  border-radius: 0!important;
+  border-radius: 0 !important;
   border: none;
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
 
   &--compose {
-
   }
 
-  &:active, &:focus, &:hover{
-    border-bottom-color: $yellow-yandex!important;
-    &__match-item{
-      //background-color: $yellow-lignt!important;
-      //color: $black;
-      ////padding: 0 26px 0 0;
-      ////margin-right: -26px!important;
-    }
-    .ui-select-match-item{
-      &:active, &:focus, &:hover{
-        .close{
-          display: block!important;
+  &:active, &:focus, &:hover {
+    border-bottom-color: $yellow-yandex !important;
+
+    .ui-select-match-item {
+      &:active, &:focus, &:hover {
+        .close {
+          display: block !important;
           opacity: .6;
           z-index: 5;
         }
@@ -34,209 +28,38 @@
     }
   }
 
-  &.ui-select-container > div{
-    //display: table;
-    //width: inherit;
-  }
-
-  &--min-height{
+  &--min-height {
     min-height: 58px;
-    display: flex!important;
-    align-items: center!important;
+    display: flex !important;
+    align-items: center !important;
   }
 
-  .btn-primary{
-    background-color: transparent!important;
-    color: transparent!important;
-    border: none!important;
-    display: none!important;
-    max-width: 0!important;
-    height: 0!important;
-    opacity: 0!important;
+  .btn-primary {
+    background-color: transparent !important;
+    color: transparent !important;
+    border: none !important;
+    display: none !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
   }
-  &:focus, &:active ,&:hover{
-    box-shadow: none!important;
-    outline: none!important;
+  &:focus, &:active, &:hover {
+    box-shadow: none !important;
+    outline: none !important;
   }
 
-  .select-list__body{
-    margin: auto!important;
-    &:focus, &:active{
-      box-shadow: none!important;
-      outline: none!important;
+  .select-list__body {
+    margin: auto !important;
+    &:focus, &:active {
+      box-shadow: none !important;
+      outline: none !important;
     }
   }
-  .select2-drop{
-    //margin: 0 auto!important;
+  .select2-drop {
     left: 0;
   }
 
-  .select-list__body, .select-list__body > .select2-arrow{
-    background-color: transparent!important;
+  .select-list__body, .select-list__body > .select2-arrow {
+    background-color: transparent !important;
   }
-
-
-
-  /*
-
-   .close{
-     position: absolute!important;
-     top: 0!important;
-     padding-top: 5px;
-     right: 5px!important;
-     color: transparent;
-     overflow: hidden;
-     width: 16px;
-     height: 20px;
-     line-height: 1!important;
-     display: none!important;
-
-     &:before{
-       //position: absolute;
-       font-family: 'icomoon' !important;
-       content: "\e908";
-       font-size: 10px;
-       color: #000!important;
-       display: flex;
-       justify-content: center;
-     }
-
-  }
-  &__match-tags{
-    //
-    //display: table-cell;
-    //background: transparent;
-
-    .ui-select-match-item{
-      border: none!important;
-      padding: 0;
-      display: inline-flex;
-      margin: 0 5px 0 0!important;
-
-      &:hover, &:active, &:focus{
-        background-color: transparent!important;
-        color: $black;
-        padding-right: 26px ;
-      }
-    }
-
-    &:hover, &:active, &:focus{
-
-    }
-
-  }
-  &__match-item{
-    border-radius: 100px;
-    padding: 0 5px 0 0;
-    //background: rgba($select-input-line-active-item-color, 1)!important;
-
-    background-color: $select-input-line-active-item-color!important;
-
-    .avatar{
-      background-color: $select-input-line-active-item-color!important;
-      box-shadow: $select-input-line-avatar-shadow,inset 0 0 0 1px rgba(0,0,0,.1);
-      .avatar__first-name, .avatar__last-name {
-        font-size: 65%!important;
-        font-weight: bold;
-        color: #777!important;
-        margin-top: -1px;
-      }
-    }
-
-    .tag-contact__name {
-      padding-left: 2px;
-    }
-
-    //background: transparent;
-    //background-color:  #f6f5f3!important;
-    color: #222;
-
-    &:hover, &:active, &:focus{
-      background-color: $yellow-lignt!important;
-      //background: rgba($select-input-line-active-item-color, 1)!important;
-      //background-color: $select-input-line-active-item-hover-color!important;
-      .avatar{
-        background-color: $select-input-line-active-item-color!important;
-      }
-      color: $black;
-      padding: 0 26px 0 0;
-      margin-right: -26px!important;
-    }
-  }
-
-  &__choices-tags{
-
-    border: none!important;
-    border-radius: 0!important;
-    box-shadow: $popup-shadow!important;
-    padding: 0!important;
-    max-height: 264px!important;
-    border-top: 2px solid $yellow-yandex!important;
-    font-size:  14px!important;
-
-    .ui-select-choices-row{
-
-      &:hover{
-        background-color: $yellow-lignt!important;
-      }
-      .ui-select-choices-group{
-        height: 43px;
-        display: inline-flex;
-        flex-flow: column;
-        align-items: center;
-      }
-      .tag-contact__name, .tag-contact__email{
-        min-width: 160px;
-        max-width: 200px;
-      }
-
-    }
-
-    .ui-select-choices-row-inner{
-
-      margin: 0 10px;
-      padding: 0!important;
-      border: 1px solid transparent;
-      border-bottom-color: rgba(0,0,0,.1);
-      &:hover{
-        background-color: transparent!important;
-      }
-      &:last-child{
-        //border-bottom-color:transparent;
-      }
-    }
-
-  }
-  &__choices-item{
-    height: 43px;
-    display: inline-flex;
-    align-items: center;
-    padding:0 14px;
-    .avatar{
-      background: $select-input-line-active-item-color;
-      .avatar__first-name, .avatar__last-name {
-        font-size: 75% !important;
-        margin-top: 1px;
-      }
-    }
-  }
-
-  .ui-select-search {
-    width: auto !important;
-    min-width: 50%!important;
-    position: relative;
-    top: -2px;
-  }
-
-  .ui-select-match-close {
-    //display: none;
-  }
-
-  .ui-select-choices-row.active>span {
-    color: inherit!important;
-    text-decoration: none;
-    outline: 0;
-    background-color:  transparent!important;
-  }
-    */
 }

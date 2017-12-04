@@ -39,10 +39,6 @@
   color: #808080 !important;
 }
 
-.pointer {
-  cursor: pointer;
-}
-
 .width--all {
   width: 100% !important;
 }
@@ -126,29 +122,13 @@
   margin: 0 18px 0 0;
 }
 
-.hide-elm {
+.hide {
   visibility: hidden !important;
   display: none !important;
 }
 
 .separate--top {
   border-top: 1px solid #e6e6e6;
-}
-
-.overflow {
-  overflow: auto;
-}
-.overflow--h {
-  overflow: hidden !important;
-}
-.overflow--v {
-  overflow: visible !important;
-}
-
-.text-overflow {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
 }
 
 .line-h--h-1 {
@@ -167,21 +147,35 @@
   line-height: 1.8;
 }
 
-/*Hiddeens scroll*/
-.scrollables::-webkit-scrollbar {
-  width: 0 !important;
-  padding: 15px 10px;
-}
-
-.scrollables {
-  height: 100%;
-  overflow: -moz-scrollbars-none;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-}
-
-.opacity--0 {
+.opc--0 {
   opacity: 0;
+}
+
+.wrap-content, .mail-message__main-content {
+  padding: 0 10px;
+}
+@media only screen and (min-width: 562px) {
+  .wrap-content, .mail-message__main-content {
+    padding: 0 22px;
+  }
+}
+.wrap-content--sub, .mail-message__images-resolve {
+  margin: 0 -10px;
+}
+@media only screen and (min-width: 562px) {
+  .wrap-content--sub, .mail-message__images-resolve {
+    margin: 0 -22px;
+  }
+}
+.wrap-content--psevdo, .settings-folders__header:after, .settings-folders__item-content:after, .settings-main__block:after, .settings-tags__header:after, .settings-tags__item-content:after, .settings-rules__header:after, .settings-rules__item-content:after, .settings-rule-add__section:after, .settings-accounts__footer:after, .message-reply:before {
+  right: -10px;
+  left: -10px;
+}
+@media only screen and (min-width: 562px) {
+  .wrap-content--psevdo, .settings-folders__header:after, .settings-folders__item-content:after, .settings-main__block:after, .settings-tags__header:after, .settings-tags__item-content:after, .settings-rules__header:after, .settings-rules__item-content:after, .settings-rule-add__section:after, .settings-accounts__footer:after, .message-reply:before {
+    right: -22px;
+    left: -22px;
+  }
 }
 
 /* Helvetica font*/
@@ -301,6 +295,24 @@ button {
 
 a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   outline: none;
+}
+
+.main-flex, .menu-main__item-content, .menu-main__item-sub, .menu-main__link, .menu-main__additional-option, .menu-main-filter, .footer__row, .navigation__row, .menu-main-layout, .menu-main-layout__button-close, .menu-main-layout__add-btn:before, .menu-main-layout__avatar, .menu-main-layout__footer, .menu-settings__link-choose-element, .auth-layout__content, .password-reset-layout__content, .mail-message, .mail-message__footer, .folder-layout, .folder-layout__container, .folder-layout__header, .folder-layout__footer, .folder-layout__item, .settings-folders__list, .settings-folders__item-content, .settings-tags__list, .settings-tags__item-content, .settings-rules__list, .settings-rules__item-content, .btn-y--image-icon, .field-style--flex, .input-plash--box, .popup__container, .popup__head, .popup__item, .input-line, .input-line__label, .radio-switch, .tags-input .tags .tag-item, .main-switch, .main-switch__btn, .radiobutton-y__label, .select-list, .select-list__body.select2-choice, .select-list__body > .select2-arrow:after, .select-list-new__body.select2-choice, .search-block, .avatar__symbol-image, .folders-setup__row, .inbox-header__row, .inbox-message, .inbox-message__left, .inbox-message__center, .inbox-message__right, .inbox-message__head, .inbox-message__head-right, .inbox-message__text, .inbox-message__labels, .inbox-footer__content, .inbox-footer__group-option-content, .date-sort, .user-signatures__connection, .social-icons__icon, .social-icons--btn-tied:before, .search-mail, .user-menu__link, .search-result, .letter-tags, .message-textarea__note-editing-area--translate, .compose-from, .quick-reply, .to-whom__folders, .info-sender__right-menu, .info-sender__title, .info-sender__message-info, .info-sender__important-tags, .time-send__planing, .choice-language, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact__name, .tag-contact__info, .attach-upload__list, .attach-upload__name, .attach-item__button, .attach-item:hover .attach-item__buttons, .attachments, .inbox-empty, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply, .message-reply__container, .search-filters__date-sort, .menu-bottom, .social-auth__row, .to-round__body, .avatar-upload__header, .avatar-upload__body, .avatar-upload__footer {
+  display: flex;
+}
+.main-flex-flow-col, .mail-message, .mail-message__main-content, .search-mail, .search-result {
+  flex-flow: column;
+}
+.main-flex-flow-row {
+  flex-flow: row;
+}
+.main-align-items-center, .mail-message__head-info, .search-block, .avatar__symbol-image, .inbox-message, .inbox-message__left, .inbox-message__right, .inbox-message__head-right, .inbox-footer__group-option-content, .user-signatures__connection, .social-icons__icon, .user-menu__link, .letter-tags, .message-textarea .note-toolbar, .compose-from, .to-whom, .info-sender__head, .info-sender__to-whom, .info-sender__important-tags, .time-send__planing, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact, .tag-contact__name, .attach-upload__name, .attach-item__type, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply__container, .to-round__body, .avatar-upload__header, .avatar-upload__footer {
+  align-items: center;
+}
+.main-text-dots, .inbox-message__center, .inbox-message__name, .inbox-message__subject, .inbox-message__message, .message-textarea .note-btn.dropdown-toggle, .tag-contact__name, .attach-upload__name, .attach-item__name, .attach-item__name2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /*------------------------------------------- helpers*/
@@ -617,6 +629,49 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .align-items--en {
   align-items: flex-end !important;
+}
+
+::-webkit-resizer {
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::-webkit-scrollbar {
+  width: 0 !important;
+  opacity: 0 !important;
+  display: none;
+  visibility: hidden;
+}
+
+.scroll-fix {
+  height: 100%;
+  overflow: -moz-scrollbars-none;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+}
+.scroll-fix::-webkit-scrollbar {
+  width: 0 !important;
+}
+.scroll-fix--none {
+  position: fixed !important;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+}
+.scroll-fix--none::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
+.scroll-fix--auto {
+  overflow: auto !important;
+}
+.scroll-fix--h {
+  overflow: hidden !important;
+}
+.scroll-fix--v {
+  overflow: visible !important;
 }
 
 /*------------------------------------------- icons*/
@@ -1234,27 +1289,27 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   content: "\e97e";
 }
 
+.icon-download:before {
+  content: "\e97f";
+}
+
 /*------------------------------------------- layout*/
 .main-layout {
-  position: relative;
-  display: flex;
-  flex-direction: column;
   width: 100%;
   max-width: 768px;
   min-height: 100%;
   margin: auto;
-  overflow-x: hidden;
+}
+.main-layout__header {
+  position: relative;
+  z-index: 5;
+  height: 48px;
 }
 .main-layout__inner {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 98%;
-  padding-top: 48px;
-  max-width: -webkit-calc(100% + 0vw);
-  max-width: calc(100% + 0vw);
   z-index: 2;
+}
+.main-layout__inner--height {
+  min-height: calc(100vh - 48px);
 }
 .main-layout__menu {
   position: fixed;
@@ -1311,25 +1366,19 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   top: 0;
   right: 0;
   bottom: 0;
-  left: 478px;
+  left: 0;
   z-index: 49;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: transparent;
   display: none;
   padding: 0 !important;
 }
 .main-layout__content {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
   min-width: 0;
   padding: 0 22px;
-}
-.main-layout__header {
-  position: relative;
-  z-index: 5;
 }
 .main-layout__footer {
   margin-top: 50px;
@@ -1364,6 +1413,11 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   transform: translate3d(0px, 0px, 0px);
 }
 
+.height-inh {
+  display: block;
+  min-height: inherit;
+}
+
 .menu-main {
   margin: 0;
   padding: 0;
@@ -1388,7 +1442,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   transition: all 1s;
 }
 .menu-main__item-content {
-  display: flex;
   align-items: center;
   justify-content: space-between;
   flex-flow: row nowrap;
@@ -1397,7 +1450,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   color: rgba(0, 0, 0, 0.6);
 }
 .menu-main__item-sub {
-  display: flex;
   align-items: center;
   justify-content: space-between;
   flex-flow: row nowrap;
@@ -1409,7 +1461,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   padding-left: 3px !important;
 }
 .menu-main__link {
-  display: flex;
   align-items: baseline;
   width: 100%;
   font: 400 15px/1 "HelveticaNeueCyr", sans-serif;
@@ -1456,7 +1507,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   font-size: 24px;
   text-align: center;
   min-width: 75px;
-  display: flex;
   align-items: center;
   justify-content: center;
   text-overflow: ellipsis;
@@ -1515,7 +1565,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   margin: 0;
   padding: 0;
   list-style-type: none;
-  display: flex;
   justify-content: space-evenly;
 }
 .menu-main-filter__item {
@@ -1681,7 +1730,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   padding-left: 10%;
 }
 .footer__row {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-left: 260px;
@@ -1690,7 +1738,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .navigation__row {
-  display: flex;
   flex-direction: row;
 }
 .navigation__item {
@@ -1738,7 +1785,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .menu-main-layout {
-  display: flex;
   flex-direction: column;
   height: 100%;
   box-sizing: border-box;
@@ -1761,7 +1807,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   position: absolute !important;
   top: 22px;
   right: -24px;
-  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50% !important;
@@ -1859,7 +1904,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   transform: rotate(-45deg);
 }
 .menu-main-layout__add-btn:before {
-  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -1868,7 +1912,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .menu-main-layout__avatar {
   position: relative;
-  display: flex;
   align-items: center;
   justify-content: center;
   background-color: transparent;
@@ -1887,7 +1930,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   flex: 1 0 auto;
 }
 .menu-main-layout__footer {
-  display: flex;
   align-items: center;
   height: 38px;
   padding: 0 10px;
@@ -1952,7 +1994,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .menu-settings__link-choose-element {
   position: absolute;
   top: -5px;
-  display: flex;
   align-items: center;
   width: inherit;
   max-width: 100%;
@@ -1990,7 +2031,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .auth-layout__content, .password-reset-layout__content {
   position: relative;
-  display: flex;
   justify-content: center;
   flex-flow: column;
   flex: 1 0 auto;
@@ -2061,44 +2101,44 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .mail-message {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 48px);
-  max-height: calc(100vh - 48px);
-  margin-right: -22px;
-  margin-left: -22px;
-}
-.mail-message__container {
-  position: relative;
-  display: inherit;
-  flex-direction: inherit;
-  overflow: auto;
+  min-height: calc(100% - 48px);
+  position: absolute;
+  top: 48px;
+  right: 0;
+  left: 0;
 }
 .mail-message__head-info {
   position: relative;
   top: 0;
   z-index: 5;
-  display: flex;
-  align-items: center;
+  display: inherit;
+  flex: 0 0 auto;
   min-height: 72px;
-  padding: 0 22px;
   background: #fff;
-  transform: translate3d(0, 0, 0);
+}
+.mail-message__head-info--sticky {
+  position: sticky;
+  top: 48px !important;
 }
 .mail-message__main-content {
   position: relative;
+  display: inherit;
   flex: 1 0 auto;
-  height: auto;
-  padding: 0 22px;
+  height: inherit;
   background: #fff;
-  overflow-x: hidden;
+}
+.mail-message__body {
+  position: relative;
+  z-index: 1;
+  flex: 1 0 auto;
+  margin-bottom: 10px;
+  height: auto;
 }
 .mail-message__reply {
   background: #ffffff;
   flex: 0 0 auto;
 }
 .mail-message__banner {
-  flex: 0 0 auto;
   width: 100%;
   height: max-content;
   padding: 18px 10px;
@@ -2108,11 +2148,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   .mail-message__banner {
     padding: 18px 4px 4px;
   }
-}
-.mail-message__body {
-  position: relative;
-  margin-bottom: 10px;
-  z-index: 1;
 }
 .mail-message__mail-attachments {
   position: relative;
@@ -2141,26 +2176,8 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #f6f5f3;
 }
 .mail-message__footer {
-  display: flex;
   align-items: center;
   padding: 16px;
-}
-@media only screen and (max-width: 562px) {
-  .mail-message {
-    margin-right: -10px;
-    margin-left: -10px;
-  }
-  .mail-message__main-content, .mail-message__head-info {
-    padding: 0 10px;
-  }
-}
-.mail-message__images-resolve {
-  margin: 0 -22px;
-}
-@media only screen and (max-width: 562px) {
-  .mail-message__images-resolve {
-    margin: 0 -10px;
-  }
 }
 
 .folder-layout {
@@ -2169,7 +2186,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
   color: rgba(0, 0, 0, 0.6);
@@ -2178,7 +2194,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .folder-layout__container {
   position: relative;
-  display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 768px;
@@ -2189,7 +2204,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .folder-layout__header {
   position: relative;
   min-height: 40px;
-  display: flex;
   flex-flow: row;
   justify-content: space-between;
   align-items: center;
@@ -2198,7 +2212,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .folder-layout__footer {
   position: relative;
-  display: flex;
   align-items: center;
   flex: 0 0 auto;
   height: 42px;
@@ -2214,7 +2227,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   margin-top: 10px;
 }
 .folder-layout__item {
-  display: flex;
   align-items: center;
   padding: 6px 20px;
   cursor: pointer;
@@ -2236,19 +2248,16 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-folders__header:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
 .settings-folders__list {
-  display: flex;
   flex-flow: column;
   width: 100%;
 }
-.settings-folders__list--sub {
-  padding: 0 0 0 17px;
+.settings-folders__list--sub .settings-folders__item-content {
+  padding-left: 25px;
 }
 .settings-folders__caption {
   font-size: 14px;
@@ -2259,7 +2268,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .settings-folders__item-content {
   position: relative;
-  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -2270,9 +2278,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-folders__item-content:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
@@ -2288,11 +2294,15 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-main__block:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
+}
+.settings-main__block:last-child {
+  padding-bottom: 0;
+}
+.settings-main__block:last-child:after {
+  display: none;
 }
 
 .settings-tags__header {
@@ -2302,19 +2312,16 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-tags__header:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
 .settings-tags__list {
-  display: flex;
   flex-flow: column;
   width: 100%;
 }
-.settings-tags__list--sub {
-  padding: 0 0 0 17px;
+.settings-tags__list--sub .settings-folders__item-content {
+  padding-left: 25px;
 }
 .settings-tags__caption {
   font-size: 14px;
@@ -2328,7 +2335,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .settings-tags__item-content {
   position: relative;
-  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -2339,9 +2345,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-tags__item-content:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
@@ -2372,23 +2376,19 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-rules__header:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
 .settings-rules__list {
-  display: flex;
   flex-flow: column;
   width: 100%;
 }
-.settings-rules__list--sub {
-  padding: 0 0 0 17px;
+.settings-rules__list--sub .settings-folders__item-content {
+  padding-left: 25px;
 }
 .settings-rules__item-content {
   position: relative;
-  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -2399,9 +2399,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-rules__item-content:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
@@ -2418,9 +2416,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-rule-add__section:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
@@ -2470,9 +2466,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .settings-accounts__footer:after {
   content: '';
   position: absolute;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   height: 1px;
   background-color: #f2f2f2;
 }
@@ -2604,9 +2598,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .btn-y--border {
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
-.btn-y--image-icon {
-  display: flex;
-}
 .btn-y--image-icon .btn-y__name {
   margin-right: 4px;
 }
@@ -2695,9 +2686,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .field-style--max-wd260 {
   max-width: 260px;
-}
-.field-style--flex {
-  display: flex;
 }
 .field-style .input {
   background-color: #fff;
@@ -3041,6 +3029,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border: 1px solid #c3c4c9;
   outline: 1px solid transparent;
   background: 0 0 transparent;
+  border-radius: 0 !important;
   padding: 0 10px;
   -webkit-appearance: none;
 }
@@ -3098,7 +3087,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   top: 1px;
   right: 1px;
   bottom: 1px;
-  display: flex;
   align-items: center;
   padding: 2px 10px;
   text-align: center;
@@ -3243,7 +3231,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .popup__container {
   position: relative;
-  display: flex;
   flex-flow: column;
   align-items: center;
   -webkit-box-orient: vertical;
@@ -3256,7 +3243,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .popup__head {
   position: relative;
-  display: flex;
   justify-content: center;
   align-items: center;
   min-height: 52px;
@@ -3280,7 +3266,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   min-height: 52px;
 }
 .popup__item {
-  display: flex;
   align-items: center;
   justify-content: flex-start;
   height: 52px;
@@ -3430,7 +3415,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .input-line {
   position: relative;
-  display: flex;
   color: #000;
   font-weight: 100;
   min-height: 58px;
@@ -3477,7 +3461,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .input-line__label {
   position: relative;
-  display: flex;
   align-items: flex-end;
   margin: 0;
   font-size: 12px;
@@ -3601,7 +3584,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .radio-switch {
   position: relative;
-  display: flex;
   align-items: center;
   width: 68px;
   height: 30px;
@@ -3779,168 +3761,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border: none;
   border-bottom: 1px solid !important;
   border-color: #ccc !important;
-  /*
-
-   .close{
-     position: absolute!important;
-     top: 0!important;
-     padding-top: 5px;
-     right: 5px!important;
-     color: transparent;
-     overflow: hidden;
-     width: 16px;
-     height: 20px;
-     line-height: 1!important;
-     display: none!important;
-
-     &:before{
-       //position: absolute;
-       font-family: 'icomoon' !important;
-       content: "\e908";
-       font-size: 10px;
-       color: #000!important;
-       display: flex;
-       justify-content: center;
-     }
-
-  }
-  &__match-tags{
-    //
-    //display: table-cell;
-    //background: transparent;
-
-    .ui-select-match-item{
-      border: none!important;
-      padding: 0;
-      display: inline-flex;
-      margin: 0 5px 0 0!important;
-
-      &:hover, &:active, &:focus{
-        background-color: transparent!important;
-        color: $black;
-        padding-right: 26px ;
-      }
-    }
-
-    &:hover, &:active, &:focus{
-
-    }
-
-  }
-  &__match-item{
-    border-radius: 100px;
-    padding: 0 5px 0 0;
-    //background: rgba($select-input-line-active-item-color, 1)!important;
-
-    background-color: $select-input-line-active-item-color!important;
-
-    .avatar{
-      background-color: $select-input-line-active-item-color!important;
-      box-shadow: $select-input-line-avatar-shadow,inset 0 0 0 1px rgba(0,0,0,.1);
-      .avatar__first-name, .avatar__last-name {
-        font-size: 65%!important;
-        font-weight: bold;
-        color: #777!important;
-        margin-top: -1px;
-      }
-    }
-
-    .tag-contact__name {
-      padding-left: 2px;
-    }
-
-    //background: transparent;
-    //background-color:  #f6f5f3!important;
-    color: #222;
-
-    &:hover, &:active, &:focus{
-      background-color: $yellow-lignt!important;
-      //background: rgba($select-input-line-active-item-color, 1)!important;
-      //background-color: $select-input-line-active-item-hover-color!important;
-      .avatar{
-        background-color: $select-input-line-active-item-color!important;
-      }
-      color: $black;
-      padding: 0 26px 0 0;
-      margin-right: -26px!important;
-    }
-  }
-
-  &__choices-tags{
-
-    border: none!important;
-    border-radius: 0!important;
-    box-shadow: $popup-shadow!important;
-    padding: 0!important;
-    max-height: 264px!important;
-    border-top: 2px solid $yellow-yandex!important;
-    font-size:  14px!important;
-
-    .ui-select-choices-row{
-
-      &:hover{
-        background-color: $yellow-lignt!important;
-      }
-      .ui-select-choices-group{
-        height: 43px;
-        display: inline-flex;
-        flex-flow: column;
-        align-items: center;
-      }
-      .tag-contact__name, .tag-contact__email{
-        min-width: 160px;
-        max-width: 200px;
-      }
-
-    }
-
-    .ui-select-choices-row-inner{
-
-      margin: 0 10px;
-      padding: 0!important;
-      border: 1px solid transparent;
-      border-bottom-color: rgba(0,0,0,.1);
-      &:hover{
-        background-color: transparent!important;
-      }
-      &:last-child{
-        //border-bottom-color:transparent;
-      }
-    }
-
-  }
-  &__choices-item{
-    height: 43px;
-    display: inline-flex;
-    align-items: center;
-    padding:0 14px;
-    .avatar{
-      background: $select-input-line-active-item-color;
-      .avatar__first-name, .avatar__last-name {
-        font-size: 75% !important;
-        margin-top: 1px;
-      }
-    }
-  }
-
-  .ui-select-search {
-    width: auto !important;
-    min-width: 50%!important;
-    position: relative;
-    top: -2px;
-  }
-
-  .ui-select-match-close {
-    //display: none;
-  }
-
-  .ui-select-choices-row.active>span {
-    color: inherit!important;
-    text-decoration: none;
-    outline: 0;
-    background-color:  transparent!important;
-  }
-    */
 }
 .select-input-line:active, .select-input-line:focus, .select-input-line:hover {
   border-bottom-color: #fc0 !important;
@@ -4221,7 +4041,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   line-height: 0 !important;
   overflow: hidden;
   max-width: 100%;
-  display: flex;
   align-items: center;
 }
 .tags-input .tags .tag-item .avatar {
@@ -4493,7 +4312,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border: none;
   overflow: hidden;
   cursor: pointer;
-  display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
@@ -4517,7 +4335,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border-style: solid;
   outline: 1px solid transparent;
   background: 0 0 transparent;
-  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -4555,7 +4372,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   font-weight: bold;
 }
 .radiobutton-y__label {
-  display: flex;
   align-items: center;
 }
 .radiobutton-y__radio {
@@ -4589,7 +4405,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .select-list {
   position: relative;
-  display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
@@ -4623,7 +4438,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border: transparent !important;
 }
 .select-list__body.select2-choice {
-  display: flex;
   align-items: center;
   overflow: hidden;
   position: relative;
@@ -4703,7 +4517,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .select-list__body > .select2-arrow:after {
   width: 28px;
   height: 100%;
-  display: flex;
   justify-content: center;
   align-items: center;
   content: "\e90a";
@@ -4846,7 +4659,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   color: #999999 !important;
 }
 .select-list-new__body.select2-choice {
-  display: flex;
   align-items: center;
   padding: 0 0 0 8px;
   overflow: hidden;
@@ -5074,8 +4886,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border: none;
   overflow: hidden;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
   height: 40px;
 }
 .search-block__icon {
@@ -5107,7 +4917,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   box-sizing: border-box;
 
   display: flex;
-  align-items: center;
+ @extend .main-align-items-center;
   height: 40px;
 
   &:active, &:hover{
@@ -5202,10 +5012,8 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   right: 0;
   bottom: 0;
   left: 0;
-  display: flex;
   justify-content: center;
   align-content: center;
-  align-items: center;
   color: #ffffff;
   font: 500 18px/1 Arial, sans-serif;
 }
@@ -5298,7 +5106,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .folders-setup__row {
   margin: 4px 0;
-  display: flex;
   flex-flow: row;
   justify-content: space-between;
 }
@@ -5320,20 +5127,8 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background: #15da00;
 }
 
-.inbox-list {
-  margin: 0 -22px;
-}
-@media only screen and (max-width: 562px) {
-  .inbox-list {
-    margin: 0 -10px;
-  }
-}
-
 .inbox-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-.inbox-header__row {
-  display: flex;
 }
 .inbox-header__item {
   text-align: center;
@@ -5378,9 +5173,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .inbox-message {
-  display: flex;
   flex-flow: row nowrap;
-  align-items: center;
   justify-content: space-between;
   position: relative;
   padding: 0;
@@ -5392,27 +5185,19 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background: rgba(0, 0, 0, 0.03);
 }
 .inbox-message__left {
-  display: flex;
   flex-flow: column;
-  align-items: center;
   max-width: 67px;
   padding: 12px;
   height: 91px;
 }
 .inbox-message__center {
-  display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
   width: 100%;
   padding: 10px 0 8px;
   margin: 0 0 auto;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .inbox-message__right {
-  display: flex;
-  align-items: center;
   padding: 5px;
   max-width: 56px;
   width: 56px;
@@ -5427,16 +5212,14 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   cursor: pointer;
 }
 .inbox-message__head {
-  display: flex;
   justify-content: space-between;
+  width: 100%;
   color: #373737;
 }
 .inbox-message__head-right {
   position: absolute;
   top: 8px;
   right: 19px;
-  display: flex;
-  align-items: center;
 }
 @media (min-width: 500px) {
   .inbox-message__head-right {
@@ -5449,6 +5232,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   }
 }
 .inbox-message__name {
+  max-width: calc(100% - 80px);
   margin: 0 auto 3px 0;
   font-size: 16px;
 }
@@ -5459,7 +5243,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   color: #777777;
 }
 .inbox-message__text {
-  display: flex;
   flex-flow: column wrap;
   justify-content: flex-start;
   width: 100%;
@@ -5471,16 +5254,11 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   margin: 0;
   color: #373737;
   line-height: 1.3;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .inbox-message__message {
   display: inline-block;
   flex-shrink: 1;
   max-height: 48px;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin: auto 0;
   color: #777777;
   font: normal 14px/1.3 Arial, sans-serif;
@@ -5514,7 +5292,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   margin-right: 10px;
 }
 .inbox-message__labels {
-  display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
   margin-right: 10px;
@@ -5572,7 +5349,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   min-height: 100%;
   margin: auto;
   padding: 0;
-  display: flex;
   justify-content: flex-end;
 }
 .inbox-footer__new-message {
@@ -5614,9 +5390,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .inbox-footer__group-option-content {
   top: 1px;
   left: 0;
-  display: flex;
   justify-content: flex-start;
-  align-items: center;
   width: 100%;
   height: 100%;
   padding: 7px 0;
@@ -5633,7 +5407,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .date-sort {
-  display: flex;
   flex-flow: row;
   justify-content: flex-start;
   font-family: Arial, sans-serif;
@@ -5738,8 +5511,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   box-shadow: 0 5px 12px 0 rgba(0, 0, 0, 0.26);
 }
 .user-signatures__connection {
-  display: flex;
-  align-items: center;
   flex-flow: row wrap;
   justify-content: space-between;
 }
@@ -5761,8 +5532,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .social-icons__icon {
   position: relative;
-  display: flex;
-  align-items: center;
   justify-content: center;
   width: 45px;
   height: 45px;
@@ -5804,7 +5573,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #007bb6;
 }
 .social-icons--btn-tied:before {
-  display: flex;
   justify-content: center;
   content: "×";
   position: absolute;
@@ -5823,14 +5591,17 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .search-mail {
-  display: flex;
-  flex-direction: row;
+  position: sticky;
+  top: 48px;
+  z-index: 4;
+  background: #ffffff;
+  box-shadow: 0 -3px 20px -3px rgba(0, 0, 0, 0.4);
+  transition: all .6s;
 }
-.search-mail__close {
-  margin-right: 5px;
-}
-.search-mail__input {
-  width: 188px;
+.search-mail__header {
+  display: inherit;
+  justify-content: space-between;
+  padding: 10px 0;
 }
 
 @-moz-keyframes search-input {
@@ -5896,8 +5667,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   max-width: none !important;
 }
 .user-menu__link {
-  display: flex;
-  align-items: center;
   padding: 8px 12px;
   color: rgba(0, 0, 0, 0.5);
   font-size: 13px;
@@ -5939,10 +5708,8 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .search-result {
   position: relative;
-  display: flex;
-  flex-flow: column;
-  background: #f8f8f8;
   height: 100%;
+  background: #f8f8f8;
   transition: all .6s;
 }
 .search-result--no-result {
@@ -5954,14 +5721,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .search-result--active .search-result__button-filter {
   color: #ffdb4d;
-}
-.search-result__header {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 0 8px;
-  background-color: #ffffff;
-  z-index: 2;
 }
 .search-result__filters {
   height: 0;
@@ -6001,9 +5760,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .letter-tags {
   position: relative;
-  display: flex;
   justify-content: space-between;
-  align-items: center;
   border-radius: 3px 0 0 3px;
   cursor: pointer;
   color: #fff;
@@ -6149,7 +5906,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   width: 500px;
   background: #fff;
   display: inline-flex;
-  align-items: center;
   padding: 0 5px;
 }
 .message-textarea .note-statusbar {
@@ -6208,9 +5964,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .message-textarea .note-btn.dropdown-toggle {
   width: 42px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .message-textarea .note-btn .icon-arrow-down {
   font-size: 9px;
@@ -6219,7 +5972,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   min-height: 107px !important;
 }
 .message-textarea__note-editing-area--translate {
-  display: flex;
   flex-flow: row nowrap;
 }
 .message-textarea__note-editing-area--translate .note-editable {
@@ -6242,9 +5994,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .compose-from {
-  display: flex;
   justify-content: flex-start;
-  align-items: center;
 }
 .compose-from__item {
   margin-left: 5px;
@@ -6252,7 +6002,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 /* Блок с формой быстрого ответа */
 .quick-reply {
-  display: flex;
   justify-content: space-between;
   align-items: flex-end;
   width: inherit;
@@ -6310,7 +6059,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .to-whom {
   display: inline-flex;
-  align-items: center;
 }
 .to-whom__title {
   font: 300 14px/1 "HelveticaNeueCyr", sans-serif;
@@ -6326,7 +6074,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   margin-left: 0 !important;
 }
 .to-whom__folders {
-  display: flex;
   flex-wrap: wrap;
   font: 300 14px/1.4 "HelveticaNeueCyr", sans-serif;
   color: #000;
@@ -6350,7 +6097,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .info-sender__head {
   position: relative;
   z-index: 2;
-  align-items: center;
   width: 100%;
   background: #ffffff;
 }
@@ -6361,7 +6107,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .info-sender__to-whom {
   color: #7f7f7f;
   font: 100 11px/1 "HelveticaNeueCyr", sans-serif;
-  align-items: center;
 }
 .info-sender__from-whom {
   color: #333333;
@@ -6378,15 +6123,12 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   margin-top: 2px;
 }
 .info-sender__right-menu {
-  display: flex;
   flex-wrap: nowrap;
 }
 .info-sender__title {
-  display: flex;
   flex-flow: column;
 }
 .info-sender__message-info {
-  display: flex;
   flex-flow: column;
   position: absolute;
   top: 45px;
@@ -6433,8 +6175,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   z-index: 3;
 }
 .info-sender__important-tags {
-  display: flex;
-  align-items: center;
   margin-right: 10px;
   padding: 1px 1px 1px 0;
   border: none;
@@ -6483,10 +6223,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   width: 15px;
   height: 15px;
 }
-.time-send__planing {
-  display: flex;
-  align-items: center;
-}
 .time-send__planing-item {
   margin-left: 5px;
 }
@@ -6497,7 +6233,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .choice-language {
   position: absolute;
   bottom: -13px;
-  display: flex;
   flex-flow: column;
   padding: 0;
   border-radius: 3px;
@@ -6568,12 +6303,13 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   display: inline-block;
   width: 28px;
   height: 28px;
+  margin: 5px auto;
   border-radius: 50%;
   background: transparent;
   border-top: 2px solid transparent;
   border-right: 2px solid transparent;
-  border-bottom: 2px solid #777;
-  border-left: 2px solid #777;
+  border-bottom: 2px solid #fee481;
+  border-left: 2px solid #fee481;
   -webkit-animation: loading 1.2s infinite linear;
   -moz-animation: loading 1.2s infinite linear;
   -ms-animation: loading 1.2s infinite linear;
@@ -6624,8 +6360,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .tag-list__item {
-  display: flex;
-  align-items: center;
   justify-content: flex-start;
   height: 45px;
   color: #000;
@@ -6674,10 +6408,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .tag-create__title {
   font-size: 17px;
 }
-.tag-create__input {
-  display: flex;
-  align-items: center;
-}
 
 .palette-list {
   margin: 20px auto 0;
@@ -6690,8 +6420,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .palette-list__item {
   position: relative;
   float: left;
-  display: flex;
-  align-items: center;
   justify-content: center;
   width: 28px;
   height: 28px;
@@ -6715,18 +6443,18 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .inbox-message-list {
   position: relative;
+  overflow: hidden;
+  transition: all .2s ease-in;
 }
 .inbox-message-list--indentation {
   padding-bottom: 55px !important;
 }
 .inbox-message-list__spinner {
-  padding: 20px;
   text-align: center;
 }
 
 .tag-contact {
   display: inline-flex;
-  align-items: center;
 }
 .tag-contact__avatar {
   background-color: #d8d8d8 !important;
@@ -6737,13 +6465,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   line-height: 0;
 }
 .tag-contact__name {
-  display: flex;
-  align-items: center;
   height: 20px;
   font-size: 16px;
   line-height: 1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: #000;
 }
 .tag-contact__email {
@@ -6756,12 +6480,10 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   color: #595959;
 }
 .tag-contact__info {
-  display: flex;
   flex-flow: column;
 }
 
 .attach-upload__list {
-  display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
 }
@@ -6809,11 +6531,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   color: #ffffff;
   font: bold 10px/1 Verdana, sans-serif;
   text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   background: #cc0000;
 }
 .attach-upload__image {
@@ -6839,7 +6556,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .attach-item {
-  width: 100px;
+  width: 96px;
 }
 .attach-item__body {
   position: relative;
@@ -6853,15 +6570,11 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   top: 10px;
   left: 10px;
   font: bold 12px/1.1 "HelveticaNeueCyr", sans-serif;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .attach-item__name2 {
-  height: 36px;
+  max-height: 36px;
   text-align: center;
-  font-size: 13px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 12px;
 }
 .attach-item__image {
   -moz-border-radius: 3px;
@@ -6872,14 +6585,14 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   top: 0;
   right: 0;
   z-index: 1;
-  width: 45px;
+  width: 100%;
   height: 56px;
   background-size: cover;
   background-position: center;
 }
 .attach-item__image--file {
   border: none;
-  width: 50px;
+  width: 100%;
   height: 65px;
   z-index: 2;
   background-repeat: no-repeat;
@@ -6893,7 +6606,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   height: 20px;
   display: inline-flex;
   justify-content: center;
-  align-items: center;
   bottom: 10px;
   left: 10px;
   padding: 0 7px;
@@ -6934,7 +6646,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   color: #fff;
   border: none;
   background: rgba(0, 0, 0, 0.75);
-  display: flex;
   justify-content: center;
   align-content: center;
 }
@@ -6944,16 +6655,12 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .attach-item:hover .attach-item__type {
   display: none;
 }
-.attach-item:hover .attach-item__buttons {
-  display: flex;
-}
 
 .attachments {
-  display: flex;
   flex-flow: row wrap;
 }
 .attachments__item {
-  margin: 6px 6px 6px 0;
+  margin: 6px 3px 6px;
 }
 
 .compose__header {
@@ -7033,7 +6740,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 .inbox-empty {
-  display: flex;
   flex-flow: column;
   justify-content: center;
   font: normal 16px/1 "HelveticaNeueCyr", sans-serif;
@@ -7079,8 +6785,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #f6f5f3;
 }
 .pop-up-notification__container {
-  display: flex;
-  align-items: center;
   justify-content: flex-start;
   width: 100%;
   max-width: 768px;
@@ -7137,8 +6841,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   text-align: left;
   z-index: 10;
   padding-left: 8px;
-  display: flex;
-  align-items: center;
 }
 .pop-up-notification__close {
   position: absolute;
@@ -7179,7 +6881,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   padding-top: 3px;
   min-height: 40px;
   max-height: 120px;
-  display: flex;
   align-items: flex-end;
   box-sizing: content-box;
   z-index: 5;
@@ -7189,15 +6890,11 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   content: "";
   position: absolute;
   top: 0;
-  right: -100vw;
   bottom: 0;
-  left: -100vw;
   background: #ffffff;
 }
 .message-reply__container {
   position: relative;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
   background: #ffffff;
   width: 100%;
@@ -7265,13 +6962,11 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #ffeaae;
 }
 .search-filters__date-sort {
-  display: flex;
   overflow-x: scroll;
 }
 
 .menu-bottom {
   position: fixed;
-  display: flex;
   width: 100%;
   height: 100%;
   top: 0;
@@ -7311,60 +7006,11 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: #fff;
 }
 
-/*
-.menu-bottom {
-  position: fixed;
-
-  width: 100%;
-  height: 100%;
-
-  top: 0;
-  left: 0;
-
-  background: rgba(255, 255, 255, 0.7);
-
-  z-index: 100;
-
-  &__container {
-    position: absolute;
-
-    width: 100%;
-
-    bottom: 0;
-  }
-
-  &__item {
-    padding: 15px 0;
-
-    background-color: #f5f5f5;
-
-    border-bottom: 1px solid #D5D5D5;
-
-    display: flex;
-
-    justify-content: space-around;
-  }
-}
-
-.menu-bottom-bg {
-  position: fixed;
-
-  width: 100%;
-  height: 100%;
-
-  opacity: 0.7;
-
-  background-color: #fff;
-
-  z-index: 99;
-}
-*/
 .social-auth {
   width: 200px;
   display: inline-block;
 }
 .social-auth__row {
-  display: flex;
   justify-content: space-between;
 }
 
@@ -7390,8 +7036,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .to-round__body {
   border-radius: 26px;
-  display: flex;
-  align-items: center;
   padding-right: 10px;
 }
 
@@ -7438,8 +7082,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .avatar-upload__header {
   position: relative;
-  display: flex;
-  align-items: center;
   justify-content: flex-start;
   height: 64px;
   padding: 0 38px;
@@ -7450,17 +7092,14 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .avatar-upload__body {
   position: relative;
   padding: 20px 30px;
-  display: flex;
   justify-content: space-around;
   flex-flow: row wrap;
   border-bottom: 1px solid #e5e5e5;
 }
 .avatar-upload__footer {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
   height: 64px;
+  padding: 0 20px;
 }
 .avatar-upload__crop, .avatar-upload__default {
   width: 200px !important;
@@ -7641,7 +7280,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   width: 500px;
   background: #fff;
   display: inline-flex;
-  align-items: center;
   padding: 0 5px;
 }
 .message-textarea .note-statusbar {
@@ -7700,9 +7338,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .message-textarea .note-btn.dropdown-toggle {
   width: 42px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .message-textarea .note-btn .icon-arrow-down {
   font-size: 9px;
@@ -7711,7 +7346,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   min-height: 107px !important;
 }
 .message-textarea__note-editing-area--translate {
-  display: flex;
   flex-flow: row nowrap;
 }
 .message-textarea__note-editing-area--translate .note-editable {
@@ -7734,8 +7368,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 
 body {
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  overflow-x: hidden;
   margin: 0;
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

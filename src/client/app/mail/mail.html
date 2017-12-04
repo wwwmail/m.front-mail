@@ -1,10 +1,9 @@
-<section class="main-layout">
-    <div class="main-layout__header">
-
+<div class="main-layout">
+    <section class="main-layout__header">
         <header folder="vm.folder"></header>
 
         <!-- Основное меню-->
-        <div class="main-layout__menu" ng-class="{'main-layout__menu--is-active-menu': isOpenMenu}">
+        <nav class="main-layout__menu" ng-class="{'main-layout__menu--is-active-menu': isOpenMenu}">
             <div class="main-layout__menu-content">
                 <menu-main></menu-main>
             </div>
@@ -12,14 +11,12 @@
                     type="button"
                     ng-click="vm.closeMenu()">
             </button>
-        </div>
-    </div>
+        </nav>
+    </section>
 
-    <div class="main-layout__inner" layout-height>
-        <div class="main-layout__content">
-            <ui-view class="height--min-inh height--all"></ui-view>
-        </div>
-    </div>
-</section>
+    <main class="main-layout__inner"><!--layout-height -->
+        <ui-view class=""></ui-view>
+    </main>
+</div>
 
 <div class="menu-bottom-bg" ng-if="isMenuBottomOpen"></div>

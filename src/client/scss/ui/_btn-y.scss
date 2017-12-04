@@ -40,7 +40,7 @@
   }
 
   &--image-icon {
-    display: flex;
+    @extend .main-flex;
 
     .btn-y__name {
       margin-right: 4px;

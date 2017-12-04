@@ -26,7 +26,7 @@
     background: #fff;
 
     display: inline-flex;
-    align-items: center;
+    @extend .main-align-items-center;
 
     padding: 0 5px;
   }
@@ -104,35 +104,14 @@
     }
 
     &.dropdown-toggle {
-      //width: auto;
       width: 42px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+
+      @extend .main-text-dots;
     }
 
     .icon-arrow-down {
       font-size: 9px;
     }
-    //.icon-bold {
-    //  font-size: 12px;
-    //  &:before {
-    //    content: "\e95c" !important;
-    //  }
-    //}
-    //.icon-italic {
-    //  font-size: 11px;
-    //  &:before {
-    //    content: "\e95a" !important;
-    //  }
-    //}
-    //
-    //.icon-underlay {
-    //  font-size: 12px;
-    //  &:before {
-    //    content: "\e95b" !important;
-    //  }
-    //}
   }
 
   .panel-body {
@@ -140,7 +119,7 @@
   }
 
   &__note-editing-area--translate {
-    display: flex;
+    @extend .main-flex;
     flex-flow: row nowrap;
 
     .note-editable {

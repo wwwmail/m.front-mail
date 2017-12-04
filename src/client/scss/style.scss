@@ -3,7 +3,6 @@
 @import "compass/css3/transform";
 @import "compass/css3/box-shadow";
 @import "compass/css3";
-
 /*------------------------------------------- core*/
 @import 'core/mixins';
 @import 'core/vars';
@@ -11,18 +10,17 @@
 @import 'core/helper';
 @import 'core/fonts';
 @import "core/resets";
-
+@import "core/inheritance";
 /*------------------------------------------- helpers*/
 @import 'core/helpers/position';
 @import 'core/helpers/margin';
 @import 'core/helpers/padding';
 @import 'core/helpers/font';
 @import 'core/helpers/flex-box';
-
+@import "core/helpers/scroll-fix";
 /*------------------------------------------- icons*/
 @import 'icons/icons';
 @import "icons/icons-font";
-
 /*------------------------------------------- layout*/
 @import 'layout/layout';
 @import 'layout/menu-main';
@@ -46,7 +44,6 @@
 @import "layout/settings-rules";
 @import "layout/settings-rule-add";
 @import "layout/settings-accounts";
-
 /*------------------------------------------- ui*/
 @import 'ui/checked';
 @import 'ui/hr';
@@ -70,7 +67,6 @@
 @import "ui/radiobutton";
 @import "ui/select-list";
 @import "ui/m-input";
-
 /*------------------------------------------- components*/
 @import "components/search-block";
 @import "components/validation";
@@ -134,8 +130,12 @@
 @import "components/message-textarea";
 
 body {
-  width: 100%;
-  height: 100%;
+  //width: 100%;
+  //height: 100%;
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+
+  overflow-x: hidden;
 
   margin: 0;
 
@@ -143,7 +143,7 @@ body {
 
   -webkit-font-smoothing: antialiased;
 
-  background-color: $white-color!important;
+  background-color: $white-color !important;
 }
 
 a {

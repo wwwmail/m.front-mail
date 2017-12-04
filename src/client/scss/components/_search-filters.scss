@@ -60,7 +60,7 @@
   }
 
   &__date-sort{
-  display: flex;
+    @extend .main-flex;
 
   overflow-x: scroll;
 }

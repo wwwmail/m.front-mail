@@ -12,7 +12,7 @@
     position: relative;
 
 
-    display: flex;
+    @extend .main-flex;
     justify-content: center;
     flex-flow: column;
     flex: 1 0 auto;
