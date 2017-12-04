@@ -125,14 +125,21 @@
         }
 
         function openAttach() {
+            vm.url = vm.CONFIG.AttachUrl + vm.message.number + '?mbox=' + vm.message.mbox + '&part=attach&filename=' + vm.attach.fileName + '&token=' + vm.user.access_token + '&connection_id=' + vm.message.connection_id;
+
+            if (vm.attach.mime === 'application/pdf') {
+                window.open(vm.url + '&screen=true', '_blank');
+                return;
+            }
+
             if (vm.attach.mime !== 'image/png' && vm.attach.mime !== 'image/jpeg') {
-                var url = vm.CONFIG.AttachUrl + vm.message.number + '?mbox=' + vm.message.mbox + '&part=attach&filename=' + vm.attach.fileName + '&token=' + vm.user.access_token + '&connection_id=' + vm.message.connection_id;
+                // var url = vm.CONFIG.AttachUrl + vm.message.number + '?mbox=' + vm.message.mbox + '&part=attach&filename=' + vm.attach.fileName + '&token=' + vm.user.access_token + '&connection_id=' + vm.message.connection_id;
                 window.open(vm.viewAppUrl + encodeURIComponent(url), '_blank');
                 return;
             }
 
             if (vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg') {
-                var url = vm.CONFIG.AttachUrl + vm.message.number + '?mbox=' + vm.message.mbox + '&part=attach&filename=' + vm.attach.fileName + '&token=' + vm.user.access_token + '&connection_id=' + vm.message.connection_id;
+                // var url = vm.CONFIG.AttachUrl + vm.message.number + '?mbox=' + vm.message.mbox + '&part=attach&filename=' + vm.attach.fileName + '&token=' + vm.user.access_token + '&connection_id=' + vm.message.connection_id;
                 window.open(url, '_blank');
             }
         }
