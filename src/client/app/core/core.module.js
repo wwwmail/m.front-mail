@@ -24,7 +24,7 @@
             'ngTagsInput',
             'pascalprecht.translate',
             'ngCookies',
-            'ngPasswordStrength'
-            // 'angular-google-adsense'
+            'ngPasswordStrength',
+            'angular-google-adsense'
         ]);
 })();

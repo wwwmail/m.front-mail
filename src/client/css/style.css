@@ -7020,8 +7020,8 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .banner-block {
   position: relative;
-  width: 330px;
-  height: 200px;
+  width: 300px;
+  height: 250px;
   margin: auto;
 }
 .banner-block--view-caption {

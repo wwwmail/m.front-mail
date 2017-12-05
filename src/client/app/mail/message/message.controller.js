@@ -5,9 +5,9 @@
         .module('mail.message')
         .controller('MessageController', MessageController);
 
-    MessageController.$inject = ['mail', '$scope', '$state', '$sce', '$auth', '$stateParams', 'message', 'tag', '$rootScope', '$uibModal'];
+    MessageController.$inject = ['mail', '$scope', '$state', '$sce', '$auth', '$stateParams', 'message', 'tag', '$rootScope', '$uibModal', '$timeout'];
     /* @ngInject */
-    function MessageController(mail, $scope, $state, $sce, $auth, $stateParams, message, tag, $rootScope, $uibModal) {
+    function MessageController(mail, $scope, $state, $sce, $auth, $stateParams, message, tag, $rootScope, $uibModal, $timeout) {
         var vm = this;
 
         vm.message = {};

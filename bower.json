@@ -52,7 +52,8 @@
     "bower": "*",
     "install": "^1.0.4",
     "ng-password-strength": "^0.2.1",
-    "angular-sticky": "angular-sticky-plugin#^0.4.2"
+    "angular-sticky": "angular-sticky-plugin#^0.4.2",
+    "angular-google-adsense": "^0.5.0"
   },
   "overrides": {
     "jquery": {
