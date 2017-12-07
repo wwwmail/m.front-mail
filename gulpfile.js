@@ -206,7 +206,7 @@ gulp.task('angularProd', ['templateCacheProd'], function () {
     gulp.src(scripts)
         .pipe(concat('app.js'))
         .pipe(ngAnnotate())
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(rev())
         .pipe(gulp.dest(pathBuildProd + 'js'))
         .pipe(rev.manifest('rev-script-manifest.json'))

@@ -15,8 +15,6 @@
         ////
 
         function activate() {
-            console.log('profile', profile);
-
             var params = {};
 
             if ($stateParams.compose) {
