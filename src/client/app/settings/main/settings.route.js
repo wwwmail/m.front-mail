@@ -18,7 +18,7 @@
                 config: {
                     url: '/main',
                     templateUrl: 'app/settings/main/settings.html',
-                    controller: 'SettingsController',
+                    controller: 'SettingsMainController',
                     controllerAs: 'vm',
                     title: 'Settings'
                 }

@@ -5,9 +5,14 @@
     display: inline-flex !important;
   }
 
+  &--just-cn {
+    justify-content: center !important;
+  }
+
   &--just-s-a {
     justify-content: space-around !important;
   }
+
   &--just-f-e {
     justify-content: flex-end !important;
   }
@@ -15,13 +20,14 @@
   &--just-s-b {
     justify-content: space-between !important;
   }
+
   &--row-wrap {
     flex-flow: row wrap !important;
   }
+
   &--column {
     flex-flow: column !important;
   }
-
 }
 
 .align-items {

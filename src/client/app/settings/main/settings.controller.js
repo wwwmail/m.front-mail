@@ -3,15 +3,12 @@
 
     angular
         .module('settings.main')
-        .controller('SettingsController', SettingsController);
+        .controller('SettingsMainController', SettingsMainController);
 
-    SettingsController.$inject = ['$uibModal', '$sce', '$auth', 'profile', '$translatePartialLoader', '$translate'];
+    SettingsMainController.$inject = ['$uibModal', '$sce', '$auth', 'profile'];
     /* @ngInject */
-    function SettingsController($uibModal, $sce, $auth, profile, $translatePartialLoader, $translate) {
+    function SettingsMainController($uibModal, $sce, $auth, profile) {
         var vm = this;
-
-        // $translatePartialLoader.addPart('settings');
-        // $translate.refresh();
 
         vm.openAvatarUploadPopup = openAvatarUploadPopup;
         vm.openPasswordChangePopup = openPasswordChangePopup;
@@ -25,6 +22,8 @@
         vm.destroyEmail = destroyEmail;
 
         activate();
+
+        ////
 
         function activate() {
             vm.user = $auth.user;

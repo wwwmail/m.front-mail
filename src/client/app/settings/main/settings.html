@@ -1,4 +1,5 @@
 <article class="settings-main">
+
     <!-- Персональные данные -->
     <section class="settings-main__block">
         <div class="personal-info">
@@ -15,7 +16,8 @@
                              ng-if="!vm.avatar.picFile">
 
                         <button class="btn--not-style btn--not-events btn--opacity width--all"
-                                ng-click="vm.openAvatarUploadPopup()"></button>
+                                ng-click="vm.openAvatarUploadPopup()">
+                        </button>
                         <button class="avatar__edit btn btn--not-style btn--size_xs color--silver mrg--t10"
                                 type="button"
                                 ng-if="vm.user.profile.photo"
@@ -25,7 +27,9 @@
 
                     <div class="flex flex--column mrg--l20">
                         <button class="btn btn--size_m btn--y-gradient btn--border-dark mrg--f-right"
-                                ng-click="vm.openAvatarUploadPopup()">{{ 'AVATAR_LOAD_IMAGE' | translate }}
+                                type="button"
+                                ng-click="vm.openAvatarUploadPopup()">
+                            {{ 'AVATAR_LOAD_IMAGE' | translate }}
                         </button>
                         <p class="font--size12 mrg--t10 font--right">
                             {{ 'AVATAR_UPLOAD_TEXT_NOTYF' | translate }}
@@ -36,6 +40,7 @@
         </div>
     </section>
 
+    <!-- Настройки профиля -->
     <section class="settings-main__block">
         <div class="personal-info">
             <profile-form></profile-form>

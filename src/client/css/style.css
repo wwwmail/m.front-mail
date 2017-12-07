@@ -297,7 +297,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   outline: none;
 }
 
-.main-flex, .menu-main__item-content, .menu-main__item-sub, .menu-main__link, .menu-main__additional-option, .menu-main-filter, .footer__row, .navigation__row, .menu-main-layout, .menu-main-layout__button-close, .menu-main-layout__add-btn:before, .menu-main-layout__avatar, .menu-main-layout__footer, .menu-settings__link-choose-element, .auth-layout__content, .password-reset-layout__content, .mail-message, .mail-message__footer, .folder-layout, .folder-layout__container, .folder-layout__header, .folder-layout__footer, .folder-layout__item, .settings-folders__list, .settings-folders__item-content, .settings-tags__list, .settings-tags__item-content, .settings-rules__list, .settings-rules__item-content, .btn-y--image-icon, .field-style--flex, .input-plash--box, .popup__container, .popup__head, .popup__item, .input-line, .input-line__label, .radio-switch, .tags-input .tags .tag-item, .main-switch, .main-switch__btn, .radiobutton-y__label, .select-list, .select-list__body.select2-choice, .select-list__body > .select2-arrow:after, .select-list-new__body.select2-choice, .search-block, .avatar__symbol-image, .folders-setup__row, .inbox-header__row, .inbox-message, .inbox-message__left, .inbox-message__center, .inbox-message__right, .inbox-message__head, .inbox-message__head-right, .inbox-message__text, .inbox-message__labels, .inbox-footer__content, .inbox-footer__group-option-content, .date-sort, .user-signatures__connection, .social-icons__icon, .social-icons--btn-tied:before, .search-mail, .user-menu__link, .search-result, .letter-tags, .message-textarea__note-editing-area--translate, .compose-from, .quick-reply, .to-whom__folders, .info-sender__right-menu, .info-sender__title, .info-sender__message-info, .info-sender__important-tags, .time-send__planing, .choice-language, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact__name, .tag-contact__info, .attach-upload__list, .attach-upload__name, .attach-item__button, .attach-item:hover .attach-item__buttons, .attachments, .inbox-empty, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply, .message-reply__container, .search-filters__date-sort, .menu-bottom, .social-auth__row, .to-round__body, .avatar-upload__header, .avatar-upload__body, .avatar-upload__footer {
+.main-flex, .menu-main__item-content, .menu-main__item-sub, .menu-main__link, .menu-main__additional-option, .menu-main-filter, .footer__row, .navigation__row, .menu-main-layout, .menu-main-layout__button-close, .menu-main-layout__add-btn:before, .menu-main-layout__avatar, .menu-main-layout__footer, .menu-settings__link-choose-element, .auth-layout__content, .password-reset-layout__content, .mail-message, .mail-message__footer, .folder-layout, .folder-layout__container, .folder-layout__header, .folder-layout__footer, .folder-layout__item, .settings-folders__list, .settings-folders__item-content, .settings-tags__list, .settings-tags__item-content, .settings-rules__list, .settings-rules__item-content, .btn-y--image-icon, .field-style--flex, .input-plash--box, .popup__container, .popup__head, .popup__item, .input-line, .input-line__label, .radio-switch, .tags-input .tags .tag-item, .main-switch, .main-switch__btn, .radiobutton-y__label, .select-list, .select-list__body.select2-choice, .select-list__body > .select2-arrow:after, .select-list-new__body.select2-choice, .search-block, .avatar__symbol-image, .folders-setup__row, .inbox-header__row, .inbox-message, .inbox-message__left, .inbox-message__center, .inbox-message__right, .inbox-message__head, .inbox-message__head-right, .inbox-message__text, .inbox-message__labels, .inbox-footer__content, .inbox-footer__group-option-content, .date-sort, .user-signatures__connection, .social-icons__icon, .social-icons--btn-tied:before, .search-mail, .user-menu__link, .search-result, .letter-tags, .message-textarea__note-editing-area--translate, .compose-from, .quick-reply, .to-whom__folders, .info-sender__right-menu, .info-sender__title, .info-sender__message-info, .info-sender__important-tags, .time-send__planing, .choice-language, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact__name, .tag-contact__info, .attach-upload__list, .attach-upload__name, .attach-item__button, .attach-item:hover .attach-item__buttons, .attachments, .inbox-empty, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply, .message-reply__container, .search-filters__date-sort, .menu-bottom, .social-auth__row, .to-round__body {
   display: flex;
 }
 .main-flex-flow-col, .menu-main-layout, .auth-layout__content, .password-reset-layout__content, .mail-message, .mail-message__main-content, .folder-layout__container, .settings-folders__list, .settings-tags__list, .settings-rules__list, .popup__container, .select-list, .inbox-message__left, .search-mail, .search-result, .info-sender__title, .info-sender__message-info, .choice-language, .tag-contact__info, .inbox-empty {
@@ -306,7 +306,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .main-flex-flow-row, .folder-layout__header, .folders-setup__row, .date-sort {
   flex-flow: row;
 }
-.main-align-items-center, .mail-message__head-info, .search-block, .avatar__symbol-image, .inbox-message, .inbox-message__left, .inbox-message__right, .inbox-message__head-right, .inbox-footer__group-option-content, .user-signatures__connection, .social-icons__icon, .user-menu__link, .letter-tags, .message-textarea .note-toolbar, .compose-from, .to-whom, .info-sender__head, .info-sender__to-whom, .info-sender__important-tags, .time-send__planing, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact, .tag-contact__name, .attach-upload__name, .attach-item__type, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply__container, .to-round__body, .avatar-upload__header, .avatar-upload__footer {
+.main-align-items-center, .mail-message__head-info, .search-block, .avatar__symbol-image, .inbox-message, .inbox-message__left, .inbox-message__right, .inbox-message__head-right, .inbox-footer__group-option-content, .user-signatures__connection, .social-icons__icon, .user-menu__link, .letter-tags, .message-textarea .note-toolbar, .compose-from, .to-whom, .info-sender__head, .info-sender__to-whom, .info-sender__important-tags, .time-send__planing, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact, .tag-contact__name, .attach-upload__name, .attach-item__type, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply__container, .to-round__body {
   align-items: center;
 }
 .main-text-dots, .inbox-message__center, .inbox-message__name, .inbox-message__subject, .inbox-message__message, .message-textarea .note-btn.dropdown-toggle, .tag-contact__name, .attach-upload__name, .attach-item__name, .attach-item__name2 {
@@ -604,6 +604,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .flex--inline {
   display: inline-flex !important;
+}
+.flex--just-cn {
+  justify-content: center !important;
 }
 .flex--just-s-a {
   justify-content: space-around !important;
@@ -7061,6 +7064,8 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 
 .avatar-upload__header {
   position: relative;
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
   height: 64px;
   padding: 0 38px;
@@ -7070,18 +7075,26 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .avatar-upload__body {
   position: relative;
-  padding: 20px 30px;
+  padding: 20px 0;
+  display: flex;
   justify-content: space-around;
   flex-flow: row wrap;
   border-bottom: 1px solid #e5e5e5;
 }
 .avatar-upload__footer {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  height: 64px;
   padding: 0 20px;
+  height: 64px;
 }
-.avatar-upload__crop, .avatar-upload__default {
-  width: 200px !important;
+.avatar-upload__default {
+  max-width: 100px;
+  max-height: 100px;
+  text-align: center;
+}
+.avatar-upload__crop {
+  width: 100% !important;
   height: 200px !important;
 }
 

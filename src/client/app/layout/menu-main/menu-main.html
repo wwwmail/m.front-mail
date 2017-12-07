@@ -148,7 +148,6 @@
         <!-- -->
         <!--<hr class="hr hr&#45;&#45;main-menu">-->
 
-        <!-- -->
         <ul class="menu-main">
             <li class="menu-main__item" ng-repeat="tag in vm.tags.items">
                 <div class="menu-main__item-content">
@@ -183,8 +182,7 @@
             <li class="menu-main__item">
                 <div class="menu-main__item-content">
                     <a class="menu-main__link"
-                       ng-click="vm.goToDesktopVersion('/settings/main?version=desktop')"
-                       target="_blank">
+                       ui-sref="settings.main">
                         <span class="icon-settings menu-main__icon"></span>
                         <span class="menu-main__title">{{ 'SETTING' | translate }}</span>
                     </a>

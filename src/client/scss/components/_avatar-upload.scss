@@ -1,46 +1,49 @@
 .avatar-upload {
-  &__header{
+  &__header {
     position: relative;
 
-    @extend .main-flex;
-    @extend .main-align-items-center;
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
 
     height: 64px;
 
     padding: 0 38px;
 
-    color: $textBlack ;
+    color: $textBlack;
     font: bold 18px/1 $mainFont;
-    border-bottom: 1px solid $hr-main-color;
 
+    border-bottom: 1px solid $hr-main-color;
   }
 
   &__body {
     position: relative;
 
-    padding: 20px 30px;
-    @extend .main-flex;
+    padding: 20px 0;
+    display: flex;
     justify-content: space-around;
 
     flex-flow: row wrap;
     border-bottom: 1px solid $hr-main-color;
-
-
   }
 
-  &__footer{
-    @extend .main-flex;
-    @extend .main-align-items-center;
+  &__footer {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
-
-    height: 64px;
     padding: 0 20px;
-
+    height: 64px;
   }
 
-  &__crop, &__default{
-    width: 200px!important;
-    height: 200px!important;
+  &__default {
+    max-width: 100px;
+    max-height: 100px;
+
+    text-align: center;
+  }
+
+  &__crop {
+    width: 100% !important;
+    height: 200px !important;
   }
 }

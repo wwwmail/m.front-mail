@@ -5,13 +5,10 @@
         .module('settings.rules')
         .controller('RulesController', RulesController);
 
-    RulesController.$inject = ['$state', 'sieve', '$translatePartialLoader', '$translate'];
+    RulesController.$inject = ['$state', 'sieve'];
     /* @ngInject */
-    function RulesController($state, sieve, $translatePartialLoader, $translate) {
+    function RulesController($state, sieve) {
         var vm = this;
-
-        $translatePartialLoader.addPart('settings');
-        $translate.refresh();
 
         vm.$state = $state;
 
