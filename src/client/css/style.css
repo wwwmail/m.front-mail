@@ -309,7 +309,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .main-align-items-center, .mail-message__head-info, .search-block, .avatar__symbol-image, .inbox-message, .inbox-message__left, .inbox-message__right, .inbox-message__head-right, .inbox-footer__group-option-content, .user-signatures__connection, .social-icons__icon, .user-menu__link, .letter-tags, .message-textarea .note-toolbar, .compose-from, .to-whom, .info-sender__head, .info-sender__to-whom, .info-sender__important-tags, .time-send__planing, .tag-list__item, .tag-create__input, .palette-list__item, .tag-contact, .tag-contact__name, .attach-upload__name, .attach-item__type, .pop-up-notification__container, .pop-up-notification--vg-style .pop-up-notification__notific, .message-reply__container, .to-round__body {
   align-items: center;
 }
-.main-text-dots, .inbox-message__center, .inbox-message__name, .inbox-message__subject, .inbox-message__message, .message-textarea .note-btn.dropdown-toggle, .tag-contact__name, .attach-upload__name, .attach-item__name, .attach-item__name2 {
+.main-text-dots, .settings-accounts__title, .inbox-message__center, .inbox-message__name, .inbox-message__subject, .inbox-message__message, .message-textarea .note-btn.dropdown-toggle, .tag-contact__name, .attach-upload__name, .attach-item__name, .attach-item__name2 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2487,9 +2487,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 }
 .settings-accounts__title {
   font-size: 14px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .settings-accounts__item {
   position: relative;
