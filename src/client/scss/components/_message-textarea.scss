@@ -11,24 +11,20 @@
   }
 
   .note-toolbar {
-    //position: sticky;
-    //top: 0;
-    //left: 0;
-    //z-index: 3;
-
-    border: none;
-    border-bottom: 1px solid #cccccc;
-
-    height: 33px;
-
-    width: 500px;
-
-    background: #fff;
-
+    position: relative;
     display: inline-flex;
     @extend .main-align-items-center;
 
+    height: 33px;
+    width: 100%;
+    min-width: 270px;
+
     padding: 0 5px;
+
+    border: none;
+    border-bottom: 1px solid #cccccc;
+    background: #fff;
+    overflow-x: auto;
   }
 
   .note-statusbar {
@@ -54,6 +50,7 @@
     @include border-radius(0);
     border: none;
     margin-top: 0 !important;
+    flex: 0 0 auto;
   }
 
   .note-mybutton {

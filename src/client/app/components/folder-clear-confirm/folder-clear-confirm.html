@@ -1,46 +1,26 @@
-<div class="popup">
-    <div class="popup__header">
-        <span class="">{{ 'EMPTY_THE_FOLDER' | translate }}</span>
-    </div>
-    <div class="popup__content pdd--t20 pdd--b20">
+<div class="popup__head">
+    <span class="popup__head-title">{{ 'EMPTY_THE_FOLDER' | translate }}</span>
+    <button class="icon-close btn btn--not-style btn--main-mobile-color btn--size_s"
+            type="button"
+            ng-click="vm.cancel()"></button>
+    <hr class="hr hr--popup">
+</div>
+
+<div class="popup__content pdd--20">
+    <div class="font--center">
         {{ 'EMPTY_THE_FOLDER_MSG' | translate: {folder: (vm.folder.name | translate)} }}
-
-        <hr class="hr hr--bottom">
-    </div>
-
-    <div class="popup__footer">
-        <button class="btn btn--normal btn--size_l  float--left"
-                type="button"
-                ng-click="vm.cancel()">{{ 'CANCEL' | translate }}
-        </button>
-
-        <button class="btn btn--yellow btn--size_l  float--left"
-                type="button"
-                ng-click="vm.close()">
-            {{ 'DELETE_WITH_LETTERS' | translate }}
-        </button>
     </div>
 </div>
 
-<!--<div class="folder-create">-->
-    <!--<div class="folder-create__title">{{ 'EMPTY_THE_FOLDER' | translate }}</div>-->
+<div class="popup__footer">
+    <!--<button class="btn btn&#45;&#45;normal btn&#45;&#45;size_l  float&#45;&#45;left"-->
+            <!--type="button"-->
+            <!--ng-click="vm.cancel(">{{ 'CANCEL' | translate }}-->
+    <!--</button>-->
 
-    <!--<div class="mrg&#45;&#45;t10">-->
-        <!--{{ 'EMPTY_THE_FOLDER_MSG' | translate: {folder: (vm.folder.name | translate)} }}-->
-    <!--</div>-->
-
-    <!--<div class="mrg&#45;&#45;t15">-->
-        <!--<div class="folder-create__btn">-->
-            <!--<button class="btn-y btn-y&#45;&#45;mail-fix btn&#45;&#45;yellow btn-y&#45;&#45;border"-->
-                    <!--type="button"-->
-                    <!--ng-click="vm.close()">-->
-                <!--{{ 'CLEAR' | translate }}-->
-            <!--</button>-->
-            <!--<button class="btn-y btn-y&#45;&#45;mail-fix btn-y&#45;&#45;border"-->
-                    <!--type="button"-->
-                    <!--ng-click="vm.cancel()">-->
-                <!--{{ 'CANCEL' | translate }}-->
-            <!--</button>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
+    <button class="btn btn--yellow btn--no-radius width--all height--min-inh font--size20"
+            type="button"
+            ng-click="vm.close()">
+        {{ 'DELETE_WITH_LETTERS' | translate }}
+    </button>
+</div>

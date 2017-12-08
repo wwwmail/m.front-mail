@@ -447,5 +447,8 @@
   "SERVER": "Server",
   "PORT": "Port",
   "DELETING_FOLDER_MSG": "În directorul {{ folder }} {{ messageCount }} literele. Scrisorile vor fi înlăturate împreună cu directoarele.",
+  "PROFILE_PORTRAIT": "Portret profil",
+  "EMPTY_THE_FOLDER": "director gol",
+  "EMPTY_THE_FOLDER_MSG": "Vizualizați toate directoarele în directoarele \"{{ folder }}\"",
   "BANNER_BLOCK_CAPTION": "Publicitate"
 }			

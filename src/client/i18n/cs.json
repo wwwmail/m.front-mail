@@ -446,5 +446,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametry Vašeho poštovního serveru",
   "SERVER": "Server",
   "PORT": "Port",
+  "PROFILE_PORTRAIT": "Portrét profilu",
+  "EMPTY_THE_FOLDER": "čistá složka",
+  "EMPTY_THE_FOLDER_MSG": "Zobrazit všechny složky ve složkách \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "Ve složce {{ folder }} {{ messageCount }} písmena. Dopisy budou odstraněny spolu s složky."
 }

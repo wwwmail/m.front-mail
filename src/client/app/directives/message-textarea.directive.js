@@ -205,6 +205,9 @@
 
                     $('.note-statusbar').html("<span class='summernote__resize'>◢</span>");
 
+                    $('.note-btn.dropdown-toggle').attr('dropdown-append-to-body','');
+                    $('.note-btn.dropdown-toggle').attr(' uib-dropdown','');
+
                     pasteStructureHtml();
 
                 }, timeLoad);

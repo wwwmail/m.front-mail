@@ -446,5 +446,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Параметри вашого поштового сервера",
   "SERVER": "Сервер",
   "PORT": "Порт",
+  "EMPTY_THE_FOLDER": "Очищення папки",
+  "PROFILE_PORTRAIT": "Портрет профілю",
+  "EMPTY_THE_FOLDER_MSG": "Всі листи будуть видалені з папки \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "В папці {{ folder }} {{ messageCount }} листи. Листи будуть видалені разом з папкою."
 }

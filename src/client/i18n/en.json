@@ -446,5 +446,8 @@
   "SERVER": "Server",
   "PORT": "Port",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parameters of your mail server",
+  "PROFILE_PORTRAIT": "Profile image",
+  "EMPTY_THE_FOLDER": "empty folder",
+  "EMPTY_THE_FOLDER_MSG": "View all folders in \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "In the {{ folder }} {{ messageCount }} letters. Letters will be removed along with the folders."
 }

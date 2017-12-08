@@ -447,5 +447,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri vaše mejl mape",
   "SERVER": "Server",
   "PORT": "Pristup",
+  "PROFILE_PORTRAIT": "Porteret profila",
+  "EMPTY_THE_FOLDER": "isprazni mapu",
+  "EMPTY_THE_FOLDER_MSG": "Pokaži sve mape u mapama \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messageCount }} slova. Biti će izbrisane poruke zajedno sa mapom"
 }

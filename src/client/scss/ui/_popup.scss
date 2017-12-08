@@ -170,6 +170,12 @@
     }
   }
 
+  &--avatar-upload{
+    .modal-dialog {
+      min-width: 290px;
+    }
+  }
+
   &--tag-create {
     .modal-dialog {
       width: 432px;

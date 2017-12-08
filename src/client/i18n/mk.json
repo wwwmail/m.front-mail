@@ -447,5 +447,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Параметри на вашиот поштенски сервер",
   "SERVER": "Сервер",
   "PORT": "Порт",
+  "PROFILE_PORTRAIT": "Портрет на профилот",
+  "EMPTY_THE_FOLDER": "празна папка",
+  "EMPTY_THE_FOLDER_MSG": "Прикажи ги сите папки во папки \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "Во папката {{ folder }} {{ messageCount }} букви. Пораките ќе бидат избришани заедно со папката."
 }

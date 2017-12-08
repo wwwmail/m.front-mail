@@ -446,5 +446,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri vašega poštnega strežnika",
   "SERVER": "Strežnik",
   "PORT": "Vrata",
+  "PROFILE_PORTRAIT": "Slika profila",
+  "EMPTY_THE_FOLDER": "čista mapa",
+  "EMPTY_THE_FOLDER_MSG": "Prikaži vse mape v mapah \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "V mapi {{ folder }} {{ messageCount }} črke. Pisma bodo odstranjena skupaj z mapami."
 }

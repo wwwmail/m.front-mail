@@ -447,5 +447,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg poštanskog servera",
   "SERVER": "Server",
   "PORT": "Port",
+  "PROFILE_PORTRAIT": "Izgled profila",
+  "EMPTY_THE_FOLDER": "isprazni fasciklu",
+  "EMPTY_THE_FOLDER_MSG": "Pokaži sve fascikle u fasciklama \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messagecount }} slova.  Poruke će biti obrisane zajedno sa mapom"
 }

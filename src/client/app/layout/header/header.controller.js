@@ -42,7 +42,7 @@
 
             $timeout(function () {
                 vm.notify.isOpen = false;
-            }, 3000);
+            }, 800);
         });
 
         $scope.$on('mail:isSend', function (e, data) {

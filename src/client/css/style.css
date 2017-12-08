@@ -2399,8 +2399,10 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   height: 1px;
   background-color: #f2f2f2;
 }
+.settings-rules__message {
+  margin: 16px 0;
+}
 .settings-rules__title {
-  margin: 0 22px 0;
   font-size: 16px;
   font-weight: bold;
 }
@@ -2443,7 +2445,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   line-height: 1.1;
 }
 .settings-rule-add__textarea {
-  width: 100%;
   height: 200px;
 }
 
@@ -3317,6 +3318,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
 .popup--tags .popup__content {
   max-height: calc(80vh - 80px);
 }
+.popup--avatar-upload .modal-dialog {
+  min-width: 290px;
+}
 .popup--tag-create .modal-dialog {
   width: 432px;
 }
@@ -3526,7 +3530,6 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   position: relative;
   width: 100%;
   max-width: 100%;
-  min-width: 300px;
   min-height: 40px;
   border: none;
   background: none;
@@ -5891,13 +5894,16 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border: none;
 }
 .message-textarea .note-toolbar {
+  position: relative;
+  display: inline-flex;
+  height: 33px;
+  width: 100%;
+  min-width: 270px;
+  padding: 0 5px;
   border: none;
   border-bottom: 1px solid #cccccc;
-  height: 33px;
-  width: 500px;
   background: #fff;
-  display: inline-flex;
-  padding: 0 5px;
+  overflow-x: auto;
 }
 .message-textarea .note-statusbar {
   margin-top: 25px;
@@ -5917,6 +5923,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border-radius: 0;
   border: none;
   margin-top: 0 !important;
+  flex: 0 0 auto;
 }
 .message-textarea .note-mybutton {
   margin-left: 6px !important;
@@ -7266,13 +7273,16 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border: none;
 }
 .message-textarea .note-toolbar {
+  position: relative;
+  display: inline-flex;
+  height: 33px;
+  width: 100%;
+  min-width: 270px;
+  padding: 0 5px;
   border: none;
   border-bottom: 1px solid #cccccc;
-  height: 33px;
-  width: 500px;
   background: #fff;
-  display: inline-flex;
-  padding: 0 5px;
+  overflow-x: auto;
 }
 .message-textarea .note-statusbar {
   margin-top: 25px;
@@ -7292,6 +7302,7 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   border-radius: 0;
   border: none;
   margin-top: 0 !important;
+  flex: 0 0 auto;
 }
 .message-textarea .note-mybutton {
   margin-left: 6px !important;

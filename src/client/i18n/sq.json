@@ -447,5 +447,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametrat e serverit Tuaj të emailit",
   "SERVER": "Serveri",
   "PORT": "Port",
+  "PROFILE_PORTRAIT": "Portreti i profilit",
+  "EMPTY_THE_FOLDER": "dosje bosh",
+  "EMPTY_THE_FOLDER_MSG": "Pasqyro të gjitha dosjet tek dosjet \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "Në dosjen {{ folder }} {{ messageCount }} shkronjat.  Letrat do të fshihen së bashku me skedarët."
 }			

@@ -447,5 +447,8 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg e-mail servera",
   "SERVER": "Server",
   "PORT": "Port",
+  "PROFILE_PORTRAIT": "Slika profila",
+  "EMPTY_THE_FOLDER": "Isprazni direktorij",
+  "EMPTY_THE_FOLDER_MSG": "Prikaži sve direktorije u direktorijima \"{{ folder }}\"",
   "DELETING_FOLDER_MSG": "U direktoriju {{ folder }} {{ messageCount }} slova. Poruke će biti izbrisane zajedno sa direktorijima."
 }
