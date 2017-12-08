@@ -41,7 +41,9 @@
 
                         <div class="flex align-items--cn">
                             <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
-                                    ng-click="vm.openFolderEditPopup()">
+                                    type="button"
+                                    ng-disabled="subFolder.name === 'Archive' || subFolder.name === 'Templates'"
+                                    ng-click="vm.openFolderEditPopup(subFolder)">
                                 <!--
                                     ng-disabled="!vm.selected.isSub || vm.selected.name === 'Archive'"
                                 -->
@@ -57,6 +59,8 @@
                             </button>
 
                             <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
+                                    type="button"
+                                    ng-disabled="subFolder.name === 'Archive' || subFolder.name === 'Templates'"
                                     ng-click="vm.selected.messagesCount ? vm.openFolderDeleteConfirmPopup() : vm.destroy()">
                                 <!--
                                     ng-disabled="!vm.selected.isSub || vm.selected.name === 'Archive' || vm.selected.name === 'Templates'"

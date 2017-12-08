@@ -144,7 +144,7 @@
             });
         }
 
-        function openFolderEditPopup() {
+        function openFolderEditPopup(folder) {
             $uibModal.open({
                 animation: true,
                 templateUrl: 'app/components/folder-edit/folder-edit-popup.html',
@@ -159,7 +159,7 @@
                 },
                 resolve: {
                     model: function () {
-                        return vm.selected;
+                        return folder;
                     }
                 },
                 size: 'sm',
