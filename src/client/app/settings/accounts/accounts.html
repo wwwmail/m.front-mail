@@ -8,13 +8,16 @@
 
     <!-- Основная часть-->
     <div class="accounts-settings__content">
-        <div class="accounts-settings__list mrg--t20" ng-if="vm.accounts.items.length">
-            <div class="accounts-settings__title">{{ 'CONNECTED_BOXES' | translate }}</div>
-            <div class="accounts-settings__items">
+        <!---->
+        <div class="settings-accounts__list" ng-if="vm.accounts.items.length">
+            <div class="settings-accounts__caption">{{ 'CONNECTED_BOXES' | translate }}</div>
+            <div class="settings-accounts__items">
+                <div class="settings-accounts__item" ng-repeat="account in vm.accounts.items">
+                    <div class="settings-accounts__title">
+                        {{ account.email }}
+                    </div>
 
-                <div class="accounts-settings__item" ng-repeat="account in vm.accounts.items">
-                    <span class="accounts-settings__item--name-mail">{{ account.email }}</span>
-                    <form class="option-icons just-content--f-en">
+                    <form class="settings-accounts__item-content-right">
                         <div class="radio-switch radio-switch--size-s mrg--r16">
                             <input class="radio-switch__input" type="radio" name="toggle"
                                    ng-checked="{{ account.enable }}"
@@ -32,41 +35,13 @@
                                                 </span>
                         </div>
 
-                        <button class="btn btn--not-style btn__icon--opahover"
+                        <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
                                 type="button"
                                 ng-click="vm.destroy(account)">
-                            <span class="icon-basket"></span>
+                            <span class="icon-delete"></span>
                         </button>
                     </form>
                 </div>
-
-                <!--  Аккаунт 1-->
-                <!-- <span class="accounts-settings__item&#45;&#45;name-mail">{{ account.email }}</span>
-                 <form class="option-icons just-content&#45;&#45;f-en">
-                     &lt;!&ndash; Переключатель &ndash;&gt;
-                     <div class="radiobutton mrg--r16">
-                         <div class="radiobutton radiobutton__switch radiobutton&#45;&#45;size72x28">
-                             <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                    ng-checked="{{ account.enable }}"
-                                    ng-value="0"
-                                    ng-model="account.enable"
-                                    ng-change="vm.enableTrigger(account)">
-                             <input class="radiobutton__switch__input" type="radio" name="toggle"
-                                    ng-checked="{{ account.enable }}"
-                                    ng-value="1"
-                                    ng-model="account.enable"
-                                    ng-change="vm.enableTrigger(account)">
-                             <span class="radiobutton__switch__on-off"></span>
-                         </div>
-                     </div>
-                     &lt;!&ndash; Редактирование записи &ndash;&gt;
-                     &lt;!&ndash;<button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;edit"&ndash;&gt;
-                     &lt;!&ndash;type="button"></button>&ndash;&gt;
-                     &lt;!&ndash; Удалить &ndash;&gt;
-                     <button class="btn-group__btn btn btn&#45;&#45;size_s width&#45;&#45;size28 btn__icon&#45;&#45;opahover btn__icon&#45;&#45;remove"
-                             type="button"
-                             ng-click="vm.destroy(account)"></button>
-                 </form>-->
             </div>
         </div>
 
