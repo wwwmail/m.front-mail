@@ -70,10 +70,10 @@
         $scope.$watch('vm.sendForm.model.body', function (data, oldData) {
             if (data) {
                 if (!vm.isSaveDraft && !$state.params.fwd && !$state.params.re && !$state.params.template) {
-                    save({isGoDraft: true});
+                    save({isGoDrafts: true});
                     vm.interval = $interval(function () {
                         if (vm.sendForm.model.to && !vm.$state.params.template) {
-                            save({isGoDraft: true});
+                            save({isGoDrafts: true});
                         }
                     }, 1000 * 60);
                     vm.isSaveDraft = true;
