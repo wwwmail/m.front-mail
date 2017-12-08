@@ -3,47 +3,22 @@
         <div class="menu-bottom__caption">
             {{ 'SAVE_CHANGES' | translate }}?
         </div>
-
         <div class="mrg--auto">
             <button class="btn btn--size_l btn--yellow mrg--b10 width--all"
-                    ng-click="vm.isOpen = false"
-                    ui-sref="mail.inbox({mbox: 'INBOX'})">
+                    type="button"
+                    ng-click="vm.destroy()">
                 {{ 'NOT_SAVE' | translate }}
             </button>
-
-            <button class="btn btn--size_l btn--yellow width--all" ng-click="vm.save()">
+            <button class="btn btn--size_l btn--yellow width--all"
+                    type="button"
+                    ng-click="vm.save()">
                 {{ 'SAVE_AND_GO' | translate }}
             </button>
         </div>
     </div>
-
-    <button class="menu-bottom__cancel btn--not-style" ng-click="vm.isOpen = false;"></button>
+    <button class="menu-bottom__cancel btn--not-style"
+            type="button"
+            ng-click="vm.isOpen = false;">
+    </button>
 </div>
-
-<!--
-<div class="menu-bottom" ng-if="vm.isOpen">
-    <div class="menu-bottom__container">
-        <div class="menu-bottom__item">
-            <div>
-                {{ 'SAVE_CHANGES' | translate }}?
-            </div>
-            <div ng-click="vm.isOpen = false;">
-                {{ 'CANCEL' | translate }}
-            </div>
-        </div>
-
-        <div class="menu-bottom__item">
-            <div ng-click="vm.isOpen = false" ui-sref="mail.inbox({mbox: 'INBOX'})">
-                {{ 'NOT_SAVE' | translate }}
-            </div>
-        </div>
-
-        <div class="menu-bottom__item">
-            <div ng-click="vm.save()">
-                {{ 'SAVE_AND_GO' | translate }}
-            </div>
-        </div>
-    </div>
-</div>
--->
 

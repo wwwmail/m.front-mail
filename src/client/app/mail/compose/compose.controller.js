@@ -191,7 +191,7 @@
                         date: setNowTime()
                     };
 
-                    if (options.isGoDrafts) {
+                    if (options.isGoDrafts || $state.params.mbox === 'Drafts') {
                         $state.go('mail.compose', {
                             id: vm.sendForm.id,
                             mbox: 'Drafts',

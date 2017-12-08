@@ -328,6 +328,29 @@
             return data;
         }
 
+        function destroyOne(data, isSync) {
+            var message = angular.copy(data);
+
+            if (message.isLoading) return;
+
+            $http({
+                url: API_URL + '/' + 1,
+                method: 'DELETE',
+                data: {
+                    messages: [message]
+                },
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+            }).then(function () {
+                $rootScope.$broadcast('mail:sync');
+            });
+
+            message = {};
+
+            return message;
+        }
+
         return {
             get: get,
             post: post,
@@ -348,7 +371,8 @@
             setFwdData: setFwdData,
             getFwdData: getFwdData,
             deleteAll: deleteAll,
-            setPaginate: setPaginate
+            setPaginate: setPaginate,
+            destroyOne: destroyOne
         }
     }
 })();
