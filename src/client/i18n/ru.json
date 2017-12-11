@@ -430,13 +430,13 @@
   "CONTINUE": "Продолжить",
   "ENTER_MAIL_CODE": "Для изменения пароля введите код отправленный на Ваш альтернативный e-mail",
   "ENTER_PHONE_CODE": "Для изменения пароля введите код отправленный на Ваш телефон",
-  "ENTER_PHONE_OR_EMAIL": "Пожалуйста, укажите <strong>телефон</strong> или <strong>альтернативный e-mail</strong>, <br> который Вы использовали при регистрации.",
+  "ENTER_PHONE_OR_EMAIL": "Пожалуйста, укажите <strong>телефон с кодом</strong> или <strong>альтернативный e-mail</strong>, <br> который Вы использовали при регистрации.",
   "ACTIVE_EMAIL": "Ваш альтернативный e-mail",
   "NO_EMAIL": "Нет e-maila",
   "ACTIVE_PHONE": "Ваш номер телефона",
   "NO_PHONE": "Нет телефона",
   "PHONE_OR_ALTERNATE_EMAIL": "Нет телефона",
-  "PHONE_OR_EMAIL": "Телефон или альтернативный e-mail",
+  "PHONE_OR_EMAIL": "Телефон с кодом или альтернативный e-mail",
   "SELECT_YOUR_NAME": "Придумайте Ваше имя",
   "LOGOUT": "Выход",
   "SHOW_IMAGES": "Загрузить внешние картинки.",
@@ -447,8 +447,9 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Параметры вашего почтового сервера",
   "SERVER": "Сервер",
   "PORT": "Порт",
-  "PROFILE_PORTRAIT": "Портрет профиля",
+  "DELETING_FOLDER_MSG": "В папке {{ folder }} {{ messageCount }} письма. Письма будут удалены вместе с папкой.",
+
+
   "EMPTY_THE_FOLDER": "Очистка папки",
-  "EMPTY_THE_FOLDER_MSG": "Все письма будут удалены из папки \"{{ folder }}\"",
-  "DELETING_FOLDER_MSG": "В папке {{ folder }} {{ messageCount }} письма. Письма будут удалены вместе с папкой."
+  "EMPTY_THE_FOLDER_MSG": "Все письма будут удалены из папки \"{{ folder }}\""
 }

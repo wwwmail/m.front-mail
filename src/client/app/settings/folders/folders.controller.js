@@ -39,15 +39,14 @@
 
         vm.folders = {};
 
-        vm.selected = {};
 
         vm.openFolderCreatePopup = openFolderCreatePopup;
         vm.openFolderEditPopup = openFolderEditPopup;
         vm.move = move;
-        vm.select = select;
         vm.destroy = destroy;
         vm.openFolderDeleteConfirmPopup = openFolderDeleteConfirmPopup;
         vm.openFolderClearConfirmPopup = openFolderClearConfirmPopup;
+
 
         $scope.$on('mailBox:update:success', function () {
             getMailBox();
@@ -61,9 +60,9 @@
             getMailBox();
         });
 
-        /////
-
         activate();
+
+        /////
 
         function activate() {
             vm.$state = $state;
@@ -83,7 +82,7 @@
                 var isSub = true;
 
                 _.forEach(vm.standartFolders, function (standartFolder) {
-                    if (folder.name == standartFolder.name) {
+                    if (folder.name === standartFolder.name) {
                         isSub = false;
                     }
                 });
@@ -167,32 +166,23 @@
             });
         }
 
-        function select(folder) {
-            _.forEach(vm.folders.items, function (folder) {
-                folder.isSelected = false;
-            });
-
-            folder.isSelected = true;
-
-            vm.selected = folder;
-        }
-
-        function destroy() {
+        function destroy(folder) {
             mailBox.destroy({}, {
-                mbox: vm.selected.name
+                mbox: folder.name
             });
         }
 
-        function clearFolder() {
+        function clearFolder(folder) {
+            console.log('v', folder);
             mail.deleteAll({}, {
-                mbox: vm.selected.name,
+                mbox: folder.name,
                 connection_id: vm.user.profile.default_connection_id
             }).then(function () {
                 getMailBox();
             });
         }
 
-        function openFolderDeleteConfirmPopup() {
+        function openFolderDeleteConfirmPopup(folder) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'app/components/folder-delete-confirm/folder-delete-confirm-popup.html',
@@ -213,18 +203,18 @@
                 size: 'sm',
                 resolve: {
                     folderResolve: function () {
-                        return vm.selected;
+                        return folder;
                     }
                 },
                 windowClass: 'popup popup--folder-create'
             });
 
             modalInstance.result.then(function (response) {
-                destroy();
+                destroy(folder);
             });
         }
 
-        function openFolderClearConfirmPopup() {
+        function openFolderClearConfirmPopup(folder) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'app/components/folder-clear-confirm/folder-clear-confirm-popup.html',
@@ -245,14 +235,14 @@
                 size: 'sm',
                 resolve: {
                     folderResolve: function () {
-                        return vm.selected;
+                        return folder;
                     }
                 },
                 windowClass: 'popup popup--folder-create'
             });
 
             modalInstance.result.then(function (response) {
-                clearFolder();
+                clearFolder(folder);
             });
         }
     }

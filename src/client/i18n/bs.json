@@ -430,13 +430,13 @@
   "CONTINUE": "Nastavi",
   "ENTER_MAIL_CODE": "Za promjenu Vaše lozinke upišite kod koji smo Vam poslali na Vaš alternativni e-mail",
   "ENTER_PHONE_CODE": "Za promjenu Vaše lozinke upišite kod koji smo Vam poslali na Vaš telefon",
-  "ENTER_PHONE_OR_EMAIL": "Upišite, molim, svoj telefonski broj ili alternativni e-mail koji ste upisali prilikom registracije.",
+  "ENTER_PHONE_OR_EMAIL": "Upišite, molim, svoj telefon s kodom ili alternativni e-mail koji ste upisali prilikom registracije.",
   "ACTIVE_EMAIL": "Vaš alternativni e-mail",
   "NO_EMAIL": "Nemam e-mail",
   "ACTIVE_PHONE": "Vaš telefonski broj",
   "NO_PHONE": "Nemam telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nemam telefon",
-  "PHONE_OR_EMAIL": "Telefon ili alternativni e-mail:",
+  "PHONE_OR_EMAIL": "Telefon s kodom ili alternativni e-mail:",
   "SELECT_YOUR_NAME": "Smislite svoje korisničko ime",
   "LOGOUT": "Odjavi se",
   "SHOW_IMAGES": "Ubacite spoljne slike.",
@@ -447,8 +447,9 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg e-mail servera",
   "SERVER": "Server",
   "PORT": "Port",
-  "PROFILE_PORTRAIT": "Slika profila",
+  "DELETING_FOLDER_MSG": "U direktoriju {{ folder }} {{ messageCount }} slova. Poruke će biti izbrisane zajedno sa direktorijima.",
+
+
   "EMPTY_THE_FOLDER": "Isprazni direktorij",
-  "EMPTY_THE_FOLDER_MSG": "Prikaži sve direktorije u direktorijima \"{{ folder }}\"",
-  "DELETING_FOLDER_MSG": "U direktoriju {{ folder }} {{ messageCount }} slova. Poruke će biti izbrisane zajedno sa direktorijima."
+  "EMPTY_THE_FOLDER_MSG": "Prikaži sve direktorije u direktorijima \"{{ folder }}\""
 }

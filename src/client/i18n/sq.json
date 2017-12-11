@@ -430,13 +430,13 @@
   "CONTINUE": "Vazhdoj",
   "ENTER_MAIL_CODE": "Për të ndryshuar fjalëkryqin Tuaj është e nevojshme të vendosni kodin, të cilin Jua kemi dërguar në emailin Tuaj të dytë",
   "ENTER_PHONE_CODE": "Për të ndryshuar fjalëkryqin Tuaj është e nevojshme të vendosni kodin, të cilin Jua kemi dërguar në telefonin tuaj",
-  "ENTER_PHONE_OR_EMAIL": "Ju lutemi, vendosni numrin Tuaj të telefonit ose emailin e dytë, të cilin e keni vendosur gjatë rregjistrimit.",
+  "ENTER_PHONE_OR_EMAIL": "Ju lutemi, vendosni numrin Tuaj të telefonit me kodin ose emailin e dytë, të cilin e keni vendosur gjatë rregjistrimit.",
   "ACTIVE_EMAIL": "Email Juaj i dytë",
   "NO_EMAIL": "Nuk kam email",
   "ACTIVE_PHONE": "Numri i Juaj i telefonit",
   "NO_PHONE": "Nuk kam telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nuk kam telefon",
-  "PHONE_OR_EMAIL": "Numri i telefonit ose emaili i dytë",
+  "PHONE_OR_EMAIL": "Numri i telefonit me kodin ose emaili i dytë",
   "SELECT_YOUR_NAME": "Mendoni për një emër",
   "LOGOUT": "Largimi",
   "SHOW_IMAGES": "Ngarko imazhe të jashtme.",
@@ -447,8 +447,9 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametrat e serverit Tuaj të emailit",
   "SERVER": "Serveri",
   "PORT": "Port",
-  "PROFILE_PORTRAIT": "Portreti i profilit",
+  "DELETING_FOLDER_MSG": "Në dosjen {{ folder }} {{ messageCount }} shkronjat.  Letrat do të fshihen së bashku me skedarët.",
+
+
   "EMPTY_THE_FOLDER": "dosje bosh",
-  "EMPTY_THE_FOLDER_MSG": "Pasqyro të gjitha dosjet tek dosjet \"{{ folder }}\"",
-  "DELETING_FOLDER_MSG": "Në dosjen {{ folder }} {{ messageCount }} shkronjat.  Letrat do të fshihen së bashku me skedarët."
-}			
+  "EMPTY_THE_FOLDER_MSG": "Pasqyro të gjitha dosjet tek dosjet \"{{ folder }}\""
+}

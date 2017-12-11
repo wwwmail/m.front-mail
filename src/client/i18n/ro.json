@@ -430,13 +430,13 @@
   "CONTINUE": "Continua",
   "ENTER_MAIL_CODE": "Pentru modificarea parolei dvs. introduceți codul pe care vi l-am trimis pe e-mailul dvs. alternativ",
   "ENTER_PHONE_CODE": "Pentru modificarea parolei dvs. introduceți codul pe care vi l-am trimis la telefon",
-  "ENTER_PHONE_OR_EMAIL": "Vă rugăm, introduceți, nr. dvs. de telefon sau e-mailul alternativ, pe care le-ați introdus la înregistrare.",
+  "ENTER_PHONE_OR_EMAIL": "Vă rugăm, introduceți, nr. dvs. de telefon cu cod sau e-mailul alternativ, pe care le-ați introdus la înregistrare.",
   "ACTIVE_EMAIL": "E-mailul dvs. alternativ",
   "NO_EMAIL": "Nu am e-mail",
   "ACTIVE_PHONE": "Numărul dvs. de telefon",
   "NO_PHONE": "Nu am telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nu am telefon",
-  "PHONE_OR_EMAIL": "Telefonul sau e-mailul alternativ",
+  "PHONE_OR_EMAIL": "Telefon cu cod sau e-mailul alternativ",
   "SELECT_YOUR_NAME": "Concepeți numele dvs. utilizator",
   "LOGOUT": "Deconectați-vă",
   "SHOW_IMAGES": "Încărcați imagini externe.",
@@ -447,8 +447,9 @@
   "SERVER": "Server",
   "PORT": "Port",
   "DELETING_FOLDER_MSG": "În directorul {{ folder }} {{ messageCount }} literele. Scrisorile vor fi înlăturate împreună cu directoarele.",
-  "PROFILE_PORTRAIT": "Portret profil",
+  "BANNER_BLOCK_CAPTION": "Publicitate",
+
+
   "EMPTY_THE_FOLDER": "director gol",
   "EMPTY_THE_FOLDER_MSG": "Vizualizați toate directoarele în directoarele \"{{ folder }}\"",
-  "BANNER_BLOCK_CAPTION": "Publicitate"
-}			
+}

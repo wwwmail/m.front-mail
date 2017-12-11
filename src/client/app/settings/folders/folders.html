@@ -8,20 +8,19 @@
 
     <div class="settings-folders__list" ng-repeat="folder in vm.folders.items">
         <div class="settings-folders__item"
-             ng-class="{'tags-settings__item--active': folder.isSelected}"
-             ng-click="vm.select(folder)"
              ng-if="!folder.isSub">
 
             <div class="settings-folders__item-content">
-                <div class="">
+                <div>
                     <span class="settings-folders__caption">{{ folder.name | translate }}</span>
                     <span class="settings-folders__counter">{{ folder.messagesCount }}</span>
                 </div>
 
                 <div class="flex align-items--cn">
                     <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
-                            ng-disabled="!vm.selected.name"
-                            ng-click="vm.openFolderClearConfirmPopup()">
+                            type="button"
+                            ng-click="vm.openFolderClearConfirmPopup(folder)"
+                            ng-disabled="!folder.messagesCount">
                         <span class="icon-clear"></span>
                     </button>
                 </div>
@@ -29,8 +28,6 @@
 
             <div class="settings-folders__list settings-folders__list--sub"
                  ng-repeat="subFolder in vm.folders.items"
-                 ng-class="{'tags-settings__item--active': subFolder.isSelected}"
-                 ng-click="vm.select(subFolder)"
                  ng-if="subFolder.isSub && (folder.name === 'INBOX' && subFolder.name !== 'Templates') || (folder.name === 'Drafts' && subFolder.name === 'Templates')">
                 <div class="settings-folders__item">
                     <div class="settings-folders__item-content">
@@ -42,29 +39,22 @@
                         <div class="flex align-items--cn">
                             <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
                                     type="button"
-                                    ng-disabled="subFolder.name === 'Archive' || subFolder.name === 'Templates'"
-                                    ng-click="vm.openFolderEditPopup(subFolder)">
-                                <!--
-                                    ng-disabled="!vm.selected.isSub || vm.selected.name === 'Archive'"
-                                -->
+                                    ng-click="vm.openFolderEditPopup(subFolder)"
+                                    ng-disabled="subFolder.name === 'Archive' || subFolder.name === 'Templates'">
                                 <span class="icon-edit-pen"></span>
                             </button>
 
                             <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 mrg--r5 color--silver"
-                                    ng-click="vm.openFolderClearConfirmPopup()">
-                                <!--
-                                ng-disabled="!vm.selected.name"
-                                -->
+                                    type="button"
+                                    ng-click="vm.openFolderClearConfirmPopup(subFolder)"
+                                    ng-disabled="!subFolder.messagesCount">
                                 <span class="icon-clear"></span>
                             </button>
 
                             <button class="btn btn--not-style btn--size_xl pdd--r2 pdd--l2 color--silver"
                                     type="button"
-                                    ng-disabled="subFolder.name === 'Archive' || subFolder.name === 'Templates'"
-                                    ng-click="vm.selected.messagesCount ? vm.openFolderDeleteConfirmPopup() : vm.destroy()">
-                                <!--
-                                    ng-disabled="!vm.selected.isSub || vm.selected.name === 'Archive' || vm.selected.name === 'Templates'"
-                                -->
+                                    ng-click="subFolder.messagesCount ? vm.openFolderDeleteConfirmPopup(subFolder) : vm.destroy(subFolder)"
+                                    ng-disabled="subFolder.name === 'Archive' || subFolder.name === 'Templates'">
                                 <span class="icon-delete"></span>
                             </button>
                         </div>

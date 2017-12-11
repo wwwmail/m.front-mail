@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
+    "jquery": "^3.2.1",
     "angular": "1.5.3",
     "angular-resource": "1.5.3",
     "angular-sanitize": "1.5.3",

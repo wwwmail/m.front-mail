@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('mail', mail);
 
-    mail.$inject = ['CONFIG', '$resource', '$http', '$rootScope', 'Upload', '$state'];
+    mail.$inject = ['CONFIG', '$resource', '$http', '$rootScope', 'Upload', '$state', 'wb'];
 
-    function mail(CONFIG, $resource, $http, $rootScope, Upload, $state) {
+    function mail(CONFIG, $resource, $http, $rootScope, Upload, $state, mb) {
         var API_URL = CONFIG.APIHost + '/mail';
 
         var answerData = {};
@@ -88,7 +88,7 @@
                 mbox: params.mbox
             };
 
-            _.forEach(files, function (file, i){
+            _.forEach(files, function (file, i) {
                 var name = 'file' + i;
                 formattedData[name] = file;
             });
@@ -108,7 +108,34 @@
         }
 
         function move(params, data) {
-            return resource.move(params, data).$promise;
+            return resource.move(params, data).$promise
+                .then(function (response) {
+                    if (data.mboxnew === 'Junk') {
+                        _.forEach(response.data, function (message) {
+                            if (message.mbox !== 'Junk') {
+                                wb.post({}, {
+                                    email: message.fromAddress,
+                                    list: 'B'
+                                });
+                                console.log('message', message);
+                            }
+                        });
+                    }
+
+                    if (data.mbox !== 'Junk') {
+                        _.forEach(response.data, function (message) {
+                            if (message.mbox === 'Junk') {
+                                wb.destroy({}, {
+                                    email: message.fromAddress,
+                                    list: 'B'
+                                });
+                                console.log('message', message);
+                            }
+                        });
+                    }
+
+                    return response;
+                });
         }
 
         function moveToFolder(folder, data) {
@@ -318,7 +345,7 @@
 
         function filterMessage(messages) {
             var data = [];
-            _.forEach(messages, function(item) {
+            _.forEach(messages, function (item) {
                 data.push({
                     number: item.number,
                     connection_id: item.connection_id,

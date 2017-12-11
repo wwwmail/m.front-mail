@@ -9,22 +9,9 @@
     <div class="inbox-message__left">
         <label ng-click="$event.stopPropagation();">
             <div class="inbox-message__avatar">
-                <div class="avatar avatar--settings avatar--size42 avatar--second-style mrg--auto">
-                    <avatar-name name="vm.message.from"
-                                 email="vm.message.fromAddress"
-                                 ng-if="vm.$state.params.mbox !== 'Sent' && vm.$state.params.mbox !== 'Drafts'"></avatar-name>
 
-                    <avatar-name name="vm.message.to[0].name"
-                                 email="vm.message.to[0].address"
-                                 ng-if="vm.$state.params.mbox === 'Sent' || vm.$state.params.mbox === 'Drafts'"></avatar-name>
+                <message-avatar message="vm.message"></message-avatar>
 
-                    <div class="inbox-message__check-message"></div>
-                    <input type="checkbox"
-                           ng-model="vm.message.isChecked"
-                           style="display: none;"
-                           data-checklist-model="vm.messages.checked"
-                           data-checklist-value="vm.message">
-                </div>
             </div>
         </label>
 

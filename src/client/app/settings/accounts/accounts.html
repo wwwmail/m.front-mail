@@ -77,43 +77,47 @@
                        required>
             </div>
 
-            <div class="settings-accounts__caption">{{ 'PARAMETERS_OF_YOUR_MAIL_SERVER' | translate }}</div>
+            <div ng-if="!vm.accountsConf.selected && !vm.accountsConf.isFirst && vm.accountForm.model.email && vm.accountForm.model.password">
 
-            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
-                <label class="settings-accounts__label">{{
-                    'INPUT_PLACEHOLDER_LOGIN' | translate }}</label>
-                <input class="input input--size_m width--all"
-                       type="text"
-                       name="login"
-                       ng-model="vm.accountForm.model.login"
-                       login-format
-                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_LOGIN' | translate }}"
-                       required>
-            </div>
+                <div class="settings-accounts__caption">{{ 'PARAMETERS_OF_YOUR_MAIL_SERVER' | translate }}</div>
 
-            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
-                <label class="settings-accounts__label">{{ 'SERVER' | translate }}</label>
-                <input class="input input--size_m width--all"
-                       type="text"
-                       name="server"
-                       ng-model="vm.accountForm.model.server"
-                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_SERVER_ADDRESS' | translate }}"
-                       required>
-            </div>
+                <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
+                    <label class="settings-accounts__label">{{
+                        'INPUT_PLACEHOLDER_LOGIN' | translate }}</label>
+                    <input class="input input--size_m width--all"
+                           type="text"
+                           name="login"
+                           ng-model="vm.accountForm.model.login"
+                           login-format
+                           placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_LOGIN' | translate }}"
+                           required>
+                </div>
 
-            <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
-                <label class="settings-accounts__label">{{ 'PORT' | translate }}</label>
-                <input class="input input--size_m width--all"
-                       type="text"
-                       name="port"
-                       ng-model="vm.accountForm.model.port"
-                       placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_PORT' | translate }}"
-                       required>
-            </div>
+                <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
+                    <label class="settings-accounts__label">{{ 'SERVER' | translate }}</label>
+                    <input class="input input--size_m width--all"
+                           type="text"
+                           name="server"
+                           ng-model="vm.accountForm.model.server"
+                           placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_SERVER_ADDRESS' | translate }}"
+                           required>
+                </div>
 
-            <div class="settings-accounts__verification-message"
-                 ng-if="vm.error.message">
-                {{ 'WRONG_LOGIN_OF_PASSWORD' | translate }}
+                <div class="flex--inline align-items--cn just-content--f-st width--all mrg--b9">
+                    <label class="settings-accounts__label">{{ 'PORT' | translate }}</label>
+                    <input class="input input--size_m width--all"
+                           type="text"
+                           name="port"
+                           ng-model="vm.accountForm.model.port"
+                           placeholder="{{ 'INPUT_PLACEHOLDER_ENTER_PORT' | translate }}"
+                           required>
+                </div>
+
+                <div class="settings-accounts__verification-message"
+                     ng-if="vm.error.message">
+                    {{ 'WRONG_LOGIN_OF_PASSWORD' | translate }}
+                </div>
+
             </div>
         </div>
 

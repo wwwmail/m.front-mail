@@ -430,13 +430,13 @@
   "CONTINUE": "Postupiti",
   "ENTER_MAIL_CODE": "Za promjenu Vaše lozinke upišite kod koji smo Vam poslali na Vaš alternativni e-mail",
   "ENTER_PHONE_CODE": "Za promjenu Vaše lozinke upišite kod koji smo Vam poslali na Vaš telefon",
-  "ENTER_PHONE_OR_EMAIL": "Upišite, molim, svoj telefonski broj ili alternativni e-mail koji ste upisali prilikom registracije.",
+  "ENTER_PHONE_OR_EMAIL": "Upišite, molim, svoj telefon s kodom ili alternativni e-mail koji ste upisali prilikom registracije.",
   "ACTIVE_EMAIL": "Vaš alternativni e-mail",
   "NO_EMAIL": "Nemam e-mail",
   "ACTIVE_PHONE": "Vaš telefonski broj",
   "NO_PHONE": "Nemam telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nemam telefon",
-  "PHONE_OR_EMAIL": "Telefon ili alternativni e-mail",
+  "PHONE_OR_EMAIL": "Telefon s kodom ili alternativni e-mail",
   "SELECT_YOUR_NAME": "Smislite svoje korisničko ime",
   "LOGOUT": "Izlaz",
   "SHOW_IMAGES": "Prijenos vanjskih slika.",
@@ -447,8 +447,9 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri vaše mejl mape",
   "SERVER": "Server",
   "PORT": "Pristup",
-  "PROFILE_PORTRAIT": "Porteret profila",
+  "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messageCount }} slova. Biti će izbrisane poruke zajedno sa mapom",
+
+
   "EMPTY_THE_FOLDER": "isprazni mapu",
   "EMPTY_THE_FOLDER_MSG": "Pokaži sve mape u mapama \"{{ folder }}\"",
-  "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messageCount }} slova. Biti će izbrisane poruke zajedno sa mapom"
 }

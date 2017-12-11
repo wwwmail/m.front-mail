@@ -430,13 +430,13 @@
   "CONTINUE": "Nastavi",
   "ENTER_MAIL_CODE": "Za promenu Vaše lozinke upišite kod koji smo Vam poslali na Vaš alternativni e-mail",
   "ENTER_PHONE_CODE": "Za promenu Vaše lozinke upišite kod koji smo Vam poslali na Vaš tetefon",
-  "ENTER_PHONE_OR_EMAIL": "Upišite, molim, svoj telefonski broj ili alternativni e-mail koji ste upisali prilikom registracije.",
+  "ENTER_PHONE_OR_EMAIL": "Upišite, molim, svoj telefon s kodom ili alternativni e-mail koji ste upisali prilikom registracije.",
   "ACTIVE_EMAIL": "Vaš alternativni e-mail",
   "NO_EMAIL": "Nemam e-mail",
   "ACTIVE_PHONE": "Vaš telefonski broj",
   "NO_PHONE": "Nemam telefon",
   "PHONE_OR_ALTERNATE_EMAIL": "Nemam telefon",
-  "PHONE_OR_EMAIL": "Telefon ili alternativni e-mail",
+  "PHONE_OR_EMAIL": "Telefon s kodom ili alternativni e-mail",
   "SELECT_YOUR_NAME": "Smislite svoje korisničko ime",
   "LOGOUT": "Izlaz",
   "SHOW_IMAGES": "Otpremite spoljne slike.",
@@ -447,8 +447,9 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg poštanskog servera",
   "SERVER": "Server",
   "PORT": "Port",
-  "PROFILE_PORTRAIT": "Izgled profila",
+  "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messagecount }} slova.  Poruke će biti obrisane zajedno sa mapom",
+
+
   "EMPTY_THE_FOLDER": "isprazni fasciklu",
-  "EMPTY_THE_FOLDER_MSG": "Pokaži sve fascikle u fasciklama \"{{ folder }}\"",
-  "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messagecount }} slova.  Poruke će biti obrisane zajedno sa mapom"
+  "EMPTY_THE_FOLDER_MSG": "Pokaži sve fascikle u fasciklama \"{{ folder }}\""
 }

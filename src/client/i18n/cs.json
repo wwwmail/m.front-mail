@@ -432,8 +432,8 @@
   "ACTIVE_PHONE": "Vaše telefonní číslo",
   "NO_PHONE": "Nemám telefon",
   "ACCESS_RECOVERY_STEP_2": "Obnovení hesla k účtu",
-  "ENTER_PHONE_OR_EMAIL": "Zadejte, prosím, své telefonní číslo nebo alternativní e-mail, který jste zadali při registraci.",
-  "PHONE_OR_EMAIL": "Telefon nebo alternativní e-mail",
+  "ENTER_PHONE_OR_EMAIL": "Zadejte, prosím, své telefon s kódem nebo alternativní e-mail, který jste zadali při registraci.",
+  "PHONE_OR_EMAIL": "Telefon s kódem nebo alternativní e-mail",
   "ENTER_MAIL_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš alternativní e-mail",
   "ENTER_PHONE_CODE": "Pro změnu Vašeho hesla zadejte kód, který jsem Vám zaslali na Váš telefon",
   "SELECT_YOUR_NAME": "Vymyslete svoje uživatelské jméno",
@@ -446,8 +446,9 @@
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametry Vašeho poštovního serveru",
   "SERVER": "Server",
   "PORT": "Port",
-  "PROFILE_PORTRAIT": "Portrét profilu",
+  "DELETING_FOLDER_MSG": "Ve složce {{ folder }} {{ messageCount }} písmena. Dopisy budou odstraněny spolu s složky.",
+
+
   "EMPTY_THE_FOLDER": "čistá složka",
-  "EMPTY_THE_FOLDER_MSG": "Zobrazit všechny složky ve složkách \"{{ folder }}\"",
-  "DELETING_FOLDER_MSG": "Ve složce {{ folder }} {{ messageCount }} písmena. Dopisy budou odstraněny spolu s složky."
+  "EMPTY_THE_FOLDER_MSG": "Zobrazit všechny složky ve složkách \"{{ folder }}\""
 }

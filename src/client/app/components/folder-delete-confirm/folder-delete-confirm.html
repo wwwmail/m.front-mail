@@ -2,7 +2,7 @@
     <span class="popup__head-title">{{ 'DELETING_FOLDER' | translate }}</span>
     <button class="icon-close btn btn--not-style btn--main-mobile-color btn--size_s"
             type="button"
-            ng-click="vm.close()"></button>
+            ng-click="vm.cancel()"></button>
     <hr class="hr hr--popup">
 </div>
 <div class="popup__content pdd--20">
@@ -11,16 +11,10 @@
         vm.folder.messagesCount} }}
     </div>
 </div>
-
 <div class="popup__footer">
     <button class="btn btn--yellow btn--no-radius width--all height--min-inh font--size20"
             type="button"
             ng-click="vm.close()">
         {{ 'DELETE_WITH_LETTERS' | translate }}
     </button>
-    <!--<button class="btn btn&#45;&#45;yellow btn&#45;&#45;no-radius width&#45;&#45;all height&#45;&#45;min-inh font&#45;&#45;size20"-->
-            <!--type="button"-->
-            <!--ng-click="vm.cancel()">-->
-        <!--{{ 'CANCEL' | translate }}-->
-    <!--</button>-->
 </div>
