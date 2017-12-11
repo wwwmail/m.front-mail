@@ -30,6 +30,10 @@
         }
       }
     }
+
+    &:active {
+      background-color: $yellow-hard-light;
+    }
   }
 
   &__item-content {
