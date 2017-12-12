@@ -9,7 +9,8 @@
 <div class="popup__content pdd--20">
     <div class="flex flex--just-cn">
         <div class="avatar-upload__crop"
-             ngf-drop ngf-pattern="image/*"
+             ngf-drop
+             ngf-pattern="image/*"
              ng-if="vm.avatar.picFile"
              style="width:283px;height:283px;">
             <img-crop image="vm.avatar.picFile | ngfDataUrl"
@@ -26,6 +27,7 @@
         <button class="btn btn--size_l btn--normal mrg--t30"
                 ngf-select
                 accept="image/*"
+                ngf-max-size="50MB"
                 ng-model="vm.avatar.picFile">
             {{ 'AVATAR_LOAD_IMAGE' | translate }}
         </button>
