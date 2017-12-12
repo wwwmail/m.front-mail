@@ -12,6 +12,7 @@
     </avatar-name>
 
     <img class="avatar__image"
+         ng-hide="!vm.isAvatarIsSuccess"
          ng-if="vm.message.avatar && !vm.isAvatarIsError"
          ng-src="{{ vm.message.avatar }}"
          image-load
