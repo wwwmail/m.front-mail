@@ -11,11 +11,9 @@
         <div class="avatar-upload__crop"
              ngf-drop
              ngf-pattern="image/*"
-             ng-if="vm.avatar.picFile"
              style="width:283px;height:283px;">
             <img-crop image="vm.avatar.picFile | ngfDataUrl"
-                      result-image="vm.avatar.croppedDataUrl"
-                      ng-init="vm.avatar.croppedDataUrl=''">
+                      result-image="vm.avatar.croppedDataUrl">
             </img-crop>
         </div>
         <img class="avatar-upload__default img-responsive"

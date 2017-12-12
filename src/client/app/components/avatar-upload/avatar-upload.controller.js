@@ -10,7 +10,9 @@
     function AvatarUploadController($timeout, Upload, profile) {
         var vm = this;
 
-        vm.avatar = {};
+        vm.avatar = {
+            croppedDataUrl: ''
+        };
 
         vm.close = close;
         vm.upload = upload;
