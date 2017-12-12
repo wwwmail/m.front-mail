@@ -451,5 +451,8 @@
 
 
   "EMPTY_THE_FOLDER": "Очистка папки",
-  "EMPTY_THE_FOLDER_MSG": "Все письма будут удалены из папки \"{{ folder }}\""
+  "EMPTY_THE_FOLDER_MSG": "Все письма будут удалены из папки \"{{ folder }}\"",
+
+
+  "RETURN_TO_MAIL": "Вернуться в почту"
 }

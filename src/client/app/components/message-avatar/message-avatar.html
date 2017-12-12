@@ -1,4 +1,5 @@
-<div class="avatar avatar--settings avatar--size42 avatar--second-style mrg--auto">
+<div class="{{ vm.classNames }}"
+     ng-class="{'avatar avatar--settings avatar--size42 avatar--second-style': !vm.classNames}">
 
     <avatar-name name="vm.message.from"
                  email="vm.message.fromAddress"
@@ -26,20 +27,3 @@
            data-checklist-model="vm.messages.checked"
            data-checklist-value="vm.message">
 </div>
-
-<!--<div class="avatar avatar&#45;&#45;settings avatar&#45;&#45;size42 avatar&#45;&#45;second-style mrg&#45;&#45;auto">
-    <avatar-name name="vm.message.from"
-                 email="vm.message.fromAddress"
-                 ng-if="vm.$state.params.mbox !== 'Sent' && vm.$state.params.mbox !== 'Drafts'"></avatar-name>
-
-    <avatar-name name="vm.message.to[0].name"
-                 email="vm.message.to[0].address"
-                 ng-if="vm.$state.params.mbox === 'Sent' || vm.$state.params.mbox === 'Drafts'"></avatar-name>
-
-    <div class="inbox-message__check-message"></div>
-    <input type="checkbox"
-           ng-model="vm.message.isChecked"
-           style="display: none;"
-           data-checklist-model="vm.messages.checked"
-           data-checklist-value="vm.message">
-</div>-->
