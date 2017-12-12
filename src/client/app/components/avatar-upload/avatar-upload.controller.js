@@ -23,9 +23,12 @@
             vm.avatar.upload = profile.uploadAvatar({imageFile: blob});
 
             vm.avatar.isLoading = true;
+
             vm.avatar.upload.then(function (response) {
+
+                vm.avatar.isLoading = false;
+
                 $timeout(function () {
-                    vm.avatar.isLoading = false;
                     close();
                 });
             }, function (response) {
@@ -39,7 +42,5 @@
         function close() {
             vm.onClose();
         }
-
-
     }
 })();
