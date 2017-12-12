@@ -34,14 +34,15 @@
 .scroll-fix {
   height: 100%;
 
-  overflow: -moz-scrollbars-none;
+  //overflow: -moz-scrollbars-none;
+  -webkit-overflow-scrolling:touch;
   overflow-y: auto;
-  -ms-overflow-style: none;
 
-  &::-webkit-scrollbar {
-    width: 0 !important;
-    //padding: 15px 10px;
-  }
+  //-ms-overflow-style: none;
+  //
+  //&::-webkit-scrollbar {
+  //  width: 0 !important;
+  //}
 
   &--none {
     position: fixed !important;

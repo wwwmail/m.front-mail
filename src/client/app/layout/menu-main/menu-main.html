@@ -3,6 +3,15 @@
     <div class="menu-main-layout__header">
         <img class="menu-main-layout__header__logo img-responsive"
              src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg">
+
+
+
+        <button class="menu-main-layout__button-close btn font--size16"
+                type="button"
+                ng-click="vm.closeMenu()">
+            <span class="icon-close"></span>
+        </button>
+
         <!--<button class="menu-main-layout__button-close btn font&#45;&#45;size16"-->
                 <!--type="button"-->
                 <!--ng-click="vm.closeMenu()">-->
@@ -52,8 +61,8 @@
                                 ui-sref="signIn()">
                         </button>
                     </div>
-                    <span class="menu-main-layout__user-name mrg--t10">{{ vm.user.profile.username }}</span>
-                    <span class="menu-main-layout__user-mail">{{ vm.user.profile.email }}</span>
+                    <!--<span class="menu-main-layout__user-name mrg&#45;&#45;t10">{{ vm.user.profile.username }}</span>-->
+                    <span class="menu-main-layout__user-mail mrg--t10">{{ vm.user.profile.email }}</span>
                 </div>
             </div>
         </div>

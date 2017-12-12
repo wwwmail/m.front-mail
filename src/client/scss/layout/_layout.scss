@@ -40,11 +40,11 @@
       visibility: visible;
 
       background-color: rgba($black, .54);
-      transition: transform 1s, background-color 2s;
+      transition: transform .4s, background-color .6s;
 
       .main-layout__menu-content {
         transform: translate3d(0px, 0px, 0px);
-        transition: transform .4s ease-in-out;
+        transition: transform .4s ease-out;
       }
       .main-layout__menu-closer {
         display: block;

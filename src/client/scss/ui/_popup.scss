@@ -94,8 +94,13 @@
 
     height: 52px;
 
+    margin: 0 -25px;
+    padding: 0 25px;
+
     color: $textBlack;
     font: 300 20px/1 $mainFont;
+
+    @include action-yellow-light;
 
     &__title {
       margin-top: 4px;
@@ -170,7 +175,7 @@
     }
   }
 
-  &--avatar-upload{
+  &--avatar-upload {
     .modal-dialog {
       min-width: 290px;
     }
