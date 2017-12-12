@@ -448,7 +448,8 @@
   "PORT": "Порт",
   "DELETING_FOLDER_MSG": "В папці {{ folder }} {{ messageCount }} листи. Листи будуть видалені разом з папкою.",
 
-
   "EMPTY_THE_FOLDER": "Очищення папки",
-  "EMPTY_THE_FOLDER_MSG": "Всі листи будуть видалені з папки \"{{ folder }}\""
+  "EMPTY_THE_FOLDER_MSG": "Всі листи будуть видалені з папки \"{{ folder }}\"",
+
+  "RETURN_TO_MAIL": "Повернутися в пошту"
 }

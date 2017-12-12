@@ -441,14 +441,15 @@
   "SHOW_IMAGES": "Naložite zunanje slike.",
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Ali želite mapo odstraniti",
-  "DELETE_WITH_LETTERS": "Odvzemi črke",
+  "DELETE_WITH_LETTERS": "Izbriši z e-pošto",
   "BANNER_BLOCK_CAPTION": "Oglas",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri vašega poštnega strežnika",
   "SERVER": "Strežnik",
   "PORT": "Vrata",
-  "DELETING_FOLDER_MSG": "V mapi {{ folder }} {{ messageCount }} črke. Pisma bodo odstranjena skupaj z mapami.",
+  "DELETING_FOLDER_MSG": "V mapi {{ folder }} {{ messageCount }} e-poštnih sporočil. E-poštna sporočila bodo izbrisana z mapo.",
 
+  "EMPTY_THE_FOLDER": "Izpraznite mapo",
+  "EMPTY_THE_FOLDER_MSG": "Vsa e-poštna sporočila bodo izbrisana iz mape \"{{ folder }}\"",
 
-  "EMPTY_THE_FOLDER": "čista mapa",
-  "EMPTY_THE_FOLDER_MSG": "Prikaži vse mape v mapah \"{{ folder }}\"",
+  "RETURN_TO_MAIL": "Vrni se na e-pošto"
 }

@@ -442,14 +442,15 @@
   "SHOW_IMAGES": "Otpremite spoljne slike.",
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Želite li odstraniti fasciklu",
-  "DELETE_WITH_LETTERS": "Obriši slova",
+  "DELETE_WITH_LETTERS": "Obriši",
   "BANNER_BLOCK_CAPTION": "Advertisement",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg poštanskog servera",
   "SERVER": "Server",
   "PORT": "Port",
-  "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messagecount }} slova.  Poruke će biti obrisane zajedno sa mapom",
+  "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messagecount }} e-poruke. E-poruke će biti izbrisane zajedno sa fasciklu.",
 
+  "EMPTY_THE_FOLDER": "Ispraznite folder",
+  "EMPTY_THE_FOLDER_MSG": "Svi e-mailovi će biti izbrisani iz foldera \"{{ folder }}\"",
 
-  "EMPTY_THE_FOLDER": "isprazni fasciklu",
-  "EMPTY_THE_FOLDER_MSG": "Pokaži sve fascikle u fasciklama \"{{ folder }}\""
+  "RETURN_TO_MAIL": "Nazad"
 }

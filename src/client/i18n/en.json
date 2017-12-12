@@ -440,15 +440,16 @@
   "LOGOUT": "Log out",
   "SHOW_IMAGES": "Upload external images.",
   "SHOW_IMAGES_2": "For security reasons, we did not upload external images.",
-  "DELETING_FOLDER": "To delete a folder",
-  "DELETE_WITH_LETTERS": "Delete letters",
+  "DELETING_FOLDER": "Do you want to delete the folder?",
+  "DELETE_WITH_LETTERS": "Delete with emails",
   "BANNER_BLOCK_CAPTION": "Advertising",
   "SERVER": "Server",
   "PORT": "Port",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parameters of your mail server",
-  "DELETING_FOLDER_MSG": "In the {{ folder }} {{ messageCount }} letters. Letters will be removed along with the folders.",
+  "DELETING_FOLDER_MSG": "In the {{ folder }} {{ messageCount }} emails. Emails will be deleted with the folder.",
 
+  "EMPTY_THE_FOLDER": "Empty folder",
+  "EMPTY_THE_FOLDER_MSG": "All emails will be deleted from the \"{{ folder }}\" folder.",
 
-  "EMPTY_THE_FOLDER": "empty folder",
-  "EMPTY_THE_FOLDER_MSG": "View all folders in \"{{ folder }}\""
+  "RETURN_TO_MAIL": "Return to email"
 }
