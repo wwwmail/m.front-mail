@@ -1444,6 +1444,9 @@ a:focus, a:hover, button:focus, button:hover, input:focus, input:hover {
   background-color: rgba(0, 0, 0, 0.03);
   transition: all 1s;
 }
+.menu-main__item:active {
+  background-color: #ffeba0;
+}
 .menu-main__item-content {
   align-items: center;
   justify-content: space-between;
