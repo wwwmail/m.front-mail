@@ -33,6 +33,7 @@
   &--border-dark {
     border: 1px solid $mail-yellow-dark-color;
   }
+
   &--border-silver {
     border: 1px solid #ccc;
   }
@@ -153,6 +154,7 @@
     fill: $main-btn-color;
     &:hover, &:focus, &:active {
       opacity: .6 !important;
+      color: $yellow-yandex;
     }
   }
 

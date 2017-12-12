@@ -65,6 +65,22 @@
     border: 1px solid #ccc;
   }
 
+  &__item {
+    @include action-yellow-light;
+
+    //&:active, &:focus, &:hover {
+    //  //background-color: $yellow-lignt!important;
+    //}
+
+    &--not-active {
+      &:active, &:focus, &:hover {
+        background-color: transparent!important;
+      }
+    }
+
+
+  }
+
   &__counter {
     float: right;
   }

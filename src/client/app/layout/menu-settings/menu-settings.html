@@ -6,7 +6,7 @@
         <button class="menu-main-layout__button-close btn font--size16"
                 type="button"
                 ng-click="vm.closeSettingsMenu()">
-            <span class="icon-double-arrow-left"></span>
+            <span class="icon-close"></span>
         </button>
     </div>
 
@@ -47,10 +47,10 @@
         </div>
 
         <div class="menu-settings__list">
-            <div class="menu-settings__item">
-                <div class="menu-settings__link menu-settings__link--not-decoration flex mrg--r5"
+            <div class="menu-settings__item menu-settings__item--not-active">
+                <div class="menu-settings__link menu-settings__link--not-decoration menu-settings__item--not-active flex mrg--r5"
                      href>
-                    <span class="mrg--r18">{{ 'LANGUAGE' | translate }}:</span>
+                    <span class="mrg--r18 menu-settings__item--not-active">{{ 'LANGUAGE' | translate }}:</span>
                     <div class="pos--rel width--all">
                         <div class="menu-settings__link-choose-element"
                              uib-popover-template="'app/components/lang-list/lang-list-popover.html'"
@@ -72,9 +72,9 @@
                 </div>
             </div>
 
-            <div class="menu-settings__item mrg--t20">
-                <div class="menu-settings__link menu-settings__link--not-decoration flex mrg--r5">
-                    <span class="mrg--r18">{{ 'CLOCK' | translate }}:</span>
+            <div class="menu-settings__item menu-settings__item--not-active mrg--t20">
+                <div class="menu-settings__link menu-settings__link--not-decoration menu-settings__item--not-active flex mrg--r5">
+                    <span class="mrg--r18 menu-settings__item--not-active">{{ 'CLOCK' | translate }}:</span>
                     <div class="pos--rel width--all">
                         <div class="menu-settings__link-choose-element"
                              uib-popover-template="'app/components/timezone-list/timezone-list-popover.html'"
