@@ -441,15 +441,16 @@
   "LOGOUT": "Odjavi se",
   "SHOW_IMAGES": "Ubacite spoljne slike.",
   "SHOW_IMAGES_2": "",
-  "DELETING_FOLDER": "Želite odstraniti direktorij",
-  "DELETE_WITH_LETTERS": "Izbriši slova",
+  "DELETING_FOLDER": "Želite odstraniti fasciklu?",
+  "DELETE_WITH_LETTERS": "Obriši sa e-poštom",
   "BANNER_BLOCK_CAPTION": "Advertisement",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametri Vašeg e-mail servera",
   "SERVER": "Server",
   "PORT": "Port",
-  "DELETING_FOLDER_MSG": "U direktoriju {{ folder }} {{ messageCount }} slova. Poruke će biti izbrisane zajedno sa direktorijima.",
+  "DELETING_FOLDER_MSG": "U direktoriju {{ folder }} {{ messageCount }} e-poruke. E-poruke će biti obrisane pomoću fascikle.",
 
+  "EMPTY_THE_FOLDER": "Ispraznite fasciklu",
+  "EMPTY_THE_FOLDER_MSG": "Svi e-mailovi će biti izbrisani iz foldera \"{{ folder }}\"",
 
-  "EMPTY_THE_FOLDER": "Isprazni direktorij",
-  "EMPTY_THE_FOLDER_MSG": "Prikaži sve direktorije u direktorijima \"{{ folder }}\""
+  "RETURN_TO_MAIL": "Povratak na e-poštu"
 }

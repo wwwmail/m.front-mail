@@ -442,14 +442,15 @@
   "SHOW_IMAGES": "Внеси надворешни слики.",
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Сакате да ја избришете папката",
-  "DELETE_WITH_LETTERS": "Отстрани букви",
+  "DELETE_WITH_LETTERS": "Отстрани со е-пораки",
   "BANNER_BLOCK_CAPTION": "Реклама",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Параметри на вашиот поштенски сервер",
   "SERVER": "Сервер",
   "PORT": "Порт",
-  "DELETING_FOLDER_MSG": "Во папката {{ folder }} {{ messageCount }} букви. Пораките ќе бидат избришани заедно со папката.",
+  "DELETING_FOLDER_MSG": "Во папката {{ folder }} {{ messageCount }} пораки. Пораките ќе бидат избришани со папката.",
 
+  "EMPTY_THE_FOLDER": "Испразнете ја папката",
+  "EMPTY_THE_FOLDER_MSG": "Сите пораки ќе бидат избришани од папката \"{{ folder }}\"",
 
-  "EMPTY_THE_FOLDER": "празна папка",
-  "EMPTY_THE_FOLDER_MSG": "Прикажи ги сите папки во папки \"{{ folder }}\""
+  "RETURN_TO_MAIL": "Врати се на е-пошта"
 }

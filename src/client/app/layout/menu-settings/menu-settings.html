@@ -1,13 +1,25 @@
 <div class="menu-main-layout scroll-fix">
 
     <div class="menu-main-layout__header">
-        <img class="menu-main-layout__header__logo img-responsive"
+        <button class="btn btn--size_m btn--yellow"
+                type="button"
+                ui-sref="mail.inbox({mbox: 'INBOX'})">
+            <span class="icon-arrow-left"></span>
+            {{ 'RETURN_TO_MAIL' | translate }}
+        </button>
+
+        <!--<img class="menu-main-layout__header__logo img-responsive"
              src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg">
-        <button class="menu-main-layout__button-close btn font--size16"
+        <button class="menu-main-layout__button-close btn font&#45;&#45;size16"
                 type="button"
                 ng-click="vm.closeSettingsMenu()">
+<<<<<<< HEAD
             <span class="icon-close"></span>
         </button>
+=======
+            <span class="icon-double-arrow-left"></span>
+        </button>-->
+>>>>>>> 1814c425dc9c443f7afdfcbdad388f00dbf76aa4
     </div>
 
     <!--основное меню -->
@@ -104,12 +116,6 @@
             <p class="menu-settings-layout__pass-info mrg--t8 mrg--b0">
                 {{ 'SETTINGS_MENU_NOTIFIC_RECOMENDATION' | translate }}.
             </p>
-
-            <button class="btn btn--size_m btn--yellow mrg--t18"
-                    type="button"
-                    ui-sref="mail.inbox({mbox: 'INBOX'})">
-                <span class="icon-arrow-left"></span>Вернуться в почту
-            </button>
         </div>
     </div>
 

@@ -10,7 +10,9 @@
     function AvatarUploadController($timeout, Upload, profile) {
         var vm = this;
 
-        vm.avatar = {};
+        vm.avatar = {
+            croppedDataUrl: ''
+        };
 
         vm.close = close;
         vm.upload = upload;
@@ -21,9 +23,12 @@
             vm.avatar.upload = profile.uploadAvatar({imageFile: blob});
 
             vm.avatar.isLoading = true;
+
             vm.avatar.upload.then(function (response) {
+
+                vm.avatar.isLoading = false;
+
                 $timeout(function () {
-                    vm.avatar.isLoading = false;
                     close();
                 });
             }, function (response) {
@@ -37,7 +42,5 @@
         function close() {
             vm.onClose();
         }
-
-
     }
 })();

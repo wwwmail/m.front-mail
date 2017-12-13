@@ -442,14 +442,15 @@
   "SHOW_IMAGES": "Încărcați imagini externe.",
   "SHOW_IMAGES_2": " ",
   "DELETING_FOLDER": "Dacă doriți să înlăturați directorul",
-  "DELETE_WITH_LETTERS": "Ștergeți literele",
+  "DELETE_WITH_LETTERS": "Ștergeți prin e-mailuri",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametrii serverului dumneavoastră poștal",
   "SERVER": "Server",
   "PORT": "Port",
-  "DELETING_FOLDER_MSG": "În directorul {{ folder }} {{ messageCount }} literele. Scrisorile vor fi înlăturate împreună cu directoarele.",
+  "DELETING_FOLDER_MSG": "În directorul {{ folder }} {{ messageCount }}  e-mailuri. E-mailurile vor fi șterse împreună cu dosarul.",
   "BANNER_BLOCK_CAPTION": "Publicitate",
 
+  "EMPTY_THE_FOLDER": "Goliți dosarul",
+  "EMPTY_THE_FOLDER_MSG": "Toate e-mailurile vor fi șterse din dosarul \"{{ folder }}\"",
 
-  "EMPTY_THE_FOLDER": "director gol",
-  "EMPTY_THE_FOLDER_MSG": "Vizualizați toate directoarele în directoarele \"{{ folder }}\"",
+  "RETURN_TO_MAIL": "Reveniți la e-mail"
 }

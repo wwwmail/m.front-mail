@@ -441,14 +441,15 @@
   "SHOW_IMAGES": "Nahrajte externé obrázky.",
   "SHOW_IMAGES_2": "Z bezpečnostných dôvodov sme neodovzdali externé obrázky.",
   "DELETING_FOLDER": "Chcete odstrániť priečinok?",
-  "DELETE_WITH_LETTERS": "Odstrániť priečinok",
+  "DELETE_WITH_LETTERS": "Odobrať správy",
   "BANNER_BLOCK_CAPTION": "Reklama",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametry Vašeho poštovního serveru",
   "SERVER": "Server",
   "PORT": "Port",
-  "DELETING_FOLDER_MSG": "V priečinku {{ folder }} {{ messageCount }} správy. Správy budú odstranené spolu s priečinkom.",
+  "DELETING_FOLDER_MSG": "V priečinku {{ folder }} je {{ messageCount }} správ. Správy budú odstránené spolu s priečinkom.",
 
+  "EMPTY_THE_FOLDER": "Vyprázdnit priečinok",
+  "EMPTY_THE_FOLDER_MSG": "Všetky správy z priečinku \"{{ folder }}\" budú odstránené",
 
-  "EMPTY_THE_FOLDER": "čistá složka",
-  "EMPTY_THE_FOLDER_MSG": "Zobrazit všechny složky ve složkách \"{{ folder }}\""
+  "RETURN_TO_MAIL": "Späť na e-mail"
 } 

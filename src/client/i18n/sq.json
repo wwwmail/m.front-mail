@@ -442,14 +442,15 @@
   "SHOW_IMAGES": "Ngarko imazhe të jashtme.",
   "SHOW_IMAGES_2": "",
   "DELETING_FOLDER": "Nëse keni dëshirë të fshini dosjen",
-  "DELETE_WITH_LETTERS": "Të fshini shkronjat",
+  "DELETE_WITH_LETTERS": "Fshihet me emailami",
   "BANNER_BLOCK_CAPTION": "Reklamë",
   "PARAMETERS_OF_YOUR_MAIL_SERVER": "Parametrat e serverit Tuaj të emailit",
   "SERVER": "Serveri",
   "PORT": "Port",
-  "DELETING_FOLDER_MSG": "Në dosjen {{ folder }} {{ messageCount }} shkronjat.  Letrat do të fshihen së bashku me skedarët.",
+  "DELETING_FOLDER_MSG": "Në dosjen {{ folder }} {{ messageCount }} email. Emailet do të fshihen me dosjen.",
 
+  "EMPTY_THE_FOLDER": "Bosh dosjen",
+  "EMPTY_THE_FOLDER_MSG": "Të gjitha emailet do të fshihen nga dosja \"{{ folder }}\"",
 
-  "EMPTY_THE_FOLDER": "dosje bosh",
-  "EMPTY_THE_FOLDER_MSG": "Pasqyro të gjitha dosjet tek dosjet \"{{ folder }}\""
+  "RETURN_TO_MAIL": "Kthehu në email"
 }
