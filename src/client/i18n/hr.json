@@ -452,5 +452,8 @@
   "EMPTY_THE_FOLDER": "Ispraznite mapu",
   "EMPTY_THE_FOLDER_MSG": "Sve poruke e-pošte bit će izbrisane iz mape \"{{ folder }}\"",
 
-  "RETURN_TO_MAIL": "Vratite se na e-poštu"
+  "RETURN_TO_MAIL": "Vratite se na e-poštu",
+
+  "PROFILE_PORTRAIT": "Porteret profila",
+  "CONTINUE": "Postupiti"
 }

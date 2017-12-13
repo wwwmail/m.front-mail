@@ -451,5 +451,8 @@
   "EMPTY_THE_FOLDER": "Vyprázdnit složku",
   "EMPTY_THE_FOLDER_MSG": "Všechny zprávy ze složky \"{{ folder }}\" budou odstraněny",
 
-  "RETURN_TO_MAIL": "Zpět na e-mail"
+  "RETURN_TO_MAIL": "Zpět na e-mail",
+
+  "PROFILE_PORTRAIT": "Portrét profilu",
+  "CONTINUE": "Pokračujte"
 }

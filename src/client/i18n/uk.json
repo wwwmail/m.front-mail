@@ -451,5 +451,8 @@
   "EMPTY_THE_FOLDER": "Очищення папки",
   "EMPTY_THE_FOLDER_MSG": "Всі листи будуть видалені з папки \"{{ folder }}\"",
 
-  "RETURN_TO_MAIL": "Повернутися в пошту"
+  "RETURN_TO_MAIL": "Повернутися в пошту",
+
+  "PROFILE_PORTRAIT": "Портрет профілю",
+  "CONTINUE": "Продовжити"
 }

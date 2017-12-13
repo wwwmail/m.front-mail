@@ -452,5 +452,9 @@
   "EMPTY_THE_FOLDER": "Очистка папки",
   "EMPTY_THE_FOLDER_MSG": "Все письма будут удалены из папки \"{{ folder }}\"",
 
-  "RETURN_TO_MAIL": "Вернуться в почту"
+  "RETURN_TO_MAIL": "Вернуться в почту",
+  "PROFILE_PORTRAIT": "Портрет профиля",
+
+  "REMOVE_CONDITION": "Удалить условие",
+  "RESEND_MAIL": "Пересылка писем"
 }

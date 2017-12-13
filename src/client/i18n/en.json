@@ -451,5 +451,8 @@
   "EMPTY_THE_FOLDER": "Empty folder",
   "EMPTY_THE_FOLDER_MSG": "All emails will be deleted from the \"{{ folder }}\" folder.",
 
-  "RETURN_TO_MAIL": "Return to email"
+  "RETURN_TO_MAIL": "Return to email",
+
+  "PROFILE_PORTRAIT": "Profile image",
+  "CONTINUE": "Continue"
 }

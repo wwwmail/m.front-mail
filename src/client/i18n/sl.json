@@ -451,5 +451,8 @@
   "EMPTY_THE_FOLDER": "Izpraznite mapo",
   "EMPTY_THE_FOLDER_MSG": "Vsa e-poštna sporočila bodo izbrisana iz mape \"{{ folder }}\"",
 
-  "RETURN_TO_MAIL": "Vrni se na e-pošto"
+  "RETURN_TO_MAIL": "Vrni se na e-pošto",
+
+  "PROFILE_PORTRAIT": "Slika profila",
+  "CONTINUE": "Nadaljuj"
 }

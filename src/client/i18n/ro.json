@@ -452,5 +452,7 @@
   "EMPTY_THE_FOLDER": "Goliți dosarul",
   "EMPTY_THE_FOLDER_MSG": "Toate e-mailurile vor fi șterse din dosarul \"{{ folder }}\"",
 
-  "RETURN_TO_MAIL": "Reveniți la e-mail"
+  "RETURN_TO_MAIL": "Reveniți la e-mail",
+
+  "PROFILE_PORTRAIT": "Portret profil"
 }

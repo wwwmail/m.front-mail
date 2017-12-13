@@ -452,5 +452,7 @@
   "EMPTY_THE_FOLDER": "Bosh dosjen",
   "EMPTY_THE_FOLDER_MSG": "Të gjitha emailet do të fshihen nga dosja \"{{ folder }}\"",
 
-  "RETURN_TO_MAIL": "Kthehu në email"
+  "RETURN_TO_MAIL": "Kthehu në email",
+
+  "PROFILE_PORTRAIT": "Portreti i profilit"
 }

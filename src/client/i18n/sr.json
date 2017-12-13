@@ -452,5 +452,7 @@
   "EMPTY_THE_FOLDER": "Ispraznite folder",
   "EMPTY_THE_FOLDER_MSG": "Svi e-mailovi će biti izbrisani iz foldera \"{{ folder }}\"",
 
-  "RETURN_TO_MAIL": "Nazad"
+  "RETURN_TO_MAIL": "Nazad",
+
+  "PROFILE_PORTRAIT": "Izgled profila"
 }

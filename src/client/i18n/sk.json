@@ -451,5 +451,8 @@
   "EMPTY_THE_FOLDER": "Vyprázdnit priečinok",
   "EMPTY_THE_FOLDER_MSG": "Všetky správy z priečinku \"{{ folder }}\" budú odstránené",
 
-  "RETURN_TO_MAIL": "Späť na e-mail"
+  "RETURN_TO_MAIL": "Späť na e-mail",
+
+  "PROFILE_PORTRAIT": "Portrét",
+  "CONTINUE": "Pokračovať"
 } 
