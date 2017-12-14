@@ -8,7 +8,7 @@
         'app.directives',
         'app.layout',
         'settings',
-        'marketing',
+        'main',
         'auth',
         'mail'
     ]);
