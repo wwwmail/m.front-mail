@@ -1,8 +1,8 @@
 <div class="inbox-message-list" ng-class="{'inbox-message-list--indentation': vm.messages.checked.length}">
-    <inbox-message
-            message="message"
-            messages="vm.messages"
-            ng-repeat="message in vm.messages.items"></inbox-message>
+    <inbox-message message="message"
+                   messages="vm.messages"
+                   ng-repeat="message in vm.messages.items">
+    </inbox-message>
     <div class="inbox-message-list__spinner">
         <spinner is-open="vm.messages.isLoading"></spinner>
     </div>

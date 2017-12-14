@@ -18,6 +18,8 @@
 
         activate();
 
+        ////
+
         function activate() {
             vm.$state = $state;
         }
@@ -140,7 +142,6 @@
 
             modalInstance.result.then(function (response) {
                 vm.messages = response.result.messages;
-                // console.log('response', response);
             });
         }
     }

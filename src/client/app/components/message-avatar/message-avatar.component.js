@@ -6,6 +6,7 @@
         .component('messageAvatar', {
             bindings: {
                 message: '=',
+                messages: '=?',
                 classNames: '@?'
             },
             templateUrl: 'app/components/message-avatar/message-avatar.html',
