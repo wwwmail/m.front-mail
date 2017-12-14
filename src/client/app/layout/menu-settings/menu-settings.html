@@ -1,47 +1,44 @@
 <div class="menu-main-layout scroll-fix">
 
     <div class="menu-main-layout__header">
-        <button class="btn btn--size_m btn--yellow"
+        <button class="btn btn--size_m btn--yellow flex--inline align-items--cn"
                 type="button"
                 ui-sref="mail.inbox({mbox: 'INBOX'})">
-            <span class="icon-arrow-left"></span>
-            {{ 'RETURN_TO_MAIL' | translate }}
+            <span class="icon-arrow-left font--size16 mrg--r5 mrg--m-l5"></span>
+            <span>{{ 'RETURN_TO_MAIL' | translate }}</span>
         </button>
 
-        <!--<img class="menu-main-layout__header__logo img-responsive"
-             src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg">
-        <button class="menu-main-layout__button-close btn font&#45;&#45;size16"
+        <!--<img class="menu-main-layout__header__logo img-responsive"-->
+        <!--src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg">-->
+
+        <button class="menu-main-layout__button-close btn btn--no-radius"
                 type="button"
+                action-effects="touch-bg"
                 ng-click="vm.closeSettingsMenu()">
-<<<<<<< HEAD
             <span class="icon-close"></span>
         </button>
-=======
-            <span class="icon-double-arrow-left"></span>
-        </button>-->
->>>>>>> 1814c425dc9c443f7afdfcbdad388f00dbf76aa4
-    </div>
 
+    </div>
     <!--основное меню -->
     <div class="menu-settings mrg--t16">
         <div class="menu-settings__list ">
-            <div class="menu-settings__item">
+            <div class="menu-settings__item" action-effects="touch-bg">
                 <a class="menu-settings__link" ui-sref="settings.main" ui-sref-active="menu-settings__link--active">
                     {{ 'MANAGE_ACCOUNT' | translate }}</a>
             </div>
-            <div class="menu-settings__item">
+            <div class="menu-settings__item" action-effects="touch-bg">
                 <a class="menu-settings__link" ui-sref="settings.folders" ui-sref-active="menu-settings__link--active">
                     {{ 'FOLDERS' | translate }}</a>
             </div>
-            <div class="menu-settings__item">
+            <div class="menu-settings__item" action-effects="touch-bg">
                 <a class="menu-settings__link" ui-sref="settings.tags" ui-sref-active="menu-settings__link--active">
                     {{ 'TAGS' | translate }}</a>
             </div>
-            <div class="menu-settings__item">
+            <div class="menu-settings__item" action-effects="touch-bg">
                 <a class="menu-settings__link" ui-sref="settings.rules" ui-sref-active="menu-settings__link--active">
                     {{ 'PROCESSING_RULES' | translate }}</a>
             </div>
-            <div class="menu-settings__item">
+            <div class="menu-settings__item" action-effects="touch-bg">
                 <a class="menu-settings__link" ui-sref="settings.accounts" ui-sref-active="menu-settings__link--active">
                     {{ 'MAILS_FROM_OTHER_BOXES' | translate }}</a>
             </div>
@@ -51,7 +48,7 @@
             <!--</div>-->
         </div>
 
-        <div class="menu-settings__list">
+        <div class="menu-settings__list" action-effects="touch-bg">
             <div class="menu-settings__item">
                 <a class="menu-settings__link" href password-change-link>
                     {{ 'ACCOUNT_SECURITY' | translate }}</a>

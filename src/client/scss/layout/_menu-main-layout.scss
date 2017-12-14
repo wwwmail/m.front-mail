@@ -65,24 +65,26 @@
     justify-content: center;
     align-items: center;
 
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
 
     margin: auto 0 auto auto!important;
 
-    background-color: transparent;
+    font-size: 16px;
     color: rgba($menu-text-color, .6);
+
+    background-color: transparent;
   }
 
   &__user-info {
     overflow: hidden;
-    min-height: 160px;
+    min-height: 150px;
 
-    margin: 5px 0;
+    margin: 5px 0 0;
   }
 
   &__user-info-container {
-    height: 180px;
+    height: 150px;
 
     padding-top: 20px;
 

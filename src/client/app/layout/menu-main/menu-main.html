@@ -1,13 +1,11 @@
 <div class="menu-main-layout scroll-fix">
-
     <div class="menu-main-layout__header">
         <img class="menu-main-layout__header__logo img-responsive"
              src="/images/domains/{{ vm.CONFIG.domainZone }}/logo-mail-dark.svg">
 
-
-
         <button class="menu-main-layout__button-close btn font--size16"
                 type="button"
+                action-effects="touch-bg"
                 ng-click="vm.closeMenu()">
             <span class="icon-close"></span>
         </button>
@@ -75,7 +73,7 @@
                 ng-hide="folder.name === 'Outbox' && !folder.messagesCount"
                 ng-class="{'is-sub-menu--open': folder.isOpen}"
                 ng-repeat="folder in vm.folders.items">
-                <div class="menu-main__item-content" ng-if="!folder.isSub && folder.name !== 'Archive'">
+                <div class="menu-main__item-content" action-effects="touch-bg" ng-if="!folder.isSub && folder.name !== 'Archive'">
                     <a class="menu-main__link"
                        ng-click="vm.closeMenu();"
                        ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined})"
@@ -101,7 +99,7 @@
                 </div>
 
                 <div ng-if="folder.isOpen">
-                    <div class="menu-main__item-content" ng-repeat="folderSub in vm.folders.items"
+                    <div class="menu-main__item-content" action-effects="touch-bg" ng-repeat="folderSub in vm.folders.items"
                          ng-if="folderSub.isSub && (folder.name === 'INBOX' || folder.name === 'Drafts')">
                         <ul class="menu-main menu-main--additional"
                             ng-if="(folderSub.name !== 'Templates' && folder.name === 'INBOX') || (folderSub.name === 'Templates' && folder.name === 'Drafts')">
@@ -159,7 +157,7 @@
 
         <ul class="menu-main">
             <li class="menu-main__item" ng-repeat="tag in vm.tags.items">
-                <div class="menu-main__item-content">
+                <div class="menu-main__item-content" action-effects="touch-bg">
                     <a class="menu-main__link"
                        ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})"
                        ng-click="vm.closeMenu();">
@@ -189,7 +187,7 @@
             </li>-->
 
             <li class="menu-main__item">
-                <div class="menu-main__item-content">
+                <div class="menu-main__item-content" action-effects="touch-bg">
                     <a class="menu-main__link"
                        ui-sref="settings.main">
                         <span class="icon-settings menu-main__icon"></span>
@@ -199,7 +197,7 @@
             </li>
 
             <li class="menu-main__item">
-                <div class="menu-main__item-content">
+                <div class="menu-main__item-content" action-effects="touch-bg">
                     <a class="menu-main__link"
                        ng-click="vm.logout()"
                        target="_blank">

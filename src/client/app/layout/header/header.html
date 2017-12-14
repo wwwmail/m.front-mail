@@ -1,11 +1,10 @@
 <div class="main-header">
-
-    <!-- -->
     <!-- Хедер для главной страници -->
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'mail.inbox'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
+                        action-effects="touch-bg-round"
                         ng-click="vm.openMenu()"></button>
             </div>
 
@@ -15,8 +14,9 @@
             </div>
 
             <div class="main-header__right">
-                <button class="main-header__right-button search-block__icon icon-search btn btn--not-style btn--main-mobile-color header__icon mrg--f-right pdd--r0"
+                <button class="main-header__right-button search-block__icon icon-search btn btn--not-style btn--main-mobile-color mrg--f-right pdd--r0"
                         type="button"
+                        action-effects="touch-bg-round"
                         set-focus="search-input"
                         ng-click="vm.isSearch = true;"></button>
             </div>
@@ -29,9 +29,11 @@
         <div class="main-header__container">
 
             <div class="main-header__right width--inh">
-                <form class="search-block widtn-inh search-block" ng-submit="vm.search()">
-                    <button class="main-header__left-button search-block__icon icon-search btn btn--not-style btn--main-mobile-color header__icon padding mrg--f-right"
-                            type="submit"></button>
+                <form class="search-block width-inh" ng-submit="vm.search()">
+                    <button class="main-header__left-button search-block__icon icon-search btn btn--not-style btn--main-mobile-color padding mrg--f-right"
+                            type="submit"
+                            action-effects="touch-bg-round"></button>
+
                     <input class="input input--no-border input--no-focus input--size_l width--all"
                            id="search-input"
                            type="text"
@@ -44,6 +46,7 @@
             <div class="main-header__left">
                 <button class="main-header__right-button icon-close btn btn--not-style btn--size_xl btn--main-mobile-color"
                         type="button"
+                        action-effects="touch-bg-round"
                         ng-click="vm.isSearch = false; vm.clearSearch();">
                 </button>
             </div>
@@ -54,20 +57,23 @@
     <div class="main-header__massege-replay is-active" ng-if="vm.$state.current.name === 'mail.message'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-arrow-left btn btn--not-style btn--main-mobile-color header__icon flex--inline align-items--cn pdd--l0"
+                <button class="main-header__left-button icon-arrow-left btn btn--not-style btn--main-mobile-color flex--inline align-items--cn pdd--l0"
                         type="button"
+                        action-effects="touch-text"
                         ui-sref="mail.inbox({mbox: vm.$state.params.mbox})">
                     <span class="font--arial font--size15 mrg--l5">{{ 'BACK' | translate }}</span>
                 </button>
             </div>
             <div class="main-header__right">
-                <button class="icon-arrow-up btn btn--not-style btn--main-mobile-color header__icon mrg--f-right pdd--r2"
+                <button class="main-header__right-button main-header__right-button--arrow btn btn--main-mobile-color pdd--r2 icon-arrow-up"
                         type="button"
+                        action-effects="touch-bg-round"
                         ng-if="vm.paginate.next"
                         ui-sref="mail.message({id: vm.paginate.next.number, connection_id: vm.paginate.next.connection_id, mbox: vm.paginate.next.mbox})">
                 </button>
-                <button class="icon-arrow-down btn btn--not-style btn--main-mobile-color header__icon mrg--f-right pdd--r0"
+                <button class="main-header__right-button main-header__right-button--arrow btn  btn--main-mobile-color pdd--r0 icon-arrow-down"
                         type="button"
+                        action-effects="touch-bg-round"
                         ng-if="vm.paginate.prev"
                         ui-sref="mail.message({id: vm.paginate.prev.number, connection_id: vm.paginate.prev.connection_id, mbox: vm.paginate.prev.mbox})">
                 </button>
@@ -80,7 +86,8 @@
     <div class="main-header__message-new is-active" ng-if="vm.$state.current.name === 'mail.compose'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-close btn btn--not-style btn--main-mobile-color header__icon header__icon--close"
+                <button class="main-header__left-button icon-close btn btn--not-style btn--main-mobile-color"
+                        action-effects="touch-bg-round"
                         ng-click="vm.closeCompose()">
                 </button>
             </div>
@@ -90,7 +97,7 @@
             </div>
 
             <div class="main-header__right">
-                <button class="main-header__right-button main-header__right-button--size22 btn btn--not-style btn--mail-send header__icon mrg--f-right font--arial icon-send-mail"
+                <button class="main-header__right-button main-header__right-button--size22 btn btn--not-style btn--mail-send mrg--f-right font--arial icon-send-mail"
                         type="button"
                         ng-click="vm.send()"
                         ng-disabled="!vm.isSend || vm.isUploading">
@@ -103,7 +110,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.main'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
                         ng-click="vm.openSettingsMenu()"></button>
             </div>
 
@@ -122,7 +129,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.folders'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
                         ng-click="vm.openSettingsMenu()"></button>
             </div>
 
@@ -141,7 +148,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.tags'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
                         ng-click="vm.openSettingsMenu()"></button>
             </div>
 
@@ -160,7 +167,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.rules'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
                         ng-click="vm.openSettingsMenu()"></button>
             </div>
 
@@ -179,7 +186,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.ruleAdd'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
                         ng-click="vm.openSettingsMenu()"></button>
             </div>
 
@@ -198,7 +205,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.accounts'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
                         ng-click="vm.openSettingsMenu()"></button>
             </div>
 
@@ -217,7 +224,7 @@
     <div class="main-header__main is-active" ng-if="!vm.isSearch && vm.$state.current.name === 'settings.contacts'">
         <div class="main-header__container">
             <div class="main-header__left">
-                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color header__icon pdd--l0"
+                <button class="main-header__left-button icon-menu btn btn--not-style btn--main-mobile-color pdd--l0"
                         ng-click="vm.openSettingsMenu()"></button>
             </div>
 

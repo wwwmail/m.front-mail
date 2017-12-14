@@ -1,19 +1,17 @@
 .user-signatures {
-
-
-  &__edit-text{
+  &__edit-text {
     min-height: 142px;
 
     border: 1px solid $avatar-border-color;
 
   }
 
-  &__view{
+  &__view {
     position: relative;
 
-    min-height: 142px;
+    min-height: 80px;
 
-    padding: 20px;
+    padding: 30px 20px 20px;
 
     background-color: $signature-pred-publick;
     box-shadow: $signature-shadow;
@@ -26,6 +24,51 @@
     justify-content: space-between;
   }
 
+  &__select {
+    flex: 1 0 auto;
+
+    @media (max-width: 320px) {
+    }
+  }
+
+  &__connection-email {
+    display: block;
+
+    margin-top: 10px;
+    padding-left: 2px;
+
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  &__text {
+    overflow: auto;
+
+    p {
+      margin: 0;
+
+      word-wrap: break-word;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+  }
+
+  &__add-button {
+    padding-left: 20px;
+
+    @media (max-width: 340px) {
+      width: 100%;
+
+      margin-top: 10px!important;
+      padding: 0;
+
+      .btn {
+        width: 100%;
+      }
+
+    }
+  }
+
   &__buttons {
     position: absolute;
     top: 7px;
@@ -35,7 +78,6 @@
       font-size: 15px;
       padding: 0;
     }
-
   }
 }
 
