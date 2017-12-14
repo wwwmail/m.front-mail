@@ -11,23 +11,30 @@
   background-color: $white-color;
   z-index: 2;
 
-  &__left-button {
-    padding: 0 20px 0 0 !important;
+  &__left-button, &__right-button {
+    height: 35px !important;
+    min-width: 35px;
 
-    height: 40px !important;
+    padding: 0 !important;
+
+    font-size: 18px !important;
+  }
+
+  &__left-button {
+    margin: 0 20px 0 0 !important;
 
     font-size: 20px !important;
   }
 
   &__right-button {
-    padding: 0 0 0 20px !important;
-
-    height: 40px !important;
-
-    font-size: 18px !important;
+    margin: 0 0 0 20px !important;
 
     &--size22 {
       font-size: 22px !important;
+    }
+
+    &--arrow {
+      margin: 0!important;
     }
   }
 
@@ -51,6 +58,7 @@
     display: none;
     visibility: hidden;
   }
+
   &__message-new {
     display: none;
     visibility: hidden;
@@ -84,8 +92,6 @@
     margin: auto;
 
     padding: 0 22px;
-
-    //padding: 0 15px;
   }
 
   &__left {
@@ -111,19 +117,19 @@
     width: auto;
   }
 
-  &__icon {
-    color: $header-icon-color;
-    font: 300 13px/1 $mainFont;
-    overflow: visible;
-    &:before {
-      font-size: 20px;
-    }
-    &--close {
-      &:before {
-        font-size: 16px !important;
-      }
-    }
-  }
+  //&__icon {
+  //  color: $header-icon-color;
+  //  font: 300 13px/1 $mainFont;
+  //  overflow: visible;
+  //  &:before {
+  //    font-size: 20px;
+  //  }
+  //  &--close {
+  //    &:before {
+  //      font-size: 16px !important;
+  //    }
+  //  }
+  //}
 
   &--not-shadow {
     box-shadow: none !important;

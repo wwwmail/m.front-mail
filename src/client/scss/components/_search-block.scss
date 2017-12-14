@@ -1,17 +1,12 @@
 .search-block{
-  //border: 2px solid $search-border-color;
-  //border-radius: 3px;
-  border: none;
-  overflow: hidden;
-  box-sizing: border-box;
-
   @extend .main-flex;
   @extend .main-align-items-center;
+
   height: 40px;
 
-  //&:active, &:hover{
-  //  border: 2px solid $yellow-yandex;
-  //}
+  border: none;
+
+  box-sizing: border-box;
 
   &__icon{
     overflow: visible!important;

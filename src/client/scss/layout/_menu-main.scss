@@ -129,6 +129,7 @@
     @extend .main-flex;
     align-items: center;
     justify-content: center;
+    //background-color:red !important;
 
     text-overflow: ellipsis;
     white-space: normal;
@@ -148,12 +149,10 @@
   &__clear-brush {
     display: none;
     opacity: .5;
-    &:focus {
-      outline: none !important;
-    }
-    &:hover, &:active {
-      opacity: .8;
-    }
+
+    //&:focus {
+    //  outline: none !important;
+    //}
 
     &--active {
       display: block;

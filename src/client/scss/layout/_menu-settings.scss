@@ -41,7 +41,7 @@
       }
     }
 
-    &--mx300{
+    &--mx300 {
       max-width: 300px;
     }
   }
@@ -66,19 +66,11 @@
   }
 
   &__item {
-    @include action-yellow-light;
-
-    //&:active, &:focus, &:hover {
-    //  //background-color: $yellow-lignt!important;
-    //}
-
     &--not-active {
       &:active, &:focus, &:hover {
-        background-color: transparent!important;
+        background-color: transparent !important;
       }
     }
-
-
   }
 
   &__counter {
