@@ -195,13 +195,13 @@
   "SETTINGS_ACCOUNTS_MESSAGE_OTHER_MAILS": "Ви можете перенаправляти вхідну пошту з інших ваших поштових скриньок в ваш ящик на Яндексі. Для цього налаштуйте з'єднання з вашими поштовими скриньками на серверах, що підтримують протокол POP3 або IMAP",
   "CONNECTED_BOXES": "підключення ящики",
   "CONNECTED_SUCCESS_COLLECTION_OF_MAILS": "З'єднання встановлено Збір пошти почнеться протягом декількох хвилин",
-  "COLLECTION_OF_MAIL": "Забирати пошту з ящика",
+  "COLLECTION_OF_MAIL": "Збирати пошту з іншого ящика",
   "INPUT_PLACEHOLDER_ENTER_EMAIL": "Введіть email",
   "INPUT_PLACEHOLDER_ENTER_PASSWORD": "Введіть пароль",
   "INPUT_PLACEHOLDER_ENTER_LOGIN": "Введіть логін",
   "INPUT_PLACEHOLDER_ENTER_SERVER_ADDRESS": "Введіть адресу сервера",
   "INPUT_PLACEHOLDER_ENTER_PORT": "Введіть порт",
-  "ENABLED_COLLECTOR": "Активувати збиральник",
+  "ENABLED_COLLECTOR": "Активувати",
   "BTN_LOAD_CONTACT_0F_FILE": "Завантажити контакти з файлу",
   "BTN_SAVE_CONTACT_IN_FILE": "Зберегти контакти в файл",
   "PERSONAL_DATA": "Персональні дані",
@@ -427,6 +427,7 @@
   "MAIN_FOLDERS": "Основні папки",
   "SAVE_AND_GO": "Зберегти і перейти",
   "NOT_SAVE": "Не зберігати",
+  "CONTINUE": "Продолжить",
   "ACTIVE_EMAIL": "Ваш альтернативний e-mail",
   "NO_EMAIL": "Немає e-mailу",
   "ACTIVE_PHONE": "Ваш номер телефону",
@@ -447,12 +448,18 @@
   "SERVER": "Сервер",
   "PORT": "Порт",
   "DELETING_FOLDER_MSG": "В папці {{ folder }} {{ messageCount }} листи. Листи будуть видалені разом з папкою.",
-
   "EMPTY_THE_FOLDER": "Очищення папки",
   "EMPTY_THE_FOLDER_MSG": "Всі листи будуть видалені з папки \"{{ folder }}\"",
-
   "RETURN_TO_MAIL": "Повернутися в пошту",
-
   "PROFILE_PORTRAIT": "Портрет профілю",
-  "CONTINUE": "Продовжити"
+  "REMOVE_CONDITION": "Видалити умову",
+  "RESEND_MAIL": "Пересилання листів",
+  "NAME_OF_ATTACHMENT": "Назва вкладення",
+  "BODY_LETTER": "Тіло листа",
+  "HEADER": "Заголовок",
+  "TO_WHOM_OR_COPY": "Кому або копія",
+  "CONTAINS": "містить",
+  "NOT_CONTAINS": "не містить",
+  "MATCHES": "Зівпадає з",
+  "NOT_MATCHES": "не збігається c"
 }

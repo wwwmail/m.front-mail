@@ -448,11 +448,19 @@
   "SERVER": "Server",
   "PORT": "Port",
   "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messagecount }} e-poruke. E-poruke će biti izbrisane zajedno sa fasciklu.",
-
   "EMPTY_THE_FOLDER": "Ispraznite folder",
   "EMPTY_THE_FOLDER_MSG": "Svi e-mailovi će biti izbrisani iz foldera \"{{ folder }}\"",
-
   "RETURN_TO_MAIL": "Nazad",
-
-  "PROFILE_PORTRAIT": "Izgled profila"
+  "PROFILE_PORTRAIT": "Portret profila",
+  "REMOVE_CONDITION": "Izbriši stanje",
+  "RESEND_MAIL": "Prosleđivanje e-poruka",
+  "NAME_OF_ATTACHMENT": "Naziv priloga",
+  "BODY_LETTER": "Korpus poruke",
+  "HEADER": "Zaglavlje",
+  "TO_WHOM_OR_COPY": "Kome ili kopija",
+  "CONTAINS": "Sadrži",
+  "NOT_CONTAINS": "Ne sadrži",
+  "MATCHES": "odgovara",
+  "NOT_MATCHES": "Ne slaže se",
+  
 }

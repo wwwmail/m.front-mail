@@ -448,11 +448,18 @@
   "SERVER": "Serveri",
   "PORT": "Port",
   "DELETING_FOLDER_MSG": "Në dosjen {{ folder }} {{ messageCount }} email. Emailet do të fshihen me dosjen.",
-
   "EMPTY_THE_FOLDER": "Bosh dosjen",
   "EMPTY_THE_FOLDER_MSG": "Të gjitha emailet do të fshihen nga dosja \"{{ folder }}\"",
-
   "RETURN_TO_MAIL": "Kthehu në email",
-
-  "PROFILE_PORTRAIT": "Portreti i profilit"
+  "PROFILE_PORTRAIT": "Fotografia e ime",
+  "REMOVE_CONDITION": "Fshi gjendjen",
+  "RESEND_MAIL": "Dërgimi i emaileve",
+  "NAME_OF_ATTACHMENT": "Emërtimi i shtojcës",
+  "BODY_LETTER": "Trupi i mesazhit",
+  "HEADER": "Hyrja",
+  "TO_WHOM_OR_COPY": "Kujt ose kopja",
+  "CONTAINS": "Përmban",
+  "NOT_CONTAINS": "Nuk përmban",
+  "MATCHES": "është e njëjtë me",
+  "NOT_MATCHES": "Nuk është e njëjtë"  
 }

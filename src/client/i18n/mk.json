@@ -448,11 +448,18 @@
   "SERVER": "Сервер",
   "PORT": "Порт",
   "DELETING_FOLDER_MSG": "Во папката {{ folder }} {{ messageCount }} пораки. Пораките ќе бидат избришани со папката.",
-
   "EMPTY_THE_FOLDER": "Испразнете ја папката",
   "EMPTY_THE_FOLDER_MSG": "Сите пораки ќе бидат избришани од папката \"{{ folder }}\"",
-
   "RETURN_TO_MAIL": "Врати се на е-пошта",
-
-  "PROFILE_PORTRAIT": "Портрет на профилот"
+  "PROFILE_PORTRAIT": "Мојот портрет",
+  "REMOVE_CONDITION": "Избришете состојба",
+  "RESEND_MAIL": "Препраќање пораки",
+  "NAME_OF_ATTACHMENT": "Име на прилогот",
+  "BODY_LETTER": "Содржина на пораката",
+  "HEADER": "Заглавје",
+  "TO_WHOM_OR_COPY": "Примач или копија",
+  "CONTAINS": "Содржи",
+  "NOT_CONTAINS": "Не содржи",
+  "MATCHES": "се согласува со",
+  "NOT_MATCHES": "Не се согласува со"
 }

@@ -195,13 +195,13 @@
   "SETTINGS_ACCOUNTS_MESSAGE_OTHER_MAILS": "Môžete presmerovať prichádzajúce správy z iných schránok do svojej schránky na Mail.sk. Vytvorte spojenie s Vašimi schránkami na serveroch, ktoré podporujú protokol POP3 alebo IMAP",
   "CONNECTED_BOXES": "Pripojené schránky",
   "CONNECTED_SUCCESS_COLLECTION_OF_MAILS": "Spojenie bolo nadviazané. Zhromažďovanie správ začne v priebehu niekoľkých minút",
-  "COLLECTION_OF_MAIL": "Odoberať správy zo schránky",
+  "COLLECTION_OF_MAIL": "Pridať schránku",
   "INPUT_PLACEHOLDER_ENTER_EMAIL": "Zadajte e-mail",
   "INPUT_PLACEHOLDER_ENTER_PASSWORD": "Zadajte heslo",
   "INPUT_PLACEHOLDER_ENTER_LOGIN": "Zadajte login",
   "INPUT_PLACEHOLDER_ENTER_SERVER_ADDRESS": "Zadajte adresu servera",
   "INPUT_PLACEHOLDER_ENTER_PORT": "Zadajte port",
-  "ENABLED_COLLECTOR": "Zapnúť kolektor ",
+  "ENABLED_COLLECTOR": "Potvrdiť",
   "BTN_LOAD_CONTACT_0F_FILE": "Nahrať kontakty zo súboru",
   "BTN_SAVE_CONTACT_IN_FILE": "Uložiť kontakty do súboru",
   "PERSONAL_DATA": "Osobné údaje",
@@ -427,6 +427,7 @@
   "MAIN_FOLDERS": "Hlavné zložky",
   "SAVE_AND_GO": "Uložit a pokračovat",
   "NOT_SAVE": "Neukládat",
+  "CONTINUE": "Pokračovať",
   "ACTIVE_EMAIL": "Váš alternatívny e-mail",
   "NO_EMAIL": "Nemám e-mail",
   "ACTIVE_PHONE": "Vaše telefónne číslo",
@@ -447,12 +448,18 @@
   "SERVER": "Server",
   "PORT": "Port",
   "DELETING_FOLDER_MSG": "V priečinku {{ folder }} je {{ messageCount }} správ. Správy budú odstránené spolu s priečinkom.",
-
   "EMPTY_THE_FOLDER": "Vyprázdnit priečinok",
   "EMPTY_THE_FOLDER_MSG": "Všetky správy z priečinku \"{{ folder }}\" budú odstránené",
-
   "RETURN_TO_MAIL": "Späť na e-mail",
-
-  "PROFILE_PORTRAIT": "Portrét",
-  "CONTINUE": "Pokračovať"
+  "PROFILE_PORTRAIT": "Môj portért",
+  "REMOVE_CONDITION": "Vymazať podmienky",
+  "RESEND_MAIL": "Preposlať e-mail",
+	"NAME_OF_ATTACHMENT": "Názov prílohy",
+	"BODY_LETTER": "Telo správy",
+	"HEADER": "Hlavička",
+	"TO_WHOM_OR_COPY": "Komu alebo kópie",
+	"CONTAINS": "Obsahuje",
+	"NOT_CONTAINS": "Neobsahuje",
+	"MATCHES": "Súhlasí s",
+	"NOT_MATCHES": "Nezhoduje sa"  
 } 
