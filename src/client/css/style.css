@@ -1759,29 +1759,20 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
 .footer__auth {
   position: relative;
   width: calc(100% + 30px);
-  left: -15px;
   height: 42px;
+  left: -15px;
   background-color: rgba(53, 46, 64, 0.8);
   filter: progid:DXImageTransform.Microsoft.Blur(pixelRadius=5);
   border: none;
-  font: 100 13px/1 Arial,sans-serif;
+  font: 100 13px/1 Arial, sans-serif;
   padding: 0 25px;
-  display: inline-flex;
-  justify-content: flex-start;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  flex: 0 0 auto;
 }
 @media only screen and (max-width: 360px) {
   .footer__auth {
     padding: 0 18px;
-  }
-}
-.footer__copyright {
-  min-width: 240px;
-}
-@media only screen and (max-width: 360px) {
-  .footer__copyright {
-    min-width: 230px;
   }
 }
 .footer__menu {
