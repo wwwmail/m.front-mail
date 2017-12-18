@@ -461,5 +461,9 @@
   "CONTAINS": "Vsebuje",
   "NOT_CONTAINS": "Ne vsebuje",
   "MATCHES": "v skladu s",
-  "NOT_MATCHES": "Ni v skladu"  
+  "NOT_MATCHES": "Ni v skladu",
+  "AVATAR_SUCCESS_UPLOADED": "Shranjeno",
+  "SAVED": "Shranjeno",
+  "FOLDER_DELETED": "Mapa je izbrisana",
+  "TAG_DELETED": "Oznaka je izbrisana"  
 }

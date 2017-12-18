@@ -461,5 +461,9 @@
   "CONTAINS": "Содржи",
   "NOT_CONTAINS": "Не содржи",
   "MATCHES": "се согласува со",
-  "NOT_MATCHES": "Не се согласува со"
+  "NOT_MATCHES": "Не се согласува со",
+  "AVATAR_SUCCESS_UPLOADED": "Зачувани",
+  "SAVED": "Зачувани",
+  "FOLDER_DELETED": "Папката е избришана",
+  "TAG_DELETED": "Ознака е избришана"
 }

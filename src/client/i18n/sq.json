@@ -461,5 +461,9 @@
   "CONTAINS": "Përmban",
   "NOT_CONTAINS": "Nuk përmban",
   "MATCHES": "është e njëjtë me",
-  "NOT_MATCHES": "Nuk është e njëjtë"  
+  "NOT_MATCHES": "Nuk është e njëjtë",
+  "AVATAR_SUCCESS_UPLOADED": "Saved",
+  "SAVED": "Saved",
+  "FOLDER_DELETED": "Dosja u fshi",
+  "TAG_DELETED": "Etiketa u fshi"  
 }

@@ -461,6 +461,9 @@
   "CONTAINS": "Contains",
   "NOT_CONTAINS": "Does not contain",
   "MATCHES": "matches with",
-  "NOT_MATCHES": "does not match"
-  
+  "NOT_MATCHES": "does not match",
+  "AVATAR_SUCCESS_UPLOADED": "Saved",
+  "SAVED": "Saved",
+  "FOLDER_DELETED": "Folder deleted",
+  "TAG_DELETED": "Tag deleted"  
 }

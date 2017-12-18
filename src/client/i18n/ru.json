@@ -461,5 +461,9 @@
 	"CONTAINS": "Содержит",
 	"NOT_CONTAINS": "не содержит",
 	"MATCHES": "Совпадает с",
-	"NOT_MATCHES": "не совпадает c"  
+	"NOT_MATCHES": "не совпадает c",
+  "AVATAR_SUCCESS_UPLOADED": "Сохранено",
+  "SAVED": "Сохранено",
+  "FOLDER_DELETED": "Папка удалена",
+  "TAG_DELETED": "Метка удалена"  
 }

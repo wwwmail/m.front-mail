@@ -461,5 +461,9 @@
   "CONTAINS": "Sadrži",
   "NOT_CONTAINS": "Ne sadrži",
   "MATCHES": "Odgovara",
-  "NOT_MATCHES": "Ne slaže se"
+  "NOT_MATCHES": "Ne slaže se",
+  "AVATAR_SUCCESS_UPLOADED": "Sačuvano",
+  "SAVED": "Sačuvano",
+  "FOLDER_DELETED": "Izbrisani",
+  "TAG_DELETED": "Izbrisani"
 }

@@ -461,5 +461,9 @@
 	"CONTAINS": "Obsahuje",
 	"NOT_CONTAINS": "Neobsahuje",
 	"MATCHES": "Súhlasí s",
-	"NOT_MATCHES": "Nezhoduje sa"  
+	"NOT_MATCHES": "Nezhoduje sa",
+  "AVATAR_SUCCESS_UPLOADED": "Uložené",
+  "SAVED": "Uložené",
+  "FOLDER_DELETED": "Priečinok odstraněný",
+  "TAG_DELETED": "Štítek odstraněn"  
 } 

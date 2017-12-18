@@ -461,5 +461,9 @@
   "CONTAINS": "Conține",
   "NOT_CONTAINS": "Nu conține",
   "MATCHES": "conformă cu",
-  "NOT_MATCHES": "Nu este conformă cu"
+  "NOT_MATCHES": "Nu este conformă cu",
+  "AVATAR_SUCCESS_UPLOADED": "Salvate",
+  "SAVED": "Salvate",
+  "FOLDER_DELETED": "Șters",
+  "TAG_DELETED": "Șters"
 }
