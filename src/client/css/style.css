@@ -7482,6 +7482,107 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
   z-index: 2000;
 }
 
+.message-alert-send {
+  position: fixed;
+  z-index: 799;
+  top: 30px;
+  left: calc(50% - (45vw / 2));
+  display: flex;
+  min-height: 50px;
+  width: 100%;
+  max-width: 45vw;
+  min-width: 450px;
+  margin: auto;
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  background-color: #f6edb4;
+}
+.message-alert-send__container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  text-align: center;
+  padding: 10px 22px;
+  min-height: 24px;
+  margin: 0 auto;
+}
+.message-alert-send__notific {
+  line-height: 22px;
+  min-height: 22px;
+  padding-left: 16px;
+  word-wrap: break-word;
+  font-family: "HelveticaNeueCyr", sans-serif, Helvetica;
+  font-size: 20px;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.8);
+}
+.message-alert-send__close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 10px;
+  padding: 0;
+  width: 14px !important;
+  height: 14px;
+  outline: none;
+}
+.message-alert-send__close:focus {
+  outline: none;
+}
+.message-alert-send__close:hover {
+  color: #fb981f;
+}
+.message-alert-send__close:active {
+  color: #fb981f;
+  opacity: 1;
+}
+.message-alert-send__validate-icon {
+  font-size: 18px;
+  width: 13px;
+  height: 18px;
+  margin: auto 0;
+}
+.message-alert-send__validate-icon:before {
+  content: "\e91e";
+  color: #099502;
+  font-family: 'icons-font' !important;
+  speak: none;
+  line-height: 1;
+}
+
+/*
+.message-alert-send {
+  display: flex;
+
+  position: fixed;
+  z-index: 899;
+
+  top: 0;
+  left: 195px;
+
+  align-items: center;
+
+  //max-width: 200px;
+  height: 32px;
+
+  background: #fff;
+
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 10px 20px -5px rgba(0,0,0,.4);
+
+  &__close {
+    padding: 0 12px;
+
+    color: #000;
+  }
+
+  &__message {
+    padding: 0 12px 0 20px;
+
+    font-size: 15px;
+  }
+}
+*/
 body {
   width: calc(100% - 0px);
   height: calc(100% - 0px);

@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('profile', profile);
 
-    profile.$inject = ['CONFIG', '$resource', 'Upload', '$rootScope', '$auth', '$state', 'localStorageService'];
+    profile.$inject = ['CONFIG', '$resource', 'Upload', '$rootScope', '$auth', '$state', 'localStorageService', 'notify'];
 
-    function profile(CONFIG, $resource, Upload, $rootScope, $auth, $state, localStorageService) {
+    function profile(CONFIG, $resource, Upload, $rootScope, $auth, $state, localStorageService, notify) {
         var API_URL = CONFIG.APIHost + '/profile';
 
         var resource = $resource(API_URL,
@@ -72,6 +72,7 @@
         function put(params, data) {
             profile = resource.put(params, data).$promise
                 .then(function (response) {
+                    notify.message('SAVED');
                     $rootScope.user.profile = getFormatted(response.data);
                 });
 

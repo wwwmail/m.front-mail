@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('mailBox', mailBox);
 
-    mailBox.$inject = ['CONFIG', '$resource', '$http', '$rootScope', '$state'];
+    mailBox.$inject = ['CONFIG', '$resource', '$http', '$rootScope', '$state', 'notify'];
 
-    function mailBox(CONFIG, $resource, $http, $rootScope, $state) {
+    function mailBox(CONFIG, $resource, $http, $rootScope, $state, notify) {
         var API_URL = CONFIG.APIHost + '/mail-box';
 
         var cacheList = [];
@@ -84,6 +84,7 @@
                     "Content-Type": "application/json;charset=utf-8"
                 }
             }).then(function (response) {
+                notify.message('FOLDER_DELETED');
                 $rootScope.$broadcast('mailBox:destroy:success');
             });
             // return resource.destroy(params, data).$promise;
