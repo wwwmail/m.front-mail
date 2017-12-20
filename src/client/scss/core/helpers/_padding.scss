@@ -1,6 +1,6 @@
 .pdd {
   //@include unify-sizer-modifier(none, padding, 0);
-  padding: 0!important;
+  padding: 0 !important;
   @include unify-sizer-modifier(10, padding, 10px);
   @include unify-sizer-modifier(14, padding, 14px);
   @include unify-sizer-modifier(16, padding, 16px);
@@ -8,20 +8,21 @@
   @include unify-sizer-modifier(20, padding, 20px);
 
   /* --------------------------------------------------------------------  top */
-    @include unify-sizer-modifier(t0, padding-top, 0);
-    @include unify-sizer-modifier(t10, padding-top, 10px);
+  @include unify-sizer-modifier(t0, padding-top, 0);
+  @include unify-sizer-modifier(t10, padding-top, 10px);
 
   /* -------------------------------------------------------------------- right */
-    @include unify-sizer-modifier(r0, padding-right, 0);
-    @include unify-sizer-modifier(r2, padding-right, 2px);
-    @include unify-sizer-modifier(r30, padding-right, 3px);
+  @include unify-sizer-modifier(r0, padding-right, 0);
+  @include unify-sizer-modifier(r2, padding-right, 2px);
+  @include unify-sizer-modifier(r10, padding-right, 10px);
+  @include unify-sizer-modifier(r30, padding-right, 30px);
 
   /* -------------------------------------------------------------------- bottom */
-    @include unify-sizer-modifier(b0, padding-bottom, 0);
+  @include unify-sizer-modifier(b0, padding-bottom, 0);
 
   /* -------------------------------------------------------------------- left */
-    @include unify-sizer-modifier(l0, padding-left, 0);
-    @include unify-sizer-modifier(l2, padding-left, 2px);
-    @include unify-sizer-modifier(l12, padding-left, 12px);
-    @include unify-sizer-modifier(l38, padding-left, 38px);
+  @include unify-sizer-modifier(l0, padding-left, 0);
+  @include unify-sizer-modifier(l2, padding-left, 2px);
+  @include unify-sizer-modifier(l12, padding-left, 12px);
+  @include unify-sizer-modifier(l38, padding-left, 38px);
 }

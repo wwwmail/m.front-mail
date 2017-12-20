@@ -11,14 +11,11 @@
 
   border-radius: 0;
 
-  &:focus {
-    outline: none !important;
+  &:focus, &:active {
+    outline: none!important;
+    background: transparent;
     box-shadow: none;
-  }
-
-  &:active {
-    background-color: $yellow-lignt;
-    box-shadow: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
 
   &:disabled {
@@ -33,6 +30,7 @@
   &--border-dark {
     border: 1px solid $mail-yellow-dark-color;
   }
+
   &--border-silver {
     border: 1px solid #ccc;
   }
@@ -150,9 +148,9 @@
 
   &--main-mobile-color {
     color: $main-btn-color;
-    fill: $main-btn-color;
-    &:hover, &:focus, &:active {
-      opacity: .6 !important;
+
+    &:focus {
+      color: $main-btn-color;
     }
   }
 

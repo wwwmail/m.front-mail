@@ -1,0 +1,122 @@
+.message-alert-send {
+  position: fixed;
+  z-index: 799;
+
+  top: 30px;
+
+  display: flex;
+
+  min-height: 50px;
+  width: 100%;
+
+
+  &__container{
+    @extend .main-flex;
+    @extend .main-align-items-center;
+
+    justify-content: flex-start;
+
+    text-align: center;
+    padding: 10px 22px;
+    height: max-content;;
+
+    margin: auto;
+
+    border-radius: 4px;
+    box-shadow: $popup-shadow;
+
+    background-color: $notification-bg;
+  }
+  &--error-message {
+    .message-alert-send__validate-icon {
+      //&:before {
+      //  content: "\e920" !important;
+      //}
+    }
+  }
+
+  &__notific {
+    line-height: 22px;
+    min-height: 22px;
+
+    padding-left: 16px;
+
+    font-family: $mainFont, Helvetica;
+    font-size: 18px;
+    word-wrap: break-word;
+    color: rgba(0, 0, 0, .8);
+  }
+
+  &__close {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 10px;
+    padding: 0;
+    width: 14px!important;
+    height: 14px;
+    outline: none;
+
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      color: $main-logo-orange;
+    }
+    &:active {
+      color: $main-logo-orange;
+      opacity: 1;
+    }
+  }
+
+  &__validate-icon {
+    font-size: 18px;
+    width: 13px;
+    margin: auto 0;
+    line-height: 1;
+
+    &:before {
+      content: "\e91e";
+
+      color: $validtae-ok-green;
+      font-family: 'icons-font' !important;
+
+      speak: none;
+      line-height: 1;
+    }
+  }
+
+}
+
+/*
+.message-alert-send {
+  display: flex;
+
+  position: fixed;
+  z-index: 899;
+
+  top: 0;
+  left: 195px;
+
+  align-items: center;
+
+  //max-width: 200px;
+  height: 32px;
+
+  background: #fff;
+
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 10px 20px -5px rgba(0,0,0,.4);
+
+  &__close {
+    padding: 0 12px;
+
+    color: #000;
+  }
+
+  &__message {
+    padding: 0 12px 0 20px;
+
+    font-size: 15px;
+  }
+}
+*/

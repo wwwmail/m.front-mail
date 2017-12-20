@@ -12,7 +12,6 @@
   }
 
   &__item {
-
     &.is-sub-menu {
       .menu-main__show-additional {
         display: inline-block;
@@ -30,10 +29,6 @@
         }
       }
     }
-
-    &:active {
-      background-color: $yellow-hard-light;
-    }
   }
 
   &__item-content {
@@ -46,6 +41,8 @@
 
     font: 300 18px/1 $mainFont;
     color: $menu-text-color;
+
+    @include action-yellow-light;
   }
 
   &__item-sub {
@@ -60,20 +57,20 @@
     color: $menu-text-color;
 
     .menu-main__link {
-      padding-left: 3px!important;
+      padding-left: 3px !important;
     }
   }
 
   &__link {
     @extend .main-flex;
-    align-items: baseline;
+    align-items: center;
 
     width: 100%;
 
     font: 400 15px/1 $mainFont;
     color: $menu-text-color;
 
-    padding: 8px 20px 8px 13px;
+    padding: 9px 20px 9px 13px;
 
     cursor: pointer;
     text-overflow: ellipsis;
@@ -105,7 +102,7 @@
 
   &__title {
     position: relative;
-    top: -2px;
+    top: 2px;
 
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -123,7 +120,7 @@
 
   &__additional-option {
     cursor: pointer;
-    padding: 8px 0 8px 7px;
+    padding: 9px 0 9px 7px;
     margin-right: 7px;
     font-size: 24px;
     text-align: center;
@@ -132,6 +129,7 @@
     @extend .main-flex;
     align-items: center;
     justify-content: center;
+    //background-color:red !important;
 
     text-overflow: ellipsis;
     white-space: normal;
@@ -151,12 +149,10 @@
   &__clear-brush {
     display: none;
     opacity: .5;
-    &:focus {
-      outline: none !important;
-    }
-    &:hover, &:active {
-      opacity: .8;
-    }
+
+    //&:focus {
+    //  outline: none !important;
+    //}
 
     &--active {
       display: block;

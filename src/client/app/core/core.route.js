@@ -7,18 +7,6 @@
 
     /* @ngInject */
     function appRun(routerHelper, $cookies, $auth, timezone, CONFIG, $rootScope) {
-
-        $rootScope.CONFIG = CONFIG;
-
-        timezone.get();
-
-        if ($cookies.get('authToken')) {
-            var tokenArr = $cookies.get('authToken').split('+');
-            $auth.setAuthHeaders({
-                "Authorization": "Bearer " + tokenArr[1]
-            });
-        }
-
         var otherwise = '/';
         routerHelper.configureStates(getStates(), otherwise);
     }

@@ -28,10 +28,17 @@ button {
   cursor: pointer;
 
   transition: all .3s;
+
+  &:focus, &:active, &:hover {
+    background: transparent;
+    box-shadow: none;
+  }
 }
 
 a, button, input {
-  &:focus, &:hover {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+  &:focus, &:hover &:active {
     outline: none;
   }
 }

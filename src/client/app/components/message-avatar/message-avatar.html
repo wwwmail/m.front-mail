@@ -1,30 +1,32 @@
-<div class="{{ vm.classNames }}"
-     ng-class="{'avatar avatar--settings avatar--size42 avatar--second-style': !vm.classNames}">
+<label ng-click="$event.stopPropagation();">
+    <div class="{{ vm.classNames }}"
+         ng-class="{'avatar avatar--settings avatar--size42 avatar--second-style': !vm.classNames}">
 
-    <avatar-name name="vm.message.from"
-                 email="vm.message.fromAddress"
-                 ng-if="(!vm.message.avatar || !vm.isAvatarIsSuccess) && (vm.$state.params.mbox !== 'Sent' && vm.$state.params.mbox !== 'Drafts')">
-    </avatar-name>
+        <avatar-name name="vm.message.from"
+                     email="vm.message.fromAddress"
+                     ng-if="(!vm.message.avatar || !vm.isAvatarIsSuccess) && (vm.$state.params.mbox !== 'Sent' && vm.$state.params.mbox !== 'Drafts')">
+        </avatar-name>
 
-    <avatar-name name="vm.message.to[0].name"
-                 email="vm.message.to[0].address"
-                 ng-if="(!vm.message.avatar || !vm.isAvatarIsSuccess) && (!vm.user.profile.photo && (vm.$state.params.mbox === 'Sent' || vm.$state.params.mbox === 'Drafts'))">
-    </avatar-name>
+        <avatar-name name="vm.message.to[0].name"
+                     email="vm.message.to[0].address"
+                     ng-if="(!vm.message.avatar || !vm.isAvatarIsSuccess) && (!vm.user.profile.photo && (vm.$state.params.mbox === 'Sent' || vm.$state.params.mbox === 'Drafts'))">
+        </avatar-name>
 
-    <img class="avatar__image"
-         ng-hide="!vm.isAvatarIsSuccess"
-         ng-if="vm.message.avatar && !vm.isAvatarIsError"
-         ng-src="{{ vm.message.avatar }}"
-         image-load
-         image-load-is-error="vm.isAvatarIsError"
-         image-load-is-success="vm.isAvatarIsSuccess"
-         image-load-is-loading="vm.isAvatarIsLoading">
+        <img class="avatar__image"
+             ng-hide="!vm.isAvatarIsSuccess"
+             ng-if="vm.message.avatar && !vm.isAvatarIsError"
+             ng-src="{{ vm.message.avatar }}"
+             image-load
+             image-load-is-error="vm.isAvatarIsError"
+             image-load-is-success="vm.isAvatarIsSuccess"
+             image-load-is-loading="vm.isAvatarIsLoading">
 
-    <div class="inbox-message__check-message"></div>
+        <div class="inbox-message__check-message"></div>
 
-    <input type="checkbox"
-           ng-model="vm.message.isChecked"
-           style="display: none;"
-           data-checklist-model="vm.messages.checked"
-           data-checklist-value="vm.message">
-</div>
+        <input type="checkbox"
+               ng-model="vm.message.isChecked"
+               style="display: none;"
+               data-checklist-model="vm.messages.checked"
+               data-checklist-value="vm.message">
+    </div>
+</label>

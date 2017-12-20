@@ -124,7 +124,7 @@
                         <button class="settings-rule-add__condition-remove btn btn--not-style btn--not-events"
                                 type="button"
                                 ng-click="vm.removeRule(rule)">
-                            <span class="mrg--r5">Удалить условие</span>
+                            <span class="mrg--r5">{{ 'REMOVE_CONDITION' | translate }}</span>
                             <span class="icon-delete"></span>
                         </button>
                     </div>
@@ -239,7 +239,7 @@
         <!-- Пересылка писем -->
         <div class="settings-rule-add__section">
             <div class="settings-rule-add__item mrg--b0">
-                <div class="settings-rule-add__caption">Пересылка писем</div>
+                <div class="settings-rule-add__caption">{{ 'RESEND_MAIL' | translate }}</div>
                 <div class="settings-rule-add__info flex align-items--cn">
                     <span class="icon-info mrg--r10"></span>
                     <span>{{ 'RULE_ADD_MESSAGE_WHEN_ACTIVE_RULE' | translate }}</span>

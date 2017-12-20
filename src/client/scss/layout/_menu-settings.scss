@@ -41,7 +41,7 @@
       }
     }
 
-    &--mx300{
+    &--mx300 {
       max-width: 300px;
     }
   }
@@ -63,6 +63,14 @@
 
     background-color: $white-color;
     border: 1px solid #ccc;
+  }
+
+  &__item {
+    &--not-active {
+      &:active, &:focus, &:hover {
+        background-color: transparent !important;
+      }
+    }
   }
 
   &__counter {

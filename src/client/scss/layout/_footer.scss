@@ -9,12 +9,13 @@
 
   background: #fff;
 
-  &__auth{
+  &__auth {
     position: relative;
-    width: calc(100% + 30px);
-    left: -15px;
 
+    width: calc(100% + 30px);
     height: 42px;
+
+    left: -15px;
 
     background-color: rgba($auth-footer-color, .8);
 
@@ -22,34 +23,32 @@
 
     border: none;
 
-    font: 100 13px/1 Arial,sans-serif;
+    font: 100 13px/1 Arial, sans-serif;
 
     padding: 0 25px;
 
-    display: inline-flex;
-    justify-content: flex-start;
+    display: flex;
+
+    justify-content: space-between;
+
     align-items: center;
-    flex: 0 0 auto;
+
+    //flex: 0 0 auto;
 
     @media only screen and (max-width: 360px) {
       padding: 0 18px;
     }
   }
 
-  &__copyright{
-    min-width: 240px;
-
-    @media only screen and (max-width: 360px) {
-      min-width: 230px;
-    }
+  &__copyright {
   }
 
-  &__menu{
+  &__menu {
     width: 450px;
-    padding-left:10%;
+    padding-left: 10%;
   }
 
-  &__right-menu{
+  &__right-menu {
   }
 
   &__row {

@@ -9,7 +9,8 @@
         Mail.{{ CONFIG.domainZone }}
     </title>
 
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -20,18 +21,26 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
 
     <link href="/css/vendor-668b75702c.css" rel="stylesheet">
-    <link href="/css/style-84e387ec7c.css" rel="stylesheet">
+    <link href="/css/style-895ea93da5.css" rel="stylesheet">
 
     <base href="/">
 </head>
 
 <body ng-class="{'scroll-fix--none': isOpenMenu || isOpenSettingsMenu}">
-    <ui-view></ui-view>
+<alert-message></alert-message>
 
-    <iframe-paste></iframe-paste>
+<ui-view></ui-view>
 
+<<<<<<< HEAD
     <script type="text/javascript" src="/config/config.js?v=0.12"></script>
     <script type="text/javascript" src="/js/vendor-4195921d4f.js"></script>
     <script type="text/javascript" src="/js/app-8f9ac0718d.js"></script>
+=======
+<iframe-paste></iframe-paste>
+
+<script type="text/javascript" src="/config/config.js?v=0.12"></script>
+<script type="text/javascript" src="/js/vendor-4195921d4f.js"></script>
+<script type="text/javascript" src="/js/app-831eda1a2e.js"></script>
+>>>>>>> 94852849f352098dc7b34e5e4619f59368368041
 </body>
 </html>

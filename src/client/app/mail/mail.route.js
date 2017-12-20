@@ -16,6 +16,7 @@
             {
                 state: 'mail',
                 config: {
+                    parent: 'config',
                     url: '/mail',
                     templateUrl: 'app/mail/mail.html',
                     controller: 'MailController',

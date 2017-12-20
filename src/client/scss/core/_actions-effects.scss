@@ -1,0 +1,85 @@
+@mixin action-yellow-light {
+  //transition: all .05s!important;
+
+  //-webkit-tap-highlight-color: initial;
+  border-radius: 0 !important;
+  -webkit-tap-highlight-color: rgba($yellow-lignt, .6);
+
+  &:active {
+    //background-color: $yellow-lignt!important;
+    //-webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+}
+
+@mixin animate-style($width, $height, $color-text, $color-bg, $bg-opacity, $daley) {
+  position: relative;
+
+  color: $color-text !important;
+
+  overflow: visible !important;
+  transition: color 0.7s;
+  &:after {
+    content: '';
+    position: absolute;
+    top: calc(-17%);
+    left: calc(-17%);
+
+    width: $width;
+    height: $height;
+
+    border-radius: 50%;
+
+    background-color: rgba($color-bg, $bg-opacity) !important;
+    opacity: 0;
+
+    pointer-events: none;
+
+    animation: effect-round-up $daley ease-out forwards;
+  }
+}
+
+.touch {
+  &-yellow-text {
+    color: $yellow-normal-light !important;
+    transition: all .5s ease-in !important;
+  }
+
+  &-yellow-bg {
+    background-color: rgba($yellow-normal-light, .5) !important;
+    transition: all .3s ease-in !important;
+  }
+
+  &-yellow-bg-round {
+    @include animate-style(45px, 45px, $yellow-normal-light, $textBlack, .03, .8s);
+  }
+}
+
+@-webkit-keyframes effect-round-up {
+  0% {
+    opacity: 1;
+    transform: scale3d(0.5, 0.5, 1);
+  }
+  25% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes effect-round-up {
+  0% {
+    opacity: 1;
+    transform: scale3d(0.5, 0.5, 1);
+  }
+  25% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale3d(1, 1, 1);
+  }
+}

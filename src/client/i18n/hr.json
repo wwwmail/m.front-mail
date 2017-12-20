@@ -448,9 +448,22 @@
   "SERVER": "Server",
   "PORT": "Pristup",
   "DELETING_FOLDER_MSG": "U mapi {{ folder }} {{ messageCount }} e-pošte. E-pošta će biti izbrisane s mapom.",
-
   "EMPTY_THE_FOLDER": "Ispraznite mapu",
   "EMPTY_THE_FOLDER_MSG": "Sve poruke e-pošte bit će izbrisane iz mape \"{{ folder }}\"",
-
-  "RETURN_TO_MAIL": "Vratite se na e-poštu"
+  "RETURN_TO_MAIL": "Vratite se na e-poštu",
+  "PROFILE_PORTRAIT": "Portret profila",
+  "REMOVE_CONDITION": "Izbriši stanje",
+  "RESEND_MAIL": "Prosljeđivanje e-pošte",
+  "NAME_OF_ATTACHMENT": "Naziv privitka",
+  "BODY_LETTER": "Korpus poruke",
+  "HEADER": "Zaglavlje",
+  "TO_WHOM_OR_COPY": "Komu ili kopija",
+  "CONTAINS": "Sadrži",
+  "NOT_CONTAINS": "Ne sadrži",
+  "MATCHES": "pristaje",
+  "NOT_MATCHES": "ne slaže se",
+  "AVATAR_SUCCESS_UPLOADED": "Spremljeno",
+  "SAVED": "Spremljeno",
+  "FOLDER_DELETED": "Mapa je izbrisana",
+  "TAG_DELETED": "Oznaka je izbrisana"  
 }

@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('tag', tag);
 
-    tag.$inject = ['CONFIG', '$resource', '$http', '$rootScope', '$auth'];
+    tag.$inject = ['CONFIG', '$resource', '$http', '$rootScope', '$auth', 'notify'];
 
-    function tag(CONFIG, $resource, $http, $rootScope, $auth) {
+    function tag(CONFIG, $resource, $http, $rootScope, $auth, notify) {
         var API_URL = CONFIG.APIHost + '/tag';
 
         var resource = $resource(API_URL,
@@ -67,7 +67,11 @@
         }
 
         function destroy(params, data) {
-            return resource.destroy(params, data).$promise;
+            return resource.destroy(params, data).$promise
+                .then(function (response) {
+                    notify.message('TAG_DELETED');
+                    return response;
+                });
         }
 
         function getTagsByMessage(params, data) {

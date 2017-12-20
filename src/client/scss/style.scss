@@ -11,6 +11,7 @@
 @import 'core/fonts';
 @import "core/resets";
 @import "core/inheritance";
+@import "core/actions-effects";
 /*------------------------------------------- helpers*/
 @import 'core/helpers/position';
 @import 'core/helpers/margin';
@@ -128,6 +129,7 @@
 @import "components/lang-list";
 @import "components/timezone-list";
 @import "components/message-textarea";
+@import "components/message-alert-send";
 
 body {
   //width: 100%;
