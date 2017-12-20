@@ -34,7 +34,6 @@
 
         function activate() {
             vm.$state = $state;
-            console.log('vm.state', vm.$state.current.name);
         }
 
         function checkedAllMessages() {
@@ -79,7 +78,6 @@
         function goToAnswer() {
             var data = mail.getAnswerData();
             $state.go('mail.compose', {
-                // to: data.fromAddress,
                 connection_id: data.connection_id,
                 mbox: data.mbox,
                 id: data.number,
@@ -94,8 +92,6 @@
             _.forEach(vm.messages.checked, function (item) {
                 ids.push(item.number);
             });
-
-            console.log('ids', ids);
 
             mail.setFwdData(vm.messages.checked);
 
@@ -122,7 +118,6 @@
 
             modalInstance.result.then(function (response) {
                 vm.messages = response.result.messages;
-                // console.log('response', response);
             });
         }
 

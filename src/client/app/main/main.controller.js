@@ -2,17 +2,15 @@
     'use strict';
 
     angular
-        .module('marketing.home')
-        .controller('HomeController', HomeController);
+        .module('main')
+        .controller('MainController', MainController);
 
-    HomeController.$inject = ['$auth', '$state', '$stateParams', 'profile'];
+    MainController.$inject = ['$auth', '$state', '$stateParams', 'profile'];
     /* @ngInject */
-    function HomeController($auth, $state, $stateParams, profile) {
+    function MainController($auth, $state, $stateParams, profile) {
         var vm = this;
 
         activate();
-
-        ////
 
         function activate() {
             var params = {};
