@@ -7484,25 +7484,22 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
 
 .message-alert-send {
   position: fixed;
-  z-index: 799;
   top: 30px;
-  left: calc(50% - (45vw / 2));
-  display: flex;
+  z-index: 799;
   min-height: 50px;
   width: 100%;
 }
 .message-alert-send__container {
   justify-content: flex-start;
-  text-align: center;
-  padding: 10px 22px;
+  width: max-content;
   height: max-content;
-  margin: auto;
+  margin: 0 auto;
+  padding: 12px 22px;
   border-radius: 4px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
   background-color: #f6edb4;
 }
 .message-alert-send__notific {
-  line-height: 22px;
   min-height: 22px;
   padding-left: 16px;
   font-family: "HelveticaNeueCyr", sans-serif, Helvetica;

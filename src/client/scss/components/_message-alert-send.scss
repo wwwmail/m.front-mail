@@ -1,11 +1,10 @@
 .message-alert-send {
   position: fixed;
+  top: 30px;
+
   z-index: 799;
 
-  top: 30px;
-  left: calc(50% - (45vw / 2));
-
-  display: flex;
+  //display: flex;
 
   min-height: 50px;
   width: 100%;
@@ -16,11 +15,14 @@
 
     justify-content: flex-start;
 
-    text-align: center;
-    padding: 10px 22px;
-    height: max-content;;
+    width: max-content;
+    height: max-content;
 
-    margin: auto;
+    margin: 0 auto;
+    padding: 12px 22px;
+
+    //
+    //text-align: center;
 
     border-radius: 4px;
     box-shadow: $popup-shadow;
@@ -29,14 +31,11 @@
   }
   &--error-message {
     .message-alert-send__validate-icon {
-      //&:before {
-      //  content: "\e920" !important;
-      //}
     }
   }
 
   &__notific {
-    line-height: 22px;
+    //line-height: 22px;
     min-height: 22px;
 
     padding-left: 16px;
