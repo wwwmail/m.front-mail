@@ -5,10 +5,23 @@
         .module('auth.passwordUpdate')
         .controller('PasswordUpdateController', PasswordUpdateController);
 
-    PasswordUpdateController.$inject = ['$state', '$auth', 'CONFIG'];
+    PasswordUpdateController.$inject = ['$state', '$auth', '$timeout', 'CONFIG', 'configResolve'];
     /* @ngInject */
-    function PasswordUpdateController($state, $auth, CONFIG) {
+    function PasswordUpdateController($state, $auth, $timeout, CONFIG, configResolve) {
         var vm = this;
+
+        vm.codes = {
+            list: [
+                {
+                    name: '+420',
+                    value: 420
+                },
+                {
+                    name: '+421',
+                    value: 421
+                }
+            ]
+        };
 
         vm.step = 1;
 
@@ -42,25 +55,39 @@
         vm.resetPassword = resetPassword;
         vm.isEmail = isEmail;
 
-        ////
-
         activate();
 
+        ////
+
         function activate() {
-            vm.CONFIG = CONFIG;
             vm.username = $state.params.username;
+
+            configResolve.$promise.then(function (response) {
+                if (response.data.phoneCode) {
+                    $timeout(function () {
+                        vm.userForm.model.phoneCode = parseInt(response.data.phoneCode);
+                    });
+                }
+            });
         }
 
-        function requestPasswordReset(form) {
-            // if (form.$invalid) return;
+        function requestPasswordReset() {
+            var data = {
+                username: vm.username
+            };
 
-            vm.passwordResetForm.model.username = vm.username;
+            if (vm.userForm.model.email) {
+                data.email = vm.userForm.model.email;
+            }
+
+            if (vm.userForm.model.phone) {
+                data.phone = vm.userForm.model.phoneCode + '' + vm.userForm.model.phone;
+            }
 
             vm.userForm.isLoading = true;
-            $auth.requestPasswordReset(vm.passwordResetForm.model)
+            $auth.requestPasswordReset(data)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
-
                     vm.step = 2;
                 })
                 .catch(function (response) {
@@ -69,9 +96,7 @@
         }
 
         function resetPassword() {
-            if (userForm.$invalid) return;
             vm.userForm.model.username = $state.params.username;
-            console.log(vm.userForm);
             vm.userForm.isLoading = true;
             $auth.updatePassword(vm.userForm.model)
                 .then(function (response) {

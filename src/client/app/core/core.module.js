@@ -25,6 +25,7 @@
             'pascalprecht.translate',
             'ngCookies',
             'ngPasswordStrength',
-            'angular-google-adsense'
+            'angular-google-adsense',
+            'vcRecaptcha'
         ]);
 })();

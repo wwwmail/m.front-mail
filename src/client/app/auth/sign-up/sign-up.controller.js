@@ -5,14 +5,27 @@
         .module('auth.signUp')
         .controller('SignUpController', SignUpController);
 
-    SignUpController.$inject = ['$state', '$auth', '$timeout', 'authService', 'profile', 'CONFIG'];
+    SignUpController.$inject = ['$state', '$auth', '$timeout', '$translate', 'authService', 'profile', 'CONFIG', 'configResolve'];
     /* @ngInject */
-    function SignUpController($state, $auth, $timeout, authService, profile, CONFIG) {
+    function SignUpController($state, $auth, $timeout, $translate, authService, profile, CONFIG, configResolve) {
         var vm = this;
 
         vm.CONFIG = CONFIG;
 
         vm.isAdditionalEmail = true;
+
+        vm.codes = {
+            list: [
+                {
+                    name: '+420',
+                    value: 420
+                },
+                {
+                    name: '+421',
+                    value: 421
+                }
+            ]
+        };
 
         vm.userForm = {
             isLoading: false,
@@ -34,16 +47,26 @@
             model: {}
         };
 
+
         vm.signUp = signUp;
         vm.sendCode = sendCode;
         vm.checkUserName = checkUserName;
 
+
         activate();
 
+        ////
+
         function activate() {
-            $timeout(function () {
-                vm.userForm.model.phone = 420;
-            }, 1250);
+            vm.lang = $translate.use();
+
+            configResolve.$promise.then(function (response) {
+                if (response.data.phoneCode) {
+                    $timeout(function () {
+                        vm.userForm.model.phoneCode = parseInt(response.data.phoneCode);
+                    });
+                }
+            });
         }
 
         function signUp() {

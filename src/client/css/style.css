@@ -63,6 +63,12 @@
 .width--size129 {
   width: 129px !important;
 }
+.width--size73 {
+  width: 73px !important;
+}
+.width--size133 {
+  width: 133px !important;
+}
 .width--size150 {
   width: 150px !important;
 }
@@ -4930,6 +4936,12 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
 }
 .select-list-new--auto-width .select2-result-label {
   padding-left: 16px !important;
+}
+.select-list-new--auth .select2-chosen {
+  margin-right: 0 !important;
+}
+.select-list-new--auth .select2-arrow {
+  width: 20px !important;
 }
 
 .m-input__body {

@@ -296,6 +296,7 @@
       line-height: 18px !important;
     }
   }
+
   &--no-border {
     .select-list__body.select2-choice {
       border: none !important;
@@ -646,6 +647,16 @@
       > div {
         @extend .main-text-dots;
       }
+    }
+  }
+
+  &--auth {
+    .select2-chosen {
+      margin-right: 0 !important;
+    }
+
+    .select2-arrow {
+      width: 20px !important;
     }
   }
 }

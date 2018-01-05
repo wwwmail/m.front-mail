@@ -145,7 +145,28 @@
                             </label>
 
                             <div class="form__field-item mrg--b25 flex flex--row-wrap">
-                                <div class="field-style width--size177">
+                                <div class="field-style width--size73">
+                                    <ui-select ng-model="vm.userForm.model.phoneCode"
+                                               class="select-list select-list--size_l select-list--auth font--size12"
+                                               ng-class="{'select-list--error': userForm.phoneCode.$invalid}"
+                                               theme="select2"
+                                               name="phoneCode"
+                                               search-enabled="false"
+                                               server-error
+                                               ng-required="true">
+                                        <ui-select-match
+                                                class="select-list__body select-list--size_xs width--inh font--size14"
+                                                placeholder="{{ 'Код телефона' | translate }}">
+                                            {{ $select.selected.name | translate }}
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="item.value as item in vm.codes.list"
+                                                           value="{{ $select.selected.value }}">
+                                            <div ng-bind-html="item.name | translate"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="field-style width--size133">
                                     <input class="input input--size_l input--up-shadow input--focus-icon width--inh font--size12"
                                            type="text"
                                            name="phone"
@@ -157,7 +178,7 @@
                                            required>
                                 </div>
 
-                                <div class="field-style width--inh width--max126">
+                                <div class="field-style width--inh">
                                     <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" type="button"
                                             ng-click="vm.sendCode()">
                                         {{ 'BTN_TO_GET_THE_CODE' | translate }}
@@ -255,6 +276,18 @@
                                                    class="validation--form-auth validation--mrg-t5"></validation-errors>
 
                             </div>
+                        </div>
+
+
+                        <div class="form__field-item mrg--b10">
+                            <div vc-recaptcha
+                                 ng-model="vm.userForm.model.gRecaptchaResponse"
+                                 theme="light"
+                                 size="normal"
+                                 type="'image'"
+                                 key="'6LfYcD8UAAAAAGgAM-q3F9_yDKcC4-uH5ck3HwZH'"
+                                 lang="vm.lang"
+                            ></div>
                         </div>
 
                         <!-- Зарегистрироватся -->
