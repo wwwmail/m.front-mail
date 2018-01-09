@@ -10,6 +10,8 @@
     function PasswordUpdateController($state, $auth, $timeout, CONFIG, configResolve) {
         var vm = this;
 
+        vm.CONFIG = CONFIG;
+
         vm.codes = {
             list: [
                 {
