@@ -5,9 +5,9 @@
         .module('app.components')
         .controller('PlaqueSecureController', PlaqueSecureController);
 
-    PlaqueSecureController.$inject = ['$auth', '$state'];
+    PlaqueSecureController.$inject = ['$auth', '$state', 'CONFIG'];
     /* @ngInject */
-    function PlaqueSecureController($auth, $state) {
+    function PlaqueSecureController($auth, $state, CONFIG) {
         var vm = this;
 
         vm.isRouteResolved = isRouteResolved;
@@ -19,8 +19,7 @@
         function activate() {
             vm.$auth = $auth;
             vm.$state = $state;
-            console.log('vm.$state', vm.$state.current);
-            console.log('vm.$auth', vm.$auth.user);
+            vm.CONFIG = CONFIG;
         }
 
         function isRouteResolved() {

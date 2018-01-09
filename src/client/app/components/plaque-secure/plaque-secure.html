@@ -1,4 +1,5 @@
-<div class="plaque-secure plaque-secure--danger" ng-if="vm.$auth.user.signedIn && vm.isRouteResolved()">
+<div class="plaque-secure plaque-secure--danger"
+     ng-if="vm.$auth.user.signedIn && vm.isRouteResolved() && vm.CONFIG.domainZone === 'md'">
     <div class="plaque-secure__body">
         <div>
             Ваш аккаунт недостаточно защищен. Перейдите в раздел
