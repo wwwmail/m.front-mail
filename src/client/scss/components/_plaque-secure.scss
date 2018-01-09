@@ -1,0 +1,17 @@
+.plaque-secure {
+  width: 100%;
+
+  &__body {
+    padding: 0 10px;
+
+    height: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &--danger {
+    background-color: #ffe8e8;
+  }
+}

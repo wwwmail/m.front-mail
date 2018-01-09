@@ -130,10 +130,9 @@
 @import "components/timezone-list";
 @import "components/message-textarea";
 @import "components/message-alert-send";
+@import "components/plaque-secure";
 
 body {
-  //width: 100%;
-  //height: 100%;
   width: calc(100% - 0px);
   height: calc(100% - 0px);
 

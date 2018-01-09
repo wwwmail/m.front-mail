@@ -7553,6 +7553,20 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
   line-height: 1;
 }
 
+.plaque-secure {
+  width: 100%;
+}
+.plaque-secure__body {
+  padding: 0 10px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.plaque-secure--danger {
+  background-color: #ffe8e8;
+}
+
 body {
   width: calc(100% - 0px);
   height: calc(100% - 0px);
