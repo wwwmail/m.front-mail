@@ -78,12 +78,12 @@
                 username: vm.username
             };
 
-            if (vm.userForm.model.email) {
-                data.email = vm.userForm.model.email;
+            if (vm.passwordResetForm.model.email) {
+                data.email = vm.passwordResetForm.model.email;
             }
 
-            if (vm.userForm.model.phone) {
-                data.phone = vm.userForm.model.phoneCode + '' + vm.userForm.model.phone;
+            if (vm.passwordResetForm.model.phone) {
+                data.phone = vm.passwordResetForm.model.phoneCode + '' + vm.passwordResetForm.model.phone;
             }
 
             vm.userForm.isLoading = true;
