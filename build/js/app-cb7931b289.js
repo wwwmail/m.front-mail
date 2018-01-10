@@ -61,15 +61,15 @@
 (function() {
   'use strict';
 
-  angular.module('app.components', []);
+  angular.module('app.layout', [
+    'app.core'
+  ]);
 })();
 
 (function() {
   'use strict';
 
-  angular.module('app.layout', [
-    'app.core'
-  ]);
+  angular.module('app.components', []);
 })();
 
 (function() {
@@ -81,20 +81,20 @@
 (function () {
     'use strict';
 
+    angular.module('main', [
+        'app.core'
+    ]);
+})();
+
+(function () {
+    'use strict';
+
     angular.module('mail', [
         'mail.inbox',
         'mail.compose',
         'mail.message'
     ]);
 })();
-(function () {
-    'use strict';
-
-    angular.module('main', [
-        'app.core'
-    ]);
-})();
-
 (function() {
   'use strict';
 
@@ -117,9 +117,33 @@
     ]);
 })();
 (function() {
+  'use strict';
+
+  angular.module('blocks.logger', []);
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('blocks.router', [
+    'ui.router',
+    'blocks.logger'
+  ]);
+})();
+
+(function() {
     'use strict';
 
     angular.module('auth.passwordReset', [
+        'app.core',
+        'app.components'
+    ]);
+})();
+
+(function() {
+    'use strict';
+
+    angular.module('auth.passwordUpdate', [
         'app.core',
         'app.components'
     ]);
@@ -146,15 +170,6 @@
 (function() {
     'use strict';
 
-    angular.module('auth.passwordUpdate', [
-        'app.core',
-        'app.components'
-    ]);
-})();
-
-(function() {
-    'use strict';
-
     angular.module('auth.signUp', [
         'app.core',
         'app.components',
@@ -162,31 +177,16 @@
     ]);
 })();
 
-(function() {
-  'use strict';
+(function () {
+    'use strict';
 
-  angular.module('blocks.logger', []);
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('blocks.router', [
-    'ui.router',
-    'blocks.logger'
-  ]);
+    angular.module('mail.compose', []);
 })();
 
 (function () {
     'use strict';
 
     angular.module('mail.inbox', []);
-})();
-
-(function () {
-    'use strict';
-
-    angular.module('mail.compose', []);
 })();
 
 (function () {
@@ -204,12 +204,6 @@
 (function () {
     'use strict';
 
-    angular.module('settings.main', []);
-})();
-
-(function () {
-    'use strict';
-
     angular.module('settings.contacts', []);
 })();
 
@@ -217,6 +211,12 @@
     'use strict';
 
     angular.module('settings.folders', []);
+})();
+
+(function () {
+    'use strict';
+
+    angular.module('settings.main', []);
 })();
 
 (function () {
@@ -1346,79 +1346,6 @@
     'use strict';
 
     angular
-        .module('mail')
-        .controller('MailController', MailController);
-
-    MailController.$inject = ['folder', 'tagResolve', '$rootScope'];
-    /* @ngInject */
-    function MailController(folder, tagResolve, $rootScope) {
-        var vm = this;
-
-        vm.closeMenu = closeMenu;
-        vm.closeSettingsMenu = closeSettingsMenu;
-        activate();
-
-        function activate() {
-            vm.folder = folder;
-            vm.tag = tagResolve;
-        }
-
-        function closeMenu() {
-            $rootScope.isOpenMenu = false;
-        }
-
-        function closeSettingsMenu() {
-            $rootScope.isOpenSettingsMenu = false;
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('mail')
-        .run(appRun);
-
-    appRun.$inject = ['routerHelper'];
-    /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
-    }
-
-    function getStates() {
-        return [
-            {
-                state: 'mail',
-                config: {
-                    parent: 'config',
-                    url: '/mail',
-                    templateUrl: 'app/mail/mail.html',
-                    controller: 'MailController',
-                    controllerAs: 'vm',
-                    resolve: {
-                        auth: function ($auth, $state) {
-                            return $auth.validateUser().catch(function () {
-                                $state.go('signIn');
-                            });
-                        },
-                        folder: function (mailBox) {
-                            return mailBox.get();
-                        },
-                        tagResolve: function (tag) {
-                            return tag.get();
-                        }
-                    }
-                }
-            }
-        ];
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
         .module('main')
         .controller('MainController', MainController);
 
@@ -1497,6 +1424,79 @@
                     url: '/?version&token&page&compose&success',
                     controller: 'MainController',
                     controllerAs: 'vm'
+                }
+            }
+        ];
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('mail')
+        .controller('MailController', MailController);
+
+    MailController.$inject = ['folder', 'tagResolve', '$rootScope'];
+    /* @ngInject */
+    function MailController(folder, tagResolve, $rootScope) {
+        var vm = this;
+
+        vm.closeMenu = closeMenu;
+        vm.closeSettingsMenu = closeSettingsMenu;
+        activate();
+
+        function activate() {
+            vm.folder = folder;
+            vm.tag = tagResolve;
+        }
+
+        function closeMenu() {
+            $rootScope.isOpenMenu = false;
+        }
+
+        function closeSettingsMenu() {
+            $rootScope.isOpenSettingsMenu = false;
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('mail')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper'];
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
+
+    function getStates() {
+        return [
+            {
+                state: 'mail',
+                config: {
+                    parent: 'config',
+                    url: '/mail',
+                    templateUrl: 'app/mail/mail.html',
+                    controller: 'MailController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        auth: function ($auth, $state) {
+                            return $auth.validateUser().catch(function () {
+                                $state.go('signIn');
+                            });
+                        },
+                        folder: function (mailBox) {
+                            return mailBox.get();
+                        },
+                        tagResolve: function (tag) {
+                            return tag.get();
+                        }
+                    }
                 }
             }
         ];
@@ -3404,6 +3404,189 @@
     'use strict';
 
     angular
+        .module('blocks.logger')
+        .factory('logger', logger);
+
+    logger.$inject = ['$log', 'toastr'];
+
+    /* @ngInject */
+    function logger($log, toastr) {
+        var service = {
+            showToasts: true,
+            error: error,
+            info: info,
+            success: success,
+            warning: warning,
+
+            // straight to console; bypass toastr
+            log: $log.log
+        };
+
+        return service;
+        /////////////////////
+
+        function error(message, data, title) {
+            toastr.error(message, title);
+            $log.error('Error: ' + message, data);
+        }
+
+        function info(message, data, title) {
+            toastr.info(message, title);
+            $log.info('Info: ' + message, data);
+        }
+
+        function success(message, data, title) {
+            toastr.success(message, title);
+            $log.info('Success: ' + message, data);
+        }
+
+        function warning(message, data, title) {
+            toastr.warning(message, title);
+            $log.warn('Warning: ' + message, data);
+        }
+    }
+}());
+
+/* Help configure the state-base ui.router */
+(function () {
+    'use strict';
+
+    angular
+        .module('blocks.router')
+        .provider('routerHelper', routerHelperProvider);
+
+    routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
+    /* @ngInject */
+    function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
+        /* jshint validthis:true */
+        var config = {
+            docTitle: '',
+            resolveAlways: {}
+        };
+
+        // if (!(window.history && window.history.pushState)) {
+        //   window.location.hash = '/';
+        // }
+
+        $locationProvider.html5Mode(true);
+        $locationProvider.hashPrefix('!');
+
+        this.configure = function (cfg) {
+            angular.extend(config, cfg);
+        };
+
+        this.$get = RouterHelper;
+        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger', 'mailBox'];
+        /* @ngInject */
+        function RouterHelper($location, $rootScope, $state, $timeout, logger, mailBox) {
+            var handlingStateChangeError = false;
+            var hasOtherwise = false;
+            var stateCounts = {
+                errors: 0,
+                changes: 0
+            };
+
+            var service = {
+                configureStates: configureStates,
+                getStates: getStates,
+                stateCounts: stateCounts
+            };
+
+            init();
+
+            return service;
+
+            ///////////////
+
+            function configureStates(states, otherwisePath) {
+                states.forEach(function (state) {
+                    state.config.resolve =
+                        angular.extend(state.config.resolve || {}, config.resolveAlways);
+                    $stateProvider.state(state.state, state.config);
+                });
+                if (otherwisePath && !hasOtherwise) {
+                    hasOtherwise = true;
+                    $urlRouterProvider.otherwise(otherwisePath);
+                }
+            }
+
+            function handleRoutingErrors() {
+                // Route cancellation:
+                // On routing error, go to the dashboard.
+                // Provide an exit clause if it tries to do it twice.
+                $rootScope.$on('$stateChangeError',
+                    function (event, toState, toParams, fromState, fromParams, error) {
+                        if (handlingStateChangeError) {
+                            return;
+                        }
+                        stateCounts.errors++;
+                        handlingStateChangeError = true;
+                        var destination = (toState &&
+                            (toState.title || toState.name || toState.loadedTemplateUrl)) ||
+                            'unknown target';
+                        var msg = 'Error routing to ' + destination + '. ' +
+                            (error.data || '') + '. <br/>' + (error.statusText || '') +
+                            ': ' + (error.status || '');
+                        // logger.warning(msg, [toState]);
+                        $location.path('/');
+                    }
+                );
+            }
+
+            function init() {
+                handleRoutingErrors();
+                updateDocTitle();
+            }
+
+            function getStates() {
+                return $state.get();
+            }
+
+            function updateDocTitle() {
+                $rootScope.$on('$stateChangeSuccess',
+                    function (event, toState, toParams, fromState, fromParams) {
+                        document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+                        stateCounts.changes++;
+                        handlingStateChangeError = false;
+
+                        console.log('toParams', toParams);
+
+                        $rootScope.isOpenMenu = false;
+                        $rootScope.isOpenSettingsMenu = false;
+
+                        if (toState.name === 'mail.inbox' || toState.name === 'mail.message') {
+                            if (!toParams.filter) {
+                                var folder = _.find(mailBox.getCacheList().items, {'name': toParams.mbox});
+                            }
+
+                            if (toParams.filter === 'unseen') {
+                                folder = {name: 'UNREAD'};
+                            }
+
+                            if (toParams.filter === 'attach') {
+                                folder = {name: 'SEARCH_IS_ATTACH'};
+                            }
+
+                            if (toParams.filter === 'flagged') {
+                                folder = {name: 'IMPORTANT'};
+                            }
+
+                            $rootScope.folder = folder;
+
+                            console.log('$rootScope.folder', $rootScope.folder);
+                        }
+                    }
+                );
+            }
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
         .module('auth.passwordReset')
         .controller('PasswordResetController', PasswordResetController);
 
@@ -3470,6 +3653,160 @@
                     url: '/password-reset',
                     templateUrl: 'app/auth/password-reset/password-reset.html',
                     controller: 'PasswordResetController',
+                    controllerAs: 'vm',
+                    title: 'Войти',
+                    resolve: {
+                        configResolve: function (config) {
+                            return config.getIndex();
+                        }
+                    }
+                }
+            }
+        ];
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('auth.passwordUpdate')
+        .controller('PasswordUpdateController', PasswordUpdateController);
+
+    PasswordUpdateController.$inject = ['$state', '$auth', '$timeout', 'CONFIG', 'configResolve'];
+    /* @ngInject */
+    function PasswordUpdateController($state, $auth, $timeout, CONFIG, configResolve) {
+        var vm = this;
+
+        vm.CONFIG = CONFIG;
+
+        vm.codes = {
+            list: [
+                {
+                    name: '+420',
+                    value: 420
+                },
+                {
+                    name: '+421',
+                    value: 421
+                }
+            ]
+        };
+
+        vm.step = 1;
+
+        vm.passwordResetForm = {
+            isLoading: false,
+            model: {},
+            validations: {
+                // mail_or_phone: {
+                //     'required': 'Введите Телефон или e-mail:(нужен_перевод)'
+                // }
+            }
+        };
+
+        vm.userForm = {
+            isLoading: false,
+            model: {},
+            validations: {
+                code: {
+                    'required': 'INPUT_PLACEHOLDER_ENTER_SMS_CODE'
+                },
+                newpassword: {
+                    'required': 'INPUT_PLACEHOLDER_ENTER_NEW_PASSWORD'
+                },
+                passwordConf: {
+                    'required': 'INPUT_PLACEHOLDER_CONFIRM_NEW_PASSWORD'
+                }
+            }
+        };
+
+        vm.requestPasswordReset = requestPasswordReset;
+        vm.resetPassword = resetPassword;
+        vm.isEmail = isEmail;
+
+        activate();
+
+        ////
+
+        function activate() {
+            vm.username = $state.params.username;
+
+            configResolve.$promise.then(function (response) {
+                if (response.data.phoneCode) {
+                    $timeout(function () {
+                        vm.userForm.model.phoneCode = parseInt(response.data.phoneCode);
+                    });
+                }
+            });
+        }
+
+        function requestPasswordReset() {
+            var data = {
+                username: vm.username
+            };
+
+            if (vm.passwordResetForm.model.email) {
+                data.email = vm.passwordResetForm.model.email;
+            }
+
+            if (vm.passwordResetForm.model.phone) {
+                data.phone = vm.passwordResetForm.model.phone;
+            }
+
+            vm.userForm.isLoading = true;
+            $auth.requestPasswordReset(data)
+                .then(function (response) {
+                    vm.userForm.isLoading = false;
+                    vm.step = 2;
+                })
+                .catch(function (response) {
+                    vm.passwordResetForm.errors = response.data.data;
+                });
+        }
+
+        function resetPassword() {
+            vm.userForm.model.username = $state.params.username;
+            vm.userForm.isLoading = true;
+            $auth.updatePassword(vm.userForm.model)
+                .then(function (response) {
+                    vm.userForm.isLoading = false;
+                    $state.go('signIn');
+                })
+                .catch(function (response) {
+                    vm.userForm.errors = response.data.data;
+                    vm.error = response.data.data;
+                });
+        }
+
+        function isEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('auth.passwordUpdate')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper'];
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
+
+    function getStates() {
+        return [
+            {
+                state: 'passwordUpdate',
+                config: {
+                    url: '/password-update?username&code',
+                    templateUrl: 'app/auth/password-update/password-update.html',
+                    controller: 'PasswordUpdateController',
                     controllerAs: 'vm',
                     title: 'Войти',
                     resolve: {
@@ -3706,160 +4043,6 @@
     'use strict';
 
     angular
-        .module('auth.passwordUpdate')
-        .controller('PasswordUpdateController', PasswordUpdateController);
-
-    PasswordUpdateController.$inject = ['$state', '$auth', '$timeout', 'CONFIG', 'configResolve'];
-    /* @ngInject */
-    function PasswordUpdateController($state, $auth, $timeout, CONFIG, configResolve) {
-        var vm = this;
-
-        vm.CONFIG = CONFIG;
-
-        vm.codes = {
-            list: [
-                {
-                    name: '+420',
-                    value: 420
-                },
-                {
-                    name: '+421',
-                    value: 421
-                }
-            ]
-        };
-
-        vm.step = 1;
-
-        vm.passwordResetForm = {
-            isLoading: false,
-            model: {},
-            validations: {
-                // mail_or_phone: {
-                //     'required': 'Введите Телефон или e-mail:(нужен_перевод)'
-                // }
-            }
-        };
-
-        vm.userForm = {
-            isLoading: false,
-            model: {},
-            validations: {
-                code: {
-                    'required': 'INPUT_PLACEHOLDER_ENTER_SMS_CODE'
-                },
-                newpassword: {
-                    'required': 'INPUT_PLACEHOLDER_ENTER_NEW_PASSWORD'
-                },
-                passwordConf: {
-                    'required': 'INPUT_PLACEHOLDER_CONFIRM_NEW_PASSWORD'
-                }
-            }
-        };
-
-        vm.requestPasswordReset = requestPasswordReset;
-        vm.resetPassword = resetPassword;
-        vm.isEmail = isEmail;
-
-        activate();
-
-        ////
-
-        function activate() {
-            vm.username = $state.params.username;
-
-            configResolve.$promise.then(function (response) {
-                if (response.data.phoneCode) {
-                    $timeout(function () {
-                        vm.userForm.model.phoneCode = parseInt(response.data.phoneCode);
-                    });
-                }
-            });
-        }
-
-        function requestPasswordReset() {
-            var data = {
-                username: vm.username
-            };
-
-            if (vm.passwordResetForm.model.email) {
-                data.email = vm.passwordResetForm.model.email;
-            }
-
-            if (vm.passwordResetForm.model.phone) {
-                data.phone = vm.passwordResetForm.model.phone;
-            }
-
-            vm.userForm.isLoading = true;
-            $auth.requestPasswordReset(data)
-                .then(function (response) {
-                    vm.userForm.isLoading = false;
-                    vm.step = 2;
-                })
-                .catch(function (response) {
-                    vm.passwordResetForm.errors = response.data.data;
-                });
-        }
-
-        function resetPassword() {
-            vm.userForm.model.username = $state.params.username;
-            vm.userForm.isLoading = true;
-            $auth.updatePassword(vm.userForm.model)
-                .then(function (response) {
-                    vm.userForm.isLoading = false;
-                    $state.go('signIn');
-                })
-                .catch(function (response) {
-                    vm.userForm.errors = response.data.data;
-                    vm.error = response.data.data;
-                });
-        }
-
-        function isEmail(email) {
-            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(email);
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('auth.passwordUpdate')
-        .run(appRun);
-
-    appRun.$inject = ['routerHelper'];
-    /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
-    }
-
-    function getStates() {
-        return [
-            {
-                state: 'passwordUpdate',
-                config: {
-                    url: '/password-update?username&code',
-                    templateUrl: 'app/auth/password-update/password-update.html',
-                    controller: 'PasswordUpdateController',
-                    controllerAs: 'vm',
-                    title: 'Войти',
-                    resolve: {
-                        configResolve: function (config) {
-                            return config.getIndex();
-                        }
-                    }
-                }
-            }
-        ];
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
         .module('auth.signUp')
         .controller('SignUpController', SignUpController);
 
@@ -4038,181 +4221,470 @@
     'use strict';
 
     angular
-        .module('blocks.logger')
-        .factory('logger', logger);
-
-    logger.$inject = ['$log', 'toastr'];
-
-    /* @ngInject */
-    function logger($log, toastr) {
-        var service = {
-            showToasts: true,
-            error: error,
-            info: info,
-            success: success,
-            warning: warning,
-
-            // straight to console; bypass toastr
-            log: $log.log
-        };
-
-        return service;
-        /////////////////////
-
-        function error(message, data, title) {
-            toastr.error(message, title);
-            $log.error('Error: ' + message, data);
-        }
-
-        function info(message, data, title) {
-            toastr.info(message, title);
-            $log.info('Info: ' + message, data);
-        }
-
-        function success(message, data, title) {
-            toastr.success(message, title);
-            $log.info('Success: ' + message, data);
-        }
-
-        function warning(message, data, title) {
-            toastr.warning(message, title);
-            $log.warn('Warning: ' + message, data);
-        }
-    }
-}());
-
-/* Help configure the state-base ui.router */
+        .module('app.layout')
+        .component('header', {
+            bindings: {
+                folder: '='
+            },
+            templateUrl: 'app/layout/header/header.html',
+            controller: 'HeaderController',
+            controllerAs: 'vm'
+        });
+})();
 (function () {
     'use strict';
 
     angular
-        .module('blocks.router')
-        .provider('routerHelper', routerHelperProvider);
+        .module('app.layout')
+        .controller('HeaderController', HeaderController);
 
-    routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
+    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'mail'];
+
     /* @ngInject */
-    function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
-        /* jshint validthis:true */
-        var config = {
-            docTitle: '',
-            resolveAlways: {}
+    function HeaderController($rootScope, $scope, $state, $timeout, mail) {
+        var vm = this;
+
+        vm.searchForm = {
+            model: {}
         };
 
-        // if (!(window.history && window.history.pushState)) {
-        //   window.location.hash = '/';
-        // }
+        vm.currentFolder = {};
 
-        $locationProvider.html5Mode(true);
-        $locationProvider.hashPrefix('!');
+        vm.notify = {};
 
-        this.configure = function (cfg) {
-            angular.extend(config, cfg);
-        };
+        vm.openMenu = openMenu;
+        vm.closeMenu = closeMenu;
+        vm.openSettingsMenu = openSettingsMenu;
+        vm.closeSettingsMenu = closeSettingsMenu;
 
-        this.$get = RouterHelper;
-        RouterHelper.$inject = ['$location', '$rootScope', '$state', '$timeout', 'logger', 'mailBox'];
-        /* @ngInject */
-        function RouterHelper($location, $rootScope, $state, $timeout, logger, mailBox) {
-            var handlingStateChangeError = false;
-            var hasOtherwise = false;
-            var stateCounts = {
-                errors: 0,
-                changes: 0
-            };
+        vm.clearSearch = clearSearch;
+        vm.search = search;
+        vm.send = send;
+        vm.closeCompose = closeCompose;
 
-            var service = {
-                configureStates: configureStates,
-                getStates: getStates,
-                stateCounts: stateCounts
-            };
+        $scope.$watch('vm.$state.params.mbox', function () {
+            getCurrentFolder();
+        });
 
-            init();
+        $scope.$on('notify:message', function (e, data) {
+            console.log('data', data);
+            vm.notify.isOpen = true;
 
-            return service;
+            vm.message = data.message;
+            vm.folderMessage = data.folder;
 
-            ///////////////
+            $timeout(function () {
+                vm.notify.isOpen = false;
+            }, 800);
+        });
 
-            function configureStates(states, otherwisePath) {
-                states.forEach(function (state) {
-                    state.config.resolve =
-                        angular.extend(state.config.resolve || {}, config.resolveAlways);
-                    $stateProvider.state(state.state, state.config);
+        $scope.$on('mail:isSend', function (e, data) {
+            console.log('mail:isSend', data);
+            vm.isSend = data.isSend;
+        });
+
+        $scope.$on('mail:isUploading', function (e, data) {
+            console.log('mail:isUploading', data);
+            vm.isUploading = data.isUploading;
+        });
+
+        $scope.$on('mail.paginate', function (e, data) {
+            vm.paginate = data.paginate;
+        });
+
+        $scope.$watch('vm.searchForm.model.search', function (data, oldData) {
+            if (data === '') {
+                clearSearch();
+            }
+        });
+
+        ////
+
+        activate();
+
+        function activate() {
+            vm.$state = $state;
+            vm.paginate = mail.paginate;
+
+            console.log('vm.$state', vm.$state);
+
+            getCurrentFolder();
+        }
+
+        function openMenu() {
+            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
+        }
+
+        function closeMenu() {
+            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
+        }
+
+        function openSettingsMenu() {
+            $rootScope.isOpenSettingsMenu = !$rootScope.isOpenSettingsMenu;
+        }
+
+        function closeSettingsMenu() {
+            $rootScope.isOpenSettingsMenu = !$rootScope.isOpenSettingsMenu;
+        }
+
+        function getCurrentFolder() {
+            if (vm.folder) {
+                _.forEach(vm.folder.data.items, function (folder) {
+                    if (folder.name === vm.$state.params.mbox) {
+                        vm.currentFolder = folder;
+                        console.log('vm.currentFolder', vm.currentFolder);
+                    }
                 });
-                if (otherwisePath && !hasOtherwise) {
-                    hasOtherwise = true;
-                    $urlRouterProvider.otherwise(otherwisePath);
+            }
+        }
+
+        function search() {
+            var data = {};
+
+            if (vm.searchForm.model.search) {
+                data.search = vm.searchForm.model.search;
+            }
+
+            $rootScope.$broadcast('search:mailQuery', {
+                search: data
+            });
+        }
+
+        function clearSearch() {
+            vm.searchForm.model.search = '';
+            $rootScope.$broadcast('search:close');
+        }
+
+        function send() {
+            $rootScope.$broadcast('mail:send');
+        }
+
+        function closeCompose() {
+            $rootScope.$broadcast('mail:compose:close');
+        }
+
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('app.layout')
+        .component('menuMain', {
+            bindings: {},
+            templateUrl: 'app/layout/menu-main/menu-main.html',
+            controller: 'MenuMainController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app.layout')
+        .controller('MenuMainController', MenuMainController);
+
+    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', '$state', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
+
+    /* @ngInject */
+    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, $state, mail, mailBox, tag, profile, CONFIG) {
+        var vm = this;
+
+        vm.standartFolders = [
+            {
+                name: 'INBOX',
+                icon: 'icon-inbox-old'
+            },
+            {
+                name: 'Drafts',
+                icon: 'icon-draft-line'
+            },
+            {
+                name: 'Trash',
+                icon: 'icon-basket'
+            },
+            {
+                name: 'Sent',
+                icon: 'icon-sent-old'
+            },
+            {
+                name: 'Junk',
+                icon: 'icon-spam'
+            },
+            // {
+            //     name: 'Outbox',
+            //     icon: 'icon-strelka'
+            // },
+            {
+                name: 'Outbox',
+                icon: 'icon-time'
+            }
+        ];
+
+        vm.folders = {};
+
+        vm.tags = {
+            items: []
+        };
+
+        vm.user = $auth.user;
+
+        vm.profiles = [];
+
+        $scope.$on('mail:sync', function () {
+            getMailBox();
+        });
+
+        $scope.$on('folders:sync', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:update:success', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:create:success', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:destroy:success', function () {
+            getMailBox();
+        });
+
+        $scope.$on('mailBox:sync', function () {
+            getMailBox();
+        });
+
+        $scope.$on('tag:update:success', function () {
+            getTag();
+        });
+
+        $scope.$on('tag:create:success', function () {
+            getTag();
+        });
+
+        $scope.$on('tag:destroy:success', function () {
+            getTag();
+        });
+
+
+        vm.openFolderCreatePopup = openFolderCreatePopup;
+        vm.closeMenu = closeMenu;
+        vm.setAuthProfile = setAuthProfile;
+        vm.clearFolder = clearFolder;
+        vm.goToDesktopVersion = goToDesktopVersion;
+        vm.logout = logout;
+
+
+        activate();
+
+        function activate() {
+            getMailBox();
+            getTag();
+            getProfiles();
+
+            vm.user = $auth.user;
+            vm.CONFIG = CONFIG;
+        }
+
+        function goToDesktopVersion(target) {
+            var url = window.location.origin + target; //+ '&token=' + vm.user.access_token.split(' ')[1];
+            window.location.href = url;
+        }
+
+        function getMailBox() {
+            mailBox.get().then(function (response) {
+                vm.folders = _.assign(vm.folders, response.data);
+                setIcons();
+                getMailBoxFormatted();
+            });
+        }
+
+        function getMailBoxFormatted() {
+            _.forEach(vm.folders.items, function (folder) {
+                var isSub = true;
+
+                folder.isOpen = false;
+
+                _.forEach(vm.standartFolders, function (standartFolder) {
+                    if (folder.name == standartFolder.name) {
+                        isSub = false;
+                    }
+                });
+
+                if (isSub) {
+                    folder.isSub = true;
+                } else {
+                    folder.isSub = false;
                 }
-            }
+            });
 
-            function handleRoutingErrors() {
-                // Route cancellation:
-                // On routing error, go to the dashboard.
-                // Provide an exit clause if it tries to do it twice.
-                $rootScope.$on('$stateChangeError',
-                    function (event, toState, toParams, fromState, fromParams, error) {
-                        if (handlingStateChangeError) {
-                            return;
-                        }
-                        stateCounts.errors++;
-                        handlingStateChangeError = true;
-                        var destination = (toState &&
-                            (toState.title || toState.name || toState.loadedTemplateUrl)) ||
-                            'unknown target';
-                        var msg = 'Error routing to ' + destination + '. ' +
-                            (error.data || '') + '. <br/>' + (error.statusText || '') +
-                            ': ' + (error.status || '');
-                        // logger.warning(msg, [toState]);
-                        $location.path('/');
+            sortFolder();
+        }
+
+        function sortFolder() {
+            vm.folders.items = _.sortBy(vm.folders.items, 'caption').reverse();
+            vm.folders.items = _.sortBy(vm.folders.items, [
+                {'name': 'INBOX'},
+                {'isSub': true},
+                {'name': 'Sent'},
+                {'name': 'Trash'},
+                {'name': 'Junk'},
+                {'name': 'Drafts'},
+                {'name': 'Outbox'}
+            ]).reverse();
+        }
+
+        function setIcons() {
+            _.forEach(vm.folders.items, function (item) {
+                _.forEach(vm.standartFolders, function (standartFolder) {
+                    if (item.name === standartFolder.name) {
+                        item.icon = standartFolder.icon;
                     }
-                );
-            }
+                });
+            });
+        }
 
-            function init() {
-                handleRoutingErrors();
-                updateDocTitle();
-            }
+        function openFolderCreatePopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/folder-create/folder-create-popup.html',
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+                    $scope.cancel = cancel;
 
-            function getStates() {
-                return $state.get();
-            }
-
-            function updateDocTitle() {
-                $rootScope.$on('$stateChangeSuccess',
-                    function (event, toState, toParams, fromState, fromParams) {
-                        document.body.scrollTop = document.documentElement.scrollTop = 0;
-
-                        stateCounts.changes++;
-                        handlingStateChangeError = false;
-
-                        console.log('toParams', toParams);
-
-                        $rootScope.isOpenMenu = false;
-                        $rootScope.isOpenSettingsMenu = false;
-
-                        if (toState.name === 'mail.inbox' || toState.name === 'mail.message') {
-                            if (!toParams.filter) {
-                                var folder = _.find(mailBox.getCacheList().items, {'name': toParams.mbox});
-                            }
-
-                            if (toParams.filter === 'unseen') {
-                                folder = {name: 'UNREAD'};
-                            }
-
-                            if (toParams.filter === 'attach') {
-                                folder = {name: 'SEARCH_IS_ATTACH'};
-                            }
-
-                            if (toParams.filter === 'flagged') {
-                                folder = {name: 'IMPORTANT'};
-                            }
-
-                            $rootScope.folder = folder;
-
-                            console.log('$rootScope.folder', $rootScope.folder);
-                        }
+                    function cancel() {
+                        $uibModalInstance.dismiss('cancel');
                     }
-                );
+                }],
+                // controllerAs: 'vm',
+                size: 'sm',
+                windowClass: 'popup popup--folder-create'
+            });
+        }
+
+        function getTag() {
+            tag.get().then(function (response) {
+                vm.tags.items = response.data;
+            });
+        }
+
+        function closeMenu() {
+            $rootScope.isOpenMenu = false;
+        }
+
+        function getProfiles() {
+            vm.profiles = profile.getStorageProfiles();
+        }
+
+        function setAuthProfile(profile) {
+            $auth.user.access_token = profile.access_token;
+
+            $timeout(function () {
+                $('#iframe--auth').on('load', function () {
+                    $timeout(function () {
+                        window.location.href = '/mail/inbox?mbox=INBOX';
+                    }, 250);
+                });
+            }, 250);
+        }
+
+        function clearFolder(e, folder) {
+            e.stopPropagation();
+            mail.deleteAll({}, {
+                mbox: folder.name,
+                connection_id: vm.user.profile.default_connection_id
+            }).then(function () {
+                $scope.$emit('mail:sync');
+            });
+        }
+
+        function logout() {
+            var profiles = profile.destroyStorageProfile($auth.user);
+
+            console.log('profiles', profiles);
+
+            if (profiles && profiles.length) {
+                setAuthProfile(profiles[0]);
+                return;
             }
+
+            $auth.signOut();
+            $state.go('signIn');
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('app.layout')
+        .component('menuSettings', {
+            bindings: {},
+            templateUrl: 'app/layout/menu-settings/menu-settings.html',
+            controller: 'MenuSettingsController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app.layout')
+        .controller('MenuSettingsController', MenuSettingsController);
+
+    MenuSettingsController.$inject = ['$uibModal', '$auth', '$timeout', 'lang', '$rootScope', 'timezone', 'CONFIG'];
+
+    /* @ngInject */
+    function MenuSettingsController($uibModal, $auth, $timeout, lang, $rootScope, timezone, CONFIG) {
+        var vm = this;
+
+        vm.getTimezoneName = getTimezoneName;
+        vm.openPasswordChangePopup = openPasswordChangePopup;
+
+        vm.closeSettingsMenu = closeSettingsMenu;
+
+        $rootScope.$on('$translateLoadingSuccess', function (e, data) {
+            $timeout(function () {
+                vm.useLang = lang.getCurrentLang();
+            });
+        });
+
+        activate();
+
+        ////
+
+        function activate() {
+            vm.user = $auth.user;
+            vm.profile = $auth.user.profile;
+
+            vm.useLang = lang.getCurrentLang();
+            vm.CONFIG = CONFIG;
+        }
+
+        function closeSettingsMenu() {
+            $rootScope.isOpenSettingsMenu = false;
+        }
+
+        function openPasswordChangePopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/password-change/password-change-popup.html',
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+                    $scope.cancel = cancel;
+
+                    function cancel() {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+                }],
+                size: 'sm',
+                windowClass: 'popup popup--password-change'
+            });
+        }
+
+        function getTimezoneName() {
+            return timezone.getCurrent();
         }
     }
 })();
@@ -4962,6 +5434,111 @@
 
     angular
         .module('app.components')
+        .component('folderDeleteConfirm', {
+            bindings: {
+                folder: '=',
+                onClose: '&',
+                onCancel: '&'
+            },
+            templateUrl: 'app/components/folder-delete-confirm/folder-delete-confirm.html',
+            controller: 'FolderDeleteConfirmController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('FolderDeleteConfirmController', FolderDeleteConfirmController);
+
+    FolderDeleteConfirmController.$inject = [];
+    /* @ngInject */
+    function FolderDeleteConfirmController() {
+        var vm = this;
+
+        vm.close = close;
+        vm.cancel = cancel;
+
+        activate();
+
+        function activate() {
+        }
+
+        function close() {
+            vm.onClose();
+        }
+
+        function cancel() {
+            vm.onCancel();
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
+        .component('folderEdit', {
+            bindings: {
+                model: '=',
+                onСlose: '&'
+            },
+            templateUrl: 'app/components/folder-edit/folder-edit.html',
+            controller: 'FolderEditController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('FolderEditController', FolderEditController);
+
+    FolderEditController.$inject = ['mailBox'];
+    /* @ngInject */
+    function FolderEditController(mailBox) {
+        var vm = this;
+
+        vm.form = {
+            model: {}
+        };
+
+        vm.update = update;
+        vm.close = close;
+
+        activate();
+
+        function activate() {
+            vm.form.model.mbox = angular.copy(vm.model).name;
+            vm.form.model.mboxnew = angular.copy(vm.model).name;
+
+            // vm.form.model
+            console.log('vm.form.model', vm.form.model);
+        }
+
+        function update(form) {
+            if (form.$invalid) return;
+
+            mailBox.update({}, vm.form.model).then(function (response) {
+                console.log('response', response);
+                close();
+            });
+        }
+
+        function close() {
+            vm.onСlose();
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
         .component('folderCreate', {
             bindings: {
                 onСlose: '&'
@@ -5007,52 +5584,6 @@
 
         function close() {
             vm.onСlose();
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .component('folderDeleteConfirm', {
-            bindings: {
-                folder: '=',
-                onClose: '&',
-                onCancel: '&'
-            },
-            templateUrl: 'app/components/folder-delete-confirm/folder-delete-confirm.html',
-            controller: 'FolderDeleteConfirmController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('FolderDeleteConfirmController', FolderDeleteConfirmController);
-
-    FolderDeleteConfirmController.$inject = [];
-    /* @ngInject */
-    function FolderDeleteConfirmController() {
-        var vm = this;
-
-        vm.close = close;
-        vm.cancel = cancel;
-
-        activate();
-
-        function activate() {
-        }
-
-        function close() {
-            vm.onClose();
-        }
-
-        function cancel() {
-            vm.onCancel();
         }
     }
 })();
@@ -5222,65 +5753,6 @@
                 size: 'sm',
                 windowClass: 'popup popup--folder-create'
             });
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .component('folderEdit', {
-            bindings: {
-                model: '=',
-                onСlose: '&'
-            },
-            templateUrl: 'app/components/folder-edit/folder-edit.html',
-            controller: 'FolderEditController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('FolderEditController', FolderEditController);
-
-    FolderEditController.$inject = ['mailBox'];
-    /* @ngInject */
-    function FolderEditController(mailBox) {
-        var vm = this;
-
-        vm.form = {
-            model: {}
-        };
-
-        vm.update = update;
-        vm.close = close;
-
-        activate();
-
-        function activate() {
-            vm.form.model.mbox = angular.copy(vm.model).name;
-            vm.form.model.mboxnew = angular.copy(vm.model).name;
-
-            // vm.form.model
-            console.log('vm.form.model', vm.form.model);
-        }
-
-        function update(form) {
-            if (form.$invalid) return;
-
-            mailBox.update({}, vm.form.model).then(function (response) {
-                console.log('response', response);
-                close();
-            });
-        }
-
-        function close() {
-            vm.onСlose();
         }
     }
 })();
@@ -5625,12 +6097,13 @@
 
     angular
         .module('app.components')
-        .component('inboxMessageList', {
+        .component('menuBottom', {
             bindings: {
-                messages: '='
+                isOpen: '=',
+                onSave: '&'
             },
-            templateUrl: 'app/components/inbox-message-list/inbox-message-list.html',
-            controller: 'InboxMessageListController',
+            templateUrl: 'app/components/menu-bottom/menu-bottom.html',
+            controller: 'MenuBottomController',
             controllerAs: 'vm'
         });
 })();
@@ -5639,19 +6112,35 @@
 
     angular
         .module('app.components')
-        .controller('InboxMessageListController', InboxMessageListController);
+        .controller('MenuBottomController', MenuBottomController);
 
-    InboxMessageListController.$inject = ['$scope', 'mail'];
+    MenuBottomController.$inject = ['$state', '$stateParams', 'mail'];
     /* @ngInject */
-    function InboxMessageListController($scope, mail) {
+    function MenuBottomController($state, $stateParams, mail) {
         var vm = this;
 
-        activate();
+        vm.save = save;
+        vm.destroy = destroy;
 
-        function activate() {
-
+        function save() {
+            vm.onSave();
+            vm.isOpen = false;
+            $state.go('mail.inbox', {mbox: 'INBOX'});
         }
 
+        function destroy() {
+            vm.isOpen = false;
+
+            if ($stateParams.id) {
+                mail.destroyOne({
+                    mbox: $stateParams.mbox,
+                    number: $stateParams.id,
+                    connection_id: $stateParams.connection_id
+                });
+
+                $state.go('mail.inbox', {mbox: 'INBOX'});
+            }
+        }
     }
 })();
 
@@ -5735,13 +6224,12 @@
 
     angular
         .module('app.components')
-        .component('menuBottom', {
+        .component('inboxMessageList', {
             bindings: {
-                isOpen: '=',
-                onSave: '&'
+                messages: '='
             },
-            templateUrl: 'app/components/menu-bottom/menu-bottom.html',
-            controller: 'MenuBottomController',
+            templateUrl: 'app/components/inbox-message-list/inbox-message-list.html',
+            controller: 'InboxMessageListController',
             controllerAs: 'vm'
         });
 })();
@@ -5750,34 +6238,55 @@
 
     angular
         .module('app.components')
-        .controller('MenuBottomController', MenuBottomController);
+        .controller('InboxMessageListController', InboxMessageListController);
 
-    MenuBottomController.$inject = ['$state', '$stateParams', 'mail'];
+    InboxMessageListController.$inject = ['$scope', 'mail'];
     /* @ngInject */
-    function MenuBottomController($state, $stateParams, mail) {
+    function InboxMessageListController($scope, mail) {
         var vm = this;
 
-        vm.save = save;
-        vm.destroy = destroy;
+        activate();
 
-        function save() {
-            vm.onSave();
-            vm.isOpen = false;
-            $state.go('mail.inbox', {mbox: 'INBOX'});
+        function activate() {
+
         }
 
-        function destroy() {
-            vm.isOpen = false;
+    }
+})();
 
-            if ($stateParams.id) {
-                mail.destroyOne({
-                    mbox: $stateParams.mbox,
-                    number: $stateParams.id,
-                    connection_id: $stateParams.connection_id
-                });
+(function () {
+    'use strict';
 
-                $state.go('mail.inbox', {mbox: 'INBOX'});
-            }
+    angular
+        .module('app.components')
+        .component('messageAvatar', {
+            bindings: {
+                message: '=',
+                messages: '=?',
+                classNames: '@?'
+            },
+            templateUrl: 'app/components/message-avatar/message-avatar.html',
+            controller: 'MessageAvatarController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('MessageAvatarController', MessageAvatarController);
+
+    MessageAvatarController.$inject = ['$state', '$scope', 'mail', 'tag', '$rootScope', '$uibModal'];
+    /* @ngInject */
+    function MessageAvatarController($state, $scope, mail, tag, $rootScope, $uibModal) {
+        var vm = this;
+
+        activate();
+
+        ////
+
+        function activate() {
         }
     }
 })();
@@ -5949,43 +6458,6 @@
 
         function close() {
             $uibModalInstance.close({result: {messages: vm.messages}});
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .component('messageAvatar', {
-            bindings: {
-                message: '=',
-                messages: '=?',
-                classNames: '@?'
-            },
-            templateUrl: 'app/components/message-avatar/message-avatar.html',
-            controller: 'MessageAvatarController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('MessageAvatarController', MessageAvatarController);
-
-    MessageAvatarController.$inject = ['$state', '$scope', 'mail', 'tag', '$rootScope', '$uibModal'];
-    /* @ngInject */
-    function MessageAvatarController($state, $scope, mail, tag, $rootScope, $uibModal) {
-        var vm = this;
-
-        activate();
-
-        ////
-
-        function activate() {
         }
     }
 })();
@@ -6416,6 +6888,54 @@
 
     angular
         .module('app.components')
+        .component('spinner', {
+            bindings: {
+                isGlobal: '=',
+                isOpen: '=?'
+            },
+            templateUrl: 'app/components/spinner/spinner.html',
+            controller: 'SpinnerController',
+            controllerAs: 'vm'
+        });
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('SpinnerController', SpinnerController);
+
+    SpinnerController.$inject = ['$scope', '$timeout', 'httpPreConfig'];
+    /* @ngInject */
+    function SpinnerController($scope, $timeout, httpPreConfig) {
+        var vm = this;
+
+        vm.isOpen = false;
+
+        $scope.$on('httpCallStarted', function () {
+            $timeout(function () {
+                if (vm.isGlobal) {
+                    vm.isOpen = true;
+                }
+            });
+        });
+
+        $scope.$on('httpCallStopped', function () {
+            $timeout(function () {
+                if (vm.isGlobal) {
+                    vm.isOpen = false;
+                }
+            });
+        });
+
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('app.components')
         .component('tagCreate', {
             bindings: {
                 onClose: '&',
@@ -6498,54 +7018,6 @@
         function close() {
             vm.onClose();
         }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .component('spinner', {
-            bindings: {
-                isGlobal: '=',
-                isOpen: '=?'
-            },
-            templateUrl: 'app/components/spinner/spinner.html',
-            controller: 'SpinnerController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('SpinnerController', SpinnerController);
-
-    SpinnerController.$inject = ['$scope', '$timeout', 'httpPreConfig'];
-    /* @ngInject */
-    function SpinnerController($scope, $timeout, httpPreConfig) {
-        var vm = this;
-
-        vm.isOpen = false;
-
-        $scope.$on('httpCallStarted', function () {
-            $timeout(function () {
-                if (vm.isGlobal) {
-                    vm.isOpen = true;
-                }
-            });
-        });
-
-        $scope.$on('httpCallStopped', function () {
-            $timeout(function () {
-                if (vm.isGlobal) {
-                    vm.isOpen = false;
-                }
-            });
-        });
-
     }
 })();
 
@@ -7453,695 +7925,6 @@
     'use strict';
 
     angular
-        .module('app.layout')
-        .component('header', {
-            bindings: {
-                folder: '='
-            },
-            templateUrl: 'app/layout/header/header.html',
-            controller: 'HeaderController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.layout')
-        .controller('HeaderController', HeaderController);
-
-    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'mail'];
-
-    /* @ngInject */
-    function HeaderController($rootScope, $scope, $state, $timeout, mail) {
-        var vm = this;
-
-        vm.searchForm = {
-            model: {}
-        };
-
-        vm.currentFolder = {};
-
-        vm.notify = {};
-
-        vm.openMenu = openMenu;
-        vm.closeMenu = closeMenu;
-        vm.openSettingsMenu = openSettingsMenu;
-        vm.closeSettingsMenu = closeSettingsMenu;
-
-        vm.clearSearch = clearSearch;
-        vm.search = search;
-        vm.send = send;
-        vm.closeCompose = closeCompose;
-
-        $scope.$watch('vm.$state.params.mbox', function () {
-            getCurrentFolder();
-        });
-
-        $scope.$on('notify:message', function (e, data) {
-            console.log('data', data);
-            vm.notify.isOpen = true;
-
-            vm.message = data.message;
-            vm.folderMessage = data.folder;
-
-            $timeout(function () {
-                vm.notify.isOpen = false;
-            }, 800);
-        });
-
-        $scope.$on('mail:isSend', function (e, data) {
-            console.log('mail:isSend', data);
-            vm.isSend = data.isSend;
-        });
-
-        $scope.$on('mail:isUploading', function (e, data) {
-            console.log('mail:isUploading', data);
-            vm.isUploading = data.isUploading;
-        });
-
-        $scope.$on('mail.paginate', function (e, data) {
-            vm.paginate = data.paginate;
-        });
-
-        $scope.$watch('vm.searchForm.model.search', function (data, oldData) {
-            if (data === '') {
-                clearSearch();
-            }
-        });
-
-        ////
-
-        activate();
-
-        function activate() {
-            vm.$state = $state;
-            vm.paginate = mail.paginate;
-
-            console.log('vm.$state', vm.$state);
-
-            getCurrentFolder();
-        }
-
-        function openMenu() {
-            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
-        }
-
-        function closeMenu() {
-            $rootScope.isOpenMenu = !$rootScope.isOpenMenu;
-        }
-
-        function openSettingsMenu() {
-            $rootScope.isOpenSettingsMenu = !$rootScope.isOpenSettingsMenu;
-        }
-
-        function closeSettingsMenu() {
-            $rootScope.isOpenSettingsMenu = !$rootScope.isOpenSettingsMenu;
-        }
-
-        function getCurrentFolder() {
-            if (vm.folder) {
-                _.forEach(vm.folder.data.items, function (folder) {
-                    if (folder.name === vm.$state.params.mbox) {
-                        vm.currentFolder = folder;
-                        console.log('vm.currentFolder', vm.currentFolder);
-                    }
-                });
-            }
-        }
-
-        function search() {
-            var data = {};
-
-            if (vm.searchForm.model.search) {
-                data.search = vm.searchForm.model.search;
-            }
-
-            $rootScope.$broadcast('search:mailQuery', {
-                search: data
-            });
-        }
-
-        function clearSearch() {
-            vm.searchForm.model.search = '';
-            $rootScope.$broadcast('search:close');
-        }
-
-        function send() {
-            $rootScope.$broadcast('mail:send');
-        }
-
-        function closeCompose() {
-            $rootScope.$broadcast('mail:compose:close');
-        }
-
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('app.layout')
-        .component('menuMain', {
-            bindings: {},
-            templateUrl: 'app/layout/menu-main/menu-main.html',
-            controller: 'MenuMainController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.layout')
-        .controller('MenuMainController', MenuMainController);
-
-    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', '$state', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
-
-    /* @ngInject */
-    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, $state, mail, mailBox, tag, profile, CONFIG) {
-        var vm = this;
-
-        vm.standartFolders = [
-            {
-                name: 'INBOX',
-                icon: 'icon-inbox-old'
-            },
-            {
-                name: 'Drafts',
-                icon: 'icon-draft-line'
-            },
-            {
-                name: 'Trash',
-                icon: 'icon-basket'
-            },
-            {
-                name: 'Sent',
-                icon: 'icon-sent-old'
-            },
-            {
-                name: 'Junk',
-                icon: 'icon-spam'
-            },
-            // {
-            //     name: 'Outbox',
-            //     icon: 'icon-strelka'
-            // },
-            {
-                name: 'Outbox',
-                icon: 'icon-time'
-            }
-        ];
-
-        vm.folders = {};
-
-        vm.tags = {
-            items: []
-        };
-
-        vm.user = $auth.user;
-
-        vm.profiles = [];
-
-        $scope.$on('mail:sync', function () {
-            getMailBox();
-        });
-
-        $scope.$on('folders:sync', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:update:success', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:create:success', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:destroy:success', function () {
-            getMailBox();
-        });
-
-        $scope.$on('mailBox:sync', function () {
-            getMailBox();
-        });
-
-        $scope.$on('tag:update:success', function () {
-            getTag();
-        });
-
-        $scope.$on('tag:create:success', function () {
-            getTag();
-        });
-
-        $scope.$on('tag:destroy:success', function () {
-            getTag();
-        });
-
-
-        vm.openFolderCreatePopup = openFolderCreatePopup;
-        vm.closeMenu = closeMenu;
-        vm.setAuthProfile = setAuthProfile;
-        vm.clearFolder = clearFolder;
-        vm.goToDesktopVersion = goToDesktopVersion;
-        vm.logout = logout;
-
-
-        activate();
-
-        function activate() {
-            getMailBox();
-            getTag();
-            getProfiles();
-
-            vm.user = $auth.user;
-            vm.CONFIG = CONFIG;
-        }
-
-        function goToDesktopVersion(target) {
-            var url = window.location.origin + target; //+ '&token=' + vm.user.access_token.split(' ')[1];
-            window.location.href = url;
-        }
-
-        function getMailBox() {
-            mailBox.get().then(function (response) {
-                vm.folders = _.assign(vm.folders, response.data);
-                setIcons();
-                getMailBoxFormatted();
-            });
-        }
-
-        function getMailBoxFormatted() {
-            _.forEach(vm.folders.items, function (folder) {
-                var isSub = true;
-
-                folder.isOpen = false;
-
-                _.forEach(vm.standartFolders, function (standartFolder) {
-                    if (folder.name == standartFolder.name) {
-                        isSub = false;
-                    }
-                });
-
-                if (isSub) {
-                    folder.isSub = true;
-                } else {
-                    folder.isSub = false;
-                }
-            });
-
-            sortFolder();
-        }
-
-        function sortFolder() {
-            vm.folders.items = _.sortBy(vm.folders.items, 'caption').reverse();
-            vm.folders.items = _.sortBy(vm.folders.items, [
-                {'name': 'INBOX'},
-                {'isSub': true},
-                {'name': 'Sent'},
-                {'name': 'Trash'},
-                {'name': 'Junk'},
-                {'name': 'Drafts'},
-                {'name': 'Outbox'}
-            ]).reverse();
-        }
-
-        function setIcons() {
-            _.forEach(vm.folders.items, function (item) {
-                _.forEach(vm.standartFolders, function (standartFolder) {
-                    if (item.name === standartFolder.name) {
-                        item.icon = standartFolder.icon;
-                    }
-                });
-            });
-        }
-
-        function openFolderCreatePopup() {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/folder-create/folder-create-popup.html',
-                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
-                    $scope.cancel = cancel;
-
-                    function cancel() {
-                        $uibModalInstance.dismiss('cancel');
-                    }
-                }],
-                // controllerAs: 'vm',
-                size: 'sm',
-                windowClass: 'popup popup--folder-create'
-            });
-        }
-
-        function getTag() {
-            tag.get().then(function (response) {
-                vm.tags.items = response.data;
-            });
-        }
-
-        function closeMenu() {
-            $rootScope.isOpenMenu = false;
-        }
-
-        function getProfiles() {
-            vm.profiles = profile.getStorageProfiles();
-        }
-
-        function setAuthProfile(profile) {
-            $auth.user.access_token = profile.access_token;
-
-            $timeout(function () {
-                $('#iframe--auth').on('load', function () {
-                    $timeout(function () {
-                        window.location.href = '/mail/inbox?mbox=INBOX';
-                    }, 250);
-                });
-            }, 250);
-        }
-
-        function clearFolder(e, folder) {
-            e.stopPropagation();
-            mail.deleteAll({}, {
-                mbox: folder.name,
-                connection_id: vm.user.profile.default_connection_id
-            }).then(function () {
-                $scope.$emit('mail:sync');
-            });
-        }
-
-        function logout() {
-            var profiles = profile.destroyStorageProfile($auth.user);
-
-            console.log('profiles', profiles);
-
-            if (profiles && profiles.length) {
-                setAuthProfile(profiles[0]);
-                return;
-            }
-
-            $auth.signOut();
-            $state.go('signIn');
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('app.layout')
-        .component('menuSettings', {
-            bindings: {},
-            templateUrl: 'app/layout/menu-settings/menu-settings.html',
-            controller: 'MenuSettingsController',
-            controllerAs: 'vm'
-        });
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app.layout')
-        .controller('MenuSettingsController', MenuSettingsController);
-
-    MenuSettingsController.$inject = ['$uibModal', '$auth', '$timeout', 'lang', '$rootScope', 'timezone', 'CONFIG'];
-
-    /* @ngInject */
-    function MenuSettingsController($uibModal, $auth, $timeout, lang, $rootScope, timezone, CONFIG) {
-        var vm = this;
-
-        vm.getTimezoneName = getTimezoneName;
-        vm.openPasswordChangePopup = openPasswordChangePopup;
-
-        vm.closeSettingsMenu = closeSettingsMenu;
-
-        $rootScope.$on('$translateLoadingSuccess', function (e, data) {
-            $timeout(function () {
-                vm.useLang = lang.getCurrentLang();
-            });
-        });
-
-        activate();
-
-        ////
-
-        function activate() {
-            vm.user = $auth.user;
-            vm.profile = $auth.user.profile;
-
-            vm.useLang = lang.getCurrentLang();
-            vm.CONFIG = CONFIG;
-        }
-
-        function closeSettingsMenu() {
-            $rootScope.isOpenSettingsMenu = false;
-        }
-
-        function openPasswordChangePopup() {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/password-change/password-change-popup.html',
-                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
-                    $scope.cancel = cancel;
-
-                    function cancel() {
-                        $uibModalInstance.dismiss('cancel');
-                    }
-                }],
-                size: 'sm',
-                windowClass: 'popup popup--password-change'
-            });
-        }
-
-        function getTimezoneName() {
-            return timezone.getCurrent();
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('mail.inbox')
-        .controller('InboxController', InboxController);
-
-    InboxController.$inject = ['$scope', '$state', '$http', '$auth', 'mail', 'mailBox', 'profile', 'messages'];
-    /* @ngInject */
-    function InboxController($scope, $state, $http, $auth, mail, mailBox, profile, messages) {
-        var vm = this;
-
-        vm.user = $auth.user;
-
-        vm.messages = {
-            params: {
-                'per-page': 10,
-                'len': 100,
-                'part': 'bodytext'
-            },
-            defaultParams: {
-                'per-page': 10,
-                'len': 100,
-                'part': 'bodytext'
-            },
-            searchParams: {},
-            checked: []
-        };
-
-        vm.folders = {};
-
-        $scope.$on('mail:sync', function () {
-            get();
-        });
-
-        $scope.$on('mail:inbox:messages:update', function (e, data) {
-            // console.log(data);
-            vm.messages = data;
-            // get();
-        });
-
-        $scope.$on('search:mailQuery', function (e, data) {
-            console.log('data', data);
-            vm.messages.searchParams.search = data.search.search;
-            vm.searchQuery = data.search.search;
-            vm.messages.isSearch = true;
-
-            if (!vm.messages.searchParams.search_part) {
-                vm.messages.searchParams.search_part = 'text';
-            }
-
-            get();
-        });
-
-        $scope.$on('search:mail', function (e, data) {
-            console.log('search:mail', data);
-            // vm.messages.params = data.search;
-            vm.messages.searchParams = data.search;
-            vm.messages.searchParams.search = vm.searchQuery;
-            vm.messages.isSearch = true;
-            get();
-        });
-
-        $scope.$on('search:close', function (e, data) {
-            vm.messages.params = angular.copy(vm.messages.defaultParams);
-            vm.messages.params.mbox = $state.params.mbox;
-            vm.messages.isSearch = false;
-            get();
-        });
-
-        vm.openTagList = openTagList;
-        vm.paginate = paginate;
-        vm.clearFolder = clearFolder;
-
-        activate();
-
-        function activate() {
-            vm.$state = $state;
-
-            if ($state.params.filter) {
-                vm.messages.params.filter = $state.params.filter;
-            }
-
-            if ($state.params.mbox) {
-                vm.messages.params.mbox = $state.params.mbox;
-            }
-
-            if ($state.params.tag_id) {
-                vm.messages.params.tag_id = $state.params.tag_id;
-            }
-
-            getMailBox();
-
-            console.log('messages', messages.$promise);
-
-            messages.$promise.then(function (response) {
-                vm.messages.params.search = null;
-                vm.messages.checked = [];
-                vm.messages = _.assign(vm.messages, response.data);
-                _.forEach(vm.messages.items, function (message) {
-                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
-                });
-            });
-        }
-
-        function get() {
-            vm.messages.isLoading = true;
-
-            var params = {};
-
-            if (vm.messages.isSearch) {
-                params = vm.messages.searchParams;
-            } else {
-                params = vm.messages.params;
-            }
-
-            mail.get(params).then(function (response) {
-                vm.messages.isLoading = false;
-                vm.messages.checked = [];
-                vm.messages = _.assign(vm.messages, response.data);
-                _.forEach(vm.messages.items, function (message) {
-                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
-                });
-            });
-        }
-
-        function getMailBox() {
-            mailBox.get().then(function (response) {
-                vm.folders = _.assign(vm.folders, response.data);
-            });
-        }
-
-        function openTagList() {
-            vm.isOpenTagList = true;
-        }
-
-        function paginate() {
-            if (vm.messages._links.next && !vm.messages.isLoading) {
-                vm.messages.isLoading = true;
-                $http.get(vm.messages._links.next.href).then(function (response) {
-                    vm.messages.isLoading = false;
-                    vm.messages.items = vm.messages.items.concat(response.data.data.items);
-                    vm.messages._links = response.data.data._links;
-                    vm.messages._meta = response.data.data._meta;
-
-                    console.log('pag', vm.messages);
-                });
-            }
-        }
-
-        function clearFolder(e, folder) {
-            e.stopPropagation();
-            mail.deleteAll({}, {
-                mbox: folder.name,
-                connection_id: vm.user.profile.default_connection_id
-            }).then(function () {
-                get();
-            });
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('mail.inbox')
-        .run(appRun);
-
-    appRun.$inject = ['routerHelper'];
-    /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
-    }
-
-    function getStates() {
-        return [
-            {
-                state: 'mail.inbox',
-                config: {
-                    url: '/inbox?mbox&filter&tag_id&attach&search',
-                    templateUrl: 'app/mail/inbox/inbox.html',
-                    controller: 'InboxController',
-                    controllerAs: 'vm',
-                    title: 'Inbox',
-                    resolve: {
-                        messages: function (mail, $stateParams) {
-                            var messages = {
-                                params: {
-                                    'per-page': 10,
-                                    'len': 100,
-                                    'part': 'bodytext'
-                                },
-                                checked: []
-                            };
-
-                            if ($stateParams.filter) {
-                                messages.params.filter = $stateParams.filter;
-                            }
-
-                            if ($stateParams.mbox) {
-                                messages.params.mbox = $stateParams.mbox;
-                            }
-
-                            if ($stateParams.tag_id) {
-                                messages.params.tag_id = $stateParams.tag_id;
-                            }
-
-                            return mail.get(messages.params);
-                        }
-                    }
-                }
-            }
-        ];
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
         .module('mail.compose')
         .controller('ComposeController', ComposeController);
 
@@ -8752,6 +8535,223 @@
     'use strict';
 
     angular
+        .module('mail.inbox')
+        .controller('InboxController', InboxController);
+
+    InboxController.$inject = ['$scope', '$state', '$http', '$auth', 'mail', 'mailBox', 'profile', 'messages'];
+    /* @ngInject */
+    function InboxController($scope, $state, $http, $auth, mail, mailBox, profile, messages) {
+        var vm = this;
+
+        vm.user = $auth.user;
+
+        vm.messages = {
+            params: {
+                'per-page': 10,
+                'len': 100,
+                'part': 'bodytext'
+            },
+            defaultParams: {
+                'per-page': 10,
+                'len': 100,
+                'part': 'bodytext'
+            },
+            searchParams: {},
+            checked: []
+        };
+
+        vm.folders = {};
+
+        $scope.$on('mail:sync', function () {
+            get();
+        });
+
+        $scope.$on('mail:inbox:messages:update', function (e, data) {
+            // console.log(data);
+            vm.messages = data;
+            // get();
+        });
+
+        $scope.$on('search:mailQuery', function (e, data) {
+            console.log('data', data);
+            vm.messages.searchParams.search = data.search.search;
+            vm.searchQuery = data.search.search;
+            vm.messages.isSearch = true;
+
+            if (!vm.messages.searchParams.search_part) {
+                vm.messages.searchParams.search_part = 'text';
+            }
+
+            get();
+        });
+
+        $scope.$on('search:mail', function (e, data) {
+            console.log('search:mail', data);
+            // vm.messages.params = data.search;
+            vm.messages.searchParams = data.search;
+            vm.messages.searchParams.search = vm.searchQuery;
+            vm.messages.isSearch = true;
+            get();
+        });
+
+        $scope.$on('search:close', function (e, data) {
+            vm.messages.params = angular.copy(vm.messages.defaultParams);
+            vm.messages.params.mbox = $state.params.mbox;
+            vm.messages.isSearch = false;
+            get();
+        });
+
+        vm.openTagList = openTagList;
+        vm.paginate = paginate;
+        vm.clearFolder = clearFolder;
+
+        activate();
+
+        function activate() {
+            vm.$state = $state;
+
+            if ($state.params.filter) {
+                vm.messages.params.filter = $state.params.filter;
+            }
+
+            if ($state.params.mbox) {
+                vm.messages.params.mbox = $state.params.mbox;
+            }
+
+            if ($state.params.tag_id) {
+                vm.messages.params.tag_id = $state.params.tag_id;
+            }
+
+            getMailBox();
+
+            console.log('messages', messages.$promise);
+
+            messages.$promise.then(function (response) {
+                vm.messages.params.search = null;
+                vm.messages.checked = [];
+                vm.messages = _.assign(vm.messages, response.data);
+                _.forEach(vm.messages.items, function (message) {
+                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
+                });
+            });
+        }
+
+        function get() {
+            vm.messages.isLoading = true;
+
+            var params = {};
+
+            if (vm.messages.isSearch) {
+                params = vm.messages.searchParams;
+            } else {
+                params = vm.messages.params;
+            }
+
+            mail.get(params).then(function (response) {
+                vm.messages.isLoading = false;
+                vm.messages.checked = [];
+                vm.messages = _.assign(vm.messages, response.data);
+                _.forEach(vm.messages.items, function (message) {
+                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
+                });
+            });
+        }
+
+        function getMailBox() {
+            mailBox.get().then(function (response) {
+                vm.folders = _.assign(vm.folders, response.data);
+            });
+        }
+
+        function openTagList() {
+            vm.isOpenTagList = true;
+        }
+
+        function paginate() {
+            if (vm.messages._links.next && !vm.messages.isLoading) {
+                vm.messages.isLoading = true;
+                $http.get(vm.messages._links.next.href).then(function (response) {
+                    vm.messages.isLoading = false;
+                    vm.messages.items = vm.messages.items.concat(response.data.data.items);
+                    vm.messages._links = response.data.data._links;
+                    vm.messages._meta = response.data.data._meta;
+
+                    console.log('pag', vm.messages);
+                });
+            }
+        }
+
+        function clearFolder(e, folder) {
+            e.stopPropagation();
+            mail.deleteAll({}, {
+                mbox: folder.name,
+                connection_id: vm.user.profile.default_connection_id
+            }).then(function () {
+                get();
+            });
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('mail.inbox')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper'];
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
+
+    function getStates() {
+        return [
+            {
+                state: 'mail.inbox',
+                config: {
+                    url: '/inbox?mbox&filter&tag_id&attach&search',
+                    templateUrl: 'app/mail/inbox/inbox.html',
+                    controller: 'InboxController',
+                    controllerAs: 'vm',
+                    title: 'Inbox',
+                    resolve: {
+                        messages: function (mail, $stateParams) {
+                            var messages = {
+                                params: {
+                                    'per-page': 10,
+                                    'len': 100,
+                                    'part': 'bodytext'
+                                },
+                                checked: []
+                            };
+
+                            if ($stateParams.filter) {
+                                messages.params.filter = $stateParams.filter;
+                            }
+
+                            if ($stateParams.mbox) {
+                                messages.params.mbox = $stateParams.mbox;
+                            }
+
+                            if ($stateParams.tag_id) {
+                                messages.params.tag_id = $stateParams.tag_id;
+                            }
+
+                            return mail.get(messages.params);
+                        }
+                    }
+                }
+            }
+        ];
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
         .module('mail.message')
         .controller('MessageController', MessageController);
 
@@ -9278,172 +9278,6 @@
     'use strict';
 
     angular
-        .module('settings.main')
-        .controller('SettingsMainController', SettingsMainController);
-
-    SettingsMainController.$inject = ['$uibModal', '$sce', '$auth', 'profile'];
-    /* @ngInject */
-    function SettingsMainController($uibModal, $sce, $auth, profile) {
-        var vm = this;
-
-        vm.openAvatarUploadPopup = openAvatarUploadPopup;
-        vm.openPasswordChangePopup = openPasswordChangePopup;
-        // vm.openEmailChangePopup = openEmailChangePopup;
-        vm.openEmailAddPopup = openEmailAddPopup;
-        vm.openPhoneChangePopup = openPhoneChangePopup;
-        vm.destroy = destroy;
-        vm.getTrustHtml = getTrustHtml;
-        vm.updateSign = updateSign;
-        vm.removeAvatar = removeAvatar;
-        vm.destroyEmail = destroyEmail;
-
-        activate();
-
-        ////
-
-        function activate() {
-            vm.user = $auth.user;
-        }
-
-        function openAvatarUploadPopup() {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/avatar-upload/avatar-upload-popup.html',
-                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
-                    $scope.cancel = cancel;
-
-                    function cancel() {
-                        $uibModalInstance.dismiss('cancel');
-                    }
-                }],
-                size: 'sm',
-                windowClass: 'popup popup--avatar-upload'
-            });
-        }
-
-        function openPasswordChangePopup() {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/password-change/password-change-popup.html',
-                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
-                    $scope.cancel = cancel;
-
-                    function cancel() {
-                        $uibModalInstance.dismiss('cancel');
-                    }
-                }],
-                size: 'sm',
-                windowClass: 'popup popup--password-change'
-            });
-        }
-
-        function openEmailAddPopup() {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/email-add/email-add-popup.html',
-                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
-                    $scope.cancel = cancel;
-                    $scope.close = close;
-
-                    function cancel() {
-                        $uibModalInstance.dismiss('cancel');
-                    }
-
-                    function close() {
-                        $uibModalInstance.close();
-                    }
-                }],
-                size: 'sm',
-                windowClass: 'popup popup--email-change'
-            });
-
-            modalInstance.result.then(function (response) {
-                // console.log('response', response);
-                profile.get().then(function () {
-                    vm.user = $auth.user;
-                });
-            });
-        }
-
-        function openPhoneChangePopup() {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/phone-change/phone-change-popup.html',
-                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
-                    $scope.cancel = cancel;
-
-                    function cancel() {
-                        $uibModalInstance.dismiss('cancel');
-                    }
-                }],
-                size: 'sm',
-                windowClass: 'popup popup--phone-change'
-            });
-        }
-
-        function removeAvatar() {
-            profile.put({}, {photo: null});
-        }
-
-        function destroy() {
-            profile.destroy();
-        }
-
-        function getTrustHtml(html) {
-            return $sce.trustAsHtml(html);
-        }
-
-        function updateSign() {
-            vm.user.profile.sign = vm.signature ? vm.signature : '';
-
-            var data = {};
-
-            data.sign = '-- <br>' + angular.copy(vm.user.profile.sign);
-
-            profile.put({}, data);
-        }
-
-        function destroyEmail() {
-            profile.put({}, {
-                deleteAdditionalEmails: 1
-            });
-        }
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-        .module('settings.main')
-        .run(appRun);
-
-    appRun.$inject = ['routerHelper'];
-    /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
-    }
-
-    function getStates() {
-        return [
-            {
-                state: 'settings.main',
-                config: {
-                    url: '/main',
-                    templateUrl: 'app/settings/main/settings.html',
-                    controller: 'SettingsMainController',
-                    controllerAs: 'vm',
-                    title: 'Settings'
-                }
-            }
-        ];
-    }
-})();
-
-(function () {
-    'use strict';
-
-    angular
         .module('settings.contacts')
         .controller('СontactsController', СontactsController);
 
@@ -9794,6 +9628,172 @@
                     controller: 'FoldersController',
                     controllerAs: 'vm',
                     title: 'Tags'
+                }
+            }
+        ];
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('settings.main')
+        .controller('SettingsMainController', SettingsMainController);
+
+    SettingsMainController.$inject = ['$uibModal', '$sce', '$auth', 'profile'];
+    /* @ngInject */
+    function SettingsMainController($uibModal, $sce, $auth, profile) {
+        var vm = this;
+
+        vm.openAvatarUploadPopup = openAvatarUploadPopup;
+        vm.openPasswordChangePopup = openPasswordChangePopup;
+        // vm.openEmailChangePopup = openEmailChangePopup;
+        vm.openEmailAddPopup = openEmailAddPopup;
+        vm.openPhoneChangePopup = openPhoneChangePopup;
+        vm.destroy = destroy;
+        vm.getTrustHtml = getTrustHtml;
+        vm.updateSign = updateSign;
+        vm.removeAvatar = removeAvatar;
+        vm.destroyEmail = destroyEmail;
+
+        activate();
+
+        ////
+
+        function activate() {
+            vm.user = $auth.user;
+        }
+
+        function openAvatarUploadPopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/avatar-upload/avatar-upload-popup.html',
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+                    $scope.cancel = cancel;
+
+                    function cancel() {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+                }],
+                size: 'sm',
+                windowClass: 'popup popup--avatar-upload'
+            });
+        }
+
+        function openPasswordChangePopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/password-change/password-change-popup.html',
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+                    $scope.cancel = cancel;
+
+                    function cancel() {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+                }],
+                size: 'sm',
+                windowClass: 'popup popup--password-change'
+            });
+        }
+
+        function openEmailAddPopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/email-add/email-add-popup.html',
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+                    $scope.cancel = cancel;
+                    $scope.close = close;
+
+                    function cancel() {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+
+                    function close() {
+                        $uibModalInstance.close();
+                    }
+                }],
+                size: 'sm',
+                windowClass: 'popup popup--email-change'
+            });
+
+            modalInstance.result.then(function (response) {
+                // console.log('response', response);
+                profile.get().then(function () {
+                    vm.user = $auth.user;
+                });
+            });
+        }
+
+        function openPhoneChangePopup() {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/phone-change/phone-change-popup.html',
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+                    $scope.cancel = cancel;
+
+                    function cancel() {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+                }],
+                size: 'sm',
+                windowClass: 'popup popup--phone-change'
+            });
+        }
+
+        function removeAvatar() {
+            profile.put({}, {photo: null});
+        }
+
+        function destroy() {
+            profile.destroy();
+        }
+
+        function getTrustHtml(html) {
+            return $sce.trustAsHtml(html);
+        }
+
+        function updateSign() {
+            vm.user.profile.sign = vm.signature ? vm.signature : '';
+
+            var data = {};
+
+            data.sign = '-- <br>' + angular.copy(vm.user.profile.sign);
+
+            profile.put({}, data);
+        }
+
+        function destroyEmail() {
+            profile.put({}, {
+                deleteAdditionalEmails: 1
+            });
+        }
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('settings.main')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper'];
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
+
+    function getStates() {
+        return [
+            {
+                state: 'settings.main',
+                config: {
+                    url: '/main',
+                    templateUrl: 'app/settings/main/settings.html',
+                    controller: 'SettingsMainController',
+                    controllerAs: 'vm',
+                    title: 'Settings'
                 }
             }
         ];
