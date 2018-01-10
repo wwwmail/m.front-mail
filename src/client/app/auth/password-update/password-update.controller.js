@@ -83,7 +83,7 @@
             }
 
             if (vm.passwordResetForm.model.phone) {
-                data.phone = vm.passwordResetForm.model.phoneCode + '' + vm.passwordResetForm.model.phone;
+                data.phone = vm.passwordResetForm.model.phone;
             }
 
             vm.userForm.isLoading = true;

@@ -63,7 +63,7 @@
             configResolve.$promise.then(function (response) {
                 if (response.data.phoneCode) {
                     $timeout(function () {
-                        vm.userForm.model.phoneCode = parseInt(response.data.phoneCode);
+                        vm.userForm.model.phone = parseInt(response.data.phoneCode);
                     });
                 }
             });
@@ -91,7 +91,7 @@
                 .then(function (response) {
                     vm.userForm.isLoading = false;
                     // $state.go('signIn');
-                    console.log('response', response);
+                    // console.log('response', response);
 
                     profile.addStorageProfile(response.data.data);
 
