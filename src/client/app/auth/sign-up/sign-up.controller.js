@@ -122,7 +122,7 @@
                 })
                 .catch(function (response) {
                     vm.userForm.errors = response.data.data;
-                    console.log('error', response);
+                    // console.log('error', response);
                 });
         }
 
