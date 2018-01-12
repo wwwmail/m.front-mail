@@ -559,9 +559,9 @@
 	"MAIN_CREATE_EMAIL": "Krijo një mail",
 	"MAIN_SIGN_IN_THROUGH": "Identifikohu përmes",
 	"MAIN_ALT_MICROFONE": "Thuaj kërkesën tuaj",
-	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Futni pyetjen"
+	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Futni pyetjen",
 
 	"Sent": "Të dërguara",
 	"Archive": "Arkivi",
-	"Drafts": "Koncepte",
+	"Drafts": "Koncepte"
 }

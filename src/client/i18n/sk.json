@@ -559,9 +559,9 @@
 	"MAIN_CREATE_EMAIL": "Vytvorte poštovú schránku",
 	"MAIN_SIGN_IN_THROUGH": "Prihláste sa",
 	"MAIN_ALT_MICROFONE": "Povedzte svoju žádost",
-	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Zadajte dotaz"
+	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Zadajte dotaz",
 
 	"Sent": "Odoslané",
 	"Archive": "Archív",
-	"Drafts": "Koncepty",
+	"Drafts": "Koncepty"
 }

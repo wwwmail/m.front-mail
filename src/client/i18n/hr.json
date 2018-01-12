@@ -559,9 +559,9 @@
 	"MAIN_CREATE_EMAIL": "Stvorite poštu",
 	"MAIN_SIGN_IN_THROUGH": "Prijavite se",
 	"MAIN_ALT_MICROFONE": "Izgovorite svoj zahtjev",
-	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Unesite upit"
+	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Unesite upit",
 	
 	"Sent": "Poslane",
 	"Archive": "Arhiva",
-	"Drafts": "Skice",
+	"Drafts": "Skice"
 }

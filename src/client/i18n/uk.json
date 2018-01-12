@@ -559,9 +559,9 @@
 	"MAIN_CREATE_EMAIL": "Створити пошту",
 	"MAIN_SIGN_IN_THROUGH": "Увійти через",
 	"MAIN_ALT_MICROFONE": "Скажіть свій запит",
-	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Введіть запит"
+	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Введіть запит",
 
 	"Sent": "Відправлені",
 	"Archive": "Архів",
-	"Drafts": "Чернетки",
+	"Drafts": "Чернетки"
 }

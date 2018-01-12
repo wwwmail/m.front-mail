@@ -559,9 +559,9 @@
 	"MAIN_CREATE_EMAIL": "Creați un e-mail",
 	"MAIN_SIGN_IN_THROUGH": "Conectați-vă prin",
 	"MAIN_ALT_MICROFONE": "Spuneți-vă cererea",
-	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Introduceți interogarea"
+	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Introduceți interogarea",
 
 	"Sent": "Expediate",
 	"Archive": "Arhivă",
-	"Drafts": "Concepte",
+	"Drafts": "Concepte"
 }
