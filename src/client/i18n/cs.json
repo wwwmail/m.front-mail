@@ -560,4 +560,8 @@
 	"MAIN_SIGN_IN_THROUGH": "Přihlaste se",
 	"MAIN_ALT_MICROFONE": "Sdělte svou žádost",
 	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Zadejte dotaz"
+
+	"Sent": "Odeslané",
+	"Archive": "Archiv",
+	"Drafts": "Koncepty",
 }

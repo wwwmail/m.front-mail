@@ -560,4 +560,8 @@
     "MAIN_SIGN_IN_THROUGH": "Войти через",
     "MAIN_ALT_MICROFONE": "Скажите свой запрос",
     "INPUT_PLACEHOLDER_SEARCH_QUERY": "Введите запрос"
+
+    "Sent": "Отправленные",
+    "Archive": "Архив",
+    "Drafts": "Черновики",
 }

@@ -560,4 +560,8 @@
 	"MAIN_SIGN_IN_THROUGH": "Prijavite se",
 	"MAIN_ALT_MICROFONE": "Recite svoj zahtev",
 	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Unesite upit"
+
+	"Sent": "Poslano",
+	"Archive": "Arhiv",
+	"Drafts": "Koncepti",
 }

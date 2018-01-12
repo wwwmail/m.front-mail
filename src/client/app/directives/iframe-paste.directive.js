@@ -27,13 +27,12 @@
 
             scope.$watch('user.access_token', function (data) {
                 if (data) {
-                    // console.log('token', scope.user.access_token, $auth);
                     signIn();
                 }
             });
 
             function signIn() {
-                var url = CONFIG.parentHost + '?aToken=' + '' + scope.user.access_token;
+                var url = CONFIG.parentHost + '/auth-cookie?token=' + scope.user.access_token;
                 scope.url = $sce.trustAsResourceUrl(url);
             }
 

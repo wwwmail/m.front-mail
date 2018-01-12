@@ -560,4 +560,8 @@
 	"MAIN_SIGN_IN_THROUGH": "Sign in through",
 	"MAIN_ALT_MICROFONE": "Say your request",
 	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Enter the query"
+
+	"Sent": "Sent",
+	"Archive": "Archive",
+	"Drafts": "Drafts",
 }
