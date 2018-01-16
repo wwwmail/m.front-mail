@@ -121,19 +121,20 @@
     });
 
     core.run(function($translate, $rootScope, $timeout, $cookies, $auth, CONFIG, timezone, lang, config, init) {
-        config.getIndex().then(function () {
-            lang.init();
 
+        if ($cookies.get('authToken')) {
+            var tokenArr = $cookies.get('authToken').split('+');
+            $auth.setAuthHeaders({
+                "Authorization": "Bearer " + tokenArr[1]
+            });
+        }
+
+        config.getIndex().then(function () {
             $rootScope.CONFIG = CONFIG;
 
-            timezone.get();
+            lang.init();
 
-            if ($cookies.get('authToken')) {
-                var tokenArr = $cookies.get('authToken').split('+');
-                $auth.setAuthHeaders({
-                    "Authorization": "Bearer " + tokenArr[1]
-                });
-            }
+            timezone.get();
 
             $timeout(function () {
                 init.$defer.resolve({});
