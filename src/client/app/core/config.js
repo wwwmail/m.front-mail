@@ -122,8 +122,8 @@
 
     core.run(function($translate, $rootScope, $timeout, $cookies, $auth, CONFIG, timezone, lang, config, init) {
 
-        if ($cookies.get('authToken')) {
-            var tokenArr = $cookies.get('authToken').split('+');
+        if ($cookies.get('token')) {
+            var tokenArr = $cookies.get('token').split('+');
             $auth.setAuthHeaders({
                 "Authorization": "Bearer " + tokenArr[1]
             });
