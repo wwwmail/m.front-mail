@@ -58,7 +58,9 @@
         ////
 
         function activate() {
-            vm.lang = $translate.use();
+            $timeout(function () {
+                vm.lang = $translate.use();
+            }, 250);
 
             configResolve.$promise.then(function (response) {
                 if (response.data.phoneCode) {
