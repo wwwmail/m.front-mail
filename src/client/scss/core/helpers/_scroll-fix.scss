@@ -26,7 +26,7 @@
 
 ::-webkit-scrollbar {
   width: 0 !important;
-  opacity: 0!important;
+  opacity: 0 !important;
   display: none;
   visibility: hidden;
 }
@@ -35,7 +35,7 @@
   height: 100%;
 
   //overflow: -moz-scrollbars-none;
-  -webkit-overflow-scrolling:touch;
+  -webkit-overflow-scrolling: touch;
   overflow-y: auto;
 
   //-ms-overflow-style: none;
@@ -69,5 +69,13 @@
 
   &--v {
     overflow: visible !important;
+  }
+
+  &--x {
+    overflow-x: hidden !important;
+  }
+
+  &--y {
+    overflow-y: hidden !important;
   }
 }

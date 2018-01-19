@@ -750,6 +750,12 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
 .scroll-fix--v {
   overflow: visible !important;
 }
+.scroll-fix--x {
+  overflow-x: hidden !important;
+}
+.scroll-fix--y {
+  overflow-y: hidden !important;
+}
 
 /*------------------------------------------- icons*/
 .icon-crumbs-arrow, .bread-crumbs__item::after {
