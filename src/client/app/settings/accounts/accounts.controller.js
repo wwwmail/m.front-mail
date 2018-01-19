@@ -60,6 +60,13 @@
                     ],
                     imap: 'imap.tiscali.cz',
                     port: 993
+                },
+                {
+                    parts: [
+                        'mail.cz'
+                    ],
+                    imap: 'imap.mail.cz',
+                    port: 993
                 }
             ]
         };
