@@ -536,7 +536,7 @@
     "YOUR_NAME": "Ваше имя",
     "YOUR_PHOTO": "Мой портрет",
     "YOUR_SIGNATURE": "Ваши подписи",
-    
+
     "MAIN_SEARCH_INTERNET": "Интернет",
     "MAIN_SEARCH_MAPS": "Карты",
     "MAIN_SEARCH_IMAGES": "Картинки",
@@ -563,5 +563,7 @@
 
     "Sent": "Отправленные",
     "Archive": "Архив",
-    "Drafts": "Черновики"
+    "Drafts": "Черновики",
+
+    "ALL": "Все"
 }

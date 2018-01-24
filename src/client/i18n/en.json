@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Your name",
 	"YOUR_PHOTO": "My photo",
 	"YOUR_SIGNATURE": "Your signatures",
-	
+
 	"MAIN_SEARCH_INTERNET": "Internet",
 	"MAIN_SEARCH_MAPS": "Maps",
 	"MAIN_SEARCH_IMAGES": "Pictures",
@@ -563,5 +563,7 @@
 
 	"Sent": "Sent",
 	"Archive": "Archive",
-	"Drafts": "Drafts"
+	"Drafts": "Drafts",
+
+	"ALL": "All"
 }

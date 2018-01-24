@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Vaše ime",
 	"YOUR_PHOTO": "Moj portret",
 	"YOUR_SIGNATURE": "Vaši potpisi",
-	
+
 	"MAIN_SEARCH_INTERNET": "Internet",
 	"MAIN_SEARCH_MAPS": "Karte",
 	"MAIN_SEARCH_IMAGES": "Slike",
@@ -560,8 +560,10 @@
 	"MAIN_SIGN_IN_THROUGH": "Prijavite se",
 	"MAIN_ALT_MICROFONE": "Izgovorite svoj zahtjev",
 	"INPUT_PLACEHOLDER_SEARCH_QUERY": "Unesite upit",
-	
+
 	"Sent": "Poslane",
 	"Archive": "Arhiva",
-	"Drafts": "Skice"
+	"Drafts": "Skice",
+
+	"ALL": "Sve"
 }

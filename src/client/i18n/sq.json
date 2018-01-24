@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Emri juaj",
 	"YOUR_PHOTO": "Fotografia e ime",
 	"YOUR_SIGNATURE": "Nënshkrimet Tuaja",
-	
+
 	"MAIN_SEARCH_INTERNET": "Internet",
 	"MAIN_SEARCH_MAPS": "Maps",
 	"MAIN_SEARCH_IMAGES": "Piktura",
@@ -563,5 +563,7 @@
 
 	"Sent": "Të dërguara",
 	"Archive": "Arkivi",
-	"Drafts": "Koncepte"
+	"Drafts": "Koncepte",
+
+	"ALL": "Të gjitha"
 }

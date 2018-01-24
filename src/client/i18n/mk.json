@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Вашето име",
 	"YOUR_PHOTO": "Мојот портрет",
 	"YOUR_SIGNATURE": "Ваши потписи",
-	
+
 	"MAIN_SEARCH_INTERNET": "Интернет",
 	"MAIN_SEARCH_MAPS": "Мапи",
 	"MAIN_SEARCH_IMAGES": "Слики",
@@ -563,5 +563,7 @@
 
 	"Sent": "Испратени",
 	"Archive": "Архива",
-	"Drafts": "Недовршени"
+	"Drafts": "Недовршени",
+
+	"ALL": "Се"
 }
