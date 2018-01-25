@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('MenuMainController', MenuMainController);
 
-    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', '$state', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG'];
+    MenuMainController.$inject = ['$timeout', '$scope', '$rootScope', '$uibModal', '$auth', '$state', 'mail', 'mailBox', 'tag', 'profile', 'CONFIG', 'authService'];
 
     /* @ngInject */
-    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, $state, mail, mailBox, tag, profile, CONFIG) {
+    function MenuMainController($timeout, $scope, $rootScope, $uibModal, $auth, $state, mail, mailBox, tag, profile, CONFIG, authService) {
         var vm = this;
 
         vm.standartFolders = [
@@ -197,7 +197,7 @@
             vm.profiles = profile.getStorageProfiles();
         }
 
-        function setAuthProfile(profile) {
+/*        function setAuthProfile(profile) {
             $auth.user.access_token = profile.access_token;
 
             $timeout(function () {
@@ -207,6 +207,10 @@
                     }, 250);
                 });
             }, 250);
+        }*/
+
+        function setAuthProfile(profile) {
+            authService.signWithToken(profile.access_token, {isReload: true});
         }
 
         function clearFolder(e, folder) {
@@ -221,8 +225,6 @@
 
         function logout() {
             var profiles = profile.destroyStorageProfile($auth.user);
-
-            console.log('profiles', profiles);
 
             if (profiles && profiles.length) {
                 setAuthProfile(profiles[0]);

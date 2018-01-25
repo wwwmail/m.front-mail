@@ -37,6 +37,10 @@
                 $state.go('home', vm.$state.params);
                 return;
             }
+
+            if ($state.params.username) {
+                vm.userForm.model.username = $state.params.username;
+            }
         }
 
         function login() {

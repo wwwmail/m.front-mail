@@ -105,8 +105,26 @@
                         var defer = $q.defer();
 
                         if (rejection.status === 401) {
-                            // window.location.href = '/sign-in';
-                            $location.path('/sign-in');
+                            var $state = $injector.get('$state');
+                            var profile = $injector.get('profile');
+
+                            var params = {};
+
+                            if (rejection.config.headers.Authorization) {
+                                var token = rejection.config.headers.Authorization;
+
+                                var _profile = profile.getUserByToken(token);
+
+                                if (_profile) {
+                                    profile.destroyStorageProfile(_profile);
+
+                                    params.username = _profile.profile.username;
+                                }
+                            }
+
+                            $rootScope.$broadcast('auth:invalid');
+
+                            $state.go('signIn', params);
                         }
 
                         defer.reject(rejection);

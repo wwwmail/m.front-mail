@@ -57,8 +57,6 @@
         }
 
         function getFormatted(data) {
-            // data.photo = CONFIG.MediaUrl + data.photo;
-
             if (data.birthday) {
                 var date = moment(data.birthday);
                 data.bMonth = moment.months()[date.month()];
@@ -127,8 +125,6 @@
             profiles.push(user);
 
             localStorageService.set('profiles', profiles);
-
-            console.log('profiles', user, profiles);
         }
 
         function destroyStorageProfile(user) {
@@ -141,6 +137,12 @@
             localStorageService.set('profiles', profiles);
         }
 
+        function getUserByToken(token) {
+            var profiles = getStorageProfiles();
+
+            return _.find(profiles, {'access_token': token});
+        }
+
         return {
             get: get,
             post: post,
@@ -151,7 +153,8 @@
             changePassword: changePassword,
             getStorageProfiles: getStorageProfiles,
             addStorageProfile: addStorageProfile,
-            destroyStorageProfile: destroyStorageProfile
+            destroyStorageProfile: destroyStorageProfile,
+            getUserByToken: getUserByToken
         }
     }
 
