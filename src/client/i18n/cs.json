@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Vaše jméno",
 	"YOUR_PHOTO": "Můj portrét",
 	"YOUR_SIGNATURE": "Vaše podpisy",
-	
+
 	"MAIN_SEARCH_INTERNET": "Internet",
 	"MAIN_SEARCH_MAPS": "Mapy",
 	"MAIN_SEARCH_IMAGES": "Obrázky",
@@ -563,5 +563,7 @@
 
 	"Sent": "Odeslané",
 	"Archive": "Archiv",
-	"Drafts": "Koncepty"
+	"Drafts": "Koncepty",
+
+	"ALL": "Všechno"
 }

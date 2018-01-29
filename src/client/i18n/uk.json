@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Ваше ім'я:",
 	"YOUR_PHOTO": "Мій портерет",
 	"YOUR_SIGNATURE": "Ваші підписи",
-	
+
 	"MAIN_SEARCH_INTERNET": "Інтернет",
 	"MAIN_SEARCH_MAPS": "Карти",
 	"MAIN_SEARCH_IMAGES": "Картинки",
@@ -563,5 +563,8 @@
 
 	"Sent": "Відправлені",
 	"Archive": "Архів",
-	"Drafts": "Чернетки"
+	"Drafts": "Чернетки",
+
+	"ALL": "Усі"
+
 }

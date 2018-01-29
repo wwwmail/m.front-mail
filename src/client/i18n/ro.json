@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Numele dumneavoastră",
 	"YOUR_PHOTO": "Portretul meu",
 	"YOUR_SIGNATURE": "Semnăturile dumneavoastră",
-	
+
 	"MAIN_SEARCH_INTERNET": "Internet",
 	"MAIN_SEARCH_MAPS": "Hărți",
 	"MAIN_SEARCH_IMAGES": "Fotografii",
@@ -563,5 +563,7 @@
 
 	"Sent": "Expediate",
 	"Archive": "Arhivă",
-	"Drafts": "Concepte"
+	"Drafts": "Concepte",
+
+	"ALL": "Totul"
 }

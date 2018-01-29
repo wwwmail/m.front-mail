@@ -536,7 +536,7 @@
 	"YOUR_NAME": "Vaše ime",
 	"YOUR_PHOTO": "Moja slika",
 	"YOUR_SIGNATURE": "Vaši podpisi",
-	
+
 	"MAIN_SEARCH_INTERNET": "Internet",
 	"MAIN_SEARCH_MAPS": "Zemljevidi",
 	"MAIN_SEARCH_IMAGES": "Slike",
@@ -563,5 +563,7 @@
 
 	"Sent": "Poslana",
 	"Archive": "Arhiv",
-	"Drafts": "Osnutki"
+	"Drafts": "Osnutki",
+
+	"ALL": "Vse"
 }

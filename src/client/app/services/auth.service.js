@@ -28,6 +28,10 @@
                 socialComplete: {
                     method: 'POST',
                     url: API_URL + '/social-complete'
+                },
+                checkToken: {
+                    method: 'GET',
+                    url: API_URL + '/validate-token'
                 }
             }
         );
@@ -48,24 +52,30 @@
             return resource.socialComplete(params, data).$promise;
         }
 
+        function checkToken(params, data) {
+            return resource.checkToken(params, data).$promise;
+        }
+
         function signWithToken(token, options) {
-            var options = options || {};
+            options = options || {};
 
             $auth.user.access_token = token;
 
-            $timeout(function () {
-                $('#iframe--auth').on('load', function () {
-                    if (options.isReload) {
-                        $timeout(function () {
-                            window.location.href = '/mail/inbox?mbox=INBOX';
-                        }, 250);
-                    }
-                });
-            }, 250);
+            $auth.setAuthHeaders({
+                "Authorization": token
+            });
 
-            if (!options.isReload) {
-                $state.go('mail.inbox', {mbox: 'INBOX'});
-            }
+            checkToken().then(function (response) {
+                if (options.isReload) {
+                    $timeout(function () {
+                        window.location.href = '/mail/inbox?mbox=INBOX';
+                    }, 250);
+                }
+
+                if (!options.isReload) {
+                    $state.go('mail.inbox', {mbox: 'INBOX'});
+                }
+            });
         }
 
         return {
