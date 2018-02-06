@@ -26,6 +26,7 @@
             'ngCookies',
             'ngPasswordStrength',
             'angular-google-adsense',
-            'vcRecaptcha'
+            'vcRecaptcha',
+            'ngPhotoswipe'
         ]);
 })();
