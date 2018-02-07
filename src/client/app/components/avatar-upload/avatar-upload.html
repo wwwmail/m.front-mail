@@ -11,6 +11,7 @@
         <!--ng-if="vm.avatar.picFile"-->
         <div class="flex flex--just-cn">
             <div class="avatar-upload__crop"
+                 ng-hide="!vm.avatar.picFile"
                  ngf-drop
                  ngf-pattern="image/*">
                 <img-crop image="vm.avatar.picFile | ngfDataUrl"
@@ -20,6 +21,7 @@
             <!--ng-if="!vm.avatar.picFile"-->
             <img class="avatar-upload__default img-responsive"
                  style="width:260px;height:260px;"
+                 ng-hide="vm.avatar.picFile"
                  src="/images/avatar-300.png"/>
         </div>
         <div class="font--center">
