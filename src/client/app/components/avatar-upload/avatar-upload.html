@@ -8,12 +8,11 @@
     </div>
 
     <div class="popup__content pdd--20">
+        <!--ng-if="vm.avatar.picFile"-->
         <div class="flex flex--just-cn">
             <div class="avatar-upload__crop"
                  ngf-drop
-                 ngf-pattern="image/*"
-                 ng-if="vm.avatar.picFile"
-                 style="width:283px;height:283px;">
+                 ngf-pattern="image/*">
                 <img-crop image="vm.avatar.picFile | ngfDataUrl"
                           result-image="vm.avatar.croppedDataUrl">
                 </img-crop>
