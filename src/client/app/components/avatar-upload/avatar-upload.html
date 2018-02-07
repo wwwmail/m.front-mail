@@ -17,15 +17,16 @@
                           result-image="vm.avatar.croppedDataUrl">
                 </img-crop>
             </div>
+            <!--ng-if="!vm.avatar.picFile"-->
             <img class="avatar-upload__default img-responsive"
                  style="width:260px;height:260px;"
-                 src="/images/avatar-300.png"
-                 ng-if="!vm.avatar.picFile"/>
+                 src="/images/avatar-300.png"/>
         </div>
         <div class="font--center">
             <button class="btn btn--size_l btn--normal mrg--t30"
                     ngf-select
                     accept="image/*"
+                    ngf-fix-orientation="true"
                     ngf-max-size="50MB"
                     ng-model="vm.avatar.picFile">
                 {{ 'AVATAR_LOAD_IMAGE' | translate }}
