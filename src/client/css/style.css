@@ -7234,8 +7234,10 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
   text-align: center;
 }
 .avatar-upload__crop {
-  width: 100% !important;
+  width: 200px !important;
   height: 200px !important;
+  background: #E4E4E4;
+  overflow: hidden;
 }
 
 .lang-list {

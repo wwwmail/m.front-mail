@@ -43,7 +43,12 @@
   }
 
   &__crop {
-    width: 100% !important;
+    width: 200px !important;
+    //width: 100% !important;
     height: 200px !important;
+
+    background: #E4E4E4;
+
+    overflow: hidden;
   }
 }

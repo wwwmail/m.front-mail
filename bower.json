@@ -53,7 +53,8 @@
     "ng-password-strength": "^0.2.1",
     "angular-sticky": "angular-sticky-plugin#^0.4.2",
     "angular-google-adsense": "^0.5.0",
-    "angular-recaptcha": "^4.1.2"
+    "angular-recaptcha": "^4.1.2",
+    "ng-photoswipe": "^0.2.0"
   },
   "overrides": {
     "jquery": {
@@ -111,6 +112,17 @@
     "ng-tags-input": {
       "main": [
         "ng-tags-input.js"
+      ]
+    },
+    "photoswipe": {
+      "main": [
+        "dist/photoswipe.min.js",
+        "dist/photoswipe-ui-default.min.js"
+      ]
+    },
+    "ng-photoswipe": {
+      "main": [
+        "angular-photoswipe.min.js"
       ]
     }
   }

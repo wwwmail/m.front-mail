@@ -5,9 +5,9 @@
         .module('app.components')
         .controller('AttachItemController', AttachItemController);
 
-    AttachItemController.$inject = ['$auth', 'CONFIG'];
+    AttachItemController.$inject = ['$auth', 'CONFIG', 'gallery'];
     /* @ngInject */
-    function AttachItemController($auth, CONFIG) {
+    function AttachItemController($auth, CONFIG, gallery) {
         var vm = this;
 
         vm.assocFormats = [
@@ -93,7 +93,10 @@
 
         vm.viewAppUrl = 'https://view.officeapps.live.com/op/view.aspx?src=';
 
+
+        // vm.openGallery = openGallery;
         vm.openAttach = openAttach;
+
 
         activate();
 
@@ -104,6 +107,15 @@
             vm.CONFIG = CONFIG;
 
             findFormat();
+        }
+
+        function openGallery() {
+            gallery.openGallery({
+                attachIndex: vm.index,
+                attach: vm.attach,
+                attachments: vm.attachments,
+                message: vm.message
+            });
         }
 
         function findFormat() {
@@ -138,7 +150,7 @@
             }
 
             if (vm.attach.mime === 'image/png' || vm.attach.mime === 'image/jpeg') {
-                window.open(vm.url + '&screen=true', '_blank');
+                openGallery();
             }
         }
     }

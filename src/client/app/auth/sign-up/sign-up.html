@@ -139,7 +139,9 @@
                             <!-- СМС валидация -->
                             <label class="field-style__title font--size13">
                                 {{ 'ACTIVE_PHONE' | translate }}
-                                <a class="pull-right link--yellow" ng-click="vm.isAdditionalEmail = true">
+                                <a class="pull-right link--yellow"
+                                   ng-click="vm.isAdditionalEmail = true"
+                                   ng-if="vm.CONFIG.domainZone !== 'md'">
                                     {{ 'NO_PHONE' | translate }}
                                 </a>
                             </label>

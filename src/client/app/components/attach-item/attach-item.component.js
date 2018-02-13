@@ -5,8 +5,10 @@
         .module('app.components')
         .component('attachItem', {
             bindings: {
+                index: '=',
                 attach: '=',
-                message: '='
+                message: '=',
+                attachments: '='
             },
             templateUrl: 'app/components/attach-item/attach-item.html',
             controller: 'AttachItemController',

@@ -55,7 +55,9 @@ var pathBowerCss = [
     pathBower + 'select2/select2.css',
     pathBower + 'angular-ui-select/dist/select.css',
     pathBower + 'ng-tags-input/ng-tags-input.min.css',
-    pathBower + 'ng-tags-input/ng-tags-input.bootstrap.min.css'
+    pathBower + 'ng-tags-input/ng-tags-input.bootstrap.min.css',
+    pathBower + 'photoswipe/dist/photoswipe.css',
+    pathBower + 'photoswipe/dist/default-skin/default-skin.css'
 ];
 
 var pathFonts = [
@@ -164,6 +166,11 @@ gulp.task('translationDev', function buildTranslationCache() {
 gulp.task('faviconDev', function () {
     return gulp.src(pathClient + 'favicon.ico')
         .pipe(gulp.dest(pathBuildDev));
+});
+
+gulp.task('photoswipeSvg', function () {
+    return gulp.src(pathBower + 'photoswipe/dist/default-skin/default-skin.svg')
+        .pipe(gulp.dest(pathBuildDev + 'css'));
 });
 
 gulp.task('serverDev', function () {
@@ -301,6 +308,11 @@ gulp.task('faviconProd', function () {
         .pipe(gulp.dest(pathBuildProd));
 });
 
+gulp.task('photoswipeSvgProd', function () {
+    return gulp.src(pathBower + 'photoswipe/dist/default-skin/default-skin.svg')
+        .pipe(gulp.dest(pathBuildProd + 'css'));
+});
+
 gulp.task('rev_collector', ['build'], function () {
     return gulp.src([
         pathBuildProd + 'css/rev-vendor-manifest.json',
@@ -341,6 +353,7 @@ gulp.task('prod', ['rev_collector'], function () {
 });
 
 gulp.task('build', [
+    'photoswipeSvgProd',
     'translationProd',
     'bowerProd',
     'angularProd',
@@ -376,6 +389,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('default', [
+    'photoswipeSvg',
     'faviconDev',
     'translationDev',
     'bowerDev',
