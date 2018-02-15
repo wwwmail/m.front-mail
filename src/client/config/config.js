@@ -9,6 +9,7 @@
         MediaUrl: 'https://mailcz.dev.mail.group/',
         AttachUrl: 'https://mailcz.dev.mail.group/mail/',
         passportLink: 'https://m.passport.dev.mail.group',
+        translatesUrl: 'https://mailapi.dev.mail.group/i18n/',
         payment: {
             sandbox: 'AQgVJbIVhUkthElCdiLS1GZj7tq38wDeBspxYrLG_K73OzXL2_NTvBsQTDT9oXhEMTGQIiEtr8jPnFzF',
             production: 'AVZhosFzrnZ5Mf3tiOxAD0M6NHv8pcB2IFNHAfp_h69mmbd-LElFYkJUSII3Y0FPbm7S7lxBuqWImLbl'

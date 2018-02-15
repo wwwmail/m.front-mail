@@ -3,9 +3,9 @@
 
     var core = angular.module('app.core');
 
-    core.config(function ($translateProvider) {
+    core.config(function ($translateProvider, CONFIG) {
         $translateProvider.useStaticFilesLoader({
-            prefix: 'i18n/',
+            prefix: CONFIG.translatesUrl || '/i18n/',
             suffix: '.json'
         });
         $translateProvider.useSanitizeValueStrategy(null);
