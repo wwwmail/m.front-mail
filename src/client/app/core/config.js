@@ -5,7 +5,7 @@
 
     core.config(function ($translateProvider, CONFIG) {
         $translateProvider.useStaticFilesLoader({
-            prefix: CONFIG.APIHost || '/i18n/',
+            prefix: CONFIG.APIHost + '/i18n/' || '/i18n/',
             suffix: '.json'
         });
         $translateProvider.useSanitizeValueStrategy(null);
