@@ -65,7 +65,7 @@
             },
             {
                 lang: 'sl',
-                ico: 'si-SI',
+                ico: 'sl-SI',
                 icon: 'sl.svg',
                 caption: 'Словенский'
             },
