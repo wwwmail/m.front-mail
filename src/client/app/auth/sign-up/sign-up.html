@@ -298,8 +298,10 @@
                         <div class="form__field-item mrg--b10">
                             <hr class="hr hr--auth ">
                             <div class="field-style text-center">
-                                <button class="btn btn--size_l btn--yellow width--inh" type="submit"
-                                        ng-if="!vm.userForm.isLoading">
+                                <button class="btn btn--size_l btn--yellow width--inh"
+                                        type="submit"
+                                        ng-if="!vm.userForm.isLoading"
+                                        ng-disabled="vm.CONFIG.domainZone === 'md'">
                                     {{ 'BTN_SING_UP_NOW' | translate }}
                                 </button>
                                 <div ng-if="vm.userForm.isLoading">
