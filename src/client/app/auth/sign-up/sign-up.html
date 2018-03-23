@@ -141,20 +141,20 @@
                                 {{ 'ACTIVE_PHONE' | translate }}
                             </label>
 
-                            <div class="form__field-item mrg--b25 flex flex--row-wrap">
-                                <div class="field-style width--size206">
+                            <div class="form__field-item mrg--b10 flex flex--row-wrap">
+                                <div class="field-style width--size190">
                                     <input class="input input--size_l input--up-shadow input--focus-icon width--inh font--size12"
                                            type="text"
                                            name="phone"
                                            ng-model="vm.userForm.model.phone"
                                            ui-mask-placeholder
                                            ui-mask-placeholder-char="x"
-                                           ui-mask="9999-9999-9999"
+                                           ui-mask="+999999999999"
                                            ui-options="{allowInvalidValue: true, clearOnBlur: false}"
                                            required>
                                 </div>
 
-                                <div class="field-style" style="flex: 1;">
+                                <div class="field-style pdd--l10" style="flex: 1;">
                                     <button class="btn btn--size_l btn--normal btn--s-gradient"
                                             style="width: 100%;"
                                             type="button"
@@ -169,13 +169,13 @@
                                                    class="validation--form-auth validation--top-no-radius">
                                 </validation-errors>
 
-                                <span class="notific notific--auth" ng-if="vm.codeResult && vm.userForm.model.phone">
+                                <span class="notific notific--auth mrg--t5" ng-if="vm.codeResult && vm.userForm.model.phone">
                                     {{ 'AUTH_NOTIFIC_PHONE_1' | translate }} +{{ vm.userForm.model.phone }}  {{ 'AUTH_NOTIFIC_PHONE_2' | translate }}
                                 </span>
                             </div>
 
                             <!-- СМС подтверждение кода -->
-                            <div class="form__field-item mrg--b20 mrg--t16"
+                            <div class="form__field-item mrg--b20 mrg--t10"
                                  ng-if="vm.codeResult || vm.userForm.errors">
 
                                 <div class="width-inh flex--inline align-items--cn">

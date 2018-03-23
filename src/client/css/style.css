@@ -78,6 +78,9 @@
 .width--size177 {
   width: 177px !important;
 }
+.width--size190 {
+  width: 190px !important;
+}
 .width--size201 {
   width: 201px !important;
 }
@@ -583,6 +586,12 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
 }
 .pdd--l2 {
   padding-left: 2px !important;
+}
+.pdd--l5 {
+  padding-left: 5px !important;
+}
+.pdd--l10 {
+  padding-left: 10px !important;
 }
 .pdd--l12 {
   padding-left: 12px !important;
@@ -2900,14 +2909,14 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
   border: none;
   background: none;
   text-align: center;
-  border-bottom: 1px dotted #808080;
+  border-bottom: 1px dotted #fff;
   border-radius: 0 !important;
   padding: 0;
   width: auto !important;
   height: auto !important;
   margin: 16px auto 0px;
   display: inherit;
-  color: #808080;
+  color: #fff;
 }
 .btn--link-style:hover {
   background: none;
@@ -5050,7 +5059,7 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
 */
 .validation__message {
   font: normal 12px/1.16 sans-serif;
-  color: #808080;
+  color: #fff;
   margin-top: 5px;
   padding-left: 3px;
 }
@@ -5529,7 +5538,7 @@ a:focus, a:hover a:active, button:focus, button:hover a:active, input:focus, inp
 }
 .notific--auth {
   font-size: 12px;
-  color: #808080;
+  color: #fff;
 }
 
 .bread-crumbs {

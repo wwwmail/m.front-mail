@@ -23,6 +23,8 @@
   /* -------------------------------------------------------------------- left */
   @include unify-sizer-modifier(l0, padding-left, 0);
   @include unify-sizer-modifier(l2, padding-left, 2px);
+  @include unify-sizer-modifier(l5, padding-left, 5px);
+  @include unify-sizer-modifier(l10, padding-left, 10px);
   @include unify-sizer-modifier(l12, padding-left, 12px);
   @include unify-sizer-modifier(l38, padding-left, 38px);
 }
