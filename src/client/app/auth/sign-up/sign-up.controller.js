@@ -12,7 +12,7 @@
 
         vm.CONFIG = CONFIG;
 
-        vm.isAdditionalEmail = true;
+        vm.isAdditionalEmail = false;
 
         vm.codes = {
             list: [
