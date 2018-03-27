@@ -141,26 +141,28 @@
                                 {{ 'ACTIVE_PHONE' | translate }}
                             </label>
 
-                            <div class="form__field-item mrg--b10 flex flex--row-wrap">
-                                <div class="field-style width--size190">
-                                    <input class="input input--size_l input--up-shadow input--focus-icon width--inh font--size12"
-                                           type="text"
-                                           name="phone"
-                                           ng-model="vm.userForm.model.phone"
-                                           ui-mask-placeholder
-                                           ui-mask-placeholder-char="x"
-                                           ui-mask="+999999999999"
-                                           ui-options="{allowInvalidValue: true, clearOnBlur: false}"
-                                           required>
-                                </div>
+                            <div class="form__field-item mrg--b10">
+                                <div class="flex">
+                                    <div class="field-style">
+                                        <input class="input input--size_l input--up-shadow input--focus-icon width--inh font--size12"
+                                               type="text"
+                                               name="phone"
+                                               ng-model="vm.userForm.model.phone"
+                                               ui-mask-placeholder
+                                               ui-mask-placeholder-char="x"
+                                               ui-mask="+999999999999"
+                                               ui-options="{allowInvalidValue: true, clearOnBlur: false}"
+                                               required>
+                                    </div>
 
-                                <div class="field-style pdd--l10" style="flex: 1;">
-                                    <button class="btn btn--size_l btn--normal btn--s-gradient"
-                                            style="width: 100%;"
-                                            type="button"
-                                            ng-click="vm.sendCode()">
-                                        {{ 'BTN_TO_GET_THE_CODE' | translate }}
-                                    </button>
+                                    <div class="field-style pdd--l10" style="flex: 1;">
+                                        <button class="btn btn--size_l btn--normal btn--s-gradient"
+                                                style="width: 100%;"
+                                                type="button"
+                                                ng-click="vm.sendCode()">
+                                            {{ 'BTN_TO_GET_THE_CODE' | translate }}
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <validation-errors data="userForm.phone"
@@ -169,7 +171,8 @@
                                                    class="validation--form-auth validation--top-no-radius">
                                 </validation-errors>
 
-                                <span class="notific notific--auth mrg--t5" ng-if="vm.codeResult && vm.userForm.model.phone">
+                                <span class="notific notific--auth mrg--t5"
+                                      ng-if="vm.codeResult && vm.userForm.model.phone">
                                     {{ 'AUTH_NOTIFIC_PHONE_1' | translate }} +{{ vm.userForm.model.phone }}  {{ 'AUTH_NOTIFIC_PHONE_2' | translate }}
                                 </span>
                             </div>
