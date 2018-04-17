@@ -5,9 +5,9 @@
         .module('app.services')
         .factory('mail', mail);
 
-    mail.$inject = ['CONFIG', '$resource', '$http', '$rootScope', 'Upload', '$state', 'wb'];
+    mail.$inject = ['CONFIG', '$resource', '$http', '$rootScope', 'localStorageService', 'Upload', '$state', 'wb'];
 
-    function mail(CONFIG, $resource, $http, $rootScope, Upload, $state, mb) {
+    function mail(CONFIG, $resource, $http, $rootScope, localStorageService, Upload, $state, mb) {
         var API_URL = CONFIG.APIHost + '/mail';
 
         var answerData = {};
@@ -378,6 +378,22 @@
             return message;
         }
 
+        function setStorageMessages(messages) {
+            localStorageService.set('mail:messages', messages);
+        }
+
+        function getStorageMessages() {
+            return localStorageService.get('mail:messages');
+        }
+
+        function setStoragePositionScrollMessages(position) {
+            localStorageService.set('mail:scrollPosition', position);
+        }
+
+        function getStoragePositionScrollMessages() {
+            return localStorageService.get('mail:scrollPosition');
+        }
+
         return {
             get: get,
             post: post,
@@ -399,7 +415,11 @@
             getFwdData: getFwdData,
             deleteAll: deleteAll,
             setPaginate: setPaginate,
-            destroyOne: destroyOne
+            destroyOne: destroyOne,
+            getStorageMessages: getStorageMessages,
+            setStorageMessages: setStorageMessages,
+            setStoragePositionScrollMessages: setStoragePositionScrollMessages,
+            getStoragePositionScrollMessages: getStoragePositionScrollMessages
         }
     }
 })();

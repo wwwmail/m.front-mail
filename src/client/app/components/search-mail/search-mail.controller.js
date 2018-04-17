@@ -5,9 +5,10 @@
         .module('app.components')
         .controller('SearchMailController', SearchMailController);
 
-    SearchMailController.$inject = ['$scope', '$rootScope', 'tag', 'mailBox'];
+    SearchMailController.$inject = ['$scope', '$rootScope', '$state', '$timeout', 'tag', 'mailBox', 'search'];
+
     /* @ngInject */
-    function SearchMailController($scope, $rootScope, tag, mailBox) {
+    function SearchMailController($scope, $rootScope, $state, $timeout, tag, mailBox, search) {
         var vm = this;
 
         vm.isOpenDate = false;
@@ -94,31 +95,36 @@
             model: {}
         };
 
-        vm.search = search;
+
+        vm.request = request;
         vm.onSearchChange = onSearchChange;
+
 
         $scope.$watch('vm.from', function (data, oldData) {
             if (data) {
-                search();
+                request();
                 vm.isOpenFilters = false;
             }
         });
 
         $scope.$watch('vm.to', function (data, oldData) {
             if (data) {
-                search();
+                request();
                 vm.isOpenFilters = false;
             }
         });
 
         activate();
 
+        ////
+
         function activate() {
             getTags();
+
             getMailBox();
         }
 
-        function search() {
+        function request() {
             var data = {};
 
             if (vm.folders.selected.name === 'ALL') {
@@ -142,7 +148,7 @@
             }
 
             if (vm.folders.selected.name && vm.folders.selected.name !== 'ALL') {
-                data.mbox = vm.folders.selected.name;
+                data.smbox = vm.folders.selected.name;
             }
 
             if (vm.from && vm.to) {
@@ -150,13 +156,9 @@
                 data.search_end = vm.to;
             }
 
-            console.log('params', data);
+            data.mbox = undefined;
 
-            // return;
-
-            $rootScope.$broadcast('search:mail', {
-                search: data
-            });
+            search.query(data);
         }
 
         function getTags() {
@@ -177,7 +179,7 @@
                 var isSub = true;
 
                 _.forEach(vm.standartFolders, function (standartFolder) {
-                    if (folder.name == standartFolder.name) {
+                    if (folder.name === standartFolder.name) {
                         isSub = false;
                     }
                 });

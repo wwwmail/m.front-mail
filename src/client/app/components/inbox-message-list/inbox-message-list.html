@@ -1,4 +1,6 @@
-<div class="inbox-message-list" ng-class="{'inbox-message-list--indentation': vm.messages.checked.length}">
+<div class="inbox-message-list"
+     ng-class="{'inbox-message-list--indentation': vm.messages.checked.length}"
+     storage-mails-position messages="vm.messages">
     <inbox-message message="message"
                    messages="vm.messages"
                    ng-repeat="message in vm.messages.items">

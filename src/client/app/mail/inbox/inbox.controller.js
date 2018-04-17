@@ -5,9 +5,9 @@
         .module('mail.inbox')
         .controller('InboxController', InboxController);
 
-    InboxController.$inject = ['$scope', '$state', '$http', '$auth', 'mail', 'mailBox', 'profile', 'messages'];
+    InboxController.$inject = ['$rootScope', '$scope', '$state', '$http', '$auth', 'mail', 'mailBox', 'search'];
     /* @ngInject */
-    function InboxController($scope, $state, $http, $auth, mail, mailBox, profile, messages) {
+    function InboxController($rootScope, $scope, $state, $http, $auth, mail, mailBox, search) {
         var vm = this;
 
         vm.user = $auth.user;
@@ -34,13 +34,11 @@
         });
 
         $scope.$on('mail:inbox:messages:update', function (e, data) {
-            // console.log(data);
             vm.messages = data;
-            // get();
         });
 
-        $scope.$on('search:mailQuery', function (e, data) {
-            console.log('data', data);
+        /*$scope.$on('search:mailQuery', function (e, data) {
+            console.log('search:mailQuery', data);
             vm.messages.searchParams.search = data.search.search;
             vm.searchQuery = data.search.search;
             vm.messages.isSearch = true;
@@ -49,14 +47,16 @@
                 vm.messages.searchParams.search_part = 'text';
             }
 
+            $state.go('.', {
+                search: vm.searchQuery,
+                search_part: vm.messages.searchParams.search_part
+            }, {notify: false});
+
             get();
-        });
+        });*/
 
         $scope.$on('search:mail', function (e, data) {
-            console.log('search:mail', data);
-            // vm.messages.params = data.search;
             vm.messages.searchParams = data.search;
-            vm.messages.searchParams.search = vm.searchQuery;
             vm.messages.isSearch = true;
             get();
         });
@@ -89,18 +89,48 @@
                 vm.messages.params.tag_id = $state.params.tag_id;
             }
 
+            getStart();
+
             getMailBox();
+        }
 
-            console.log('messages', messages.$promise);
+        function getStart() {
+            if ($state.params.filter) {
+                vm.messages.params.filter = $state.params.filter;
+            }
 
-            messages.$promise.then(function (response) {
-                vm.messages.params.search = null;
-                vm.messages.checked = [];
-                vm.messages = _.assign(vm.messages, response.data);
-                _.forEach(vm.messages.items, function (message) {
-                    message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
-                });
-            });
+            if ($state.params.mbox) {
+                vm.messages.params.mbox = $state.params.mbox;
+            }
+
+            if ($state.params.tag_id) {
+                vm.messages.params.tag_id = $state.params.tag_id;
+            }
+
+            if ($state.params.sort) {
+                vm.messages.params.sort = $state.params.sort;
+            }
+
+            if ($state.params.sortReverse) {
+                vm.messages.params.sortReverse = $state.params.sortReverse;
+            }
+
+           /* if ($state.params.search) {
+                search.query();
+            }*/
+
+            // if (!$state.params.search) {
+            //     get();
+            // }
+
+            if ($state.params.forceFetch || !mail.getStorageMessages()) {
+                get();
+                return;
+            }
+
+            if (mail.getStorageMessages() && !$state.params.forceFetch) {
+                vm.messages = mail.getStorageMessages();
+            }
         }
 
         function get() {
@@ -118,9 +148,14 @@
                 vm.messages.isLoading = false;
                 vm.messages.checked = [];
                 vm.messages = _.assign(vm.messages, response.data);
+
                 _.forEach(vm.messages.items, function (message) {
                     message.body = message.body ? String(message.body).replace(/<[^>]+>/gm, '') : '';
                 });
+
+                if ($state.params.forceFetch) {
+                    $state.go('.', {forceFetch: undefined}, {notify: false});
+                }
             });
         }
 
@@ -135,7 +170,7 @@
         }
 
         function paginate() {
-            if (vm.messages._links.next && !vm.messages.isLoading) {
+            if (vm.messages._links && vm.messages._links.next && !vm.messages.isLoading) {
                 vm.messages.isLoading = true;
                 $http.get(vm.messages._links.next.href).then(function (response) {
                     vm.messages.isLoading = false;

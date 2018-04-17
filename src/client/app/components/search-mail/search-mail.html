@@ -4,7 +4,7 @@
             <input class="main-switch__input"
                    type="radio"
                    name="folder"
-                   ng-change="vm.search()"
+                   ng-change="vm.request()"
                    ng-value="'ALL'"
                    ng-model="vm.folders.selected.name">
             <span class="radiobutton--size_sm main-switch__btn main-switch__btn--firs width--inh font--size15">{{ 'ALL_MAIL2' | translate }}</span>
@@ -12,7 +12,7 @@
             <input class="main-switch__input"
                    type="radio"
                    name="folder"
-                   ng-change="vm.search()"
+                   ng-change="vm.request()"
                    ng-value="'INBOX'"
                    ng-model="vm.folders.selected.name">
             <span class="radiobutton--size_sm main-switch__btn main-switch__btn--last width--inh font--size15">{{ 'INBOX' | translate }}</span>
@@ -33,7 +33,7 @@
                        search-enabled="false"
                        class="select-list select-list--size_m select-list--not-border-of-sides width--all"
                        theme="select2"
-                       on-select="vm.search(); vm.isOpenFilters = false">
+                       on-select="vm.request(); vm.isOpenFilters = false">
                 <ui-select-match
                         class="select-list__body select-list--size_m width--inh pdd--r30 pdd--l12">
                     {{ $select.selected.name | translate }}
@@ -49,7 +49,7 @@
                        class="select-list select-list--size_m select-list--not-border-of-sides width--all"
                        search-enabled="false"
                        theme="select2"
-                       on-select="vm.search(); vm.isOpenFilters = false">
+                       on-select="vm.request(); vm.isOpenFilters = false">
                 <ui-select-match
                         class="select-list__body select-list--size_m width--inh pdd--r30 pdd--l12">
                     {{ $select.selected.name | translate }}
@@ -65,7 +65,7 @@
                        search-enabled="false"
                        class="select-list select-list--size_m select-list--not-border-of-sides width--all"
                        theme="select2"
-                       on-select="vm.search(); vm.isOpenFilters = false">
+                       on-select="vm.request(); vm.isOpenFilters = false">
                 <ui-select-match
                         class="select-list__body select-list--size_m width--inh pdd--r30 pdd--l12">
                     {{ $select.selected.tag_name | translate }}
@@ -83,7 +83,7 @@
                        type="checkbox"
                        name="isAttach"
                        ng-model="vm.searchForm.isAttach"
-                       ng-change="vm.search(); vm.isOpenFilters = false"
+                       ng-change="vm.request(); vm.isOpenFilters = false"
                        value="important">
                 <div class="checkbox-big__body"></div>
                 <span class="checkbox-big__text" role="presentation">

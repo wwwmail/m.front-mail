@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Aleksandr Semenov, Ilya Pashchuk",
   "license": "ISC",
   "devDependencies": {
     "angular-material": "^1.1.7",

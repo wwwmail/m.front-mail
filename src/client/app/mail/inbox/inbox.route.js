@@ -16,37 +16,11 @@
             {
                 state: 'mail.inbox',
                 config: {
-                    url: '/inbox?mbox&filter&tag_id&attach&search',
+                    url: '/inbox?mbox&filter&tag_id&attach&search&search_part&search_tag_id&search_start&search_end&id&connection_id&reload&smbox&forceFetch',
                     templateUrl: 'app/mail/inbox/inbox.html',
                     controller: 'InboxController',
                     controllerAs: 'vm',
-                    title: 'Inbox',
-                    resolve: {
-                        messages: function (mail, $stateParams) {
-                            var messages = {
-                                params: {
-                                    'per-page': 10,
-                                    'len': 100,
-                                    'part': 'bodytext'
-                                },
-                                checked: []
-                            };
-
-                            if ($stateParams.filter) {
-                                messages.params.filter = $stateParams.filter;
-                            }
-
-                            if ($stateParams.mbox) {
-                                messages.params.mbox = $stateParams.mbox;
-                            }
-
-                            if ($stateParams.tag_id) {
-                                messages.params.tag_id = $stateParams.tag_id;
-                            }
-
-                            return mail.get(messages.params);
-                        }
-                    }
+                    title: 'Inbox'
                 }
             }
         ];

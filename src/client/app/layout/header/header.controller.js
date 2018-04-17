@@ -5,10 +5,10 @@
         .module('app.layout')
         .controller('HeaderController', HeaderController);
 
-    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'mail'];
+    HeaderController.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'mail', 'search'];
 
     /* @ngInject */
-    function HeaderController($rootScope, $scope, $state, $timeout, mail) {
+    function HeaderController($rootScope, $scope, $state, $timeout, mail, search) {
         var vm = this;
 
         vm.searchForm = {
@@ -25,7 +25,7 @@
         vm.closeSettingsMenu = closeSettingsMenu;
 
         vm.clearSearch = clearSearch;
-        vm.search = search;
+        vm.searchQuery = searchQuery;
         vm.send = send;
         vm.closeCompose = closeCompose;
 
@@ -34,7 +34,6 @@
         });
 
         $scope.$on('notify:message', function (e, data) {
-            console.log('data', data);
             vm.notify.isOpen = true;
 
             vm.message = data.message;
@@ -46,12 +45,10 @@
         });
 
         $scope.$on('mail:isSend', function (e, data) {
-            console.log('mail:isSend', data);
             vm.isSend = data.isSend;
         });
 
         $scope.$on('mail:isUploading', function (e, data) {
-            console.log('mail:isUploading', data);
             vm.isUploading = data.isUploading;
         });
 
@@ -73,9 +70,12 @@
             vm.$state = $state;
             vm.paginate = mail.paginate;
 
-            console.log('vm.$state', vm.$state);
-
             getCurrentFolder();
+
+            if (vm.$state.params.search) {
+                vm.searchForm.model.search = vm.$state.params.search;
+                search.query();
+            }
         }
 
         function openMenu() {
@@ -105,15 +105,9 @@
             }
         }
 
-        function search() {
-            var data = {};
-
-            if (vm.searchForm.model.search) {
-                data.search = vm.searchForm.model.search;
-            }
-
-            $rootScope.$broadcast('search:mailQuery', {
-                search: data
+        function searchQuery() {
+            search.query({
+                search: vm.searchForm.model.search
             });
         }
 

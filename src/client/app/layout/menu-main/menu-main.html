@@ -75,7 +75,7 @@
                 <div class="menu-main__item-content" action-effects="touch-bg" ng-if="!folder.isSub && folder.name !== 'Archive'">
                     <a class="menu-main__link"
                        ng-click="vm.closeMenu();"
-                       ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined})"
+                       ui-sref="mail.inbox({mbox: folder.name, filter: undefined, tag_id: undefined, forceFetch: true})"
                        ui-sref-active="menu-main__link--active">
                         <span class="{{ folder.icon }} menu-main__icon"></span>
                         <!--<span class="menu-main__title">{{ folder.caption }}</span>-->
@@ -105,7 +105,7 @@
                             <li class="menu-main__item-sub">
                                 <a class="menu-main__link"
                                    ng-click="vm.closeMenu();"
-                                   ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined})"
+                                   ui-sref="mail.inbox({mbox: folderSub.name, filter: undefined, tag_id: undefined, forceFetch: true})"
                                    ui-sref-active="menu-main__link--active">
                                     <span class="menu-main__icon"
                                           ng-class="{'icon-template': folderSub.name === 'Templates', 'icon-archive': folderSub.name !== 'Templates'}"></span>
@@ -129,21 +129,21 @@
         <div class="menu-main__filter">
             <ul class="menu-main-filter">
                 <li class="menu-main-filter__item"
-                    ui-sref="mail.inbox({mbox: undefined, filter: 'attach', tag_id: undefined})"
+                    ui-sref="mail.inbox({mbox: undefined, filter: 'attach', tag_id: undefined, forceFetch: true})"
                     ui-sref-active="menu-main-filter__item--active"
                     ng-click="vm.closeMenu();">
                     <span class="icon-affix menu-main-filter__icon"></span>
                 </li>
 
                 <li class="menu-main-filter__item"
-                    ui-sref="mail.inbox({mbox: undefined, filter: 'unseen', tag_id: undefined})"
+                    ui-sref="mail.inbox({mbox: undefined, filter: 'unseen', tag_id: undefined, forceFetch: true})"
                     ui-sref-active="menu-main-filter__item--active"
                     ng-click="vm.closeMenu();">
                     <span class="icon-elevation menu-main-filter__icon font--size12"></span>
                 </li>
 
                 <li class="menu-main-filter__item"
-                    ui-sref="mail.inbox({mbox: undefined, filter: 'flagged', tag_id: undefined})"
+                    ui-sref="mail.inbox({mbox: undefined, filter: 'flagged', tag_id: undefined, forceFetch: true})"
                     ui-sref-active="menu-main-filter__item--active"
                     ng-click="vm.closeMenu();">
                     <span class="icon-flagged menu-main-filter__icon"></span>
@@ -158,7 +158,7 @@
             <li class="menu-main__item" ng-repeat="tag in vm.tags.items">
                 <div class="menu-main__item-content" action-effects="touch-bg">
                     <a class="menu-main__link"
-                       ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id})"
+                       ui-sref="mail.inbox({mbox: undefined, filter: undefined, tag_id: tag.id, forceFetch: true})"
                        ng-click="vm.closeMenu();">
                         <span class="icon-marker-mobile-bg menu-main__icon menu-main__icon--select"
                               style="color: {{ tag.bgcolor }}"></span>
