@@ -68,12 +68,12 @@
             checkToken().then(function (response) {
                 if (options.isReload) {
                     $timeout(function () {
-                        window.location.href = '/mail/inbox?mbox=INBOX';
+                        window.location.href = '/mail/inbox?mbox=INBOX&forceFetch=true';
                     }, 250);
                 }
 
                 if (!options.isReload) {
-                    $state.go('mail.inbox', {mbox: 'INBOX'});
+                    $state.go('mail.inbox', {mbox: 'INBOX', forceFetch: true});
                 }
             });
         }

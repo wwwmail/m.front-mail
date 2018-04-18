@@ -56,7 +56,7 @@
                     profile.put({}, profileModel);
                 }
 
-                $state.go('mail.inbox', {mbox: 'INBOX'});
+                $state.go('mail.inbox', {mbox: 'INBOX', forceFetch: true});
 
             }).catch(function (response) {
                 vm.userForm.isLoading = false;
