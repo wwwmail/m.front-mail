@@ -57,6 +57,8 @@
                 return;
             }
 
+            vm.message.seen = true;
+
             $state.go('mail.message', {
                 id: vm.message.number,
                 mbox: vm.message.mbox,
