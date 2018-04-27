@@ -115,11 +115,14 @@
                         </div>
                     </form>
 
-                    <hr class="hr hr--auth ">
+                    <hr class="hr hr--auth" ng-if="vm.CONFIG.domainZone !== 'group'">
 
-                    <button class="btn btn--size_l btn--normal width--inh btn--s-gradient" ui-sref="signUp">{{ 'CHECK_IN' | translate }}</button>
+                    <button class="btn btn--size_l btn--normal width--inh btn--s-gradient"
+                            ng-if="vm.CONFIG.domainZone !== 'group'"
+                            type="button"
+                            ui-sref="signUp">{{ 'CHECK_IN' | translate }}</button>
 
-                    <div class="text-center mrg--t20">
+                    <div class="text-center mrg--t20" ng-if="vm.CONFIG.domainZone !== 'group'">
                         <social-auth></social-auth>
                     </div>
                 </div>
