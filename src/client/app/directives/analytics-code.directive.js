@@ -5,10 +5,10 @@
         .module('app.directives')
         .directive('analyticsCode', analyticsCode);
 
-    analyticsCode.$inject = ['$compile', '$timeout', 'CONFIG'];
+    analyticsCode.$inject = ['$compile', '$timeout', 'CONFIG', 'config'];
 
     /* @ngInject */
-    function analyticsCode($compile, $timeout, CONFIG) {
+    function analyticsCode($compile, $timeout, CONFIG, config) {
         var directive = {
             link: link,
             restrict: 'EA'
@@ -16,9 +16,10 @@
         return directive;
 
         function link(scope, element, attrs) {
+
             var html = [
                 "<!-- Global site tag (gtag.js) - Google Analytics -->",
-                "<script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-114945160-1\"></script>",
+                "<script async src=\"https://www.googletagmanager.com/gtag/js?id={{ id }}\"></script>",
                 "<script>",
                 "window.dataLayer = window.dataLayer || [];",
                 "function gtag(){dataLayer.push(arguments);}",
@@ -32,14 +33,19 @@
             ////
 
             function activate() {
-                if (CONFIG.domainZone === 'cz') {
-                    pasteHtml(html);
-                }
+                config.getIndex().then(function (value) {
+                    console.log('value', value);
+                    if (value.analiticsId) {
+                        pasteHtml(html);
+                    }
+                });
             }
 
             function pasteHtml(html) {
                 $timeout(function () {
-                    element.html(html);
+                    element.html(
+                        $compile(html)(scope)
+                    );
                 });
             }
         }
