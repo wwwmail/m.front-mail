@@ -34,8 +34,9 @@
 
             function activate() {
                 config.getIndex().then(function (value) {
-                    if (value.analiticsId) {
-                        scope.analiticsId = value.analiticsId;
+                    console.log('value', value.data);
+                    if (value.data.analiticsId) {
+                        scope.analiticsId = value.data.analiticsId;
                         pasteHtml(html);
                     }
                 });
