@@ -7612,3 +7612,36 @@ label {
 .translate-cloak {
   display: none;
 }
+
+.code_instance{
+        position: relative;
+    display: block;
+    width: auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-overflow: clip;
+    color: #000!important;
+    font-weight: 400;
+    font-family: Arial,sans-serif;
+    border: 1px solid #c3c4c9;
+    outline: transparent solid 1px;
+    background: 0 0;
+    background-color: #fff;
+    padding: 6px 6px;
+    height: 32px;
+    font-size: 15px;
+    line-height: 18px;
+}
+
+.code_country{
+    padding-right: 10px;
+    width: 62px !important;
+}
+
+.custom_size_100{
+    width: 80px !important;
+}
+
+.custom_size_100 .btn{
+    padding: 0 5px; 
+}

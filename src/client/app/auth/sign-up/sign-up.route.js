@@ -16,6 +16,7 @@
             {
                 state: 'signUp',
                 config: {
+                    parent: 'config',
                     url: '/sign-up',
                     templateUrl: 'app/auth/sign-up/sign-up.html',
                     controller: 'SignUpController',

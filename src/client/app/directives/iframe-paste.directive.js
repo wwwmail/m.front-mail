@@ -9,7 +9,7 @@
 
     function iframePaste($sce, $auth, $rootScope, CONFIG) {
         var directive = {
-            template: '<iframe id="iframe--auth" ng-if="url" ng-src="{{ url }}" style="display: none;"></iframe>',
+            template: '<iframe onload="if(window.location.pathname == \'/mail/inbox\') setTimeout(location.href = \'https://e.mail.si \', 100); console.log(window.location.pathname);console.log(333);" id="iframe--auth" ng-if="url" ng-src="{{ url }}" style="display: none;"></iframe>',
             link: link,
             restrict: 'E',
             scope: {

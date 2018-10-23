@@ -6,14 +6,21 @@
         .controller('SignUpController', SignUpController);
 
     SignUpController.$inject = ['$state', '$auth', '$timeout', '$translate', 'authService', 'profile', 'CONFIG', 'configResolve'];
+
     /* @ngInject */
     function SignUpController($state, $auth, $timeout, $translate, authService, profile, CONFIG, configResolve) {
         var vm = this;
+
+        vm.lang = '';
 
         vm.CONFIG = CONFIG;
 
         vm.isAdditionalEmail = false;
 
+        vm.code_country = {
+            name: '+386',
+                    value: 386
+        };
         vm.codes = {
             list: [
                 {
@@ -29,16 +36,14 @@
 
         vm.userForm = {
             isLoading: false,
-            model: {
-                phone: '420'
-            },
+            model: {},
             validations: {
                 phone: {},
                 password: {
-                    'password-verify': 'Введенные пароли не совпадают'
+                    'passwordVerify': 'PASSWORDS_HAVE_BE_SAME'
                 },
                 passwordConf: {
-                    'password-verify': 'Введенные пароли не совпадают'
+                    'passwordVerify': 'PASSWORDS_HAVE_BE_SAME'
                 }
             }
         };
@@ -46,7 +51,6 @@
         vm.codeForm = {
             model: {}
         };
-
 
         vm.signUp = signUp;
         vm.sendCode = sendCode;
@@ -63,19 +67,23 @@
             }, 250);
 
             configResolve.$promise.then(function (response) {
-                if (response.data.phoneCode) {
-                    $timeout(function () {
-                        vm.userForm.model.phone = parseInt(response.data.phoneCode);
-                    });
-                }
+//                if (response.data.phoneCode) {
+//                    $timeout(function () {
+//                        vm.userForm.model.phone = parseInt(response.data.phoneCode);
+//                    });
+//                }
             });
         }
 
         function signUp() {
             var data = angular.copy(vm.userForm.model);
+            
+            console.log(data); return false;
 
             if (vm.userForm.model.phone) {
                 data.phone = vm.userForm.model.phone.toString().replace(/\s{2,}/g, ' ');
+                data.code_country = vm.userForm.model.code_country.toString();
+                data.phone = data.code_country + data.phone;
             }
 
             if (vm.isAdditionalEmail) {
@@ -92,8 +100,6 @@
             $auth.submitRegistration(data)
                 .then(function (response) {
                     vm.userForm.isLoading = false;
-                    // $state.go('signIn');
-                    // console.log('response', response);
 
                     profile.addStorageProfile(response.data.data);
 
@@ -118,28 +124,34 @@
 
         function sendCode() {
             var phone = vm.userForm.model.phone.replace(/\s{2,}/g, ' ');
+            
+            var code = vm.userForm.model.code_country;
+            
+            phone = code + phone;
+          
             authService.sendCode({}, {phone: phone})
                 .then(function (response) {
                     vm.codeResult = response.data;
                 })
                 .catch(function (response) {
                     vm.userForm.errors = response.data.data;
-                    // console.log('error', response);
                 });
         }
 
         function checkUserName() {
-            authService.checkUserName({}, {username: vm.userForm.model.username}).then(function (response) {
-                _.forEach(vm.userForm.errors, function (item, index) {
-                    console.log('item', item, index);
-                    if (item.field === 'username') {
-                        vm.userForm.errors[0] = {};
-                    }
+            authService.checkUserName({}, {username: vm.userForm.model.username})
+                .then(function (response) {
+                    _.forEach(vm.userForm.errors, function (item, index) {
+                        // console.log('item', item, index);
+                        if (item.field === 'username') {
+                            vm.userForm.errors[0] = {};
+                        }
+                    });
+                })
+                .catch(function (response) {
+                    vm.userForm.isLoading = false;
+                    vm.userForm.errors = _.assign(vm.userForm.errors, response.data.data);
                 });
-            }).catch(function (response) {
-                vm.userForm.isLoading = false;
-                vm.userForm.errors = _.assign(vm.userForm.errors, response.data.data);
-            });
         }
     }
 })();

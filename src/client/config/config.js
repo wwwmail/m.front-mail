@@ -1,18 +1,17 @@
-(function () {
-    'use strict';
+(function() {
+  'use strict';
 
-    window.appConfig = {
-        env: 'sandbox',
-        domainZone: 'md',
-        parentHost: 'https://wwwmailcz.dev.mail.group',
-        APIHost: 'https://mailcz.dev.mail.group',
-        MediaUrl: 'https://mailcz.dev.mail.group/',
-        AttachUrl: 'https://mailcz.dev.mail.group/mail/',
-        passportLink: 'https://m.passport.dev.mail.group',
-        translatesUrl: 'https://mailapi.dev.mail.group/i18n/',
-        payment: {
+  window.appConfig = {
+      env: 'production',
+      domainZone: 'si',
+      parentHost: 'https://mail.si',
+      APIHost: 'https://mailapi.mail.si',
+      MediaUrl: 'https://mailapi.mail.si/',
+      AttachUrl: 'https://mailapi.mail.si/mail/',
+      passportLink: 'https://passport.mail.group',
+      payment: {
             sandbox: 'AQgVJbIVhUkthElCdiLS1GZj7tq38wDeBspxYrLG_K73OzXL2_NTvBsQTDT9oXhEMTGQIiEtr8jPnFzF',
-            production: 'AVZhosFzrnZ5Mf3tiOxAD0M6NHv8pcB2IFNHAfp_h69mmbd-LElFYkJUSII3Y0FPbm7S7lxBuqWImLbl'
+            production: 'Afk2JIBw03V3FLCZOLS0kM21RTkKWYjIInGC-jXXltT-8uY2xZZ6vQ4BzJbUihhXfVz45afRb3g8f6IT'
         }
-    };
+  };
 })();
